@@ -93,7 +93,7 @@ categories:
       - "장비 관점에서 무엇이 정밀도를 제한하는가?"
 
   # ═══════════════════════════════════════════════════════
-  최적화:
+  최적화 방법:
     description: "계측 데이터에서 파라미터를 뽑아내는 수치 방법"
     keywords:
       - gradient
@@ -110,7 +110,7 @@ categories:
       - 신경망
 
     subcategories:
-      수치해법:
+      수치해석:
         description: "gradient descent, Newton, Gauss-Newton, Levenberg-Marquardt"
       회귀:
         description: "최소자승, 신경망 회귀, 정규화, 과적합"
