@@ -1,7 +1,7 @@
 ---
 title: 최적화 방법론 1편 — 최소자승과 Gradient Descent
 date: 2026-08-13 16:00:00 +0900
-categories: [최적화 방법, 수치해석]
+categories: [최적화 방법]
 tags: [optimization, gradient-descent, least-squares, thin-film, python]
 description: 수치해석과 최적화 이론이 무엇을 다루는 분야인지부터 시작해, 박막 반사율 피팅을 예로 gradient descent가 어떻게 동작하고 어디서 실패하는지를 다룬다.
 math: true

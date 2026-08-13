@@ -110,8 +110,6 @@ categories:
       - 신경망
 
     subcategories:
-      수치해석:
-        description: "gradient descent, Newton, Gauss-Newton, Levenberg-Marquardt"
       회귀:
         description: "최소자승, 신경망 회귀, 정규화, 과적합"
 
