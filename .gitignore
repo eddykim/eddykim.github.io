@@ -30,3 +30,7 @@ assets/js/dist
 *~
 .DS_Store
 Thumbs.db
+
+# Python (_code/ 시뮬레이션 스크립트)
+__pycache__/
+*.pyc
