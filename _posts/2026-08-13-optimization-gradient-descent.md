@@ -33,7 +33,7 @@ $J$가 선형이거나 2차식이면 $x^*$를 대수적으로 바로 구할 수 
 
 $$ r = \frac{r_{01} + r_{12} e^{-2i\beta}}{1 + r_{01} r_{12} e^{-2i\beta}}, \qquad \beta = \frac{2\pi n_1 d}{\lambda} $$
 
-$r_{01}, r_{12}$는 각 계면(ambient/관심층, 관심층/substrate)의 Fresnel 반사계수, $R=|r|^2$이 실제로 측정하는 반사율이다(구현은 `_code/optimization-gradient-descent/reflectance_model.py`). 이 식을 $d$에 대해 닫힌 형태로 뒤집을 수가 없다. 게다가 측정치엔 노이즈가 껴 있어서 "정확히 맞는" $d$란 애초에 존재하지 않고, "가장 잘 맞는" $d$를 찾는 문제가 된다.
+$r_{01}, r_{12}$는 각 계면(ambient/관심층, 관심층/substrate)의 Fresnel 반사계수, $R = \lvert r \rvert^2$이 실제로 측정하는 반사율이다(구현은 `_code/optimization-gradient-descent/reflectance_model.py`). 이 식을 $d$에 대해 닫힌 형태로 뒤집을 수가 없다. 게다가 측정치엔 노이즈가 껴 있어서 "정확히 맞는" $d$란 애초에 존재하지 않고, "가장 잘 맞는" $d$를 찾는 문제가 된다.
 
 그래서 필요한 게 최소자승(least squares) 목적함수다.
 
@@ -75,7 +75,7 @@ $$ J(d + \Delta d) \approx J(d) + \frac{dJ}{dd}\Delta d $$
 
 $\Delta d$를 기울기와 반대 부호로 잡으면($\Delta d = -\alpha \, dJ/dd$, $\alpha>0$) 우변의 둘째 항이 항상 음수가 되어 $J$가 (적어도 국소적으로는) 줄어드는 게 보장된다. 이걸 반복하는 게 gradient descent다.
 
-$$ d_{k+1} = d_k - \alpha \left.\frac{dJ}{dd}\right|_{d_k} $$
+$$ d_{k+1} = d_k - \alpha \, \frac{dJ}{dd}(d_k) $$
 
 $\alpha$는 스텝 사이즈(step size, learning rate)다. 미분을 해석적으로 구하기 번거로워서 중심차분(central difference)으로 수치미분했다.
 
@@ -118,4 +118,4 @@ $\alpha$ 하나 차이로 완전히 다른 결과가 나온 것이다.
 
 첫째, 초기값이 정답의 basin(전역 최솟값으로 이어지는 영역) 안에 있어야 한다. 그림 2를 다시 보면 $d=1490$ 근처가 유일한 최솟값이 아니다. 간섭 무늬 하나만큼 떨어진 $d \approx 1290$, $d \approx 1690$ 부근에도 각각 국소 최솟값이 있고, basin 경계(대략 $d=1390$과 $d=1590$, 그림 2의 두 봉우리) 바깥으로 초기값을 두면 알고리즘이 엉뚱한 쪽으로 수렴해버린다. 이 local minimum 문제는 이번 편에서는 건드리지 않았다. 다음 편(Newton, Gauss-Newton)에서 다룬다.
 
-둘째, 수렴 속도가 $\alpha$에 크게 의존하는데 매번 시행착오로 $\alpha$를 찾는 건 비효율적이다. 최솟값에 가까워질수록 $|dJ/dd|$가 0에 가까워지므로 스텝이 점점 작아지고, 반대로 처음부터 너무 크게 잡으면 그림 3처럼 발산한다. 다음 편에서 다룰 Newton 방법은 이 스텝 사이즈를 헤시안(Hessian)으로부터 자동으로 정하는데, 그 대신 헤시안 계산과 역행렬이라는 다른 비용이 붙는다.
+둘째, 수렴 속도가 $\alpha$에 크게 의존하는데 매번 시행착오로 $\alpha$를 찾는 건 비효율적이다. 최솟값에 가까워질수록 $\lvert dJ/dd \rvert$가 0에 가까워지므로 스텝이 점점 작아지고, 반대로 처음부터 너무 크게 잡으면 그림 3처럼 발산한다. 다음 편에서 다룰 Newton 방법은 이 스텝 사이즈를 헤시안(Hessian)으로부터 자동으로 정하는데, 그 대신 헤시안 계산과 역행렬이라는 다른 비용이 붙는다.
