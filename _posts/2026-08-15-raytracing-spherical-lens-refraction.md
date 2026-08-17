@@ -1,9 +1,16 @@
 ---
 title: 기하광학 1편 — 광선의 구면 굴절 계산과 검증
 date: 2026-08-15 19:00:00 +0900
-categories: [광학, 기하광학]
-tags: [ray-tracing, geometric-optics, snells-law, python, matlab]
-description: 20년 된 MATLAB 2D 광선추적기의 구면 렌즈 굴절 계산을 Python으로 재구성했다. 광선과 구면의 교차점을 구하는 방법부터, 광학 가역성과 thick-lens 공식으로 결과를 검증하는 과정까지 정리한다.
+categories:
+  - 광학
+  - 기하광학
+tags:
+  - ray-tracing
+  - geometric-optics
+  - snells-law
+  - python
+  - matlab
+description: MATLAB 2D 광선추적기의 구면 렌즈 굴절 계산을 Python으로 재구성했다. 광선과 구면의 교차점을 구하는 방법부터, 광학 가역성과 thick-lens 공식으로 결과를 검증하는 과정까지 정리한다.
 math: true
 ---
 학교나 연구실에서 레이트레이싱 혹은 광학 설계 툴을 지원하지 않는 경우가 종종 있다. 내가 속했던 연구실이 그러했는데 필요성이 그리 크진 않았다. 설계하는 광학계가 Infinite corrected(설명필요) 렌즈를 사용하기도 하고 특정 파장 영역, 특히 사용하는 가시광 영역을 보장하는 광 부품을 사용하기도 했기에 그러했다. 하지만 점점 더 정밀한 측정 데이터가 필요해지고 고배율 렌즈의 후초평면(back focal plane) 을 관찰할 일이 많아짐에 따라 연구실에서는 자체적으로 사용할, 지그 제작 및 초점거리를 특정할 레이트레이싱 툴을 구현하고 사용했었다.
