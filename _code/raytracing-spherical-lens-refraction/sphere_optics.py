@@ -196,8 +196,6 @@ def _pick_candidate(boundary, offset, wc, xc, yc, ws, xs, ys, ref_x, ref_y):
     """arccos/arcsin 두 후보해 중 렌즈 물리 경계 안에 있는 쪽을 고른다.
 
     두 후보 다 경계 안이면(보통의 경우) 기준점에 더 가까운 쪽을 쓴다.
-    이 경계조건 검사(in_c/in_s)가 처음 포팅했을 때 통째로 빠져 있던 부분이다
-    — 본문 3절 참고.
     """
     def inside(px, py):
         return (

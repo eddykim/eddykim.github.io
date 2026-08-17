@@ -43,14 +43,14 @@ $$ J(d) = \frac{1}{2}\sum_i \left( R_{model}(d, \lambda_i) - R_{meas}(\lambda_i)
 
 모델과 측정치의 차이를 제곱해서 더한 값을 최소화하는 $d$를 찾는 게 목표다. 실제로 얼마나 안 맞는지 그림으로 보면 이렇다.
 
-![모델 초기값 vs 측정치](/assets/img/posts/optimization-gradient-descent/fig1-model-vs-measurement.png){: width="600" }
+<img src="/assets/img/posts/optimization-gradient-descent/fig1-model-vs-measurement.png" alt="모델 초기값 vs 측정치" width="600">
 _그림1. 두께 1540nm로 가정한 초기 모델과 실제 1490nm 샘플의 측정치_
 
 측정치는 실제 스펙트로미터 raw 데이터가 아니라, 과거 실험실에서 실측했던 SiO2/Si 두께 계열(10~190nm, 1490nm) 중 1490nm 샘플을 가정하고 같은 물리 모델에 가우시안 노이즈를 더해 합성한 것이다. 1490nm는 가시광 대역 안에 간섭 무늬(fringe)가 여러 개 들어갈 만큼 광학적으로 두꺼워서, 두께 변화가 반사율 스펙트럼에 뚜렷하게 반영된다(그림 1에서 초기 모델과 측정치의 fringe 위치가 어긋나 있는 게 바로 보인다). 초기 모델(파란 선, $d=1540$nm)과 측정치(회색 점)가 얼마나 안 맞는지가 그림 1에서 바로 보인다.
 
 이 안 맞는 정도를 두께 $d$의 함수로 그리면 목적함수 $J(d)$의 모양이 나온다.
 
-![두께에 따른 목적함수](/assets/img/posts/optimization-gradient-descent/fig2-objective-landscape.png){: width="600" }
+<img src="/assets/img/posts/optimization-gradient-descent/fig2-objective-landscape.png" alt="두께에 따른 목적함수" width="600">
 _그림2. 두께에 따른 목적함수 J(d) — 회색 점선이 전역 최솟값(global minimum)_
 
 목표는 이 $J(d)$ 그래프를 전 구간에 대해 다 그려보고 눈으로 최솟값을 찾는 게 아니다(그림 2는 지금 원리를 보여주려고 미리 넓은 구간을 훑어본 것일 뿐이다). 실제로는 $d$ 하나를 계산할 때마다 전체 파장 대역에 대해 반사율을 계산해야 하므로, 이렇게 촘촘하게 격자 탐색(grid search)을 하는 건 계산량이 크다. 목표는 이 local minimum의 위치, 즉 $J(d)$가 최소가 되는 $d$를 최소한의 연산으로 찾아내는 것이다.
@@ -100,10 +100,10 @@ def gradient_descent(d0, wavelength_nm, measured_R, alpha, n_iter=100, h=1e-3):
 
 처음엔 $\alpha$를 별생각 없이 크게 잡았다. `alpha=1500`, 초기값 `d0=1540`nm으로 20번 반복했다. 이게 얼마나 나쁜 선택이었는지 보려면 잘 골랐을 때와 나란히 비교하는 게 낫겠다 싶어서, 똑같은 초기값·반복 횟수로 `alpha=300`도 같이 돌려서 겹쳐 그렸다.
 
-![두께 추정값 vs iteration - step size 비교](/assets/img/posts/optimization-gradient-descent/fig3-thickness-vs-iteration.png){: width="600" }
+<img src="/assets/img/posts/optimization-gradient-descent/fig3-thickness-vs-iteration.png" alt="두께 추정값 vs iteration - step size 비교" width="600">
 _그림3. 두께 추정값 vs iteration - step size 비교_
 
-![목적함수 J vs iteration - step size 비교](/assets/img/posts/optimization-gradient-descent/fig4-objective-vs-iteration.png){: width="600" }
+<img src="/assets/img/posts/optimization-gradient-descent/fig4-objective-vs-iteration.png" alt="목적함수 J vs iteration - step size 비교" width="600">
 _그림4. 목적함수 J vs iteration - step size 비교_
 
 파란 선(`alpha=300`)은 5번째 반복 만에 실제 값(1490nm, 오차 0.3nm 이내)에 도달해서 그대로 눌러앉는다. 목적함수 값도 노이즈 바닥(noise floor) 수준인 약 0.0024까지 매끄럽게 떨어진 뒤 평평해진다(그림 4).
