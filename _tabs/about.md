@@ -11,4 +11,4 @@ order: 4
 - 이미지 프로세싱: 영상·신호 처리, 컴퓨테이셔널 옵틱스(물리 기반 순방향 모델 + 역문제 피팅)
 - 머신러닝: 물리 기반 모델과 결합한 신호 복원, 데이터 기반 접근
 
-GitHub: [github.com/eddykim](https://github.com/eddykim) · Email: [yjedward.kim@gmail.com](mailto:yjedward.kim@gmail.com) · [LinkedIn](https://www.linkedin.com/in/youngjoon-kim-ed/)
+GitHub: [github.com/eddykim](https://github.com/eddykim) · Email: [eddyoptics@gmail.com](mailto:eddyoptics@gmail.com) · [LinkedIn](https://www.linkedin.com/in/youngjoon-kim-ed/)
