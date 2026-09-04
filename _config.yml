@@ -59,9 +59,14 @@ webmaster_verifications:
 # Web Analytics Settings
 analytics:
   google:
-    id: # fill in your Google Analytics ID
+    # GA4 measurement ID, e.g. "G-XXXXXXXXXX"
+    # › https://analytics.google.com  →  관리 > 데이터 스트림 > 웹 스트림 추가
+    id:
   goatcounter:
-    id: # fill in your GoatCounter ID
+    # GoatCounter site code only (the "xxx" in https://xxx.goatcounter.com), NOT the full URL.
+    # › https://www.goatcounter.com/signup  (비상업 사이트 무료)
+    # 이 값이 비어 있으면 아래 pageviews 카운터는 화면에 표시되지 않습니다.
+    id:
   umami:
     id: # fill in your Umami ID
     domain: # fill in your Umami domain
@@ -74,8 +79,9 @@ analytics:
     id: # fill in your Fathom Site ID
 
 # Page views settings
+# 글 상단/목록의 조회수 표시. `analytics.goatcounter.id`가 채워져야 실제로 렌더링됩니다.
 pageviews:
-  provider: # now only supports 'goatcounter'
+  provider: goatcounter # now only supports 'goatcounter'
 
 # Prefer color scheme setting.
 #
@@ -98,7 +104,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar:
+avatar: /assets/img/avatar.jpg
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
@@ -117,8 +123,16 @@ actions:
     # Set to true if the URL should remain unchanged, which means each post will share the same edit link.
     static_url: false # [ true | false ]
 
+# Google AdSense — 기본 꺼짐.
+# 승인 후 enabled: true + publisher_id 를 채우면 _includes/metadata-hook.html 이
+# 프로덕션 빌드에서만 광고 스크립트를 삽입합니다. ads.txt.example 도 함께 참고하세요.
+adsense:
+  enabled: false
+  publisher_id: # "ca-pub-0000000000000000"
+
 comments:
   # Global switch for the post-comment system. Keeping it empty means disabled.
+  # giscus.category_id를 채운 뒤 아래 값을 `giscus`로 바꾸면 댓글이 켜집니다.
   provider: # [disqus | utterances | giscus]
   # The provider options are as follows:
   disqus:
@@ -129,15 +143,15 @@ comments:
     issue_term: # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
-    repo: # <gh-username>/<repo>
-    repo_id:
-    category:
-    category_id:
-    mapping: # optional, default to 'pathname'
-    strict: # optional, default to '0'
-    input_position: # optional, default to 'bottom'
-    lang: # optional, default to the value of `site.lang`
-    reactions_enabled: # optional, default to the value of `1`
+    repo: eddykim/eddykim.github.io
+    repo_id: R_kgDOTwrwTg
+    category: Comments # Discussions에 만들 카테고리 이름 (Announcements 형식 권장)
+    category_id: # TODO: https://giscus.app 에서 발급 (DIC_kw... 형태)
+    mapping: pathname
+    strict: "1"
+    input_position: bottom
+    lang: ko
+    reactions_enabled: "1"
 
 # Self-hosted static assets, optional › https://github.com/cotes2020/chirpy-static-assets
 assets:
@@ -217,6 +231,7 @@ compress_html:
 
 exclude:
   - "*.gem"
+  - ads.txt.example
   - "*.gemspec"
   - docs
   - tools
