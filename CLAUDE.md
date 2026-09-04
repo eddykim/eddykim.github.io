@@ -61,6 +61,31 @@ image: /assets/img/posts/slug/thumbnail.png   # 있을 경우만
 - 참고자료는 글 말미에 "참고자료" 섹션으로 출처(제목, 링크) 명시
 - 외부 자료의 문장을 그대로 옮기지 않는다. 반드시 자신의 문장으로 재구성한다.
 
+## 영문판 작성 (jekyll-polyglot)
+
+한국어가 기본 언어이며 루트(`/posts/...`)를 쓴다. 영문판은 `/en/posts/...`에 생성된다.
+기존 한국어 URL은 바뀌지 않는다.
+
+- **번역이 없는 한국어 글은 아무것도 손대지 않는다.** `_config.yml`의 defaults가
+  `lang: ko`와 `lang-exclusive: ["ko"]`를 자동으로 넣어 `/en/`에 노출되지 않게 한다.
+- **영문판을 새로 쓸 때**는 파일명을 `YYYY-MM-DD-<slug>-en.md`로 하고 front matter에
+  아래 네 줄을 반드시 넣는다.
+
+```yaml
+lang: en
+lang-exclusive: ["en"]          # 빠뜨리면 기본값 ko가 남아 /en/ 에서 사라진다
+permalink: /posts/<slug>/       # 파일명의 -en 접미사가 URL에 새지 않게 고정
+page_id: <slug>                 # 한국어판과 짝을 맺는 식별자
+```
+
+- **그리고 한국어 원문에도 같은 `page_id: <slug>` 한 줄을 추가한다.** 이게 있어야
+  두 글이 서로의 번역본으로 인식되어 hreflang이 붙는다. 없으면 검색엔진이 두 글을
+  중복 콘텐츠로 보고 서로 순위를 깎는다.
+
+`_includes/metadata-hook.html`이 `page.available_languages`를 보고 hreflang을 자동 생성하므로
+직접 손댈 일은 없다. canonical은 jekyll-seo-tag가 담당하므로 polyglot의 `I18n_Headers`
+태그는 쓰지 않는다 (쓰면 canonical이 중복된다).
+
 ## 커밋 컨벤션
 
 - 포스트 추가: `post: <포스트 제목>`
