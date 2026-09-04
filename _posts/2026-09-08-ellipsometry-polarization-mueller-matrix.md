@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "엘립소메트리 배경이론 2편 — 편광, 스토크스 벡터, 뮬러 행렬"
-date: 2026-09-04 21:00:00 +0900
+date: 2026-09-08 20:00:00 +0900
 categories: [광학, 편광]
 tags: [ellipsometry, polarization, jones-vector, stokes-vector, mueller-matrix]
 description: "존스 벡터와 스토크스 벡터의 표현력 차이, 그리고 편광자·위상지연자의 뮬러 행렬을 실제 부품에 대응시켜 정리한다."

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "엘립소메트리 배경이론 3편 — 박막 다중반사와 다층 계산법 3가지"
-date: 2026-09-04 22:00:00 +0900
+date: 2026-09-11 20:00:00 +0900
 categories: [광학, 박막모델링]
 tags: [ellipsometry, thin-film, multilayer, transfer-matrix, scattering-matrix, interference]
 description: "단일 박막의 다중반사를 무한등비급수로 접어 유효 반사계수를 얻는 과정과, 로아드·전달행렬·산란행렬법을 실무에서 고르는 기준을 정리한다."
