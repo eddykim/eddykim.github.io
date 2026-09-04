@@ -8,7 +8,7 @@ description: "Newton법과 Gauss-Newton법으로 박막 두께 피팅을 풀며,
 math: true
 ---
 
-1편에서는 SiO2/Si 단층 박막의 두께를 반사율 스펙트럼으로부터 구하는 문제를 gradient descent로 풀었다. 스텝 사이즈 `alpha`를 잘 고르면(예: 300) 문제없이 수렴했지만, 조금만 크게 잡아도(예: 1500) 계곡을 넘나들며 발산했다. 이번 편은 그 스텝 사이즈 딜레마를 스스로 해결한다는 Newton법부터 시작해서, 계측 분야에서 실제로 훨씬 더 많이 쓰이는 Gauss-Newton법까지 다룬다.
+[1편](/posts/optimization-gradient-descent/)에서는 SiO2/Si 단층 박막의 두께를 반사율 스펙트럼으로부터 구하는 문제를 gradient descent로 풀었다. 스텝 사이즈 `alpha`를 잘 고르면(예: 300) 문제없이 수렴했지만, 조금만 크게 잡아도(예: 1500) 계곡을 넘나들며 발산했다. 이번 편은 그 스텝 사이즈 딜레마를 스스로 해결한다는 Newton법부터 시작해서, 계측 분야에서 실제로 훨씬 더 많이 쓰이는 Gauss-Newton법까지 다룬다.
 
 결론부터 말하면, "2차 미분까지 쓰는 Newton법이 이론적으로 더 빠르니 무조건 낫다"는 기대는 이번 문제에서 깨진다. 그 이유를 들여다보면 왜 계측 소프트웨어들이 대부분 Newton법이 아니라 Gauss-Newton(또는 그 변형인 Levenberg-Marquardt)을 표준으로 쓰는지 알 수 있다.
 
