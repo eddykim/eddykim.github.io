@@ -171,6 +171,12 @@ pwa:
     deny_paths:
       # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
+# 미래 날짜로 적은 글도 즉시 발행한다.
+# GitHub Pages는 푸시가 있을 때만 빌드하므로 future: false(기본값)이면
+# 예약 시각이 지나도 자동으로 올라오지 않고 다음 푸시까지 404가 된다.
+# 글 노출 순서는 그대로 date 기준을 따른다.
+future: true
+
 paginate: 10
 
 # The base URL of your site
