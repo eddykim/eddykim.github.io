@@ -14,7 +14,7 @@ math: true
 
 ## 1. 지형을 다시 본다 — basin 세 개
 
-지금까지 쓴 예제(SiO2/Si 단층, 실제 두께 1490nm, seed=0 노이즈)의 목적함수 $J(d)$를 [1편](/posts/optimization-gradient-descent/) 그림2보다 넓은 구간(1200~1800nm)에서 다시 그려보면, basin이 정확히 몇 개이고 경계가 어디인지 눈으로 확인할 수 있다.
+지금까지 쓴 예제(SiO2/Si 단층, 실제 두께 1490nm, seed=0 노이즈)의 목적함수 $J(d)$를 1편 그림2보다 넓은 구간(1200~1800nm)에서 다시 그려보면, basin이 정확히 몇 개이고 경계가 어디인지 눈으로 확인할 수 있다.
 
 ![그림1](/assets/img/posts/optimization-global-heuristics/fig1-objective-landscape.png)
 _그림1. 목적함수 지형 — 세 개의 basin (점선: basin 경계)_
