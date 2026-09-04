@@ -61,12 +61,12 @@ analytics:
   google:
     # GA4 measurement ID, e.g. "G-XXXXXXXXXX"
     # › https://analytics.google.com  →  관리 > 데이터 스트림 > 웹 스트림 추가
-    id:
+    id: G-CL3K08SH7Q
   goatcounter:
     # GoatCounter site code only (the "xxx" in https://xxx.goatcounter.com), NOT the full URL.
     # › https://www.goatcounter.com/signup  (비상업 사이트 무료)
     # 이 값이 비어 있으면 아래 pageviews 카운터는 화면에 표시되지 않습니다.
-    id:
+    id: eddykim
   umami:
     id: # fill in your Umami ID
     domain: # fill in your Umami domain
@@ -132,8 +132,7 @@ adsense:
 
 comments:
   # Global switch for the post-comment system. Keeping it empty means disabled.
-  # giscus.category_id를 채운 뒤 아래 값을 `giscus`로 바꾸면 댓글이 켜집니다.
-  provider: # [disqus | utterances | giscus]
+  provider: giscus # [disqus | utterances | giscus]
   # The provider options are as follows:
   disqus:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
@@ -146,7 +145,7 @@ comments:
     repo: eddykim/eddykim.github.io
     repo_id: R_kgDOTwrwTg
     category: Comments # Discussions에 만들 카테고리 이름 (Announcements 형식 권장)
-    category_id: # TODO: https://giscus.app 에서 발급 (DIC_kw... 형태)
+    category_id: DIC_kwDOTwrwTs4DE3Wb
     mapping: pathname
     strict: "1"
     input_position: bottom

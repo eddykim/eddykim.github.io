@@ -20,10 +20,12 @@ order: 5
 | 도구 | 수집 항목 | 쿠키 |
 | --- | --- | --- |
 | [GoatCounter](https://www.goatcounter.com/) | 페이지 주소, 유입 경로, 브라우저·화면 크기 등 익명 집계값 | 사용하지 않음 |
-| [Google Analytics 4](https://policies.google.com/privacy) | 페이지 주소, 유입 경로, 대략적 위치, 기기 정보, 방문 식별자 | 사용함 |
+| [Google Analytics 4](https://policies.google.com/privacy) | 페이지 주소, 유입 경로, 대략적 위치, 기기 정보, 방문 식별자, 스크롤 깊이·외부 링크 클릭·파일 다운로드 등 상호작용 | 사용함 |
 
 GoatCounter는 쿠키를 심지 않고 개인을 식별하지 않습니다. 반면 Google Analytics 4는 방문자를
-구분하기 위한 쿠키를 사용하며, 수집된 정보는 Google의 개인정보처리방침에 따라 처리됩니다.
+구분하기 위한 쿠키를 사용하며, '향상된 측정' 기능이 켜져 있어 페이지 조회 외에 스크롤 깊이, 외부 링크
+클릭, 첨부파일 다운로드 같은 상호작용도 함께 기록합니다. 수집된 정보는 Google의 개인정보처리방침에
+따라 처리되며, 이름·연락처 같은 개인 식별 정보는 수집하지 않습니다.
 브라우저의 쿠키 차단 설정이나 [Google Analytics 차단 부가기능](https://tools.google.com/dlpage/gaoptout)으로
 수집을 거부할 수 있으며, 거부해도 글을 읽는 데에는 아무런 제약이 없습니다.
 
