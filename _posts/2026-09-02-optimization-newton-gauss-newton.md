@@ -155,4 +155,4 @@ Hessian의 실제 곡률 부호가 무엇이든 상관없이 $\sum_i r_i'^2$은 
 ## 참고자료
 
 - D. Bindel, "Nonlinear Least Squares (Newton and Gauss-Newton)," Numerical Analysis lecture notes, Cornell University, 2023. [cs.cornell.edu/courses/cs4220/2023sp/lec/2023-04-10.pdf](https://www.cs.cornell.edu/courses/cs4220/2023sp/lec/2023-04-10.pdf)
-- K. Madsen, H.B. Nielsen, O. Tingleff, "Methods for Non-Linear Least Squares Problems," 2nd ed., IMM, Technical University of Denmark, 2004. [imm.dtu.dk 원문](http://www2.imm.dtu.dk/pubdb/edoc/imm3215.pdf)
+- K. Madsen, H.B. Nielsen, O. Tingleff, "Methods for Non-Linear Least Squares Problems," 2nd ed., IMM, Technical University of Denmark, 2004. [imm.dtu.dk 원문](https://www2.imm.dtu.dk/pubdb/edoc/imm3215.pdf)

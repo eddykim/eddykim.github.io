@@ -123,4 +123,4 @@ Levenberg-Marquardt가 계측 소프트웨어의 사실상 표준인 이유는 �
 
 ## 참고자료
 
-- K. Madsen, H.B. Nielsen, O. Tingleff, "Methods for Non-Linear Least Squares Problems," 2nd ed., IMM, Technical University of Denmark, 2004. [imm.dtu.dk 원문](http://www2.imm.dtu.dk/pubdb/edoc/imm3215.pdf)
+- K. Madsen, H.B. Nielsen, O. Tingleff, "Methods for Non-Linear Least Squares Problems," 2nd ed., IMM, Technical University of Denmark, 2004. [imm.dtu.dk 원문](https://www2.imm.dtu.dk/pubdb/edoc/imm3215.pdf)
