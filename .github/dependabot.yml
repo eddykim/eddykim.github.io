@@ -1,0 +1,21 @@
+# 의존성 보안 업데이트 알림
+# › https://docs.github.com/code-security/dependabot/dependabot-version-updates
+version: 2
+updates:
+  # Chirpy 테마 등 Ruby 젬
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+
+  # 배포 워크플로가 쓰는 GitHub Actions
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"

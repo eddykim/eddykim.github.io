@@ -1,0 +1,50 @@
+---
+permalink: /license.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RSL 1.0 (Really Simple Licensing) — https://rslstandard.org/rsl
+  이 사이트 콘텐츠의 기계 판독용 이용 조건입니다.
+
+    · 검색 색인          → 무료
+    · AI 학습/추론/색인  → 출처 표기 + 유료
+
+  금액은 아래 <amount> 값을 고치면 됩니다.
+-->
+<rsl xmlns="https://rslstandard.org/rsl">
+  <content url="/" lastmod="{{ site.time | date_to_xmlschema }}">
+
+    <!-- 1) 일반 검색엔진 색인: 자유롭게 허용 -->
+    <license>
+      <permits type="usage">search</permits>
+      <payment type="free"/>
+    </license>
+
+    <!-- 2) AI 학습·추론·검색색인: 출처 표기 필수 + 유료 -->
+    <license>
+      <permits type="usage">ai-train ai-input ai-index</permits>
+
+      <!-- 학습 코퍼스에 포함할 때: 문서당 -->
+      <payment type="training">
+        <amount currency="USD">0.10</amount>
+      </payment>
+
+      <!-- 생성 결과에 기여할 때(추론·그라운딩·RAG): 호출당 -->
+      <payment type="use">
+        <amount currency="USD">0.001</amount>
+      </payment>
+
+      <!-- 금전 지급과 별개로 가시적 출처 표기와 원문 링크를 요구합니다 -->
+      <payment type="attribution">
+        <standard>https://creativecommons.org/licenses/by/4.0/</standard>
+      </payment>
+    </license>
+
+    <copyright type="person" contactEmail="{{ site.social.email }}">{{ site.social.name }}</copyright>
+    <terms>{{ '/privacy/' | absolute_url }}</terms>
+    <legal type="warranty">ownership authority</legal>
+    <legal type="disclaimer">as-is</legal>
+    <legal type="attestation">true</legal>
+
+  </content>
+</rsl>

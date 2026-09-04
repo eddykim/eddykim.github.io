@@ -1,0 +1,29 @@
+---
+permalink: /robots.txt
+# The robots rules
+---
+
+# ─────────────────────────────────────────────────────────────
+# RSL (Really Simple Licensing) — 이 사이트 콘텐츠의 이용 조건
+# 검색 색인은 무료, AI 학습·추론 사용은 출처 표기 + 유료입니다.
+# 전문(기계 판독용): /license.xml
+# ─────────────────────────────────────────────────────────────
+License: {{ '/license.xml' | absolute_url }}
+
+User-agent: *
+
+Disallow: /norobots/
+
+# AI 크롤러를 조건 협상 없이 전면 차단하려면 아래 주석을 해제하세요.
+# 단, 차단하면 AI 검색·추천 경로에서도 사라집니다. RSL은 "차단"이 아니라
+# "조건부 허용"을 선언하는 방식이므로 기본값은 차단하지 않는 것입니다.
+#
+# User-agent: GPTBot
+# User-agent: ClaudeBot
+# User-agent: CCBot
+# User-agent: Google-Extended
+# User-agent: PerplexityBot
+# User-agent: Bytespider
+# Disallow: /
+
+Sitemap: {{ '/sitemap.xml' | absolute_url }}

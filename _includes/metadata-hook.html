@@ -1,0 +1,23 @@
+{%- comment -%}
+  테마의 빈 metadata-hook.html을 덮어쓰는 파일입니다.
+  Chirpy가 이 파일을 </head> 직전에 삽입하므로, <head>에 넣을 것은 여기에 둡니다.
+
+  ── Google AdSense ────────────────────────────────────────────
+  기본값은 꺼짐입니다. 승인 후 _config.yml에서
+
+      adsense:
+        enabled: true
+        publisher_id: "ca-pub-0000000000000000"
+
+  로 바꾸면 켜집니다. 아래 조건 때문에 프로덕션 빌드에서만,
+  그리고 publisher_id가 실제로 채워졌을 때만 스크립트가 나갑니다.
+  (승인 절차에는 저장소 루트의 ads.txt도 필요합니다. ads.txt.example 참고)
+{%- endcomment -%}
+
+{%- if jekyll.environment == 'production' and site.adsense.enabled and site.adsense.publisher_id -%}
+  <script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.adsense.publisher_id }}"
+    crossorigin="anonymous"
+  ></script>
+{%- endif -%}

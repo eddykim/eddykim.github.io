@@ -38,3 +38,7 @@ __pycache__/
 
 # Obsidian 편집기 설정 (워크플로와 무관)
 .obsidian/
+
+# 개인 문서 (사이트에 공개 게시되지 않도록 제외)
+*.pdf
+!assets/files/**/*.pdf
