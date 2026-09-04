@@ -21,3 +21,26 @@
     crossorigin="anonymous"
   ></script>
 {%- endif -%}
+
+{%- comment -%}
+  다국어 SEO 헤더: canonical + hreflang alternate.
+  번역본이 있는 글끼리 서로를 가리켜, 한국어판과 영문판이 중복 콘텐츠로
+  판정되어 서로 순위를 깎는 것을 막는다.
+{%- endcomment -%}
+{%- comment -%}
+  다국어 SEO: hreflang alternate 링크.
+  canonical 은 jekyll-seo-tag 가 이미 넣으므로 여기서는 내보내지 않는다
+  (polyglot 의 I18n_Headers 를 쓰면 canonical 이 중복된다).
+  번역본이 있는 글에만 상대 언어 링크가 붙는다.
+{%- endcomment -%}
+{%- if page.available_languages.size > 1 -%}
+  {%- for l in page.available_languages -%}
+    {%- if l == site.default_lang -%}
+      <link rel="alternate" hreflang="{{ l }}" href="{{ site.url }}{{ page.url }}">
+    {%- else -%}
+      <link rel="alternate" hreflang="{{ l }}" href="{{ site.url }}/{{ l }}{{ page.url }}">
+    {%- endif -%}
+  {%- endfor -%}
+  <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ page.url }}">
+{%- endif -%}
+
