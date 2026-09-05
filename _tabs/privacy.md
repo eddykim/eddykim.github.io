@@ -1,5 +1,8 @@
 ---
 title: 개인정보·라이선스
+lang: ko
+lang-exclusive: ["ko"]
+page_id: privacy
 # 기본 permalink 는 /:title/ 이라 한국어 제목이 슬러그가 될 수 있어 명시적으로 고정합니다.
 permalink: /privacy/
 icon: fas fa-shield-halved

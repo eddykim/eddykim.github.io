@@ -1,0 +1,65 @@
+---
+permalink: /sitemap.xml
+lang: ko
+lang-exclusive: ["ko"]
+---
+{%- comment -%}
+  테마가 딸려 쓰는 jekyll-sitemap 을 대체한다.
+
+  이유: jekyll-sitemap 은 제너레이터 플러그인이라 polyglot 의 URL 접두어 처리를
+  받지 못한다. 그 결과 /en/sitemap.xml 에 한국어 URL 이 그대로 들어가고,
+  영문 페이지는 어느 sitemap 에도 존재하지 않게 된다.
+
+  이 파일은 기본 언어(ko) 빌드에서만 생성되며(lang-exclusive), 두 언어의 URL 을
+  한 파일에 담고 각 항목에 xhtml:link 대체 언어를 붙인다. 다국어 사이트에 대해
+  Google 이 권장하는 형식이다.
+
+  영문판 존재 판정:
+    - available_languages 에 en 이 있으면 짝이 되는 영문 글이 있다.
+    - lang-exclusive 가 없는 문서(카테고리·태그·아카이브 등 레이아웃 생성 페이지)는
+      polyglot 의 fallback 으로 /en/ 에도 렌더링되므로 함께 넣는다.
+{%- endcomment -%}
+{%- assign docs = site.posts | concat: site.tabs -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {%- for doc in docs -%}
+    {%- assign has_en = false -%}
+    {%- if doc.available_languages contains 'en' -%}{%- assign has_en = true -%}{%- endif -%}
+    {%- unless doc['lang-exclusive'] -%}{%- assign has_en = true -%}{%- endunless -%}
+    {%- assign ko_url = doc.url | absolute_url -%}
+    {%- capture en_url %}{{ site.url }}/en{{ doc.url }}{% endcapture -%}
+    {%- assign lastmod = doc.last_modified_at | default: doc.date -%}
+    {%- capture alternates -%}
+      <xhtml:link rel="alternate" hreflang="ko" href="{{ ko_url }}"/>
+      {%- if has_en %}<xhtml:link rel="alternate" hreflang="en" href="{{ en_url }}"/>{% endif -%}
+      <xhtml:link rel="alternate" hreflang="x-default" href="{{ ko_url }}"/>
+    {%- endcapture -%}
+  <url>
+    <loc>{{ ko_url }}</loc>
+    {%- if lastmod %}
+    <lastmod>{{ lastmod | date_to_xmlschema }}</lastmod>{% endif %}
+    {{ alternates }}
+  </url>
+    {%- if has_en %}
+  <url>
+    <loc>{{ en_url }}</loc>
+    {%- if lastmod %}
+    <lastmod>{{ lastmod | date_to_xmlschema }}</lastmod>{% endif %}
+    {{ alternates }}
+  </url>
+    {%- endif -%}
+  {%- endfor %}
+  <url>
+    <loc>{{ '/' | absolute_url }}</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="{{ '/' | absolute_url }}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}"/>
+  </url>
+  <url>
+    <loc>{{ site.url }}/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="{{ '/' | absolute_url }}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}"/>
+  </url>
+</urlset>
