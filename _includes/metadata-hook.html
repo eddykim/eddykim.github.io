@@ -44,3 +44,9 @@
   <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ page.url }}">
 {%- endif -%}
 
+{%- comment -%}
+  RSL(Really Simple Licensing) 라이선스 선언.
+  robots.txt 의 License 지시어를 Google 이 파싱 오류로 처리해서, 스펙이 함께
+  규정하는 HTML link 방식으로 옮겼다. 기계 판독 대상은 /license.xml 로 동일하다.
+{%- endcomment -%}
+<link rel="license" type="application/rsl+xml" href="{{ '/license.xml' | absolute_url }}">
