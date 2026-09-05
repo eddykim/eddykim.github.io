@@ -2,7 +2,7 @@
 layout: post
 title: "최적화 방법론 3편 — Levenberg-Marquardt법"
 date: 2026-09-02 20:00:00 +0900
-categories: [최적화 방법]
+categories: [계산과 알고리즘, 최적화방법]
 tags: [optimization, levenberg-marquardt, gauss-newton, least-squares, thin-film, python]
 description: "damping parameter μ로 Gauss-Newton과 steepest descent를 매끄럽게 오가는 Levenberg-Marquardt법을 실제 실패 사례로 검증한다."
 math: true

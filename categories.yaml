@@ -8,11 +8,44 @@
 #       태그나 값에 쓸 경우 반드시 따옴표로 감쌀 것.
 
 meta:
-  version: 1
+  version: 2
   updated: 2026-09-05
   slug_rule: "영문 소문자와 하이픈만. 한글 금지"
   post_path: "_posts/YYYY-MM-DD-slug.md"
   image_path: "assets/img/posts/<slug>/"
+
+
+# ─────────────────────────────────────────────────────────
+# 영문판 카테고리 대응표
+# ─────────────────────────────────────────────────────────
+# 영문 글(lang: en)은 한글 분류명을 그대로 쓰면 영문 사이트에 한글이 노출된다.
+# 아래 대응명을 front matter 의 categories 에 쓴다.
+#   예) 한국어판 [광학, 편광]  →  영문판 [Optics, Polarization]
+en_names:
+  대분류:
+    광학: Optics
+    계산과 알고리즘: Computation
+    표면분석: Surface Analysis
+    잡담: Notes
+  소분류:
+    전자기학: Electromagnetics
+    기하광학: Geometrical Optics
+    파동광학: Wave Optics
+    분광학: Spectroscopy
+    편광: Polarization
+    계측장비: Instrumentation
+    푸리에광학: Fourier Optics
+    박막모델링: Thin-Film Modeling
+    최적화방법: Optimization
+    머신러닝: Machine Learning
+    이미지프로세싱: Image Processing
+    이상탐지: Anomaly Detection
+    구조광계측: Structured Light
+    광전자분광: Photoelectron Spectroscopy
+    장비구성: Instrumentation
+    정량분석: Quantification
+    스펙트럼피팅: Spectrum Fitting
+    깊이분석: Depth Profiling
 
 
 # ─────────────────────────────────────────────────────────

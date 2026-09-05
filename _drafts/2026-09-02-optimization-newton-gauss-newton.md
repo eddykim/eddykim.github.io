@@ -2,7 +2,7 @@
 layout: post
 title: "최적화 방법론 2편 — Newton법과 Gauss-Newton법"
 date: 2026-09-02 09:00:00 +0900
-categories: [최적화 방법]
+categories: [계산과 알고리즘, 최적화방법]
 tags: [optimization, newton-method, gauss-newton, least-squares, thin-film, python]
 description: "Newton법과 Gauss-Newton법으로 박막 두께 피팅을 풀며, 왜 Gauss-Newton이 계측 실무의 표준인지 확인한다."
 math: true

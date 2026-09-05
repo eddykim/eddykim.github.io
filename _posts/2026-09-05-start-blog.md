@@ -2,6 +2,7 @@
 title: 블로그를 시작하며
 date: 2026-09-05 13:00:00 +0900
 categories: [잡담]
+page_id: start-blog
 tags: [소개, 블로그, jekyll, github-pages]
 description: "광학 계측 연구노트를 시작하는 이유와, GitHub Pages로 블로그를 세우면서 겪은 시행착오."
 ---

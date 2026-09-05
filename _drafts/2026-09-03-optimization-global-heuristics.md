@@ -2,7 +2,7 @@
 layout: post
 title: "최적화 방법론 4편 — Global Optimization 휴리스틱: Basin-Hopping과 Simulated Annealing"
 date: 2026-09-03 21:00:00 +0900
-categories: [최적화 방법]
+categories: [계산과 알고리즘, 최적화방법]
 tags: [optimization, simulated-annealing, basin-hopping, global-optimization, metropolis, thin-film]
 description: "국소 최적화가 못 넘는 basin 경계를 Simulated Annealing과 Basin-Hopping이 온도 하나로 어떻게 넘는지 실험으로 확인한다."
 math: true

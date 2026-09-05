@@ -1,5 +1,10 @@
 ---
 # the default layout is 'page'
+title: 정보
+lang: ko
+lang-exclusive: ["ko"]
+permalink: /about/
+page_id: about
 icon: fas fa-info-circle
 order: 4
 ---

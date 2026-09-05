@@ -1,0 +1,19 @@
+{% comment %}
+  테마 원본을 덮어쓴다.
+
+  원본은 page.lang → site.lang 순으로만 보기 때문에, polyglot 이 /en/ 을 빌드하는
+  중에도 site.lang(ko-KR)이 잡혀 사이드바·날짜·"읽는 시간" 같은 UI 문자열이
+  한국어로 나온다. page.lang 이 없는 문서(탭 등)를 위해 site.active_lang 을
+  중간에 끼워 넣는다.
+
+  우선순위: 문서가 명시한 언어 → 지금 빌드 중인 언어 → 사이트 기본 언어 → en
+{% endcomment %}
+{% if site.data.locales[page.lang] %}
+  {% assign lang = page.lang %}
+{% elsif site.data.locales[site.active_lang] %}
+  {% assign lang = site.active_lang %}
+{% elsif site.data.locales[site.lang] %}
+  {% assign lang = site.lang %}
+{% else %}
+  {% assign lang = 'en' %}
+{% endif %}
