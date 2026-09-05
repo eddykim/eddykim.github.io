@@ -1,7 +1,9 @@
 # CLAUDE.md — 블로그 레포 운영 규칙
 
 이 레포는 GitHub Pages(Jekyll) 기반 기술 블로그입니다.
-블로그 포스트 작성 요청을 받으면 반드시 `.claude/skills/write-post/SKILL.md`의 워크플로우를 따르세요.
+
+- **새 글 작성** 요청 → `.claude/skills/write-post/SKILL.md`의 워크플로우를 따르세요.
+- **기존 글 교정·영문판 작업** 요청 → `.claude/skills/revise-post/SKILL.md`를 따르세요.
 
 ## 절대 규칙 (위반 금지)
 
