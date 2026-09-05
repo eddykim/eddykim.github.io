@@ -22,7 +22,13 @@ assets/
   files/posts/<slug>/             # 다운로드용 첨부 파일 (데이터, PDF 등)
 _code/
   <slug>/                         # 포스트에 사용된 전체 코드 (실행 가능한 형태)
+_references/                      # 참고자료 보관소 — git 에 올리지 않는다
+  <slug>/                         # 해당 포스트가 참고한 논문·데이터·메모
 ```
+
+`_references/`는 논문 PDF처럼 용량이 크거나 재배포 권한이 없는 자료를 두는 곳이다.
+`.gitignore`가 내용물을 제외하고 README 만 추적하며, `_config.yml`의 `exclude`에도
+들어 있어 사이트에 게시되지 않는다. 커밋 대상으로 삼지 말 것.
 
 - `slug`는 영문 소문자와 하이픈만 사용 (예: `snapshot-ellipsometry-intro`)
 - 포스트 파일명(`_posts/`)에만 날짜를 붙이고, `assets/`와 `_code/`의 slug 폴더명에는 날짜를 붙이지 않는다.

@@ -43,5 +43,9 @@ __pycache__/
 *.pdf
 !assets/files/**/*.pdf
 
+# 참고자료 보관소 — 내용물은 커밋하지 않고 README 만 추적한다
+_references/*
+!_references/README.md
+
 # 로컬 미리보기 빌드
 _site_dev
