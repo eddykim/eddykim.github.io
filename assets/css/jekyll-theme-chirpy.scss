@@ -1,0 +1,93 @@
+---
+---
+
+@use 'abstracts/variables' with (
+  $theme: '{{ site.theme_mode }}'
+);
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* ==================================================================
+   커스텀 스타일
+   테마 파일은 건드리지 않고 CSS 변수만 덮어쓴다. 업그레이드에 안전하다.
+
+   해결하려는 문제: 기본값은 사이드바와 본문 배경이 사실상 같은 색이라
+   영역 구분이 없다.
+     라이트  --main-bg: white     --sidebar-bg: #f6f8fa
+     다크    --main-bg: #1b1b1e   --sidebar-bg: #1e1e1e   (차이 3)
+
+   주의: 테마가 :root[data-bs-theme='...'] (특이도 0,2,0) 로 변수를 선언하므로
+   같은 선택자를 써야 한다. 다른 속성이나 html:not(...) 같은 걸 쓰면 특이도에서 밀린다.
+   같은 특이도면 나중에 선언된 이쪽이 이긴다.
+   ================================================================== */
+
+$accent: #9b3a32; // 아바타에서 뽑은 벽돌색
+$accent-light: #b8564d;
+
+@mixin light-vars {
+  --sidebar-bg: #efe9e7; // 본문(white)보다 확실히 어둡게
+  --sidebar-hover-bg: rgb(155 58 50 / 12%);
+  --sidebar-active-color: #{$accent};
+  --sidebar-muted-color: #6d5f5c;
+  --site-title-color: #{$accent};
+  --link-color: #{$accent};
+  --link-underline-color: rgb(155 58 50 / 35%);
+  --sidebar-border-color: rgb(155 58 50 / 12%);
+  --sidebar-grad: #{rgba($accent, 0.14)};
+  --sidebar-grad-mid: #{rgba($accent, 0.05)};
+}
+
+@mixin dark-vars {
+  --sidebar-bg: #201a19; // 본문(#1b1b1e)보다 따뜻하고 어둡게
+  --sidebar-hover-bg: rgb(184 86 77 / 16%);
+  --sidebar-active-color: #{$accent-light};
+  --sidebar-muted-color: #9c8b87;
+  --site-title-color: #{$accent-light};
+  --link-color: #{$accent-light};
+  --link-underline-color: rgb(184 86 77 / 40%);
+  --sidebar-border-color: rgb(184 86 77 / 14%);
+  --sidebar-grad: #{rgba($accent-light, 0.16)};
+  --sidebar-grad-mid: #{rgba($accent-light, 0.06)};
+}
+
+/* 사용자가 명시적으로 고른 모드 */
+:root[data-bs-theme='light'] {
+  @include light-vars;
+}
+
+:root[data-bs-theme='dark'] {
+  @include dark-vars;
+}
+
+/* 모드 미선택 — 시스템 설정을 따른다 */
+:root:not([data-bs-theme]) {
+  @include light-vars;
+
+  @media (prefers-color-scheme: dark) {
+    @include dark-vars;
+  }
+}
+
+/* ── 사이드바 그라데이션 ──────────────────────────────────
+   아바타의 붉은 톤이 위에서 아래로 옅어지며 배경과 만난다.
+   상단 프로필 영역과 색이 이어지도록 한 처리다. */
+#sidebar {
+  background-image: linear-gradient(
+    180deg,
+    var(--sidebar-grad) 0%,
+    var(--sidebar-grad-mid) 38%,
+    transparent 68%
+  );
+  background-repeat: no-repeat;
+  border-right: 1px solid var(--sidebar-border-color);
+}
+
+/* 프로필 이미지가 배경과 겉돌지 않도록 얇은 테두리 */
+#avatar img {
+  border: 2px solid var(--sidebar-border-color);
+}

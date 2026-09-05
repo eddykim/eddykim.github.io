@@ -42,3 +42,6 @@ __pycache__/
 # 개인 문서 (사이트에 공개 게시되지 않도록 제외)
 *.pdf
 !assets/files/**/*.pdf
+
+# 로컬 미리보기 빌드
+_site_dev
