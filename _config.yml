@@ -171,7 +171,7 @@ pwa:
       # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
 # 예약 발행을 쓰므로 미래 날짜 글은 아직 게시하지 않는다.
-# 예약 시각이 지난 뒤 실제로 올리는 일은 워크플로의 schedule(화·금 20:10 KST)이 맡는다.
+# 예약 시각이 지난 뒤 실제로 올리는 일은 워크플로의 schedule(월·수·금 20:10 KST)이 맡는다.
 # 급히 올려야 하면 Actions 탭에서 "Build and Deploy"를 수동 실행하면 된다.
 future: false
 
