@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-gradient-descent/
 page_id: optimization-gradient-descent
-date: 2026-09-07 20:00:00 +0900
+date: 2026-09-06 20:30:00 +0900
 categories: [Computation, Optimization]
 tags: [optimization, gradient-descent, least-squares, thin-film, python]
 description: What numerical analysis and optimization theory address, and how gradient descent behaves — and fails — on a thin-film reflectance fitting problem.

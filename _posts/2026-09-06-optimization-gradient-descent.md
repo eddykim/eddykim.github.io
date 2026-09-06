@@ -1,6 +1,6 @@
 ---
 title: 최적화 방법론 1편 — 최소자승과 Gradient Descent
-date: 2026-09-07 20:00:00 +0900
+date: 2026-09-06 20:30:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-gradient-descent
 tags: [optimization, gradient-descent, least-squares, thin-film, python]

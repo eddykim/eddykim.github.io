@@ -17,7 +17,7 @@
 
 ```
 [x]  1  start-blog                                    2026-09-05 발행
-[x]  2  optimization-gradient-descent                 2026-09-07 예약
+[x]  2  optimization-gradient-descent                 2026-09-06 발행
 [ ]  3  raytracing-spherical-lens-refraction          ← 다음
 [ ]  4  raytracing-total-internal-reflection
 [ ]  5  raytracing-reflection-family
@@ -38,7 +38,7 @@
   소개글만 예외적으로 존댓말이며 이미 발행됐다.
 - **영문판**: 모든 글에 함께 만든다. 번역이 아니라 영어로 다시 쓴다.
 - **발행 주기**: 주 3회 **월·수·금 20:00 KST**. 다음 빈 슬롯에 배정한다.
-  이미 9/7(월)에 최적화 1편이 잡혀 있으므로 3번 글은 9/9(수)부터다.
+  2번 글은 예외적으로 일요일(9/6)에 냈으므로 3번 글부터는 9/7(월)이 첫 빈 슬롯이다.
 - **카테고리**: 한국어는 `categories.yaml`의 분류를, 영문은 같은 파일의 `en_names`
   대응표를 쓴다. 이미 draft 파일들의 카테고리는 새 체계로 갱신해 두었다.
 - **커밋·푸시**: 사용자의 명시적 지시가 있을 때만. CLAUDE.md 절대 규칙이다.
@@ -86,7 +86,7 @@ page_id: <slug>
 1편  →  [1편](/posts/optimization-gradient-descent/)
 ```
 
-1편은 9/7에 발행되므로 그 뒤라면 링크가 유효하다.
+1편은 9/6에 발행되므로 그 뒤라면 링크가 유효하다.
 
 ### 5) 로컬 검증 (반드시)
 
