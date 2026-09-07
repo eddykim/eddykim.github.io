@@ -1,10 +1,10 @@
 ---
-layout: post
-title: "최적화 방법론 3편 — Levenberg-Marquardt법"
-date: 2026-09-02 20:00:00 +0900
+title: 최적화 방법론 3편 — Levenberg-Marquardt법
+date: 2026-09-16 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
+page_id: optimization-levenberg-marquardt
 tags: [optimization, levenberg-marquardt, gauss-newton, least-squares, thin-film, python]
-description: "damping parameter μ로 Gauss-Newton과 steepest descent를 매끄럽게 오가는 Levenberg-Marquardt법을 실제 실패 사례로 검증한다."
+description: damping parameter μ로 Gauss-Newton과 steepest descent를 매끄럽게 오가는 Levenberg-Marquardt법을 실제 실패 사례로 검증한다.
 math: true
 ---
 
@@ -14,7 +14,7 @@ math: true
 
 ## 1. Levenberg-Marquardt법 — GN과 steepest descent를 잇는 다리
 
-2편에서 Gauss-Newton의 스텝은 정규방정식 $(J^TJ)\,\Delta d = -J^Tr$을 풀어서 구했다(우리 문제에서는 $J^TJ = \sum_i r_i'^2$, $J^Tr=\sum_i r_i' r_i$인 스칼라). Levenberg-Marquardt는 이 정규방정식의 대각에 $\mu$를 더한다.
+2편에서 Gauss-Newton의 스텝은 정규방정식 $(J^TJ)\,\Delta d = -J^Tr$을 풀어서 구했다(이번 문제에서는 $J^TJ = \sum_i r_i'^2$, $J^Tr=\sum_i r_i' r_i$인 스칼라). Levenberg-Marquardt는 이 정규방정식의 대각에 $\mu$를 더한다.
 
 $$ (J^TJ + \mu I)\, h_{lm} = -J^Tr $$
 
@@ -24,7 +24,7 @@ $$ h_{lm} = -\frac{g}{A+\mu}, \qquad g = \sum_i r_i' r_i $$
 
 $\mu$의 역할은 극단을 보면 뚜렷하다. $\mu \to 0$이면 $h_{lm}$은 그대로 Gauss-Newton 스텝이 된다. 반대로 $\mu \to \infty$이면 $A$는 무시할 만큼 작아져 $h_{lm} \approx -g/\mu$, 즉 기울기 반대 방향으로 $1/\mu$만큼 움직이는 steepest descent가 된다. $\mu$ 하나가 "안전하지만 느린 방법"과 "빠르지만 곡률에 취약한 방법" 사이를 매끄럽게 오가는 손잡이인 셈이다.
 
-초기 damping은 $\mu_0 = \tau \cdot A$로 정한다. $\tau$는 사용자가 고르는 스케일 인자로, 초기값이 해에 가깝다고 믿으면 작게(예: $10^{-6}$), 자신이 없으면 크게(예: $10^{-3}\sim1$ 자리) 잡으라고 알려져 있다.
+초기 damping은 $\mu_0 = \tau \cdot A$로 정한다. $\tau$는 사용자가 고르는 스케일 인자로, 초기값이 해에 가깝다고 믿으면 작게($10^{-6}$), 자신이 없으면 크게($10^{-3}$이나 1) 잡는 것이 Madsen 등의 권고다.
 
 ```python
 # levenberg_marquardt.py 핵심부 (전체 코드: _code/optimization-levenberg-marquardt/)
@@ -50,7 +50,7 @@ for _ in range(n_iter):
 
 ## 2. 실험 — $\mu_0$을 크게 잡을 때 vs 작게 잡을 때
 
-1·2편과 같은 조건($d_0=1540$nm, 실제 두께 1490nm)에서 $\tau=10^{-6}$(Gauss-Newton에 가까움)과 $\tau=10^{6}$(steepest descent에 가까움) 두 경우를 돌려봤다. 이 지점에서 $A \approx 0.00264$이므로 각각 $\mu_0 \approx 2.64\times10^{-9}$, $\mu_0 \approx 2644$가 된다.
+1·2편과 같은 조건($d_0=1540$nm, 실제 두께 1490nm)에서 $\tau=10^{-6}$(Gauss-Newton에 가까움)과 $\tau=10^{6}$(steepest descent에 가까움) 두 경우를 돌려봤다. 이 지점에서 $A \approx 0.002644$이므로 각각 $\mu_0 \approx 2.644\times10^{-9}$, $\mu_0 \approx 2644$가 된다.
 
 <img src="/assets/img/posts/optimization-levenberg-marquardt/fig1-mu0-comparison.png" alt="mu0 크기에 따른 LM 수렴 궤적" width="600">
 _그림1. μ0 크기에 따른 LM 수렴 궤적 (d0=1540nm)_
@@ -68,7 +68,7 @@ $$ \rho = \frac{F(d) - F(d+h_{lm})}{L(0) - L(h_{lm})}, \qquad L(0)-L(h_{lm}) = \
 <img src="/assets/img/posts/optimization-levenberg-marquardt/fig2-mu-adaptation.png" alt="gain ratio 기반 mu 자동조정 추이" width="600">
 _그림2. gain ratio 기반 μ 자동조정 추이_
 
-두 경우 모두 스텝이 성공하는 동안은 $\mu$가 정확히 매번 $1/3$씩 줄어든다(로그 스케일에서 직선). 국소 2차 근사가 실제로 잘 맞아 $\rho$가 1에 가깝기 때문이다. 흥미로운 건 $\tau=10^{-6}$ 쪽(파란선)이 노이즈 바닥에 도달한 뒤의 움직임이다. $d$가 더는 유의미하게 줄지 않는 지점(노이즈가 만든 바닥)에 도달하면 이후 스텝들은 $\rho \le 0$이 되어 기각되고, $\mu$가 $\times2, \times4, \times8, \dots$로 다시 커진다 — 알고리즘이 "더 줄일 게 없다"는 걸 감지하고 스스로 보수적으로 바뀌는 모습이다.
+두 경우 모두 스텝이 성공하는 동안은 $\mu$가 정확히 매번 $1/3$씩 줄어든다(로그 스케일에서 직선). 국소 2차 근사가 실제로 잘 맞아 $\rho$가 1에 가깝기 때문이다. 흥미로운 것은 $\tau=10^{-6}$ 쪽(파란선)이 노이즈 바닥에 도달한 뒤의 움직임이다. 목적함수 $J$가 더는 줄지 않는 지점(노이즈가 만든 바닥)에 도달하면 이후 스텝들은 $\rho \le 0$이 되어 기각되고, $\mu$가 $\times2, \times4, \times8, \dots$로 다시 커진다 — 알고리즘이 "더 줄일 것이 없다"는 것을 감지하고 스스로 보수적으로 바뀌는 모습이다.
 
 ## 4. 네 가지 방법 종합 비교
 
@@ -79,29 +79,31 @@ _그림3. 네 방법 비교 (d0=1540nm)_
 
 | 방법 | $d_0=1540$nm 결과 (10스텝) |
 |---|---|
-| Gradient Descent (alpha=300) | 1490.12nm, 4~5스텝 근방 수렴 |
-| Newton | 1666.31nm, 발산 |
+| Gradient Descent (alpha=300) | 1490.12nm, 5스텝 수렴 |
+| Newton | 미수렴, 최솟값에서 100nm 이상 떨어진 곳 |
 | Gauss-Newton | 1490.12nm, 3스텝 수렴 |
 | Levenberg-Marquardt ($\tau=10^{-6}$) | 1490.12nm, 3스텝 수렴 (GN과 사실상 동일) |
+
+Newton 행에 구체적인 두께를 적지 않은 이유는 2편에서 확인한 대로다. 발산 궤적은 $J''$가 0에 가까운 구간을 지나며 반올림 오차를 증폭시켜서, 개별 반복값이 재현되지 않는다.
 
 $\tau$를 충분히 작게 잡으면 LM은 GN과 구분할 수 없을 정도로 같은 궤적을 그린다. 당연한 결과다 — $\mu_0$이 $A$보다 몇 자릿수 작으면 정규방정식이 사실상 그대로이기 때문이다. LM이 진가를 발휘하는 지점은 지금부터다.
 
 ## 5. LM도 만능은 아니다 — basin 문제는 그대로
 
-$\mu$는 정규방정식의 조건을 바꿀 뿐, 목적함수 자체의 모양을 바꾸지는 않는다. 그래서 2편에서 확인한 국소 최솟값 basin 문제는 LM에도 그대로 남는다. $d_0$를 1300nm, 1690nm 근방으로 바꿔서 LM($\tau=1$)을 돌려보면 GN과 똑같은 이웃 극소점으로 수렴한다.
+$\mu$는 정규방정식의 조건을 바꿀 뿐, 목적함수 자체의 모양을 바꾸지는 않는다. 그래서 2편에서 확인한 국소 최솟값 basin 문제는 LM에도 그대로 남는다. $d_0$를 1300nm, 1690nm 근방으로 바꿔서 $\tau$를 세 자릿수에 걸쳐 흔들어 봐도, LM은 GN과 똑같은 이웃 극소점으로 수렴한다.
 
-| 초기값 $d_0$ | Gauss-Newton | Levenberg-Marquardt ($\tau=1$) |
-|---|---|---|
-| 1300nm | 1293.12nm | 1293.12nm |
-| 1690nm | 1688.55nm | 1688.55nm |
+| 초기값 $d_0$ | Gauss-Newton | LM ($\tau=10^{-3}$) | LM ($\tau=1$) | LM ($\tau=100$) |
+|---|---|---|---|---|
+| 1300nm | 1293.12nm | 1293.12nm | 1293.12nm | 1293.12nm |
+| 1690nm | 1688.55nm | 1688.55nm | 1688.55nm | 1688.55nm |
 
-$\tau$를 바꿔봐도(1e-3, 1, 100) 결과는 같았다. Damping은 "한 basin 안에서 안전하게 그 최솟값까지 가는 것"을 보장할 뿐, "어느 basin으로 갈지"는 여전히 초기값이 결정한다.
+Damping은 "한 basin 안에서 안전하게 그 최솟값까지 가는 것"을 보장할 뿐, "어느 basin으로 갈지"는 여전히 초기값이 결정한다.
 
 ## 6. 실전 실패 사례 — 굴절률을 잘못 가정하면
 
-2편이 예고한 GN의 이론적 한계(잔차가 크거나 Jacobian이 특이에 가까우면 실패)를 실제로 재현해봤다. 피팅 모델에서 SiO2 굴절률을 실제 값(1.46)이 아니라 1.02로 잘못 가정했다고 하자 — 공기(1.0)에 가까운 값이라 SiO2/Si 경계의 간섭 콘트라스트가 거의 사라진다. $d=1490$nm에서 $\sum_i r_i'^2$를 계산해보면 올바른 모델의 약 $2.58\times10^{-3}$에서 $4.34\times10^{-6}$로, 약 600배 작아진다. Jacobian이 거의 0에 가까워진 것이다.
+2편이 예고한 GN의 이론적 한계(잔차가 크거나 Jacobian이 특이에 가까우면 실패)를 실제로 재현해봤다. 피팅 모델에서 SiO2 굴절률을 실제 값(1.46)이 아니라 1.02로 잘못 가정했다고 하자 — 공기(1.0)에 가까운 값이라 SiO2/Si 경계의 간섭 콘트라스트가 거의 사라진다. $d=1490$nm에서 $\sum_i r_i'^2$를 계산해보면 올바른 모델의 $2.58\times10^{-3}$에서 $4.34\times10^{-6}$로, 약 595배 작아진다. Jacobian이 거의 0에 가까워진 것이다.
 
-이 상황에서 $d_0=1540$nm부터 Gauss-Newton을 돌리면 1666nm → 1543nm → 1417nm 세 값 사이를 20스텝을 넘도록 영원히 순환하며 전혀 수렴하지 않는다. 정규방정식의 분모($\sum_i r_i'^2$)가 지나치게 작아서 스텝이 매번 크게 오버슈트하기 때문이다. 같은 조건에서 Levenberg-Marquardt는 $\tau$ 값과 무관하게 10~20스텝 안에 이 (잘못된) 모델의 실제 최솟값 $d\approx1486.6$nm으로 안정적으로 수렴한다.
+이 상황에서 $d_0=1540$nm부터 Gauss-Newton을 돌리면 1665.5nm → 1543.4nm → 1416.8nm 세 값 사이를 순환할 뿐, 20스텝을 돌려도 전혀 수렴하지 않는다. 정규방정식의 분모($\sum_i r_i'^2$)가 지나치게 작아서 스텝이 매번 크게 오버슈트하기 때문이다. 같은 조건에서 Levenberg-Marquardt는 이 (잘못된) 모델의 실제 최솟값 $d\approx1486.6$nm으로 안정적으로 수렴한다.
 
 <img src="/assets/img/posts/optimization-levenberg-marquardt/fig4-gn-failure-lm-rescue.png" alt="GN 실패 vs LM 성공" width="600">
 _그림4. 굴절률을 잘못 가정한 모델에서: GN 실패 vs LM 성공_
