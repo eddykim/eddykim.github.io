@@ -1,16 +1,16 @@
 ---
-layout: post
-title: "엘립소메트리 배경이론 1편 — 전자기파에서 프레넬 방정식까지"
-date: 2026-09-04 20:00:00 +0900
+title: 엘립소메트리 배경이론 1편 — 전자기파에서 프레넬 방정식까지
+date: 2026-09-21 20:00:00 +0900
 categories: [광학, 전자기학]
+page_id: ellipsometry-electromagnetic-fresnel
 tags: [ellipsometry, electromagnetics, maxwell-equations, fresnel-equations, polarization, thin-film]
-description: "맥스웰 방정식에서 프레넬 반사계수까지의 수학 구조와, 검출기가 세기만 측정한다는 사실이 왜 엘립소메트리라는 계측법을 낳는지를 정리한다."
+description: 맥스웰 방정식에서 프레넬 반사계수까지의 수학 구조와, 검출기가 세기만 측정한다는 사실이 왜 엘립소메트리라는 계측법을 낳는지를 정리한다.
 math: true
 ---
 
 엘립소메트리(ellipsometry)는 빛의 편광 상태가 시료 표면에서 어떻게 바뀌는지를 측정해 박막의 두께와 굴절률을 알아내는 계측법이다. 이 계측법을 이해하려면 결국 "빛이 매질 경계면에서 어떻게 반사·굴절되는가"라는 전자기학의 가장 기본적인 질문으로 돌아가야 한다. 이번 시리즈는 그 배경이론을 3편에 걸쳐 정리한다. 1편(이번 글)은 맥스웰 방정식에서 출발해 프레넬 방정식까지의 수학적 구조를 따라가고, 2편은 편광 상태를 기술하는 스토크스 벡터와 뮬러 행렬을, 3편은 박막 다층 구조에서의 반사와 엘립소메트리 파라미터 $\Psi, \Delta$를 다룰 예정이다.
 
-이번 글에서 특히 눈여겨볼 지점은 하나다. 프레넬 방정식 자체는 광학 교재 어디에나 나오는 표준적인 결과지만, "그래서 왜 굳이 편광 상태를 비교하는 엘립소메트리라는 계측법이 필요한가"라는 질문에 답하려면 그 방정식이 유도되는 과정 중간에 있는 포인팅 벡터(Poynting vector) 항목을 짚고 넘어가야 한다. 검출기가 실제로 측정하는 물리량이 전기장 자체가 아니라는 사실, 그리고 그로 인해 잃어버리는 정보가 무엇인지가 이 시리즈 전체를 관통하는 동기이기 때문이다.
+이번 글에서 특히 눈여겨볼 지점은 하나다. 프레넬 방정식 자체는 광학 교재 어디에나 나오는 표준적인 결과지만, "그래서 왜 굳이 편광 상태를 비교하는 엘립소메트리라는 계측법이 필요한가"라는 질문에 답하려면 그 방정식이 유도되는 과정 중간에 있는 포인팅 벡터(Poynting vector) 대목을 짚고 넘어가야 한다. 검출기가 실제로 측정하는 물리량이 전기장 자체가 아니라는 사실, 그리고 그로 인해 잃어버리는 정보가 무엇인지가 이 시리즈 전체를 관통하는 동기이기 때문이다.
 
 ## 1. 맥스웰 방정식에서 평면파까지
 
@@ -20,15 +20,15 @@ $$ \nabla \cdot \mathbf{E} = 0, \qquad \nabla \cdot \mathbf{B} = 0 $$
 
 $$ \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}, \qquad \nabla \times \mathbf{B} = \mu_0 \epsilon_0 \frac{\partial \mathbf{E}}{\partial t} $$
 
-여기서 $\mathbf{E}$는 전기장, $\mathbf{B}$는 자기장, $\mu_0$와 $\epsilon_0$는 각각 진공의 투자율과 유전율이다. 이 네 식은 서로 독립적이지 않다 — 두 번째 회전 방정식의 양변에 다시 회전 연산자를 취하고 첫 번째 방정식의 발산 조건을 대입하면, 전기장과 자기장이 각각 만족하는 파동 방정식이 유도된다.
+여기서 $\mathbf{E}$는 전기장, $\mathbf{B}$는 자기장, $\mu_0$와 $\epsilon_0$는 각각 진공의 투자율과 유전율이다. 이 네 식을 결합하면 전기장과 자기장이 각각 만족하는 파동 방정식이 나온다. 두 회전 방정식 각각에 다시 회전 연산자를 취하고, 항등식 $\nabla\times(\nabla\times\mathbf{A}) = \nabla(\nabla\cdot\mathbf{A}) - \nabla^2\mathbf{A}$에 발산 조건($\nabla\cdot\mathbf{E}=\nabla\cdot\mathbf{B}=0$)을 대입하면 된다.
 
 $$ \nabla^2 \mathbf{E} - \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2} = 0, \qquad \nabla^2 \mathbf{B} - \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{B}}{\partial t^2} = 0 $$
 
 이 파동 방정식의 해는 평면파(plane wave)의 형태로 주어진다.
 
-$$ \mathbf{E}(\mathbf{r}, t) = \mathbf{E}_0\, e^{j(\mathbf{k}\cdot\mathbf{r} - \omega t)}, \qquad \mathbf{B}(\mathbf{r}, t) = \mathbf{B}_0\, e^{j(\mathbf{k}\cdot\mathbf{r} - \omega t)} $$
+$$ \mathbf{E}(\mathbf{r}, t) = \mathbf{E}_0\, e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}, \qquad \mathbf{B}(\mathbf{r}, t) = \mathbf{B}_0\, e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})} $$
 
-여기서 $\mathbf{k}$는 파수 벡터, $\omega$는 각진동수이며, 둘 사이에는 $\lvert \mathbf{k} \rvert = \omega/c$, $c = 1/\sqrt{\mu_0\epsilon_0}$ 관계가 성립한다. 지수함수 표현을 쓰는 이유는 계산 편의성 때문이다 — 실제 물리량은 이 복소수 표현의 실수부이지만, 미분과 위상 계산이 지수함수 형태에서 훨씬 간단해지므로 뒤에 나올 프레넬 방정식까지 이 표기를 그대로 끌고 간다. 이 대목에서 이미 중요한 사실 하나가 드러난다. 전기장은 진폭 $\mathbf{E}_0$뿐 아니라 위상 $\mathbf{k}\cdot\mathbf{r}-\omega t$ 정보를 함께 담고 있는 복소수 값이라는 점이다.
+여기서 $\mathbf{k}$는 파수 벡터, $\omega$는 각진동수이며, 둘 사이에는 $\lvert \mathbf{k} \rvert = \omega/c$, $c = 1/\sqrt{\mu_0\epsilon_0}$ 관계가 성립한다. 시간 인자를 $e^{j\omega t}$로 두는 것은 엘립소메트리 문헌의 관례를 따른 것이다. 이 부호 규약은 3절에서 복소굴절률을 정의할 때 다시 문제가 되므로 미리 고정해 둔다. 지수함수 표현을 쓰는 이유는 계산 편의성 때문이다 — 실제 물리량은 이 복소수 표현의 실수부이지만, 미분과 위상 계산이 지수함수 형태에서 훨씬 간단해지므로 뒤에 나올 프레넬 방정식까지 이 표기를 그대로 끌고 간다. 이 대목에서 이미 중요한 사실 하나가 드러난다. 전기장은 진폭 $\mathbf{E}_0$뿐 아니라 위상 $\omega t - \mathbf{k}\cdot\mathbf{r}$ 정보를 함께 담고 있는 복소수 값이라는 점이다.
 
 ## 2. 포인팅 벡터와 검출기가 실제로 보는 것
 
@@ -42,7 +42,7 @@ $$ \langle \mathbf{S} \rangle = \frac{1}{2}\,\mathrm{Re}(\mathbf{E} \times \math
 
 등방 매질에서 평면파에 대해 이 식을 전개하면, 검출기가 측정하는 세기(intensity) $I$는 전기장 진폭의 절댓값 제곱에 비례하는 스칼라량으로 정리된다.
 
-$$ I = \langle \mathbf{S} \rangle = \frac{1}{2}\sqrt{\frac{\epsilon_0}{\mu_0}}\, \lvert \mathbf{E}_0 \rvert^2 $$
+$$ I = \lvert \langle \mathbf{S} \rangle \rvert = \frac{1}{2}\sqrt{\frac{\epsilon_0}{\mu_0}}\, \lvert \mathbf{E}_0 \rvert^2 $$
 
 이 식이 이 시리즈 전체의 출발점이다. 1절 끝에서 전기장이 진폭과 위상 두 정보를 함께 담고 있다고 했는데, 세기 $I$는 그중 진폭 정보($\lvert \mathbf{E}_0 \rvert$)만 남기고 위상 정보를 제곱과 시간 평균 과정에서 완전히 지워버린다. 반사율이나 투과율처럼 세기만 재는 계측 — 흔히 말하는 "포토메트리(photometry)" 방식 — 은 원리적으로 이 위상 정보에 접근할 수 없다. 뒤에서 다시 이 지점으로 돌아온다.
 
@@ -54,9 +54,9 @@ $$ I = \langle \mathbf{S} \rangle = \frac{1}{2}\sqrt{\frac{\epsilon_0}{\mu_0}}\,
 
 $$ \theta_i = \theta_r, \qquad N_1 \sin\theta_i = N_2 \sin\theta_t $$
 
-여기서 $N_1, N_2$는 각 매질의 굴절률이다. 흡수가 있는 실제 물질은 복소굴절률 $N = n - jk$로 표현하는데, 실수부 $n$은 통상적인 굴절률이고 허수부 $k$는 물질이 빛을 얼마나 흡수하는지를 나타내는 소광계수(extinction coefficient)다.
+여기서 $N_1, N_2$는 각 매질의 굴절률이다. 흡수가 있는 실제 물질은 복소굴절률 $N = n - jk$로 표현하는데, 실수부 $n$은 통상적인 굴절률이고 허수부 $k$는 물질이 빛을 얼마나 흡수하는지를 나타내는 소광계수(extinction coefficient)다. 부호가 마이너스인 것은 1절에서 고정한 $e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}$ 규약과 짝을 이룬다. 이 규약에서 $\mathbf{k} = N\omega/c$를 대입하면 진행 방향으로 $e^{-k\omega z/c}$의 감쇠가 나오기 때문이다. 시간 인자를 $e^{-j\omega t}$로 두는 물리학 쪽 관례를 따른다면 같은 감쇠를 얻기 위해 $N = n + jk$로 써야 한다. 어느 쪽이든 물리는 같지만 두 규약을 섞으면 흡수가 증폭으로 뒤집히므로, 글 전체에서 하나로 통일한다.
 
-이 스넬의 법칙은 [기하광학 1편](/posts/raytracing-spherical-lens-refraction/)에서 렌즈 굴절 계산에 그대로 가져다 썼던 바로 그 식이다. 그 글에서는 "이 식이 왜 성립하는지는 다루지 않았다"고 미뤄뒀는데, 답은 여기 있다 — 경계면 양쪽에서 파수 벡터의 접선 성분이 같아야 한다는 조건(위상 정합, phase matching) 자체가 스넬의 법칙이다. 평면파 해 $e^{j(\mathbf{k}\cdot\mathbf{r}-\omega t)}$가 경계면 위의 모든 점, 모든 시각에서 입사파·반사파·굴절파 세 파동에 걸쳐 같은 위상으로 이어지려면 각 파동의 파수 벡터가 경계면 방향으로 투영한 성분이 서로 일치해야 하고, 그 조건을 각도로 풀어 쓴 결과가 정확히 $N_1\sin\theta_i = N_2\sin\theta_t$이다.
+이 스넬의 법칙은 [기하광학 1편](/posts/raytracing-spherical-lens-refraction/)에서 렌즈 굴절 계산에 그대로 가져다 썼던 바로 그 식이다. 그 글에서는 이 식을 주어진 결과로만 쓰고 왜 성립하는지는 다루지 않았는데, 답은 여기 있다 — 경계면 양쪽에서 파수 벡터의 접선 성분이 같아야 한다는 조건(위상 정합, phase matching) 자체가 스넬의 법칙이다. 평면파 해 $e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}$가 경계면 위의 모든 점, 모든 시각에서 입사파·반사파·굴절파 세 파동에 걸쳐 같은 위상으로 이어지려면 각 파동의 파수 벡터가 경계면 방향으로 투영한 성분이 서로 일치해야 하고, 그 조건을 각도로 풀어 쓴 결과가 정확히 $N_1\sin\theta_i = N_2\sin\theta_t$이다.
 
 ## 4. 프레넬 방정식 — 진폭비와 위상차를 함께 담는 계수
 
@@ -80,7 +80,7 @@ $$ R_p = \lvert r_p \rvert^2, \qquad R_s = \lvert r_s \rvert^2 $$
 <img src="/assets/img/posts/ellipsometry-electromagnetic-fresnel/fig2-fresnel-reflectance.png" alt="프레넬 반사율 R_p, R_s를 입사각에 대해 그린 그래프, 브루스터각 표시" width="600">
 _그림2. 프레넬 반사율 $R_p$, $R_s$ (N1=1.0, N2=1.5), 브루스터각 표시_
 
-$R_s$는 입사각이 커질수록 단조증가하지만, $R_p$는 특정 각도에서 정확히 0이 되는 지점을 지난다. 이 각도를 브루스터각(Brewster's angle)이라 하며, $r_p$의 분자가 0이 되는 조건 $N_2\cos\theta_i = N_1\cos\theta_t$을 스넬의 법칙과 함께 풀면 $\theta_B = \arctan(N_2/N_1)$로 구해진다(공기-유리 조합에서는 약 56.3°). 브루스터각에서는 p-편광 성분이 전혀 반사되지 않고 반사광은 순수한 s-편광만 남는데, 이 성질은 실제 계측 현장에서 편광 상태가 알려진 기준광을 만들어 광원이나 검출기 계열을 보정하는 용도로 활용되곤 한다. 다만 브루스터각 자체를 깊이 파고드는 것은 이 시리즈의 범위를 벗어나므로 여기서는 프레넬 방정식이 실제로 어떻게 쓰이는지 보여주는 예시로만 짚고 넘어간다.
+$R_s$는 입사각이 커질수록 단조증가하지만, $R_p$는 특정 각도에서 정확히 0이 되는 지점을 지난다. 이 각도를 브루스터각(Brewster's angle)이라 하며, $r_p$의 분자가 0이 되는 조건 $N_2\cos\theta_i = N_1\cos\theta_t$을 스넬의 법칙과 함께 풀면 $\theta_B = \arctan(N_2/N_1)$로 구해진다(공기-유리 조합에서는 56.3°). 브루스터각에서는 p-편광 성분이 전혀 반사되지 않고 반사광은 순수한 s-편광만 남는데, 이 성질은 실제 계측 현장에서 편광 상태가 알려진 기준광을 만들어 광원이나 검출기 계열을 보정하는 용도로 활용되곤 한다. 다만 브루스터각 자체를 깊이 파고드는 것은 이 시리즈의 범위를 벗어나므로 여기서는 프레넬 방정식이 실제로 어떻게 쓰이는지 보여주는 예시로만 짚고 넘어간다.
 
 ## 6. 흡수: Beer-Lambert 법칙과 침투 깊이
 
@@ -88,7 +88,7 @@ $R_s$는 입사각이 커질수록 단조증가하지만, $R_p$는 특정 각도
 
 $$ I(z) = I_0\, e^{-\alpha_{abs} z}, \qquad \alpha_{abs} = \frac{4\pi k}{\lambda} $$
 
-입사 세기가 $1/e$로 줄어드는 깊이를 광투과 깊이(penetration depth) $\delta$라 부른다.
+입사 세기가 $1/e$로 줄어드는 깊이를 침투 깊이(penetration depth) $\delta$라 부른다.
 
 $$ \delta = \frac{1}{\alpha_{abs}} = \frac{\lambda}{4\pi k} $$
 
@@ -102,7 +102,7 @@ $$ \delta = \frac{1}{\alpha_{abs}} = \frac{\lambda}{4\pi k} $$
 
 $$ \rho = \frac{r_p}{r_s} = \tan\Psi \, e^{j\Delta} $$
 
-을 얻을 수 있다. 여기서 $\tan\Psi$는 두 반사계수의 진폭비, $\Delta$는 위상차다. 세기(포인팅 벡터의 시간 평균) 하나만 재는 반사계 측정으로는 $\lvert r_p \rvert$와 $\lvert r_s \rvert$ 각각의 크기 정도만 따로 얻을 수 있는 반면, 편광 상태의 변화라는 상대적인 양을 측정하면 두 반사계수의 비율 전체 — 크기비와 위상차 — 를 한 번에 얻는다. 위상 정보에 직접 접근할 수 없다는 2절의 한계를, 절대량이 아니라 두 편광 성분 사이의 상대적인 비교로 우회하는 것이다. 이 $\Psi, \Delta$라는 한 쌍의 값이 엘립소메트리가 측정하는 실질적인 결과물이며, 이로부터 박막의 두께와 굴절률을 역산하는 과정은 3편에서 다룬다.
+을 얻을 수 있다. 여기서 $\tan\Psi$는 두 반사계수의 진폭비, $\Delta$는 위상차다. 세기(포인팅 벡터의 시간 평균) 하나만 재는 반사율 측정으로는 $\lvert r_p \rvert$와 $\lvert r_s \rvert$ 각각의 크기 정도만 따로 얻을 수 있는 반면, 편광 상태의 변화라는 상대적인 양을 측정하면 두 반사계수의 비율 전체 — 크기비와 위상차 — 를 한 번에 얻는다. 위상 정보에 직접 접근할 수 없다는 2절의 한계를, 절대량이 아니라 두 편광 성분 사이의 상대적인 비교로 우회하는 것이다. 이 $\Psi, \Delta$라는 한 쌍의 값이 엘립소메트리가 측정하는 실질적인 결과물이며, 이로부터 박막의 두께와 굴절률을 역산하는 과정은 3편에서 다룬다.
 
 ## 정리 및 다음 편 예고
 
