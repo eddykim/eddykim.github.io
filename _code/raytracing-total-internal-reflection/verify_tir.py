@@ -90,7 +90,7 @@ def exit_normal(path_row0, entry_surface):
         cx2, cy2, R2 = lens["cx1"], lens["cy1"], lens["R1"]
         boundary2, off2 = lens["BOUNDARY"][0], lens["BD_OFFSET"][0]
     w2_c = np.arccos((-vy1 * x1 + vx1 * y1 + vy1 * cx2 - vx1 * cy2) / (R2 * np.hypot(vy1, vx1))) + np.arctan2(vx1, -vy1)
-    w2_s = np.arccos((-vy1 * x1 + vx1 * y1 + vy1 * cx2 - vx1 * cy2) / (R2 * np.hypot(vy1, vx1))) - np.arctan2(-vy1, vx1)
+    w2_s = np.arcsin((-vy1 * x1 + vx1 * y1 + vy1 * cx2 - vx1 * cy2) / (R2 * np.hypot(vy1, vx1))) - np.arctan2(-vy1, vx1)
     x2_c, y2_c = R2 * np.cos(w2_c) + cx2, R2 * np.sin(w2_c) + cy2
     x2_s, y2_s = R2 * np.cos(w2_s) + cx2, R2 * np.sin(w2_s) + cy2
     w2, _, _ = _pick_candidate(boundary2, off2, w2_c, x2_c, y2_c, w2_s, x2_s, y2_s, x1, y1)

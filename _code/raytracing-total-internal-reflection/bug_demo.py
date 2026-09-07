@@ -57,7 +57,7 @@ def refract_through_lens_original(ray, entry_surface, lens, n_lens, n_air):
     cx2, cy2, R2 = lens["cx2"], lens["cy2"], lens["R2"]
     boundary2, off2 = lens["BOUNDARY"][1], lens["BD_OFFSET"][1]
     w2_c = np.arccos((-vy1 * x1 + vx1 * y1 + vy1 * cx2 - vx1 * cy2) / (R2 * np.hypot(vy1, vx1))) + np.arctan2(vx1, -vy1)
-    w2_s = np.arccos((-vy1 * x1 + vx1 * y1 + vy1 * cx2 - vx1 * cy2) / (R2 * np.hypot(vy1, vx1))) - np.arctan2(-vy1, vx1)
+    w2_s = np.arcsin((-vy1 * x1 + vx1 * y1 + vy1 * cx2 - vx1 * cy2) / (R2 * np.hypot(vy1, vx1))) - np.arctan2(-vy1, vx1)
     x2_c, y2_c = R2 * np.cos(w2_c) + cx2, R2 * np.sin(w2_c) + cy2
     x2_s, y2_s = R2 * np.cos(w2_s) + cx2, R2 * np.sin(w2_s) + cy2
     in_c2, in_s2 = inside(x2_c, y2_c, boundary2, off2), inside(x2_s, y2_s, boundary2, off2)

@@ -49,12 +49,17 @@ def make_prism(ex, ey, cx=0.0, cy=0.0, tx=0.0, ty=0.0, theta=0.0):
     return dict(verts=verts, BOUNDARY=boundary)
 
 
-def trace_ray_through_prism(ray, prism, n_lens, n_air, max_bounces=20, verbose=False):
+VERBOSE_WORDS_KO = {"transmit": "투과", "tir": "전반사(TIR)"}
+
+
+def trace_ray_through_prism(ray, prism, n_lens, n_air, max_bounces=20, verbose=False,
+                            words=None):
     """프리즘 경계와 더 이상 만나지 않을 때까지 광선을 추적한다.
 
     반환값은 (N, 4) 배열 -- 각 행은 충돌점 [x, y, vx, vy] (그 지점에서 나가는
     방향). 원본 CalculateRayPath_Prism.m의 TRANSIS와 동일한 형태다.
     """
+    W = words if words is not None else VERBOSE_WORDS_KO
     xs, ys, vx, vy = map(float, ray)
     boundary = prism["BOUNDARY"]
     n_seg = len(boundary)
@@ -114,13 +119,13 @@ def trace_ray_through_prism(ray, prism, n_lens, n_air, max_bounces=20, verbose=F
             air2glass = not air2glass
             if verbose:
                 print(f"  face=({x1:.1f},{y1:.1f})-({x2:.1f},{y2:.1f})  "
-                      f"theta_in={np.rad2deg(theta_in):.3f}deg  투과  "
+                      f"theta_in={np.rad2deg(theta_in):.3f}deg  {W['transmit']}  "
                       f"theta_out={np.rad2deg(theta_out):.3f}deg")
         else:
             vout = np.array([vx, vy]) - 2 * (vx * nx + vy * ny) * np.array([nx, ny])
             if verbose:
                 print(f"  face=({x1:.1f},{y1:.1f})-({x2:.1f},{y2:.1f})  "
-                      f"theta_in={np.rad2deg(theta_in):.3f}deg  전반사(TIR)")
+                      f"theta_in={np.rad2deg(theta_in):.3f}deg  {W['tir']}")
 
         vout = vout / np.linalg.norm(vout)
         vx, vy = vout
