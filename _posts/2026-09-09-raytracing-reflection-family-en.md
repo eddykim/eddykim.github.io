@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/raytracing-reflection-family/
 page_id: raytracing-reflection-family
-date: 2026-09-11 20:00:00 +0900
+date: 2026-09-09 20:00:00 +0900
 categories: [Optics, Geometrical Optics]
 tags: [ray-tracing, geometric-optics, reflection, python, matlab]
 description: Why a single reflection vector formula suffices across the whole library, how it is used in the flat mirror, spherical mirror, beamsplitter and arbitrary mirror, and how far the result drifts when the vertex normal of the arbitrary mirror is computed wrongly.

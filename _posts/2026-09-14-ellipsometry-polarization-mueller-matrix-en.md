@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ellipsometry-polarization-mueller-matrix/
 page_id: ellipsometry-polarization-mueller-matrix
-date: 2026-09-23 20:00:00 +0900
+date: 2026-09-14 20:00:00 +0900
 categories: [Optics, Polarization]
 tags: [ellipsometry, polarization, jones-vector, stokes-vector, mueller-matrix]
 description: What a Jones vector can and cannot express compared with a Stokes vector, and the Mueller matrices of polarizers and retarders mapped onto the hardware they describe.

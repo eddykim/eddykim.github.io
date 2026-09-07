@@ -1,6 +1,6 @@
 ---
 title: 최적화 방법론 3편 — Levenberg-Marquardt법
-date: 2026-09-16 20:00:00 +0900
+date: 2026-09-11 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-levenberg-marquardt
 tags: [optimization, levenberg-marquardt, gauss-newton, least-squares, thin-film, python]

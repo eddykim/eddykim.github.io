@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-levenberg-marquardt/
 page_id: optimization-levenberg-marquardt
-date: 2026-09-16 20:00:00 +0900
+date: 2026-09-11 20:00:00 +0900
 categories: [Computation, Optimization]
 tags: [optimization, levenberg-marquardt, gauss-newton, least-squares, thin-film, python]
 description: Levenberg-Marquardt moves smoothly between Gauss-Newton and steepest descent through a damping parameter, tested here against a case constructed to make Gauss-Newton fail.

@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ellipsometry-electromagnetic-fresnel/
 page_id: ellipsometry-electromagnetic-fresnel
-date: 2026-09-21 20:00:00 +0900
+date: 2026-09-13 20:00:00 +0900
 categories: [Optics, Electromagnetics]
 tags: [ellipsometry, electromagnetics, maxwell-equations, fresnel-equations, polarization, thin-film]
 description: The mathematical chain from Maxwell's equations to the Fresnel reflection coefficients, and why the fact that a detector measures only intensity gives rise to ellipsometry as a measurement technique.

@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-newton-gauss-newton/
 page_id: optimization-newton-gauss-newton
-date: 2026-09-14 20:00:00 +0900
+date: 2026-09-10 20:00:00 +0900
 categories: [Computation, Optimization]
 tags: [optimization, newton-method, gauss-newton, least-squares, thin-film, python]
 description: Solving the same thin-film thickness fit with Newton's method and with Gauss-Newton, and seeing why Gauss-Newton is the standard in metrology practice.

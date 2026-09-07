@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ellipsometry-thin-film-multilayer-reflectance/
 page_id: ellipsometry-thin-film-multilayer-reflectance
-date: 2026-09-25 20:00:00 +0900
+date: 2026-09-15 20:00:00 +0900
 categories: [Optics, Thin-Film Modeling]
 tags: [ellipsometry, thin-film, multilayer, transfer-matrix, scattering-matrix, interference]
 description: Folding the multiple reflections inside a single film into one effective reflection coefficient, and how to choose among Rouard's method, the transfer matrix method and the scattering matrix method in practice.

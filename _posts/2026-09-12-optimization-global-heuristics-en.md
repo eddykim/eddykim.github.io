@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-global-heuristics/
 page_id: optimization-global-heuristics
-date: 2026-09-18 20:00:00 +0900
+date: 2026-09-12 20:00:00 +0900
 categories: [Computation, Optimization]
 tags: [optimization, simulated-annealing, basin-hopping, global-optimization, metropolis, thin-film]
 description: How Simulated Annealing and Basin-Hopping cross the basin boundaries that local optimization cannot, using a single temperature parameter — tested experimentally.

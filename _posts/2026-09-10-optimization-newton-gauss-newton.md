@@ -1,6 +1,6 @@
 ---
 title: 최적화 방법론 2편 — Newton법과 Gauss-Newton법
-date: 2026-09-14 20:00:00 +0900
+date: 2026-09-10 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-newton-gauss-newton
 tags: [optimization, newton-method, gauss-newton, least-squares, thin-film, python]

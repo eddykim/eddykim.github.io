@@ -1,6 +1,6 @@
 ---
 title: 엘립소메트리 배경이론 2편 — 편광, 스토크스 벡터, 뮬러 행렬
-date: 2026-09-23 20:00:00 +0900
+date: 2026-09-14 20:00:00 +0900
 categories: [광학, 편광]
 page_id: ellipsometry-polarization-mueller-matrix
 tags: [ellipsometry, polarization, jones-vector, stokes-vector, mueller-matrix]

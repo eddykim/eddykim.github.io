@@ -25,14 +25,14 @@
 [x]  1  start-blog                                    2026-09-05 발행
 [x]  2  optimization-gradient-descent                 2026-09-06 발행
 [x]  3  raytracing-spherical-lens-refraction          2026-09-07 발행
-[x]  4  raytracing-total-internal-reflection          2026-09-09 발행
-[x]  5  raytracing-reflection-family                  2026-09-11 발행
-[x]  6  optimization-newton-gauss-newton              2026-09-14 발행
-[x]  7  optimization-levenberg-marquardt              2026-09-16 발행
-[x]  8  optimization-global-heuristics                2026-09-18 발행
-[x]  9  ellipsometry-electromagnetic-fresnel          2026-09-21 발행
-[x] 10  ellipsometry-polarization-mueller-matrix      2026-09-23 발행
-[x] 11  ellipsometry-thin-film-multilayer-reflectance  2026-09-25 발행
+[x]  4  raytracing-total-internal-reflection          2026-09-08 예약
+[x]  5  raytracing-reflection-family                  2026-09-09 예약
+[x]  6  optimization-newton-gauss-newton              2026-09-10 예약
+[x]  7  optimization-levenberg-marquardt              2026-09-11 예약
+[x]  8  optimization-global-heuristics                2026-09-12 예약
+[x]  9  ellipsometry-electromagnetic-fresnel          2026-09-13 예약
+[x] 10  ellipsometry-polarization-mueller-matrix      2026-09-14 예약
+[x] 11  ellipsometry-thin-film-multilayer-reflectance 2026-09-15 예약
 ```
 
 **순서를 어기면 배포가 막힌다.** 글 사이의 링크가 전부 과거 글을 향하므로, 이 순서대로 올리면 매 시점에 링크가 유효하다. 예를 들어 6번을 2번보다 먼저 올리면 1편으로 가는 링크가 404가 된다.
@@ -43,8 +43,11 @@
   단, 수사적 질문("~하는 이유는 무엇인가")은 이 블로그 글의 강점이므로 남긴다.
   소개글만 예외적으로 존댓말이며 이미 발행됐다.
 - **영문판**: 모든 글에 함께 만든다. 번역이 아니라 영어로 다시 쓴다.
-- **발행 주기**: 주 3회 **월·수·금 20:00 KST**. 다음 빈 슬롯에 배정한다.
-  11편 전체가 재발행되었다. 마지막 글은 9/25(금)이다.
+- **발행 주기**: 원래는 주 3회 월·수·금이었으나, 재발행분에 한해 **하루 한 편**으로
+  바꿨다(2026-09-08 ~ 09-15, 매일 20:00 KST). 이미 발행된 1~3편은 URL 이 살아
+  있으므로 날짜를 건드리지 않았다.
+  `.github/workflows` 의 예약 재빌드 cron 도 `1,3,5` 에서 매일로 함께 바꿨다.
+  이 cron 이 없으면 화·목·토·일 글은 다음 월·수·금까지 게시되지 않는다.
 - **카테고리**: 한국어는 `categories.yaml`의 분류를, 영문은 같은 파일의 `en_names`
   대응표를 쓴다. 이미 draft 파일들의 카테고리는 새 체계로 갱신해 두었다.
 - **커밋·푸시**: 사용자의 명시적 지시가 있을 때만. CLAUDE.md 절대 규칙이다.

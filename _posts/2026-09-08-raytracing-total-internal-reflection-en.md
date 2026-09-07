@@ -4,7 +4,7 @@ lang: en
 lang-exclusive: ["en"]
 permalink: /posts/raytracing-total-internal-reflection/
 page_id: raytracing-total-internal-reflection
-date: 2026-09-09 20:00:00 +0900
+date: 2026-09-08 20:00:00 +0900
 categories: [Optics, Geometrical Optics]
 tags: [ray-tracing, geometric-optics, snells-law, python, matlab]
 description: Verifying the total internal reflection test in the prism routine, then applying the same logic to the exit surface of the spherical lens refraction function — and counting how often the reflection formula recurs across the library.

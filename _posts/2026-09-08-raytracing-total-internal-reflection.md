@@ -1,6 +1,6 @@
 ---
 title: 기하광학 2편 — 전반사(TIR) 판정과 렌즈에 적용하기
-date: 2026-09-09 20:00:00 +0900
+date: 2026-09-08 20:00:00 +0900
 categories: [광학, 기하광학]
 page_id: raytracing-total-internal-reflection
 tags: [ray-tracing, geometric-optics, snells-law, python, matlab]

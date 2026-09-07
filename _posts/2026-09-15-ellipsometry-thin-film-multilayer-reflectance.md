@@ -1,6 +1,6 @@
 ---
 title: 엘립소메트리 배경이론 3편 — 박막 다중반사와 다층 계산법 3가지
-date: 2026-09-25 20:00:00 +0900
+date: 2026-09-15 20:00:00 +0900
 categories: [광학, 박막모델링]
 page_id: ellipsometry-thin-film-multilayer-reflectance
 tags: [ellipsometry, thin-film, multilayer, transfer-matrix, scattering-matrix, interference]

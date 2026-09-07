@@ -1,6 +1,6 @@
 ---
 title: 엘립소메트리 배경이론 1편 — 전자기파에서 프레넬 방정식까지
-date: 2026-09-21 20:00:00 +0900
+date: 2026-09-13 20:00:00 +0900
 categories: [광학, 전자기학]
 page_id: ellipsometry-electromagnetic-fresnel
 tags: [ellipsometry, electromagnetics, maxwell-equations, fresnel-equations, polarization, thin-film]

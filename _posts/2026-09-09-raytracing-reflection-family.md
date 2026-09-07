@@ -1,6 +1,6 @@
 ---
 title: 기하광학 3편 — 반사는 왜 하나의 공식으로 충분한가
-date: 2026-09-11 20:00:00 +0900
+date: 2026-09-09 20:00:00 +0900
 categories: [광학, 기하광학]
 page_id: raytracing-reflection-family
 tags: [ray-tracing, geometric-optics, reflection, python, matlab]
