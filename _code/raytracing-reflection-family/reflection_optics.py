@@ -125,9 +125,12 @@ def make_arbitrary_mirror(ex, ey, cx=0.0, cy=0.0, tx=0.0, ty=0.0, theta=0.0):
 def _vertex_normal(x0, y0, x1, y1, x2, y2, xc, yc, dup_point):
     """꼭짓점(xc,yc)에서의 국소 곡률 법선 -- 인접 3점을 지나는 원의 중심에서 구한다.
 
-    dup_point=True는 P에서 세 번째 점(x2,y2) 대신 두 번째 점(x1,y1)을 다시 쓴다.
-    세 점이 서로 달라야 원이 유일하게 정해지므로, 이 경우 그 조건이 깨진다.
-    dup_point=False가 세 번째 점을 올바르게 쓰는 버전이다.
+    dup_point=True는 우변 P의 세 번째 성분에 세 번째 점(x2,y2) 대신 두 번째
+    점(x1,y1) -- 즉 꼭짓점 자신 -- 을 쓴다. 좌변 M의 세 번째 행은 그대로
+    (x2,y2)이므로 M은 여전히 정칙이고 solve 는 성공한다. 다만 세 번째 방정식의
+    좌변과 우변이 서로 다른 점을 가리켜, 앞의 두 점만 지나고 세 번째 점은
+    빗나가는 엉뚱한 원이 나온다.
+    dup_point=False가 세 점을 모두 올바르게 쓰는 버전이다.
     """
     M = np.array([[x0, y0, 1], [x1, y1, 1], [x2, y2, 1]], dtype=float)
     if dup_point:

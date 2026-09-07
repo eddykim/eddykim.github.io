@@ -20,8 +20,8 @@
 [x]  2  optimization-gradient-descent                 2026-09-06 발행
 [x]  3  raytracing-spherical-lens-refraction          2026-09-07 발행
 [x]  4  raytracing-total-internal-reflection          2026-09-09 발행
-[ ]  5  raytracing-reflection-family                    ← 다음
-[ ]  6  optimization-newton-gauss-newton              ※ 링크 복원 필요
+[x]  5  raytracing-reflection-family                  2026-09-11 발행
+[ ]  6  optimization-newton-gauss-newton              ← 다음  ※ 링크 복원 필요
 [ ]  7  optimization-levenberg-marquardt
 [ ]  8  optimization-global-heuristics                ※ 링크 복원 필요
 [ ]  9  ellipsometry-electromagnetic-fresnel
@@ -38,7 +38,7 @@
   소개글만 예외적으로 존댓말이며 이미 발행됐다.
 - **영문판**: 모든 글에 함께 만든다. 번역이 아니라 영어로 다시 쓴다.
 - **발행 주기**: 주 3회 **월·수·금 20:00 KST**. 다음 빈 슬롯에 배정한다.
-  4번 글은 9/9(수)에 배정했으므로 5번 글의 첫 빈 슬롯은 9/11(금)이다.
+  5번 글은 9/11(금)에 배정했으므로 6번 글의 첫 빈 슬롯은 9/14(월)이다.
 - **카테고리**: 한국어는 `categories.yaml`의 분류를, 영문은 같은 파일의 `en_names`
   대응표를 쓴다. 이미 draft 파일들의 카테고리는 새 체계로 갱신해 두었다.
 - **커밋·푸시**: 사용자의 명시적 지시가 있을 때만. CLAUDE.md 절대 규칙이다.
