@@ -1,10 +1,10 @@
 ---
-layout: post
-title: "최적화 방법론 2편 — Newton법과 Gauss-Newton법"
-date: 2026-09-02 09:00:00 +0900
+title: 최적화 방법론 2편 — Newton법과 Gauss-Newton법
+date: 2026-09-14 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
+page_id: optimization-newton-gauss-newton
 tags: [optimization, newton-method, gauss-newton, least-squares, thin-film, python]
-description: "Newton법과 Gauss-Newton법으로 박막 두께 피팅을 풀며, 왜 Gauss-Newton이 계측 실무의 표준인지 확인한다."
+description: Newton법과 Gauss-Newton법으로 박막 두께 피팅을 풀며, 왜 Gauss-Newton이 계측 실무의 표준인지 확인한다.
 math: true
 ---
 
@@ -67,7 +67,18 @@ _그림2. 두께 추정값 vs iteration (d0=1540nm)_
 <img src="/assets/img/posts/optimization-newton-gauss-newton/fig3-objective-vs-iteration.png" alt="목적함수 J vs iteration" width="600">
 _그림3. 목적함수 J vs iteration (d0=1540nm, log scale)_
 
-예상과 다른 결과가 나왔다. Gradient descent(파란선)는 1편에서 본 대로 매끄럽게 수렴한다. 그런데 Newton(빨간선)은 첫 스텝부터 1875nm까지 튀어 오르더니, 10번을 돌려도 1660~1920nm 사이를 오르내리며 전혀 정착하지 못한다. "2차 수렴이 더 빠르다"는 이론이 무색하게, 이 초기값에서는 Newton법이 아예 작동하지 않는다.
+예상과 다른 결과가 나왔다. Gradient descent(파란선)는 1편에서 본 대로 매끄럽게 수렴한다. 그런데 Newton(빨간선)은 첫 스텝부터 1876nm까지 튀어 오르더니, 이후 1824~1921nm 사이를 오르내리며 전혀 정착하지 못한다. "2차 수렴이 더 빠르다"는 이론이 무색하게, 이 초기값에서는 Newton법이 아예 작동하지 않는다.
+
+한 가지 덧붙일 것이 있다. 이 발산 궤적의 개별 반복값은 인용할 만한 수치가 아니다. 궤적이 $J''$가 0에 가까운 구간을 지나면서 반올림 오차를 증폭시키기 때문이다. 초기값을 $10^{-12}$nm만 흔들어도 10스텝째 두께가 수백 nm 달라진다.
+
+```text
+발산 궤적의 초기값 민감도 (10스텝째 두께):
+  d0=1540.000000000000 -> 1636.55 nm
+  d0=1540.000000000001 -> 1855.29 nm
+  d0=1540.000000000100 -> 1854.98 nm
+```
+
+재현되는 것은 "수렴하지 않고 최솟값에서 수백 nm 떨어진 곳을 헤맨다"는 사실이지, 특정 반복값이 아니다.
 
 ## 3. 왜 실패했는가 — 2차 근사가 무너지는 지점
 
@@ -75,15 +86,15 @@ _그림3. 목적함수 J vs iteration (d0=1540nm, log scale)_
 
 | 지점 | $J''(d)$ | 의미 |
 |---|---|---|
-| $d=1500$ | $+0.00249$ | 아래로 볼록 — 정상적인 Newton 스텝 |
-| $d=1540$ | $-0.00023$ | 위로 볼록(오목) — 스텝이 반대 방향으로 튐 |
+| $d=1500$ | $+0.002487$ | 아래로 볼록 — 정상적인 Newton 스텝 |
+| $d=1540$ | $-0.000233$ | 위로 볼록(오목) — 스텝이 반대 방향으로 튐 |
 
 $d=1540$에서는 곡률의 부호 자체가 뒤집혀 있다. 이 지점은 간섭 무늬가 만드는 국소적인 "언덕" 근처였던 셈이고, Newton 스텝 공식 $-J'/J''$은 $J''$가 음수일 때 오히려 목적함수가 커지는 방향으로 움직인다. 그림4는 같은 방법(Newton)이 시작점만 40nm 다를 뿐인데도 완전히 다른 운명을 맞는 모습을 보여준다.
 
 <img src="/assets/img/posts/optimization-newton-gauss-newton/fig4-newton-success-vs-failure.png" alt="Newton법의 두 얼굴" width="600">
 _그림4. Newton법의 두 얼굴 - 초기값에 따른 성공/실패_
 
-$d_0=1500$(초록선)은 곡률이 정상이라 2회 만에 노이즈 바닥까지 떨어지는 교과서적인 2차 수렴을 보여준다. $d_0=1540$(빨간선)은 10번을 돌려도 초기값과 비슷한 수준에 머물러 있다. 이건 구현 버그가 아니라 Newton법 자체의 구조적인 약점이다. Newton법의 스텝이 매번 목적함수를 줄이는 방향(descent direction)이라는 보장은 그 지점의 Hessian이 양의 정부호(positive definite)일 때만 성립한다고 알려져 있다. 우리 문제처럼 목적함수가 여러 굴곡을 가진 비볼록 함수라면, 초기값이 어느 "골짜기"에 있느냐에 따라 Newton법의 운명이 갈린다.
+$d_0=1500$(초록선)은 곡률이 정상이라 2회 만에 노이즈 바닥까지 떨어지는 교과서적인 2차 수렴을 보여준다. $d_0=1540$(빨간선)은 10번을 돌려도 초기값보다 먼 곳에 머물러 있다. 이는 구현 버그가 아니라 Newton법 자체의 구조적인 약점이다. Newton법의 스텝이 목적함수를 줄이는 방향(descent direction)이라는 보장은 그 지점의 Hessian이 양의 정부호(positive definite)일 때만 성립한다. 이 문제처럼 목적함수가 여러 굴곡을 가진 비볼록 함수라면, 초기값이 어느 "골짜기"에 있느냐에 따라 Newton법의 운명이 갈린다.
 
 ## 4. Newton법의 한계
 
@@ -124,16 +135,16 @@ def gauss_newton(d0, wavelength_nm, measured_R, n_iter=100, h=1e-3):
     return np.array(d_hist), np.array(J_hist)
 ```
 
-이 근사 Hessian $J^TJ$(우리 문제에서는 $\sum_i r_i'^2$)에는 Newton의 실제 Hessian에 없는 중요한 성질이 있다. 제곱의 합이라 $J^TJ$는 (Jacobian이 rank를 유지하는 한) 항상 양의 정부호이거나 최소한 준정부호(positive semidefinite)다. 즉 Gauss-Newton의 스텝에는 곡률의 부호가 뒤집히는 지점이 없어서, 3절에서 Newton이 발산했던 바로 그 이유(음의 곡률)로부터 원천적으로 자유롭다.
+이 근사 Hessian $J^TJ$(이번 문제에서는 $\sum_i r_i'^2$)에는 Newton의 실제 Hessian에 없는 중요한 성질이 있다. 제곱의 합이므로 $J^TJ$는 언제나 양의 준정부호(positive semidefinite)이고, Jacobian이 full rank이면 양의 정부호다. 즉 Gauss-Newton의 스텝에는 곡률의 부호가 뒤집히는 지점이 없어서, 3절에서 Newton이 발산했던 바로 그 이유(음의 곡률)로부터 원천적으로 자유롭다.
 
 ## 6. 실험 — 같은 실패 지점에서 Gauss-Newton은?
 
-그림2·그림3의 초록선이 Gauss-Newton이다. $d_0=1540$nm, Newton이 발산했던 바로 그 시작점에서 Gauss-Newton은 3번째 스텝 만에 노이즈 바닥까지 떨어졌다 — gradient descent(alpha=300)가 이 조건에서 4~5스텝 걸린 것보다도 빠르다.
+그림2·그림3의 초록선이 Gauss-Newton이다. $d_0=1540$nm, Newton이 발산했던 바로 그 시작점에서 Gauss-Newton은 3번째 스텝 만에 노이즈 바닥까지 떨어졌다 — gradient descent(alpha=300)가 이 조건에서 5스텝 걸린 것보다도 빠르다.
 
 | 방법 | $d_0=1540$nm 결과 |
 |---|---|
-| Gradient Descent (alpha=300) | 1490.12nm, 4~5스텝 근방 수렴 |
-| Newton | 1666.31nm, 10스텝까지 미수렴(발산) |
+| Gradient Descent (alpha=300) | 1490.12nm, 5스텝 수렴 |
+| Newton | 10스텝까지 미수렴, 최솟값에서 100nm 이상 떨어진 곳 |
 | Gauss-Newton | 1490.12nm, 3스텝 수렴 |
 
 Hessian의 실제 곡률 부호가 무엇이든 상관없이 $\sum_i r_i'^2$은 항상 0 이상이라는 사실 하나가 이런 차이를 만든다. 계측 소프트웨어들이 일반 Newton법 대신 Gauss-Newton(혹은 다음 편에서 다룰 Levenberg-Marquardt)을 표준으로 쓰는 이유가 바로 여기 있다. 2차 미분 계산 비용을 아끼는 것도 있지만, 그보다 이 구조적인 안정성이 더 크다.
@@ -142,13 +153,13 @@ Hessian의 실제 곡률 부호가 무엇이든 상관없이 $\sum_i r_i'^2$은 
 
 그렇다고 Gauss-Newton이 모든 상황에서 안전한 것은 아니다. 버려진 둘째 항 $\sum_i r_i r_i''$이 항상 무시할 만큼 작은 것은 아니기 때문이다. 이론적으로 알려진 실패 조건은 크게 두 가지다.
 
-첫째, 잔차 자체가 크면(모델이 데이터에 잘 안 맞으면) 버려진 항이 커져서 2차 수렴은커녕 선형 수렴에 그치거나 발산할 수 있다. 실제로 해에서 잔차가 정확히 0인 경우(consistent problem)에만 Gauss-Newton도 Newton과 같은 2차 수렴을 회복한다.
+첫째, 잔차 자체가 크면(모델이 데이터에 잘 안 맞으면) 버려진 항이 커져서 2차 수렴은커녕 선형 수렴에 그치거나 발산할 수 있다. 해에서 잔차가 0인 문제(zero-residual problem)에서는 Gauss-Newton도 Newton과 같은 2차 수렴을 회복한다.
 
-둘째, 시작점이 다른 국소 최솟값의 basin에 있으면 Gauss-Newton도 당연히 그 지점으로 수렴한다. 실제로 $d_0$를 1300nm 근방, 1690nm 근방으로 바꿔서 돌려보면 각각 1293nm, 1688nm — 1편 그림2에서 본 이웃 국소 최솟값으로 정확히 수렴한다. Gauss-Newton의 안정성은 "전역 최솟값을 찾아준다"는 뜻이 아니라 "한 번 방향을 잡으면 헤매지 않고 그 방향으로 곧장 간다"는 뜻에 가깝다.
+둘째, 시작점이 다른 국소 최솟값의 basin에 있으면 Gauss-Newton도 당연히 그 지점으로 수렴한다. 실제로 $d_0$를 1300nm 근방, 1690nm 근방으로 바꿔서 돌려보면 각각 1293nm, 1689nm — 1편 그림2에서 본 이웃 국소 최솟값으로 정확히 수렴한다. Gauss-Newton의 안정성은 "전역 최솟값을 찾아준다"는 뜻이 아니라 "한 번 방향을 잡으면 헤매지 않고 그 방향으로 곧장 간다"는 뜻에 가깝다.
 
 ## 정리
 
-이번 편에서 확인한 것을 정리하면, Newton법은 이론상 가장 빠른 2차 수렴을 약속하지만 그 약속은 목적함수가 국소적으로 볼록(convex)할 때만 유효하고, 우리 문제처럼 간섭 무늬로 굴곡진 비볼록 목적함수에서는 초기값에 따라 완전히 실패할 수 있다. Gauss-Newton법은 비선형최소자승이라는 문제의 구조를 이용해 Hessian을 $J^TJ$로 근사함으로써 이 실패 조건 자체를 없앤다 — 대신 잔차가 큰 경우의 수렴 속도 저하라는 다른 대가를 치른다.
+이번 편에서 확인한 것을 정리하면, Newton법은 이론상 가장 빠른 2차 수렴을 약속하지만 그 약속은 목적함수가 국소적으로 볼록(convex)할 때만 유효하고, 이 문제처럼 간섭 무늬로 굴곡진 비볼록 목적함수에서는 초기값에 따라 완전히 실패할 수 있다. Gauss-Newton법은 비선형최소자승이라는 문제의 구조를 이용해 Hessian을 $J^TJ$로 근사함으로써 이 실패 조건 자체를 없앤다 — 대신 잔차가 큰 경우의 수렴 속도 저하라는 다른 대가를 치른다.
 
 다음 편에서는 Gauss-Newton법의 이 약점(잔차가 클 때의 불안정성)을 damping parameter로 보완하는 Levenberg-Marquardt법을 다룬다. 계측 분야에서 사실상 표준으로 쓰이는 방법으로, gradient descent와 Gauss-Newton 사이를 매끄럽게 오가며 두 방법의 장점만 취하는 구조를 가지고 있다.
 
