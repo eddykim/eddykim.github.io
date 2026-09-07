@@ -25,8 +25,8 @@
 [x]  7  optimization-levenberg-marquardt              2026-09-16 발행
 [x]  8  optimization-global-heuristics                2026-09-18 발행
 [x]  9  ellipsometry-electromagnetic-fresnel          2026-09-21 발행
-[ ] 10  ellipsometry-polarization-mueller-matrix      ← 다음
-[ ] 11  ellipsometry-thin-film-multilayer-reflectance
+[x] 10  ellipsometry-polarization-mueller-matrix      2026-09-23 발행
+[ ] 11  ellipsometry-thin-film-multilayer-reflectance  ← 다음 (마지막)
 ```
 
 **순서를 어기면 배포가 막힌다.** 글 사이의 링크가 전부 과거 글을 향하므로, 이 순서대로 올리면 매 시점에 링크가 유효하다. 예를 들어 6번을 2번보다 먼저 올리면 1편으로 가는 링크가 404가 된다.
@@ -38,7 +38,7 @@
   소개글만 예외적으로 존댓말이며 이미 발행됐다.
 - **영문판**: 모든 글에 함께 만든다. 번역이 아니라 영어로 다시 쓴다.
 - **발행 주기**: 주 3회 **월·수·금 20:00 KST**. 다음 빈 슬롯에 배정한다.
-  9번 글은 9/21(월)에 배정했으므로 10번 글의 첫 빈 슬롯은 9/23(수)이다.
+  10번 글은 9/23(수)에 배정했으므로 마지막 11번 글의 첫 빈 슬롯은 9/25(금)이다.
 - **카테고리**: 한국어는 `categories.yaml`의 분류를, 영문은 같은 파일의 `en_names`
   대응표를 쓴다. 이미 draft 파일들의 카테고리는 새 체계로 갱신해 두었다.
 - **커밋·푸시**: 사용자의 명시적 지시가 있을 때만. CLAUDE.md 절대 규칙이다.
