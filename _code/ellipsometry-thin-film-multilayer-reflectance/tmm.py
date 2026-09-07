@@ -43,6 +43,16 @@ def tmm_rt(n_list, d_list, wavelength, theta0=0.0, pol="s"):
 
     r_total = M[1, 0] / M[0, 0]
     t_total = 1.0 / M[0, 0]
+
+    # p-편광 부호 규약 맞추기.
+    # 광학 어드미턴스 eta_p = n/cos(theta) 로 세운 Abeles 특성행렬에서 읽어낸 r 은
+    # Born-Wolf 규약이라, 이 시리즈가 1편부터 써온 Fresnel 규약
+    #     r_p = (N2 cos(theta_i) - N1 cos(theta_t)) / (N2 cos(theta_i) + N1 cos(theta_t))
+    # 과 부호가 반대다. smm_tensor.py 도 Fresnel 규약을 쓰므로 여기서 맞춰준다.
+    # R = |r|^2 은 어느 규약이든 같지만, rho = r_p/r_s 의 편각인 Delta 는 규약을
+    # 섞으면 180도 어긋난다.
+    if pol == "p":
+        r_total = -r_total
     return r_total, t_total
 
 
