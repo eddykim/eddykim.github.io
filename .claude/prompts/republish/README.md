@@ -23,8 +23,8 @@
 [x]  5  raytracing-reflection-family                  2026-09-11 발행
 [x]  6  optimization-newton-gauss-newton              2026-09-14 발행
 [x]  7  optimization-levenberg-marquardt              2026-09-16 발행
-[ ]  8  optimization-global-heuristics                ← 다음  ※ 링크 확인
-[ ]  9  ellipsometry-electromagnetic-fresnel
+[x]  8  optimization-global-heuristics                2026-09-18 발행
+[ ]  9  ellipsometry-electromagnetic-fresnel          ← 다음
 [ ] 10  ellipsometry-polarization-mueller-matrix
 [ ] 11  ellipsometry-thin-film-multilayer-reflectance
 ```
@@ -38,7 +38,7 @@
   소개글만 예외적으로 존댓말이며 이미 발행됐다.
 - **영문판**: 모든 글에 함께 만든다. 번역이 아니라 영어로 다시 쓴다.
 - **발행 주기**: 주 3회 **월·수·금 20:00 KST**. 다음 빈 슬롯에 배정한다.
-  7번 글은 9/16(수)에 배정했으므로 8번 글의 첫 빈 슬롯은 9/18(금)이다.
+  8번 글은 9/18(금)에 배정했으므로 9번 글의 첫 빈 슬롯은 9/21(월)이다.
 - **카테고리**: 한국어는 `categories.yaml`의 분류를, 영문은 같은 파일의 `en_names`
   대응표를 쓴다. 이미 draft 파일들의 카테고리는 새 체계로 갱신해 두었다.
 - **커밋·푸시**: 사용자의 명시적 지시가 있을 때만. CLAUDE.md 절대 규칙이다.
@@ -77,18 +77,12 @@ page_id: <slug>
 `page_id`가 양쪽에 있어야 hreflang이 붙는다. 없으면 검색엔진이 두 글을 중복
 콘텐츠로 보고 서로 순위를 깎는다.
 
-### 4) 링크 복원 (6번과 8번에만 해당)
+### 4) 링크 복원 — 완료됨
 
-전체를 내릴 때 최적화 2편·4편이 1편을 링크하고 있어 htmlproofer가 실패했다.
-임시로 일반 텍스트 `1편`로 바꿔뒀으나, `1cd3746`(전체를 내린 커밋)에서 이미
-원래대로 복원되어 있었다. 6번 글에서 확인했으므로 8번도 그럴 가능성이 높다.
-재발행할 때 링크가 살아 있는지만 확인하면 된다.
-
-```markdown
-1편  →  [1편](/posts/optimization-gradient-descent/)
-```
-
-1편은 9/6에 발행되므로 그 뒤라면 링크가 유효하다.
+전체를 내릴 때 최적화 2편·4편이 1편을 링크하고 있어 htmlproofer가 실패했고,
+임시로 일반 텍스트 `1편`로 바꿔둔 적이 있다. 그러나 `1cd3746`(전체를 내린
+커밋)에서 이미 원래대로 복원되어 있었다. 6번과 8번 글에서 모두 확인했으므로
+이 항목은 더 손댈 것이 없다. 남은 9~11편은 애초에 해당되지 않는다.
 
 ### 5) 로컬 검증 (반드시)
 
