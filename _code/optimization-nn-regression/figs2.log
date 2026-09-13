@@ -1,0 +1,16 @@
+계산 시작 — 신경망 6개를 학습하므로 몇 분 걸린다
+  기준 회귀망 학습 완료 (31s)
+  그림1 계산 완료: 성공률 [37, 93, 99, 100], 호출 [119, 301, 1806, 35]
+  그림2 계산 완료: 배수 [np.float64(1.0), np.float64(1130.2), np.float64(22.7), np.float64(4.4)], 편차 [0.4, -382.3, 1.5, 40.9]
+  그림3 rich_no: [2.72, 8.5, 40.5, 14.65, 16.13]
+  그림3 rich_aug: [2.53, 6.28, 41.3, 2.68, 2.56]
+  그림3 poor_no: [9.69, 13.48, 39.48, 21.22, 22.24]
+  그림3 poor_aug: [2.15, 7.08, 41.25, 2.39, 2.66]
+  그림4 계산 완료: 좁은밴드 [np.float64(1415.9), np.float64(1426.5), np.float64(1443.7), np.float64(1497.3), np.float64(1489.4), np.float64(1456.2), np.float64(1574.7)]
+_code/optimization-nn-regression/exp5_angles.py:64: RuntimeWarning: invalid value encountered in multiply
+  h = np.linalg.solve(A + mu * np.eye(2), -g)
+  그림5 계산 완료: 상관 [-0.9979, -0.9967, -0.9761]
+계산 총 222s
+--- [ko] assets/img/posts/optimization-nn-regression ---
+--- [en] assets/img/posts/optimization-nn-regression/en ---
+그림 5개 x 2언어 생성 완료

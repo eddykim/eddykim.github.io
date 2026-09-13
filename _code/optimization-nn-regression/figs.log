@@ -1,0 +1,38 @@
+_code/optimization-nn-regression/exp5_angles.py:64: RuntimeWarning: invalid value encountered in multiply
+  h = np.linalg.solve(A + mu * np.eye(2), -g)
+실험 5-3 — 총 데이터 점수 300 고정, 측정의 '종류'만 바꾼다
+구성                                   corr(d,n1)   cond(JtJ)    d 산포(nm)      n1 산포
+수직입사만 450~750nm (300점)                -0.997866   2.465e+08      1.3029    0.00125
+수직입사만 450~1000nm (300점)               -0.996694   1.585e+08      1.1755    0.00118
+0°+60° 각 150점 (300점)                  -0.976132   3.453e+07      0.4578    0.00034
+0°+45°+70° 각 100점 (300점)              -0.975515   3.837e+07      0.3399    0.00024
+계산 시작 — 신경망 6개를 학습하므로 몇 분 걸린다
+  기준 회귀망 학습 완료 (30s)
+  그림1 계산 완료: 성공률 [37, 93, 99, 100], 호출 [119, 301, 1806, 35]
+  그림2 계산 완료: 배수 [np.float64(1.0), np.float64(1130.2), np.float64(22.7), np.float64(4.4)], 편차 [0.4, -382.3, 1.5, 40.9]
+  그림3 rich_no: [1.66, 8.34, 40.14, 14.26, 16.12]
+  그림3 rich_aug: [2.53, 6.28, 41.3, 2.68, 2.56]
+  그림3 poor_no: [6.42, 28.53, 34.74, 20.2, 51.88]
+  그림3 poor_aug: [2.15, 7.08, 41.25, 2.39, 2.66]
+  그림4 계산 완료: 좁은밴드 [1425, 1464, 1445, 1533, 1513, 1456, 1574]
+  그림5 계산 완료: 상관 [-0.9979, -0.9967, -0.9761]
+계산 총 187s
+_code/optimization-nn-regression/generate_figures.py:264: UserWarning: Glyph 46160 (\N{HANGUL SYLLABLE DU}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+_code/optimization-nn-regression/generate_figures.py:264: UserWarning: Glyph 44760 (\N{HANGUL SYLLABLE GGE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+_code/optimization-nn-regression/generate_figures.py:264: UserWarning: Glyph 54200 (\N{HANGUL SYLLABLE PYEON}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+_code/optimization-nn-regression/generate_figures.py:264: UserWarning: Glyph 52264 (\N{HANGUL SYLLABLE CA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+_code/optimization-nn-regression/generate_figures.py:265: UserWarning: Glyph 46160 (\N{HANGUL SYLLABLE DU}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(out, "fig2-residual-alarm.png"), dpi=150)
+_code/optimization-nn-regression/generate_figures.py:265: UserWarning: Glyph 44760 (\N{HANGUL SYLLABLE GGE}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(out, "fig2-residual-alarm.png"), dpi=150)
+_code/optimization-nn-regression/generate_figures.py:265: UserWarning: Glyph 54200 (\N{HANGUL SYLLABLE PYEON}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(out, "fig2-residual-alarm.png"), dpi=150)
+_code/optimization-nn-regression/generate_figures.py:265: UserWarning: Glyph 52264 (\N{HANGUL SYLLABLE CA}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(out, "fig2-residual-alarm.png"), dpi=150)
+--- [ko] assets/img/posts/optimization-nn-regression ---
+--- [en] assets/img/posts/optimization-nn-regression/en ---
+그림 5개 x 2언어 생성 완료
