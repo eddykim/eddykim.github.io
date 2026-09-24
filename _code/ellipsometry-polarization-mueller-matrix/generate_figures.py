@@ -113,7 +113,8 @@ def stokes_to_ellipse(S, n_pts=200):
     chi = 0.5 * np.arcsin(s3c)
     a, b = np.cos(chi), np.sin(chi)
     t_ = np.linspace(0, 2 * np.pi, n_pts)
-    X, Y = a * np.cos(t_), b * np.sin(t_)
+    # S_3 = sin(2*chi) 가 phi_y - phi_x 순서로 정의되므로 Y 의 부호가 이렇게 잡힌다.
+    X, Y = a * np.cos(t_), -b * np.sin(t_)
     c, s = np.cos(psi), np.sin(psi)
     Ex = c * X - s * Y
     Ey = s * X + c * Y
@@ -191,7 +192,7 @@ def render(L):
     fig, axes = plt.subplots(1, 3, figsize=(11, 4))
     for ax, (key, Ax, Ay, dphi) in zip(axes, CASES):
         Ex = Ax * np.cos(t)
-        Ey = Ay * np.cos(t - dphi)
+        Ey = Ay * np.cos(t + dphi)   # 위상차 dphi = phi_y - phi_x (2편 1절 정의)
         ax.plot(Ex, Ey, color="tab:blue", lw=2)
         idx = len(t) // 5
         ax.annotate("", xy=(Ex[idx + 1], Ey[idx + 1]), xytext=(Ex[idx], Ey[idx]),

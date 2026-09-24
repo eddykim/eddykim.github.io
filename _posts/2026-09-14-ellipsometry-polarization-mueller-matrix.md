@@ -48,7 +48,7 @@ $$ \mathbf{E} = \begin{bmatrix} \lvert E_x \rvert\, e^{j\phi_{e,x}} \\ \lvert E_
 
 $$ S_0 = \lvert E_x \rvert^2 + \lvert E_y \rvert^2, \qquad S_1 = \lvert E_x \rvert^2 - \lvert E_y \rvert^2 $$
 
-$$ S_2 = 2\lvert E_x \rvert \lvert E_y \rvert \cos(\phi_{e,x}-\phi_{e,y}), \qquad S_3 = 2\lvert E_x \rvert \lvert E_y \rvert \sin(\phi_{e,x}-\phi_{e,y}) $$
+$$ S_2 = 2\lvert E_x \rvert \lvert E_y \rvert \cos(\phi_{e,y}-\phi_{e,x}), \qquad S_3 = 2\lvert E_x \rvert \lvert E_y \rvert \sin(\phi_{e,y}-\phi_{e,x}) $$
 
 $S_0$은 전체 세기, $S_1$은 수평(0°)-수직(90°) 편광 성분의 세기 차, $S_2$는 $+45°$-$135°$ 성분의 세기 차, $S_3$는 좌원편광-우원편광 성분의 세기 차다. 네 성분 모두 "특정 편광 필터를 통과한 세기"라는, 검출기로 직접 측정 가능한 물리량의 조합이라는 점이 중요하다. 존스 벡터의 성분(전기장의 절대 위상)은 직접 측정할 수 없지만, 스토크스 벡터의 성분은 원칙적으로 강도 측정 네 번으로 결정된다.
 

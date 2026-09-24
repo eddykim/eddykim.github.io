@@ -51,7 +51,7 @@ The Stokes vector takes a different approach. Instead of handling the field dire
 
 $$ S_0 = \lvert E_x \rvert^2 + \lvert E_y \rvert^2, \qquad S_1 = \lvert E_x \rvert^2 - \lvert E_y \rvert^2 $$
 
-$$ S_2 = 2\lvert E_x \rvert \lvert E_y \rvert \cos(\phi_{e,x}-\phi_{e,y}), \qquad S_3 = 2\lvert E_x \rvert \lvert E_y \rvert \sin(\phi_{e,x}-\phi_{e,y}) $$
+$$ S_2 = 2\lvert E_x \rvert \lvert E_y \rvert \cos(\phi_{e,y}-\phi_{e,x}), \qquad S_3 = 2\lvert E_x \rvert \lvert E_y \rvert \sin(\phi_{e,y}-\phi_{e,x}) $$
 
 $S_0$ is the total intensity, $S_1$ the intensity difference between horizontal (0°) and vertical (90°) components, $S_2$ that between $+45°$ and $135°$, and $S_3$ that between left- and right-circular components. What matters is that all four are combinations of "intensity transmitted through a particular polarization filter" — quantities a detector measures directly. The components of a Jones vector (the absolute phase of the field) cannot be measured directly, whereas the components of a Stokes vector are in principle determined by four intensity measurements.
 
