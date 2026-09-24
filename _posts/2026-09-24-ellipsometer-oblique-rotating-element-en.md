@@ -38,7 +38,7 @@ State the problem precisely. Four Stokes parameters describe the polarization of
 
 $$S_1 = -\cos 2\Psi, \qquad S_2 = \sin 2\Psi \cos\Delta, \qquad S_3 = -\sin 2\Psi \sin\Delta$$
 
-The sign of $S_3$ flips depending on whether p or s is taken as the phase reference. The convention here is the one used by $M_{sample}$ in post 3, and every calculation below rests on it.
+The minus sign on $S_3$ is a matter of convention. $\Delta$ is defined as $\phi_p - \phi_s$, whereas the Stokes parameters take the phase difference in the order $\phi_s - \phi_p$, following the definition in post 2. It is the same sign that $M_{sample}$ of post 3 produces.
 
 Knowing any two of these three yields $\Psi$ and $\Delta$. But the detector reads only $S_0$. It has no direct access to $S_1$, $S_2$ or $S_3$.
 
