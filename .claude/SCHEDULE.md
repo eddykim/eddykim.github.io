@@ -56,7 +56,7 @@
 | 2026-10-08 | 목 | electron-microscopy-beam-specimen-interaction | 전자현미경 배경이론 3편 | 한·영 | 푸시됨 |
 | 2026-10-10 | 토 | ellipsometer-dual-rotating-compensator-mme | 타원계측기 3편 | 한·영 | 푸시됨 |
 | 2026-10-12 | 월 | xps-surface-sensitivity-imfp | XPS 기초 2편 | 한·영 | 푸시됨 |
-| 2026-10-14 | 수 | imgproc-frequency-domain-filtering | 계측 영상처리 3편 | 한·영 | 미커밋 |
+| 2026-10-14 | 수 | imgproc-frequency-domain-filtering | 계측 영상처리 3편 | 한·영 | 푸시됨 |
 | 2026-10-16 | 금 | | | | |
 | 2026-10-18 | 일 | | | | |
 | 2026-10-20 | 화 | | | | |
