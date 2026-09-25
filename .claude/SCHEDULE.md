@@ -51,8 +51,8 @@
 | 2026-09-28 | 월 | electron-microscopy-why-electrons | 전자현미경 배경이론 1편 | 한·영 | 미커밋 |
 | 2026-09-30 | 수 | imgproc-sampling-noise-model | 계측 영상처리 1편 | 한·영 | 푸시됨 |
 | 2026-10-02 | 금 | xps-photoemission-binding-energy | XPS 기초 1편 | 한·영 | 미커밋 |
-| 2026-10-04 | 일 | | | | |
-| 2026-10-06 | 화 | | | | |
+| 2026-10-04 | 일 | electron-microscopy-electron-optics | 전자현미경 배경이론 2편 | 한·영 | 미커밋 |
+| 2026-10-06 | 화 | imgproc-convolution-kernels | 계측 영상처리 2편 | 한·영 | 미커밋 |
 | 2026-10-08 | 목 | | | | |
 | 2026-10-10 | 토 | | | | |
 | 2026-10-12 | 월 | | | | |
@@ -68,10 +68,9 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| electron-microscopy-electron-optics | 전자현미경 2편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 자기렌즈·수차·Scherzer 정리. 1편(09-28)을 링크하므로 그 뒤 슬롯만 가능 |
 | electron-microscopy-beam-specimen-interaction | 전자현미경 3편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 상호작용 부피와 신호 기원. Monte Carlo 직접 구현 예정 |
 | electron-microscopy-sem-imaging | 전자현미경 4편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 검출기와 대비, 대전. 3편을 링크 |
 | electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. Ewald 구와 BF/DF. 2편을 링크 |
 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 약위상물체 근사와 CTF. 5편을 링크 |
 | electron-microscopy-stem-analytical | 전자현미경 7편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. STEM·EDS·EELS·4D-STEM·CD-SEM. 6편을 링크 |
-| imgproc-convolution-kernels | 계측 영상처리 2편 | 2026-09-26 | 계획 승인됨(6편 시리즈), 착수. 컨볼루션과 커널 — 평활화·미분 커널, 분리가능성, 경계 처리. 1편(09-30)을 링크하므로 그 뒤 슬롯만 가능 |
+| ellipsometer-dual-rotating-compensator-mme | 타원계측기 3편 | 2026-09-26 | 계획 승인됨. 이중 회전 보상자 MME. 1편(09-24)·2편(09-26)을 링크하므로 그 뒤 슬롯만 가능 |
