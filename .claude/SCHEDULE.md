@@ -49,7 +49,7 @@
 | 2026-09-24 | 목 | ellipsometer-oblique-rotating-element | 타원계측기(엘립소미터) 1편 | 한·영 | 푸시됨 |
 | 2026-09-26 | 토 | ellipsometer-components | 타원계측기 2편 | 한·영 | 푸시됨 |
 | 2026-09-28 | 월 | electron-microscopy-why-electrons | 전자현미경 배경이론 1편 | 한·영 | 미커밋 |
-| 2026-09-30 | 수 | imgproc-sampling-noise-model | 계측 영상처리 1편 | 한·영 | 미커밋 |
+| 2026-09-30 | 수 | imgproc-sampling-noise-model | 계측 영상처리 1편 | 한·영 | 푸시됨 |
 | 2026-10-02 | 금 | xps-photoemission-binding-energy | XPS 기초 1편 | 한·영 | 미커밋 |
 | 2026-10-04 | 일 | | | | |
 | 2026-10-06 | 화 | | | | |
@@ -74,3 +74,4 @@
 | electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. Ewald 구와 BF/DF. 2편을 링크 |
 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 약위상물체 근사와 CTF. 5편을 링크 |
 | electron-microscopy-stem-analytical | 전자현미경 7편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. STEM·EDS·EELS·4D-STEM·CD-SEM. 6편을 링크 |
+| imgproc-convolution-kernels | 계측 영상처리 2편 | 2026-09-26 | 계획 승인됨(6편 시리즈), 착수. 컨볼루션과 커널 — 평활화·미분 커널, 분리가능성, 경계 처리. 1편(09-30)을 링크하므로 그 뒤 슬롯만 가능 |
