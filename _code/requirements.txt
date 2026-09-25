@@ -1,3 +1,5 @@
 # _code/<slug>/ 시뮬레이션·그림 생성 스크립트의 의존성
 numpy>=1.26
 matplotlib>=3.8
+scipy>=1.11
+scikit-image>=0.22
