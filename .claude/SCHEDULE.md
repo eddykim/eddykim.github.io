@@ -56,7 +56,7 @@
 | 2026-10-08 | 목 | electron-microscopy-beam-specimen-interaction | 전자현미경 배경이론 3편 | 한·영 | 푸시됨 |
 | 2026-10-10 | 토 | ellipsometer-dual-rotating-compensator-mme | 타원계측기 3편 | 한·영 | 푸시됨 |
 | 2026-10-12 | 월 | xps-surface-sensitivity-imfp | XPS 기초 2편 | 한·영 | 푸시됨 |
-| 2026-10-14 | 수 | | | | |
+| 2026-10-14 | 수 | imgproc-frequency-domain-filtering | 계측 영상처리 3편 | 한·영 | 미커밋 |
 | 2026-10-16 | 금 | | | | |
 | 2026-10-18 | 일 | | | | |
 | 2026-10-20 | 화 | | | | |
@@ -72,4 +72,3 @@
 | electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. Ewald 구와 BF/DF. 2편을 링크 |
 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 약위상물체 근사와 CTF. 5편을 링크 |
 | electron-microscopy-stem-analytical | 전자현미경 7편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. STEM·EDS·EELS·4D-STEM·CD-SEM. 6편을 링크 |
-| imgproc-frequency-domain-filtering | 계측 영상처리 3편 | 2026-09-26 | 계획 승인됨(6편 시리즈), 착수. 2D DFT·노치 필터·이상적 필터의 링잉, 학위논문 3.3절의 극값 포락선 방법. 2편(10-06)을 링크하므로 그 뒤 슬롯만 가능 |
