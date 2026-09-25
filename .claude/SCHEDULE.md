@@ -50,12 +50,12 @@
 | 2026-09-26 | 토 | ellipsometer-components | 타원계측기 2편 | 한·영 | 푸시됨 |
 | 2026-09-28 | 월 | electron-microscopy-why-electrons | 전자현미경 배경이론 1편 | 한·영 | 푸시됨 |
 | 2026-09-30 | 수 | imgproc-sampling-noise-model | 계측 영상처리 1편 | 한·영 | 푸시됨 |
-| 2026-10-02 | 금 | xps-photoemission-binding-energy | XPS 기초 1편 | 한·영 | 미커밋 |
+| 2026-10-02 | 금 | xps-photoemission-binding-energy | XPS 기초 1편 | 한·영 | 푸시됨 |
 | 2026-10-04 | 일 | electron-microscopy-electron-optics | 전자현미경 배경이론 2편 | 한·영 | 푸시됨 |
 | 2026-10-06 | 화 | imgproc-convolution-kernels | 계측 영상처리 2편 | 한·영 | 푸시됨 |
 | 2026-10-08 | 목 | electron-microscopy-beam-specimen-interaction | 전자현미경 배경이론 3편 | 한·영 | 푸시됨 |
 | 2026-10-10 | 토 | ellipsometer-dual-rotating-compensator-mme | 타원계측기 3편 | 한·영 | 푸시됨 |
-| 2026-10-12 | 월 | xps-surface-sensitivity-imfp | XPS 기초 2편 | 한·영 | 미커밋 |
+| 2026-10-12 | 월 | xps-surface-sensitivity-imfp | XPS 기초 2편 | 한·영 | 푸시됨 |
 | 2026-10-14 | 수 | | | | |
 | 2026-10-16 | 금 | | | | |
 | 2026-10-18 | 일 | | | | |
