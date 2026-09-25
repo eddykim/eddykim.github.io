@@ -15,7 +15,7 @@
 
 - **시리즈**: "XPS 기초" 전 5편 중 **3편**
 - **slug**: `xps-spectrum-structure-satellites`
-- **포스트 경로**: `_posts/2026-09-07-xps-spectrum-structure-satellites.md`
+- **포스트 경로**: `_drafts/xps-spectrum-structure-satellites.md` — 날짜 없이 쓴다. 완성되면 `.claude/SCHEDULE.md`에서 발행일을 받아 `_posts/`로 옮긴다
 - **제목**: `XPS 기초 3편 — 스펙트럼의 구조: 스핀-궤도, 위성, Auger`
 - **카테고리**: `[표면분석, 광전자분광]`
 - **대상 독자**: 대학원생 + 계측/공정 실무 엔지니어
@@ -30,7 +30,7 @@
 ---
 layout: post
 title: "XPS 기초 3편 — 스펙트럼의 구조: 스핀-궤도, 위성, Auger"
-date: 2026-09-07 20:00:00 +0900
+# date: 발행일은 완성 후 .claude/SCHEDULE.md에서 받아 넣는다
 categories: [표면분석, 광전자분광]
 tags: [xps, spin-orbit, shake-up, auger-parameter, lineshape]
 description: "원소 하나가 만드는 피크는 하나가 아니다. 스핀-궤도 분리부터 위성 구조와 Auger 피크까지, 스펙트럼의 각 구조가 어디서 오는지 정리한다."
@@ -153,7 +153,7 @@ math: true
 - shake-up 위성은 **높은 결합에너지 쪽**, shake-down은 낮은 쪽이다. 방향을 뒤집지 마라.
 - Auger 운동에너지가 $h\nu$에 무관하다는 것과, 결합에너지 축에서 보면 광원을 바꿀 때 Auger가 움직인다는 것은 같은 말이다. 이 논리를 헷갈리지 않게 서술하라.
 - 원소별 구체적 결합에너지 수치를 쓸 때는 웹 검색이나 표준 핸드북으로 확인하고 출처를 참고자료에 추가하라. 확인 안 된 수치는 쓰지 마라.
-- 작성 후 `grep -n '\$[^$]*|' _posts/2026-09-07-*.md`로 수식 내 리터럴 `|`가 없는지 확인하라.
+- 작성 후 `grep -n '\$[^$]*|' _drafts/xps-spectrum-structure-satellites.md`로 수식 내 리터럴 `|`가 없는지 확인하라.
 
 ## 커밋
 

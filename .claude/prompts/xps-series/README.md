@@ -5,15 +5,17 @@
 
 ## 진행 순서
 
-| # | 프롬프트 파일 | 포스트 | 상태 |
+| # | 프롬프트 파일 | slug | 상태 |
 |---|---|---|---|
-| 1 | [01-photoemission-binding-energy.md](01-photoemission-binding-energy.md) | `2026-09-05-xps-photoemission-binding-energy.md` | ☐ |
-| 2 | [02-surface-sensitivity-imfp.md](02-surface-sensitivity-imfp.md) | `2026-09-06-xps-surface-sensitivity-imfp.md` | ☐ |
-| 3 | [03-spectrum-structure-satellites.md](03-spectrum-structure-satellites.md) | `2026-09-07-xps-spectrum-structure-satellites.md` | ☐ |
-| 4 | [04-quantification-peak-fitting.md](04-quantification-peak-fitting.md) | `2026-09-08-xps-quantification-peak-fitting.md` | ☐ |
-| 5 | [05-thickness-arxps-pitfalls.md](05-thickness-arxps-pitfalls.md) | `2026-09-09-xps-thickness-arxps-pitfalls.md` | ☐ |
+| 1 | [01-photoemission-binding-energy.md](01-photoemission-binding-energy.md) | `xps-photoemission-binding-energy` | 한·영 완료, 2026-10-02 발행 |
+| 2 | [02-surface-sensitivity-imfp.md](02-surface-sensitivity-imfp.md) | `xps-surface-sensitivity-imfp` | 한·영 완료, 2026-10-12 발행 |
+| 3 | [03-spectrum-structure-satellites.md](03-spectrum-structure-satellites.md) | `xps-spectrum-structure-satellites` | ☐ |
+| 4 | [04-quantification-peak-fitting.md](04-quantification-peak-fitting.md) | `xps-quantification-peak-fitting` | ☐ |
+| 5 | [05-thickness-arxps-pitfalls.md](05-thickness-arxps-pitfalls.md) | `xps-thickness-arxps-pitfalls` | ☐ |
 
 **앞 편이 커밋(또는 최소한 작성 완료)된 뒤에 다음 편을 시작하라.** 2편부터는 앞 편 본문을 읽어 용어·기호·문체를 잇도록 프롬프트에 지시되어 있다.
+
+발행일은 여기서 정하지 않는다. 각 편은 `_drafts/<slug>.md`에 쓰고, 완성되면 `.claude/SCHEDULE.md`에서 완성 순서대로 슬롯을 받는다. 시리즈 순서는 그 파일의 "링크한 글보다 앞선 슬롯은 받을 수 없다" 규칙이 지켜 준다.
 
 ## 사전 준비 (완료됨)
 

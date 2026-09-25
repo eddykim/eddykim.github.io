@@ -12,7 +12,7 @@
 
 - **시리즈**: "XPS 기초" 전 5편 중 **1편**
 - **slug**: `xps-photoemission-binding-energy`
-- **포스트 경로**: `_posts/2026-09-05-xps-photoemission-binding-energy.md`
+- **포스트 경로**: `_drafts/xps-photoemission-binding-energy.md` — 날짜 없이 쓴다. 완성되면 `.claude/SCHEDULE.md`에서 발행일을 받아 `_posts/`로 옮긴다
 - **제목**: `XPS 기초 1편 — 광전효과에서 결합에너지까지`
 - **카테고리**: `[표면분석, 광전자분광]` (`categories.yaml`에 이미 등재됨)
 - **대상 독자**: 대학원생 + 계측/공정 실무 엔지니어
@@ -27,7 +27,7 @@
 ---
 layout: post
 title: "XPS 기초 1편 — 광전효과에서 결합에너지까지"
-date: 2026-09-05 20:00:00 +0900
+# date: 발행일은 완성 후 .claude/SCHEDULE.md에서 받아 넣는다
 categories: [표면분석, 광전자분광]
 tags: [xps, photoemission, binding-energy, chemical-shift, surface-analysis]
 description: "XPS가 재는 것은 광전자의 운동에너지뿐이다. 거기서 원소와 화학상태를 어떻게 읽어내는지, 결합에너지가 왜 궤도에너지가 아닌지를 정리한다."
@@ -43,7 +43,7 @@ math: true
 
 ## 스타일 규칙 (반드시 준수)
 
-1. **어조**: 평서문 "~이다". CLAUDE.md에는 존댓말로 적혀 있으나 실제 최근 포스트(엘립소메트리 1·2편, 최적화 1~4편)는 전부 평서문이다. **최근 포스트 문체를 따른다.** 작성 전 `_posts/2026-09-04-ellipsometry-electromagnetic-fresnel.md`를 읽고 어조를 맞춰라.
+1. **어조**: 평서문 "~이다". CLAUDE.md에는 존댓말로 적혀 있으나 실제 최근 포스트(엘립소메트리 1·2편, 최적화 1~4편)는 전부 평서문이다. **최근 포스트 문체를 따른다.** 작성 전 `_posts/*-ellipsometry-electromagnetic-fresnel.md`를 읽고 어조를 맞춰라.
 2. **각 절은 답을 주기 전에 질문을 먼저 던진다.** 도입부만이 아니라 모든 `##` 절이 "왜 이걸 알아야 하는가 / 무엇이 문제인가"로 시작한 뒤 식이나 정의를 내놓는다. 이 블로그의 확립된 패턴이다.
 3. **수식 안에서 리터럴 `|`를 쓰지 마라.** 절댓값·조건부는 반드시 `\lvert ... \rvert`를 쓴다. kramdown이 `|`를 표 구분자로 해석해 렌더링이 깨진다.
 4. 소제목은 `## 1.` `## 2.` … 형식으로 번호를 매긴다. 말미는 `## 정리 및 다음 편 예고` + `## 참고자료`.

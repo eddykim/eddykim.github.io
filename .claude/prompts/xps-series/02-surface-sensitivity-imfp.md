@@ -1,7 +1,7 @@
 # XPS 시리즈 2편 작성 프롬프트
 
 > 사용법: 이 레포(`eddykim.github.io`) 루트에서 Claude Code를 열고, 아래 `---` 아래 전체를 붙여넣으세요.
-> **선행 조건: 1편(`_posts/2026-09-05-xps-photoemission-binding-energy.md`)이 이미 작성되어 있어야 합니다.**
+> **선행 조건: 1편(`xps-photoemission-binding-energy` — `_posts/`나 `_drafts/`에서 찾는다)이 이미 작성되어 있어야 합니다.**
 
 ---
 
@@ -9,13 +9,13 @@
 
 **단, 0~4단계(입력 수집 / 분류 판단 / 질의응답 / 이전 포스트 참고 확인)는 이미 끝났다.** 아래 "확정 사항"이 그 결과다. 5단계(계획 제시)는 아래 목차를 그대로 확인만 받고 바로 6단계 초안으로 들어가라. 질의응답을 다시 하지 마라.
 
-**작성 시작 전에 반드시 1편(`_posts/2026-09-05-xps-photoemission-binding-energy.md`)을 읽어라.** 용어·기호·문체를 그대로 이어야 하고, 1편에서 예고한 내용을 받아서 시작해야 한다.
+**작성 시작 전에 반드시 1편(`xps-photoemission-binding-energy` — `_posts/`나 `_drafts/`에서 찾는다)을 읽어라.** 용어·기호·문체를 그대로 이어야 하고, 1편에서 예고한 내용을 받아서 시작해야 한다.
 
 ## 확정 사항
 
 - **시리즈**: "XPS 기초" 전 5편 중 **2편**
 - **slug**: `xps-surface-sensitivity-imfp`
-- **포스트 경로**: `_posts/2026-09-06-xps-surface-sensitivity-imfp.md`
+- **포스트 경로**: `_drafts/xps-surface-sensitivity-imfp.md` — 날짜 없이 쓴다. 완성되면 `.claude/SCHEDULE.md`에서 발행일을 받아 `_posts/`로 옮긴다
 - **제목**: `XPS 기초 2편 — 왜 표면 10 nm만 보이는가`
 - **카테고리**: `[표면분석, 깊이분석]`
 - **대상 독자**: 대학원생 + 계측/공정 실무 엔지니어
@@ -30,7 +30,7 @@
 ---
 layout: post
 title: "XPS 기초 2편 — 왜 표면 10 nm만 보이는가"
-date: 2026-09-06 20:00:00 +0900
+# date: 발행일은 완성 후 .claude/SCHEDULE.md에서 받아 넣는다
 categories: [표면분석, 깊이분석]
 tags: [xps, imfp, surface-analysis, information-depth, arxps]
 description: "X선은 시료 속으로 마이크로미터를 파고드는데 XPS는 왜 표면 10 nm 기법인가. 비탄성 평균자유행로와 정보깊이를 정리한다."

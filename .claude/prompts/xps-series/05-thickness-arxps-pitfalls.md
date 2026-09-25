@@ -9,13 +9,13 @@
 
 **단, 0~4단계는 이미 끝났다.** 아래 "확정 사항"이 그 결과다. 5단계(계획 제시)는 아래 목차를 그대로 확인만 받고 바로 6단계 초안으로 들어가라. 질의응답을 다시 하지 마라.
 
-**작성 시작 전에 반드시 1~4편을 읽어라.** 이 편은 시리즈의 마지막 편이므로 앞 네 편의 실을 모두 회수해야 한다. 또한 엘립소메트리 1편(`_posts/2026-09-04-ellipsometry-electromagnetic-fresnel.md`)도 읽어라 — 7절의 비교가 이 블로그 전체를 잇는 대목이다.
+**작성 시작 전에 반드시 1~4편을 읽어라.** 이 편은 시리즈의 마지막 편이므로 앞 네 편의 실을 모두 회수해야 한다. 또한 엘립소메트리 1편(`_posts/*-ellipsometry-electromagnetic-fresnel.md`)도 읽어라 — 7절의 비교가 이 블로그 전체를 잇는 대목이다.
 
 ## 확정 사항
 
 - **시리즈**: "XPS 기초" 전 5편 중 **5편(마지막)**
 - **slug**: `xps-thickness-arxps-pitfalls`
-- **포스트 경로**: `_posts/2026-09-09-xps-thickness-arxps-pitfalls.md`
+- **포스트 경로**: `_drafts/xps-thickness-arxps-pitfalls.md` — 날짜 없이 쓴다. 완성되면 `.claude/SCHEDULE.md`에서 발행일을 받아 `_posts/`로 옮긴다
 - **제목**: `XPS 기초 5편 — 두께 계측과 함정`
 - **카테고리**: `[표면분석, 깊이분석]`
 - **대상 독자**: 대학원생 + 계측/공정 실무 엔지니어
@@ -30,7 +30,7 @@
 ---
 layout: post
 title: "XPS 기초 5편 — 두께 계측과 함정"
-date: 2026-09-09 20:00:00 +0900
+# date: 발행일은 완성 후 .claude/SCHEDULE.md에서 받아 넣는다
 categories: [표면분석, 깊이분석]
 tags: [xps, arxps, film-thickness, depth-profiling, beam-damage, metrology]
 description: "감쇠 자체를 이용하면 박막 두께를 잴 수 있다. 오버레이어 식과 ARXPS의 역문제, 그리고 우선 스퍼터링과 빔 손상이라는 함정까지 정리한다."
@@ -168,7 +168,7 @@ _code/xps-thickness-arxps-pitfalls/
 - "X선은 비파괴"라는 통념을 그대로 쓰지 마라. 6절이 그 통념을 교정하는 절이다.
 - 코드는 실제로 실행해 그림과 수치를 확인하고, 본문 수치를 실행 결과와 일치시켜라.
 - 시리즈 마지막 편이므로 1~4편 링크가 전부 올바른 slug를 가리키는지 확인하라.
-- 작성 후 `grep -n '\$[^$]*|' _posts/2026-09-09-*.md`로 수식 내 리터럴 `|` 확인.
+- 작성 후 `grep -n '\$[^$]*|' _drafts/xps-thickness-arxps-pitfalls.md`로 수식 내 리터럴 `|` 확인.
 
 ## 커밋
 
