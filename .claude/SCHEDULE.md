@@ -62,10 +62,14 @@
 | 2026-10-20 | 화 | imgproc-edge-subpixel | 계측 영상처리 4편 | 한·영 | 푸시됨 |
 | 2026-10-22 | 목 | xps-quantification-peak-fitting | XPS 기초 4편 | 한·영 | 푸시됨 |
 | 2026-10-24 | 토 | ellipsometer-calibration | 타원계측기 4편 | 한·영 | 푸시됨 |
-| 2026-10-26 | 월 | | | | |
+| 2026-10-26 | 월 | electron-microscopy-tem-diffraction-contrast | 전자현미경 배경이론 5편 | 한·영 | 미커밋 |
 | 2026-10-28 | 수 | | | | |
 | 2026-10-30 | 금 | | | | |
 | 2026-11-01 | 일 | | | | |
+| 2026-11-03 | 화 | | | | |
+| 2026-11-05 | 목 | | | | |
+| 2026-11-07 | 토 | | | | |
+| 2026-11-09 | 월 | | | | |
 
 ## 작성 중
 
@@ -74,7 +78,7 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. Ewald 구와 BF/DF. 2편을 링크 |
 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 약위상물체 근사와 CTF. 5편을 링크 |
 | electron-microscopy-stem-analytical | 전자현미경 7편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. STEM·EDS·EELS·4D-STEM·CD-SEM. 6편을 링크 |
 | imgproc-geometric-fitting | 계측 영상처리 5편 | 2026-09-26 | 계획 승인됨(6편 시리즈), 착수. 대수적 거리 대 기하학적 거리, 짧은 원호의 Kasa 편향, Fitzgibbon 타원 피팅, RANSAC. 4편(10-20)을 링크하므로 그 뒤 슬롯만 가능 |
+| xps-thickness-arxps-pitfalls | XPS 기초 5편 | 2026-09-26 | 계획 승인됨, 초안 작성 중(_drafts/). 한·영. 1~4편을 링크하므로 4편(10-22) 뒤 슬롯만 가능 |
