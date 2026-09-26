@@ -64,7 +64,7 @@
 | 2026-10-24 | 토 | ellipsometer-calibration | 타원계측기 4편 | 한·영 | 푸시됨 |
 | 2026-10-26 | 월 | electron-microscopy-tem-diffraction-contrast | 전자현미경 배경이론 5편 | 한·영 | 푸시됨 |
 | 2026-10-28 | 수 | imgproc-geometric-fitting | 계측 영상처리 5편 | 한·영 | 푸시됨 |
-| 2026-10-30 | 금 | xps-thickness-arxps-pitfalls | XPS 기초 5편 | 한·영 | 미커밋 |
+| 2026-10-30 | 금 | xps-thickness-arxps-pitfalls | XPS 기초 5편 | 한·영 | 푸시됨 |
 | 2026-11-01 | 일 | | | | |
 | 2026-11-03 | 화 | | | | |
 | 2026-11-05 | 목 | | | | |
