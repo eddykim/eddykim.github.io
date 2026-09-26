@@ -68,7 +68,7 @@
 | 2026-11-01 | 일 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 배경이론 6편 | 한·영 | 푸시됨 |
 | 2026-11-03 | 화 | imgproc-phase-hilbert-unwrapping | 계측 영상처리 6편(완결) | 한·영 | 푸시됨 |
 | 2026-11-05 | 목 | electron-microscopy-stem-analytical | 전자현미경 배경이론 7편 | 한·영 | 푸시됨 |
-| 2026-11-07 | 토 | | | | |
+| 2026-11-07 | 토 | ellipsometer-channeled-spectroscopic | 타원계측기 5편 | 한·영 | 미커밋 |
 | 2026-11-09 | 월 | | | | |
 | 2026-11-11 | 수 | | | | |
 | 2026-11-13 | 금 | | | | |
@@ -82,4 +82,3 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| ellipsometer-channeled-spectroscopic | 타원계측기 5편 | 2026-09-27 | 계획 승인됨. 채널 분광 — 회전 대신 파장 변조. 1~4편을 링크하므로 4편(10-24) 뒤 슬롯 |
