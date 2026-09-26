@@ -58,7 +58,7 @@
 | 2026-10-12 | 월 | xps-surface-sensitivity-imfp | XPS 기초 2편 | 한·영 | 푸시됨 |
 | 2026-10-14 | 수 | imgproc-frequency-domain-filtering | 계측 영상처리 3편 | 한·영 | 푸시됨 |
 | 2026-10-16 | 금 | xps-spectrum-structure-satellites | XPS 기초 3편 | 한·영 | 푸시됨 |
-| 2026-10-18 | 일 | electron-microscopy-sem-imaging | 전자현미경 배경이론 4편 | 한·영 | 미커밋 |
+| 2026-10-18 | 일 | electron-microscopy-sem-imaging | 전자현미경 배경이론 4편 | 한·영 | 푸시됨 |
 | 2026-10-20 | 화 | | | | |
 | 2026-10-22 | 목 | | | | |
 | 2026-10-24 | 토 | | | | |
