@@ -9,7 +9,7 @@
 |---|---|---|---|
 | 1 | [01-photoemission-binding-energy.md](01-photoemission-binding-energy.md) | `xps-photoemission-binding-energy` | 한·영 완료, 2026-10-02 발행 |
 | 2 | [02-surface-sensitivity-imfp.md](02-surface-sensitivity-imfp.md) | `xps-surface-sensitivity-imfp` | 한·영 완료, 2026-10-12 발행 |
-| 3 | [03-spectrum-structure-satellites.md](03-spectrum-structure-satellites.md) | `xps-spectrum-structure-satellites` | ☐ |
+| 3 | [03-spectrum-structure-satellites.md](03-spectrum-structure-satellites.md) | `xps-spectrum-structure-satellites` | 한·영 완료, 2026-10-16 발행 |
 | 4 | [04-quantification-peak-fitting.md](04-quantification-peak-fitting.md) | `xps-quantification-peak-fitting` | ☐ |
 | 5 | [05-thickness-arxps-pitfalls.md](05-thickness-arxps-pitfalls.md) | `xps-thickness-arxps-pitfalls` | ☐ |
 
