@@ -64,7 +64,7 @@
 | 2026-10-24 | 토 | ellipsometer-calibration | 타원계측기 4편 | 한·영 | 푸시됨 |
 | 2026-10-26 | 월 | electron-microscopy-tem-diffraction-contrast | 전자현미경 배경이론 5편 | 한·영 | 푸시됨 |
 | 2026-10-28 | 수 | imgproc-geometric-fitting | 계측 영상처리 5편 | 한·영 | 푸시됨 |
-| 2026-10-30 | 금 | | | | |
+| 2026-10-30 | 금 | xps-thickness-arxps-pitfalls | XPS 기초 5편 | 한·영 | 미커밋 |
 | 2026-11-01 | 일 | | | | |
 | 2026-11-03 | 화 | | | | |
 | 2026-11-05 | 목 | | | | |
@@ -80,4 +80,4 @@
 |---|---|---|---|
 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 약위상물체 근사와 CTF. 5편을 링크 |
 | electron-microscopy-stem-analytical | 전자현미경 7편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. STEM·EDS·EELS·4D-STEM·CD-SEM. 6편을 링크 |
-| xps-thickness-arxps-pitfalls | XPS 기초 5편 | 2026-09-26 | 계획 승인됨, 초안 작성 중(_drafts/). 한·영. 1~4편을 링크하므로 4편(10-22) 뒤 슬롯만 가능 |
+| imgproc-phase-hilbert-unwrapping | 계측 영상처리 6편(완결) | 2026-09-26 | 계획 승인됨(6편 시리즈), 착수. 해석 신호와 힐베르트 변환, 위상천이와 디튜닝, 언래핑과 잔여점. 학위논문 3.2·3.4절. 분류는 구조광계측. 5편(10-28)을 링크하므로 그 뒤 슬롯만 가능 |
