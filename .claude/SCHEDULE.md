@@ -59,7 +59,7 @@
 | 2026-10-14 | 수 | imgproc-frequency-domain-filtering | 계측 영상처리 3편 | 한·영 | 푸시됨 |
 | 2026-10-16 | 금 | xps-spectrum-structure-satellites | XPS 기초 3편 | 한·영 | 푸시됨 |
 | 2026-10-18 | 일 | electron-microscopy-sem-imaging | 전자현미경 배경이론 4편 | 한·영 | 푸시됨 |
-| 2026-10-20 | 화 | | | | |
+| 2026-10-20 | 화 | imgproc-edge-subpixel | 계측 영상처리 4편 | 한·영 | 미커밋 |
 | 2026-10-22 | 목 | | | | |
 | 2026-10-24 | 토 | | | | |
 | 2026-10-26 | 월 | | | | |
@@ -74,5 +74,4 @@
 | electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. Ewald 구와 BF/DF. 2편을 링크 |
 | electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. 약위상물체 근사와 CTF. 5편을 링크 |
 | electron-microscopy-stem-analytical | 전자현미경 7편 | 2026-09-26 | 계획 승인됨(7편 시리즈), 착수 전. STEM·EDS·EELS·4D-STEM·CD-SEM. 6편을 링크 |
-| imgproc-edge-subpixel | 계측 영상처리 4편 | 2026-09-26 | 계획 승인됨(6편 시리즈), 착수. 엣지 모델·서브픽셀 3계열·픽셀 로킹 편향. 3편(10-14)을 링크하므로 그 뒤 슬롯만 가능 |
-| ellipsometer-calibration | 타원계측기 4편 | 2026-09-26 | 계획 승인됨. 존 평균·잔차·회귀 보정 세 시대. 1~3편을 링크하므로 3편(10-10) 뒤 슬롯만 가능 |
+| ellipsometer-calibration | 타원계측기 4편 | 2026-09-26 | 초안·그림·코드 완료, 교정 대기. 1~3편을 링크하므로 3편(10-10) 뒤 슬롯만 가능 |
