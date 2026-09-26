@@ -52,7 +52,6 @@ en_names:
     SEM결상: SEM Imaging
     TEM결상: TEM Imaging
     분석전자현미경: Analytical EM
-    시료준비: Specimen Preparation
 
 
 # ─────────────────────────────────────────────────────────
@@ -260,8 +259,6 @@ categories:
         description: "회절 대비, Ewald 구, 위상 대비, CTF, HRTEM 상 해석"
       분석전자현미경:
         description: "STEM, HAADF Z-대비, EDS·EELS, 4D-STEM과 타이코그래피"
-      시료준비:
-        description: "FIB 리프트아웃, 박편화, 코팅, 준비 과정이 만드는 인공물"
 
     questions:
       - "이 신호는 시료의 어느 깊이·부피에서 나왔는가?"
