@@ -10,7 +10,7 @@
 | 1 | [01-photoemission-binding-energy.md](01-photoemission-binding-energy.md) | `xps-photoemission-binding-energy` | 한·영 완료, 2026-10-02 발행 |
 | 2 | [02-surface-sensitivity-imfp.md](02-surface-sensitivity-imfp.md) | `xps-surface-sensitivity-imfp` | 한·영 완료, 2026-10-12 발행 |
 | 3 | [03-spectrum-structure-satellites.md](03-spectrum-structure-satellites.md) | `xps-spectrum-structure-satellites` | 한·영 완료, 2026-10-16 발행 |
-| 4 | [04-quantification-peak-fitting.md](04-quantification-peak-fitting.md) | `xps-quantification-peak-fitting` | ☐ |
+| 4 | [04-quantification-peak-fitting.md](04-quantification-peak-fitting.md) | `xps-quantification-peak-fitting` | 한·영 완료, 2026-10-22 발행 |
 | 5 | [05-thickness-arxps-pitfalls.md](05-thickness-arxps-pitfalls.md) | `xps-thickness-arxps-pitfalls` | ☐ |
 
 **앞 편이 커밋(또는 최소한 작성 완료)된 뒤에 다음 편을 시작하라.** 2편부터는 앞 편 본문을 읽어 용어·기호·문체를 잇도록 프롬프트에 지시되어 있다.
