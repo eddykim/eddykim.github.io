@@ -69,7 +69,7 @@
 | 2026-11-03 | 화 | imgproc-phase-hilbert-unwrapping | 계측 영상처리 6편(완결) | 한·영 | 푸시됨 |
 | 2026-11-05 | 목 | electron-microscopy-stem-analytical | 전자현미경 배경이론 7편 | 한·영 | 푸시됨 |
 | 2026-11-07 | 토 | ellipsometer-channeled-spectroscopic | 타원계측기 5편 | 한·영 | 푸시됨 |
-| 2026-11-09 | 월 | | | | |
+| 2026-11-09 | 월 | ellipsometer-back-focal-plane-micro | 타원계측기 6편(완결) | 한·영 | 미커밋 |
 | 2026-11-11 | 수 | | | | |
 | 2026-11-13 | 금 | | | | |
 | 2026-11-15 | 일 | | | | |
