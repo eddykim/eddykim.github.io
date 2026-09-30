@@ -71,7 +71,7 @@
 | 2026-11-07 | 토 | ellipsometer-channeled-spectroscopic | 타원계측기 5편 | 한·영 | 푸시됨 |
 | 2026-11-09 | 월 | ellipsometer-back-focal-plane-micro | 타원계측기 6편(완결) | 한·영 | 푸시됨 |
 | 2026-11-11 | 수 | geometric-optics-fermat-eikonal | 기하광학 배경이론 1편 | 한·영 | 푸시됨 |
-| 2026-11-13 | 금 | | | | |
+| 2026-11-13 | 금 | geometric-optics-paraxial-abcd | 기하광학 배경이론 2편 | 한·영 | 미커밋 |
 | 2026-11-15 | 일 | | | | |
 | 2026-11-17 | 화 | | | | |
 | 2026-11-19 | 목 | | | | |
@@ -84,3 +84,4 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
+| ptycho-computational-imaging-inverse-problem | 계산 이미징과 타이코그래피 1편 | 2026-10-01 | 코드·그림·초안·영문판 |
