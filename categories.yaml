@@ -9,7 +9,7 @@
 
 meta:
   version: 3
-  updated: 2026-09-24
+  updated: 2026-09-30
   slug_rule: "영문 소문자와 하이픈만. 한글 금지"
   post_path: "_posts/YYYY-MM-DD-slug.md"
   image_path: "assets/img/posts/<slug>/"
@@ -42,6 +42,7 @@ en_names:
     이미지프로세싱: Image Processing
     이상탐지: Anomaly Detection
     구조광계측: Structured Light
+    계산이미징: Computational Imaging
     광전자분광: Photoelectron Spectroscopy
     장비구성: Instrumentation
     정량분석: Quantification
@@ -162,6 +163,12 @@ categories:
       - 구조광
       - 위상천이
       - ROI
+      - 역문제
+      - 정규화
+      - 정칙화
+      - 위상 복원
+      - 타이코그래피
+      - ptychography
 
     subcategories:
       최적화방법:
@@ -174,6 +181,8 @@ categories:
         description: "Autoencoder 기반 이물·결함 검출, 복원 오차 해석, 정상 데이터만으로 학습하는 설정"
       구조광계측:
         description: "모아레, 구조광 투사, 위상천이, HCGMP, 단차·형상 측정"
+      계산이미징:
+        description: "전방 모델과 역문제, 정규화, 세기 측정에서의 위상 복원, 타이코그래피(실공간·푸리에), 렌즈 없는 이미징"
 
     questions:
       - "목적 함수 또는 손실 함수는 어떤 형태인가? (선형/비선형, 볼록/비볼록)"
