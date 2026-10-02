@@ -73,7 +73,7 @@
 | 2026-11-11 | 수 | geometric-optics-fermat-eikonal | 기하광학 배경이론 1편 | 한·영 | 푸시됨 |
 | 2026-11-13 | 금 | geometric-optics-paraxial-abcd | 기하광학 배경이론 2편 | 한·영 | 푸시됨 |
 | 2026-11-15 | 일 | ptycho-computational-imaging-inverse-problem | 계산 이미징과 타이코그래피 1편 | 한·영 | 푸시됨 |
-| 2026-11-17 | 화 | | | | |
+| 2026-11-17 | 화 | geometric-optics-stops-pupils-etendue | 기하광학 배경이론 3편 | 한·영 | 미커밋 |
 | 2026-11-19 | 목 | | | | |
 | 2026-11-21 | 토 | | | | |
 | 2026-11-23 | 월 | | | | |
@@ -87,4 +87,4 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| geometric-optics-stops-pupils-etendue | 기하광학 배경이론 3편 (조리개·동공·에탕듀) | 2026-10-03 | 계산·그림, 한국어 초안, 영문판 |
+| ptycho-phase-problem-iterative-retrieval | 계산 이미징과 타이코그래피 2편 | 2026-10-03 | 코드·그림·초안·영문판 |
