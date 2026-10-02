@@ -201,7 +201,7 @@ print(json.dumps((p[:, 2] - p[:, 1] * d[:, 2] / d[:, 1]).tolist()))
 
 OPTICORE_PYTHON = os.environ.get("OPTICORE_PYTHON", os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", "..",
-    "repo_raytrace", "opticore", ".venv", "bin", "python"))
+    "repo_opticore", "opticore", ".venv", "bin", "python"))
 
 
 def verify_singlet():
@@ -218,7 +218,7 @@ def verify_singlet():
 
     heights = [1.0, 30.0, 60.0, 90.0, 100.0]
     mine = lens.axis_crossing(heights)
-    # Optiland 오라클 기록값 (repo_raytrace/design_docs/PHASE0_OPTILAND_STUDY.md 절 B, Py=h/100)
+    # Optiland 오라클 기록값 (repo_opticore/design_docs/PHASE0_OPTILAND_STUDY.md 절 B, Py=h/100)
     optiland = {30.0: 1059.444, 60.0: 1055.200, 90.0: 1048.055, 100.0: 1045.011}
     ok &= check("↔ Optiland 기록값 [mm] (기록이 소수 셋째 자리)",
                 [mine[heights.index(h)] for h in optiland], list(optiland.values()), 1e-2)

@@ -81,7 +81,7 @@ print(json.dumps(out))
 
 ORACLE_PYTHON = os.environ.get("OPTILAND_PYTHON", os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", "..",
-    "repo_raytrace", "reference_libs", ".venv-oracle", "bin", "python"))
+    "repo_opticore", "reference_libs", ".venv-oracle", "bin", "python"))
 
 
 def verify_optiland():
