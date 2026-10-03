@@ -22,11 +22,11 @@ Send the light in **normally** through a high-numerical-aperture objective and t
 
 ## 1. The geometry oblique incidence leaves behind
 
-Cohn's 1994 textbook chapter divides microellipsometry in two. One approach adds focusing optics to a standard ellipsometer and measures a region 10–200 μm across — the **microspot** approach. The other replaces the detector with a CCD — **full-field imaging**.
+Cohn's 1994 chapter in the edited volume *Microanalysis of Solids* divides microellipsometry in two. One approach adds focusing optics to a standard ellipsometer and measures a region 10–200 μm across — the **microspot** approach. The other replaces the detector with a CCD — **full-field imaging**.
 
 Both pay for it. The microspot approach keeps its precision but has to move the sample mechanically from point to point. Cohn's numbers show the difference. A commercial microspot instrument needs **more than 11 hours** to acquire a $100 \times 100$ point image, while a comparatively slow full-field instrument acquires $480 \times 512$ points in **55 seconds**. In exchange, full-field imaging carries a larger uncertainty.
 
-Cohn's table of early-1990s instruments shows something else. An instrument with a $10 \times 30$ μm spot has an uncertainty of $0.1°$ in $\Delta$, while one that widens the spot to 100 μm and uses **eight-zone averaging** reaches $0.005°$. Post 4 covered four-zone averaging; this goes to eight. **Spatial resolution and accuracy trade against each other within a single table.**
+Cohn's table of instruments reported through the 1980s shows something else. An instrument with a $10 \times 30$ μm spot has an uncertainty of $0.1°$ in $\Delta$, while a transmission instrument with a 100 μm spot and **eight-zone averaging** reaches $0.005°$. Post 4 covered four-zone averaging; this goes to eight. **Spatial resolution and accuracy trade against each other within a single table.**
 
 Full-field imaging carries one more chronic problem.
 
@@ -40,7 +40,7 @@ Normal incidence removes both at once. The image plane does not tilt, so there i
 
 The back focal plane is the rear focal plane of the objective. **Rays that leave the front focal plane at the same angle converge to a single point there.** It is the counterpart of the property that light from one position on the sample converges to one point in the image plane.
 
-Because of it, **position in the back focal plane means angle.** Where the image plane shows where light came from, the back focal plane shows which way it went. The two planes are conjugate, so what is a point in one is a spread distribution in the other. Looking into the back focal plane to judge illumination uniformity in a microscope rests on the same fact.
+Because of it, **position in the back focal plane means angle.** Where the image plane shows where light came from, the back focal plane shows which way it went. The two planes are not conjugate but related by a Fourier transform, so what is a point in one is a spread distribution in the other. Microscopists look into the back focal plane through a Bertrand lens to align the illumination (lamp filament, condenser aperture) for the same reason: that plane shows angles.
 
 The difficulty is knowing where that plane is. Kim's dissertation records the practice.
 
@@ -65,7 +65,7 @@ The numerical aperture therefore fixes **the range of angles available**. NA 0.5
 
 That range matters because of the Brewster angle. As [the background post on Fresnel reflection](/en/posts/ellipsometry-electromagnetic-fresnel/) showed, it is the angle at which p-polarized reflection is minimal and where ellipsometry is most sensitive. Fused silica has a Brewster angle of $55.55°$, so **NA 0.825** reaches it. Glass is similar at $56.31°$.
 
-Silicon is not. Its Brewster angle is $75.53°$ and reaching it takes **NA 0.968**, beyond any objective usable in air. The most sensitive angle is unavailable on the main substrate of semiconductor metrology, and that is one practical limit of this method.
+Silicon is not. Its Brewster angle is $75.53°$ and reaching it takes **NA 0.968**, practically out of reach for objectives used in air. The most sensitive angle is unavailable on the main substrate of semiconductor metrology, and that is one practical limit of this method.
 
 ## 4. Azimuth rotates the polarization axis
 
@@ -135,7 +135,7 @@ Reading the back focal plane requires a two-dimensional imaging camera, and **ra
 
 Three remedies exist and each costs something: a band-pass filter, an RGB camera with a Bayer filter, or several single-wavelength sources switched in turn. Kim's dissertation records the price — system complexity rises, cost rises, and **measurement range and speed are constrained.** In a study that photographed the back focal plane through a Bayer filter, the limited spectral resolution left the fitted parameters markedly less distinguishable.
 
-The data volume grows too. Determining $\Psi$ and $\Delta$ completely takes at least three irradiance images, and at $480 \times 512$ pixels with 8-bit depth that is 0.74 MByte per frame. Adding wavelengths in sequence multiplies what a single point costs.
+The data volume grows too. Cohn notes that a full-field imaging instrument needs at least three irradiance images to determine $\Psi$ and $\Delta$ completely, which at $480 \times 512$ pixels and 8-bit depth comes to at least 0.74 MByte for the set (about 0.25 MByte per image). Annular acquisition in the back focal plane gets $\Psi$ and $\cos\Delta$ from a single image, but adding wavelengths in sequence multiplies the image count by the number of wavelengths, and what a single point costs grows quickly.
 
 Set beside Post 5, the structure is clear.
 
@@ -148,11 +148,11 @@ Getting everything at once means giving up an axis. And because the two methods 
 
 ## 7. The bill for high NA: this is not a plane wave
 
-Normal incidence and a high numerical aperture removed the geometric problems and introduced a new one. What Cohn identified in the textbook is fundamental.
+Normal incidence and a high numerical aperture removed the geometric problems and introduced a new one. What Cohn identified in the same chapter is fundamental.
 
 > The theory of ellipsometry is based on the interaction of electromagnetic **plane waves** at one or more interfaces. When lenses are used to focus the incident light, **the plane wave case no longer directly applies.**
 
-Erman and Theeten treated this with Fourier optics. Focusing through a finite aperture gives the angle of incidence a spread, and the detected $\tan\Psi$ becomes a **convolution** over that spread. Under coherent illumination amplitude functions are convolved; under incoherent illumination irradiance functions are.
+Erman and Theeten treated this with Fourier optics. Focusing through a finite aperture gives the angle of incidence a spread, and $r_p$ and $r_s$ are **each convolved** over that spread before their ratio sets the detected $\tan\Psi$. Under coherent illumination amplitude functions are convolved; under incoherent illumination irradiance functions are.
 
 Munro and Török rebuilt the same distinction in Mueller form in 2008. A focused field is a sum of plane waves, each meeting the sample matrix once, and **what gets averaged depends on how it is detected.** Confocal detection averages the sample's **Jones** matrices; conventional detection averages the **Mueller** matrices.
 
@@ -163,7 +163,7 @@ _Figure 4. Computed by widening the spread about $45°$ incidence. Left, the dep
 
 The Jones average holds an index of $1.000000000$ exactly, and **only the Mueller average falls below 1**, further as the spread widens. Not one component in the system depolarizes, yet **the act of focusing manufactures depolarization.**
 
-This is what Kim's dissertation points at when criticizing earlier work: modelling the error from the temperature of a birefringent material and an inaccurate retardance alone **cannot account for the total error of the system.** Post 5 covered one half of that, the retardance drift that rotates the $(a, b)$ plane; the other half is here.
+Kim's dissertation points at a similar gap when criticizing earlier work: modelling the error from the temperature of a birefringent material and an inaccurate retardance alone **cannot account for the total error of the system**, and the amplitude error of the spectral interference signal was left out. The dissertation traces depolarization to components such as the retarder, the beam splitter and the lenses; focusing-induced averaging is a further source added here. Post 5 covered the retardance side, the drift that rotates the $(a, b)$ plane; the amplitude and depolarization side is what remained.
 
 The remedy already appeared in Posts 4 and 5. Do not try to remove it — **put it in the forward model.** Post 4's regression calibration said a model cannot account for what is not in it, and in Post 5 Okabe folded the convolution of the window function into the theoretical model. Here the Mueller matrix of the focusing lens pair is parameterized and fitted alongside.
 
@@ -188,11 +188,11 @@ _Figure 5. Left, the $\tan^2\Psi$ profile of a fused silica reference. Right, th
 
 If the true NA is 0.90 and the specified 0.95 is used as it stands, the rim is **off by up to $7.6°$.** Solving for a thickness from $\Psi$ and $\Delta$ attributed to an angle that is $7.6°$ wrong cannot give the right answer. Setting the scale by the Brewster angle removes that error.
 
-Measuring $\tan^2\Psi$ is simple. Remove the retarder from the generator, set the polarizer alternately to $0°$ and $90°$, and hold the analyzer at $45°$:
+Measuring $\tan^2\Psi$ is simple. Remove the retarder from the generator, set the polarizer alternately to $0°$ and $90°$, and hold the analyzer at $45°$. The profile is read along the $90°$ azimuth line, where a polarizer along the laboratory $x$ axis ($0°$) delivers s-polarized light, so
 
 $$I_{0°} = I_{in}(1 + \cos 2\Psi) = 2I_{in}\cos^2\Psi, \qquad I_{90°} = I_{in}(1 - \cos 2\Psi) = 2I_{in}\sin^2\Psi$$
 
-The ratio of the two intensities is $\tan^2\Psi$. **The source intensity cancels, so no absolute radiometric calibration is needed.**
+The ratio $I_{90°}/I_{0°}$ is $\tan^2\Psi$. **The source intensity cancels, so no absolute radiometric calibration is needed.**
 
 It is the same idea as Post 4's residual calibration, which read three numbers off the minimum of a single curve. Take a ratio to cancel what is unknown, and use only the **position** of the minimum.
 
@@ -210,7 +210,7 @@ Several groups have used the back focal plane and each gained something. The map
 | Line-scan plus polarization filter | ○ | ○ | ✗ | ✗ |
 | Back focal plane with polarization modulation | ✗ | ○ | ✗ | ○ |
 
-Illuminating a shaped ring along the radial direction gives high spatial resolution but requires measuring at many radii, and as the ring narrows the angular resolution improves while the signal weakens. A line-scan spectrograph with a polarization filter achieves snapshot operation and a micro spot, but **cannot measure the phase change fully** and stays reflectance-centred, which rules out Mueller-matrix analysis.
+Illuminating a shaped ring along the radial direction gives high spatial resolution but requires measuring at many radii, and as the ring narrows the angular resolution improves while the signal weakens. A line-scan spectrograph with a polarization filter achieves snapshot operation and a micro spot, but **cannot measure the phase change fully** and stays reflectance-centred, which makes Mueller-matrix analysis difficult.
 
 > Existing studies have not presented an integrated methodology that satisfies **micro-spot measurement, snapshot analysis, angular resolution, and systematic error calibration** at the same time.
 
