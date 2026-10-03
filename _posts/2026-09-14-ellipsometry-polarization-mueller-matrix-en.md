@@ -13,7 +13,7 @@ math: true
 
 [Post 1](/en/posts/ellipsometry-electromagnetic-fresnel/) ended by arriving at the ratio of Fresnel reflection coefficients, $\rho = r_p/r_s = \tan\Psi\, e^{j\Delta}$. Taken alone, that single value looks like everything ellipsometry needs. But $\rho$ compresses the amplitude ratio and phase difference of two components, s and p, into one scalar, and it does so on the assumption that the light is always in an ideal, fully polarized state. In a real measurement there is always some degree of depolarization — part of the polarization state randomized by surface roughness on the sample, multiple scattering, or non-ideal elements inside the optics. A scalar $\rho$ has no way of expressing that situation at all.
 
-This post compares the two mathematical languages used to describe a polarization state, the Jones vector and the Stokes vector, examines the difference in what each can express, and explains why a real ellipsometer standardizes on Mueller matrices rather than Jones matrices. It then maps the Mueller matrices of the two core components — the polarizer and the retarder — onto the actual hardware one at a time.
+This post compares the two mathematical languages used to describe a polarization state, the Jones vector and the Stokes vector, examines the difference in what each can express, and explains why Mueller matrices rather than Jones matrices are needed once depolarization has to be handled. It then maps the Mueller matrices of the two core components — the polarizer and the retarder — onto the actual hardware one at a time.
 
 Before that, a picture of where those components sit. An ellipsometer consists of a Polarization State Generator (PSG), which puts the light from the source into a chosen polarization state; the sample it reflects from; and a Polarization State Analyzer (PSA), which reads out how that state has changed.
 
@@ -43,7 +43,7 @@ $$ \mathbf{E} = \begin{bmatrix} \lvert E_x \rvert\, e^{j\phi_{e,x}} \\ \lvert E_
 
 The Jones vector expresses an entire polarization state with two complex numbers — four reals: two amplitudes and two phases, of which the overall phase is irrelevant to measurement, leaving three effective degrees of freedom. That compactness also simplifies propagation through an optical system: represent each element by a 2×2 Jones matrix, and the state after several elements is just the ordered product of those matrices (Jones calculus).
 
-The difficulty is the premise on which the representation rests. The two components of a Jones vector presuppose perfectly coherent oscillation holding a fixed phase relation — in other words, that the single exact trajectory of Figure 2 persists without wavering. Real light maintains that relation only within a finite coherence time; measured over any longer interval, the phase difference and amplitude ratio typically fluctuate slightly. The larger those fluctuations, the further the state drifts from "one fully polarized ellipse," and a Jones vector has nowhere to put that drift. An unpolarized state — natural light, in which the phase relation between $E_x$ and $E_y$ is entirely random — cannot be written as a Jones vector at all.
+The difficulty is the premise on which the representation rests. The two components of a Jones vector presuppose perfectly coherent oscillation holding a fixed phase relation — in other words, that the single exact trajectory of Figure 2 persists without wavering. Light from a real source often keeps its amplitude ratio and phase difference fixed only over intervals of the order of the coherence time and lets them wander over longer ones. Conversely, light that keeps them fixed — light fresh from a polarizer, for instance — is fully polarized however short its coherence time. The larger those fluctuations, the further the state drifts from "one fully polarized ellipse," and a Jones vector has nowhere to put that drift. An unpolarized state — natural light, in which the phase relation between $E_x$ and $E_y$ is entirely random — cannot be written as a Jones vector at all.
 
 ## 3. The Stokes vector — polarization defined by measurable intensities
 
@@ -53,7 +53,7 @@ $$ S_0 = \lvert E_x \rvert^2 + \lvert E_y \rvert^2, \qquad S_1 = \lvert E_x \rve
 
 $$ S_2 = 2\lvert E_x \rvert \lvert E_y \rvert \cos(\phi_{e,y}-\phi_{e,x}), \qquad S_3 = 2\lvert E_x \rvert \lvert E_y \rvert \sin(\phi_{e,y}-\phi_{e,x}) $$
 
-$S_0$ is the total intensity, $S_1$ the intensity difference between horizontal (0°) and vertical (90°) components, $S_2$ that between $+45°$ and $135°$, and $S_3$ that between left- and right-circular components. What matters is that all four are combinations of "intensity transmitted through a particular polarization filter" — quantities a detector measures directly. The components of a Jones vector (the absolute phase of the field) cannot be measured directly, whereas the components of a Stokes vector are in principle determined by four intensity measurements.
+$S_0$ is the total intensity, $S_1$ the intensity difference between horizontal (0°) and vertical (90°) components, $S_2$ that between $+45°$ and $135°$, and $S_3$ that between right- and left-circular components (in the optics convention, where right-circular light rotates clockwise as seen looking into the oncoming beam). What matters is that all four are combinations of "intensity transmitted through a particular polarization filter" — quantities a detector measures directly. The components of a Jones vector (the absolute phase of the field) cannot be measured directly, whereas the components of a Stokes vector are in principle determined by four intensity measurements.
 
 The more consequential difference is the range of states each can express. For a fully polarized state $S_0^2 = S_1^2+S_2^2+S_3^2$ holds exactly, but real light generally satisfies only the inequality:
 
@@ -64,7 +64,7 @@ The slack in that inequality is exactly the territory a Jones vector cannot reac
 <img src="/assets/img/posts/ellipsometry-polarization-mueller-matrix/en/fig2-partial-polarization.png" alt="Ensembles of field trajectories for full, partial and zero polarization with the measured degree of polarization" width="700">
 _Fig 3. Fully polarized to partially polarized to unpolarized: a Jones vector covers only the left panel, a Stokes vector all three_
 
-Each panel can be read as the result of observing, repeatedly and over a period longer than the coherence time, a state that is fully polarized at any instant — a single ellipse like the one in Figure 2. On the left the same ellipse recurs exactly every time (P=1.00, the ellipse of Figure 2). On the right a completely random ellipse appears each time, so that averaging leaves no preferred direction at all (P=0.02). The middle sits between them, with signal and noise mixed half and half (P=0.50). A Jones vector can express only the "single fixed frame" of the left panel. Measuring a rough surface or a thick film with a real ellipsometer routinely produces something closer to the middle panel, and Jones calculus is then a tool that cannot be applied in principle. This is why ellipsometry takes the Stokes vector as its basic representation.
+Each panel can be read as the result of observing, repeatedly and over a period longer than the coherence time, a state that is fully polarized at any instant — a single ellipse like the one in Figure 2. On the left the same ellipse recurs exactly every time (P=1.00, the ellipse of Figure 2). On the right a completely random ellipse appears each time, so that averaging leaves no preferred direction at all (P=0.02). The middle sits between them, with signal and noise mixed half and half (P=0.50). A Jones vector can express only the "single fixed frame" of the left panel. Measuring a rough surface, a film of non-uniform thickness, or a transparent substrate with backside reflection yields partially polarized light noticeably below P=1 (around 0.7–0.9 in published examples), and Jones calculus is then a tool that cannot be applied in principle. This is why ellipsometry turns to the Stokes vector wherever depolarization has to be handled.
 
 ## 4. The Mueller matrix — the linear transformation through a system
 
@@ -80,7 +80,7 @@ Before writing the Mueller matrices of a polarizer and a retarder, the rotation 
 
 $$ M_R(\Omega) = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & \cos 2\Omega & \sin 2\Omega & 0 \\ 0 & -\sin 2\Omega & \cos 2\Omega & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix} $$
 
-The angle enters as $2\Omega$, not $\Omega$. This follows from the geometric symmetry of polarization: a linear state returns to itself after a rotation of only $180°$ in azimuth ($E$ and $-E$ are the same line), so the Stokes parameters $(S_1,S_2)$ vary with a period of twice the physical azimuth. Aligning a polarizer or retarder at an arbitrary angle $\Omega$ below always appears as sandwiching its reference-orientation Mueller matrix: $M_R(-\Omega)\,(\cdot)\,M_R(\Omega)$.
+The angle enters as $2\Omega$, not $\Omega$. This follows from the geometric symmetry of polarization: a linear state returns to itself after a rotation of only $180°$ in azimuth ($E$ and $-E$ are the same line), so the Stokes parameters $(S_1,S_2)$ turn through twice the azimuth, $2\Omega$, and $180°$ of azimuth makes one full period. Aligning a polarizer or retarder at an arbitrary angle $\Omega$ below always appears as sandwiching its reference-orientation Mueller matrix: $M_R(-\Omega)\,(\cdot)\,M_R(\Omega)$.
 
 ## 6. Polarizer and retarder — the expressions and the hardware they correspond to
 
@@ -90,7 +90,7 @@ $$ M_P(\Omega_P) = M_R(-\Omega_P)\, \frac{1}{2}\begin{bmatrix} 1 & 1 & 0 & 0 \\ 
 
 Taking apart what the central matrix (reference orientation, $\Omega_P=0$) does: only $S_1$ survives alongside $S_0$, while $S_2$ and $S_3$ are driven to zero — it transmits the horizontal component and erases every other piece of polarization information. In the laboratory a wire-grid polarizer or a Glan-Taylor prism plays this role. The angle at which the part is turned in its mount is $\Omega_P$ itself.
 
-A retarder, rather than blocking a component, delays the phase of the component along one axis. For an alignment angle $\Omega_C$ and retardance $\phi$:
+A retarder, rather than blocking a component, introduces a phase difference between the components along its fast and slow axes. For a fast axis aligned at $\Omega_C$ and retardance $\phi$:
 
 $$ M_C(\Omega_C, \phi) = M_R(-\Omega_C) \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & \cos\phi & \sin\phi \\ 0 & 0 & -\sin\phi & \cos\phi \end{bmatrix} M_R(\Omega_C) $$
 
@@ -133,13 +133,13 @@ The plot along the bottom shows the same result as the Stokes components $S_1/S_
 
 ## Summary and what comes next
 
-This post examined the difference in expressive power between the two languages for polarization. The Jones vector can represent only fully polarized states but keeps the arithmetic compact; the Stokes vector, defined through measurable intensities, extends to partial polarization and to unpolarized light. Real ellipsometers standardize on Mueller rather than Jones calculus because situations that break the fully-polarized assumption — surface roughness, depolarization — genuinely occur. On that foundation, the Mueller matrices of the polarizer and the retarder were defined, with the rotation matrix expressing alignment angle and the retardance formula expressing wavelength dependence.
+This post examined the difference in expressive power between the two languages for polarization. The Jones vector can represent only fully polarized states but keeps the arithmetic compact; the Stokes vector, defined through measurable intensities, extends to partial polarization and to unpolarized light. Ellipsometer equations are usually set up in Jones calculus, but situations that break the fully-polarized assumption — surface roughness, depolarization — genuinely occur, and there Mueller calculus becomes necessary. On that foundation, the Mueller matrices of the polarizer and the retarder were defined, with the rotation matrix expressing alignment angle and the retardance formula expressing wavelength dependence.
 
 The next post applies this Mueller formalism to reflection from a thin-film sample. The ellipsometric parameters $\Psi$ and $\Delta$, which emerge when the Fresnel coefficients derived in post 1 combine with multiple reflection inside a film, are treated there in terms of how they are measured and interpreted in the Stokes-Mueller language defined here.
 
 ## References
 
 - Youngjoon Kim, "라인 스캔 분광기와 후초점면 분광 간섭을 이용한 스냅샷 각도 분해 엘립소메트리 개발" [Development of snapshot angle-resolved ellipsometry using a line-scan spectrometer and back-focal-plane spectral interference], Ph.D. dissertation, Seoul National University, 2025 (in Korean), sections 1.2 and 2.3.
-- H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, ch. 2 (Jones and Stokes vectors, Mueller matrices).
-- R. M. A. Azzam and N. M. Bashara, *Ellipsometry and Polarized Light*, North-Holland, 1987, ch. 1–2 (mathematical representations of polarization).
+- H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, ch. 3 (Jones and Stokes vectors, Mueller matrices).
+- R. M. A. Azzam and N. M. Bashara, *Ellipsometry and Polarized Light*, North-Holland, 1977, ch. 1–2 (mathematical representations of polarization).
 - E. Collett, *Field Guide to Polarization*, SPIE Press, 2005 (Stokes vectors, degree of polarization, Mueller calculus).
