@@ -38,7 +38,7 @@ Research Library 파일명), DOI. 포인터는 출발점일 뿐이라는 것도 
 - 초록만 읽었으면 그렇다고 쓴다. 전문을 읽었다고 하지 않는다.
 
 자료 찾는 순서
-1. 로컬: _references/<slug>/ , ~/OneDrive-Personal/Documents/Research Library
+1. 로컬: _references/<slug>/ , ~/Library/CloudStorage/OneDrive-Personal/Documents/Research Library
    (find . -iname "*.pdf" -iname "*키워드*" | grep -v Duplicates). PDF는 Read 도구로, 10쪽이 넘으면 pages 인자.
 2. 공개 DB: OpenAlex, Crossref, arXiv, Unpaywall, Google Patents 개별 특허 페이지 (curl 사용 —
    Python urllib은 이 맥에서 SSL 오류가 난다). 출판사 사이트는 대개 403이다.

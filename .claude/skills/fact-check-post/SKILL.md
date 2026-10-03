@@ -62,7 +62,7 @@ CLAUDE.md 절대 규칙 4는 기존 포스트를 고치지 말라고 한다. 이
 | C | 위키백과, 블로그, 강의 노트 | 단서로만. 각주의 원 문헌으로 넘어간다 |
 | D | 모델의 기억 | 쓰지 않는다. 확인 불가로 둔다 |
 
-자료는 `_references/<slug>/` → `~/OneDrive-Personal/Documents/Research Library` → 공개 DB
+자료는 `_references/<slug>/` → `~/Library/CloudStorage/OneDrive-Personal/Documents/Research Library` → 공개 DB
 순서로 찾는다. 로컬을 건너뛰고 "구할 수 없다"고 결론 낸 적이 두 번 있다. 공개 DB와 전문 확보
 경로는 `research-sources` 스킬에 정리되어 있다.
 
