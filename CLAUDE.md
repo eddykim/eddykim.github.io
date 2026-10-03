@@ -5,6 +5,8 @@
 - **새 글 작성** 요청 → `.claude/skills/write-post/SKILL.md`의 워크플로우를 따르세요.
 - **기존 글 교정·영문판 작업** 요청 → `.claude/skills/revise-post/SKILL.md`를 따르세요.
 - **자료 조사·논문/특허 수집** 요청 → `.claude/skills/research-sources/SKILL.md`를 따르세요.
+- **글의 사실 검증·오류 점검** 요청 → `.claude/skills/fact-check-post/SKILL.md`를 따르세요.
+  절대 규칙 4의 예외로, 사용자가 항목별로 승인한 사실 오류와 거기에 딸린 수식·수치·그림만 고칩니다.
 
 ## 절대 규칙 (위반 금지)
 
