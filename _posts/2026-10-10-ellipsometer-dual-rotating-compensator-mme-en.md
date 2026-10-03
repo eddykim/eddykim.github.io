@@ -38,11 +38,11 @@ _Figure 1. Four rotating-element configurations and the Mueller elements each on
 
 Rotating the polarizer and analyzer together misses the fourth row and the fourth column. With no component to produce circular polarization, that is only to be expected. Adding a single compensator improves matters, and where it goes decides the outcome: placed after the sample it yields the first three columns, placed before it the first three rows.
 
-What deserves attention is that these two configurations have exactly the optical layout of the RAE-with-compensator and the RCE of post 1. Section 2 of that post argued that identical components give different reach depending on which one turns. The same argument reappears one level up, at the Mueller matrix. Where a component sits decides whether rows or columns come back.
+What deserves attention is that the configuration with the compensator after the sample has exactly the optical layout of post 1's RAE-with-compensator ($PSCA_R$) and RCE ($PSC_RA$). Section 2 of that post argued that identical components give different reach depending on which one turns. The same argument reappears one level up, at the Mueller matrix. Where a component sits decides whether rows or columns come back.
 
 Three rows or three columns do not make sixteen. Among rotating-element configurations, only two compensators turning at different frequencies deliver the whole matrix in a single measurement. The design was proposed in the late 1970s, built in the early 1990s, and an instrument capable of real-time spectroscopic measurement appeared in 2000.
 
-Photoelastic modulators can also measure a Mueller matrix. Two modulators at different resonant frequencies give nine elements, and four measurements at different component angles fill the rest. The ordinary PME of post 1 reaches only the first three columns, and needs eight measurements to do it. A single measurement of all sixteen is available on the rotating side alone.
+Photoelastic modulators can also measure a Mueller matrix. Two modulators at different resonant frequencies give nine elements, and four measurements at different component angles fill the rest. The ordinary PME of post 1 reaches only the first three columns, and needs eight measurements to do it. Among the configurations Fujiwara (2007) surveys, only the rotating type gives all sixteen in one measurement. Doing it without rotation takes four modulators (electro-optic in Thompson et al. 1980, photoelastic in Arteaga et al. 2012), or moving the modulation onto the wavelength axis as in the channeled approach of post 5.
 
 ## 3. Turning Two of Them at Different Speeds
 
@@ -72,13 +72,13 @@ That Azzam did not leave the five identities idle matters. Departures from them 
 
 Several remarks Azzam appended also touch this series directly. One is that a fixed analyzer at the end of the optical train avoids errors from polarization-dependent detector sensitivity. Section 5 of post 2 discussed why a depolarizer goes in front of the detector; here the layout itself solves the same problem.
 
-The second remark matters more. Scanning wavelength requires the quarter-wave plates to be achromatic or tunable at every wavelength. Arbitrary and differing retardances still permit the Mueller matrix to be determined, he added, but the mathematics become complicated. The whole of post 2 hangs on that sentence, and the commercial design in the next section takes precisely the complicated route.
+The second remark matters more. Scanning wavelength requires the quarter-wave plates to be achromatic or tunable at every wavelength. Arbitrary and differing retardances still permit the Mueller matrix to be determined, he added, but the mathematics become complicated. The whole of post 2 hangs on that sentence, and the Collins–Koh design in the next section takes precisely the complicated route.
 
 The last remark points ahead in the series. Replacing mechanical rotation with the optical rotation of a pair of Faraday cells would give an instrument with no moving parts at all. A 1978 paper was already looking toward doing away with rotation.
 
 ## 4. Which Element Rides on Which Harmonic
 
-Collins and Koh set out the design of the commercial instrument in 1999. In the notation of post 1 the configuration is $PC_RSC_RA$; since the two compensators must be told apart, it is written here with numbers as $PC_{1r}(\omega_1)\,S\,C_{2r}(\omega_2)\,A$. A fixed polarizer and analyzer sit symmetrically about the sample. The rotation rates are $\omega_1 = 5\omega$ and $\omega_2 = 3\omega$, and $\pi/\omega$ is the fundamental optical period.
+Collins and Koh proposed the design of a real-time instrument in 1999. In the notation of post 1 the configuration is $PC_RSC_RA$; since the two compensators must be told apart, it is written here with numbers as $PC_{1r}(\omega_1)\,S\,C_{2r}(\omega_2)\,A$. A fixed polarizer and analyzer sit symmetrically about the sample. The rotation rates are $\omega_1 = 5\omega$ and $\omega_2 = 3\omega$, and $\pi/\omega$ is the fundamental optical period.
 
 The detected intensity reads as follows, with $C$ the base rotation angle.
 
@@ -87,7 +87,7 @@ $$I(C) = I_0\Big\{1 + \sum_{n=1}^{16}\big[\alpha_{2n}\cos(2nC-\phi_{2n}) + \beta
 <img src="/assets/img/posts/ellipsometer-dual-rotating-compensator-mme/en/fig2-waveform-spectrum.png" alt="Waveform and harmonics for RCE and DRC-MME" width="780">
 _Figure 2. The same sample seen with one compensator and with two. Four bars are missing in the lower spectrum, and the calculation puts the coefficients at exactly those positions to zero._
 
-Figure 2 places this beside the RCE of post 1. One compensator gives two harmonics; two compensators raise twenty-four, from $2C$ up to $32C$. The waveform itself grows visibly more intricate.
+Figure 2 places this beside the RCE of post 1. One compensator gives two harmonics; two compensators raise twelve, from $2C$ up to $32C$ — twenty-four coefficients counting cosine and sine. The waveform itself grows visibly more intricate.
 
 Four of the sixteen positions are empty, however. The eight coefficients at $n$ equal to 9, 12, 14 and 15 vanish. Multiplying the Mueller matrices directly puts those positions at zero to within $10^{-17}$. The twenty-four that remain determine fifteen normalized Mueller elements, which leaves more equations than unknowns. The system is overdetermined.
 
@@ -129,7 +129,7 @@ How the reads are timed is part of the design too. The detector fires every 5° 
 
 Turning the compensators in the same direction or in opposite directions makes no difference. Counter-rotation only flips the sign of the terms belonging to the third and fourth columns, and reversing those signs recovers the same information.
 
-Section 9 of post 1 said the number of samples needed is set by the number of unknown coefficients: three intervals for RAE, five for RCE. Here it is 33. The same principle, an order of magnitude larger.
+Section 7 of post 1 said the number of samples needed is set by the number of unknown coefficients: three intervals for RAE, five for RCE. Here it is 33. The same principle, an order of magnitude larger.
 
 ## 6. The Ratio Does Not Set the Precision
 
@@ -150,7 +150,7 @@ So what does set the precision?
 <img src="/assets/img/posts/ellipsometer-dual-rotating-compensator-mme/en/fig5-condition-number.png" alt="Condition number against retardance" width="780">
 _Figure 5. The condition number of the data reduction matrix against compensator retardance. A quarter-wave plate is not the best choice._
 
-The retardance does. Figure 5 sweeps it, and the minimum sits at 128°, not at 90°. A quarter-wave plate gives a condition number of 9.45; a 128° plate gives 2.49. For the same detector noise the error in the Mueller elements is 3.8 times smaller. Smith's optimum of 127° is effectively the same answer.
+The retardance does. Figure 5 sweeps it, and the minimum sits at 128°, not at 90°. A quarter-wave plate gives a condition number of 9.45; a 128° plate gives 2.49. For the same detector noise, the error summed over the sixteen elements drops by about a factor of two. The condition-number ratio bounds the worst case; it is not the ratio of typical errors. Smith likewise said the noise could be cut by more than half. Smith's optimum of 127° is effectively the same answer.
 
 Why not 90° can be read off the structure in section 4. The fourth row and column ride on $\sin\delta$, which peaks at 90°. The modulated share of the second and third columns rides on $s = \sin^2(\delta/2)$, which keeps growing to 180°. The compromise between the two is pushed above 90°. Maximizing $\sin\delta\cdot\sin^2(\delta/2)$ alone gives 120°; accounting for the condition number of the full matrix lands near 128°.
 
@@ -162,7 +162,7 @@ Where is the price paid for getting sixteen at once? In time.
 
 The optical period at five to three is 200 ms, so that is how long one Mueller matrix takes. The minimum measurement time for RAE and RCE in the table of post 1 was about 10 ms, making this twenty times slower.
 
-The chain is easy to follow. Two compensators push the highest harmonic from $24C$ to $32C$; a higher harmonic demands at least 33 integrations per period; each detector read costs over 5 ms; the period therefore stretches to 200 ms. Touch any link and the rest move with it.
+The chain is easy to follow. Two compensators lift the highest harmonic from the RCE's $4\omega$ to $24C$ and beyond, and the motor-driven choice of five to three takes it to $32C$; a higher harmonic demands at least 33 integrations per period; each detector read costs over 5 ms; the period therefore stretches to 200 ms. Touch any link and the rest move with it.
 
 What 200 ms means depends on the application. It is fast enough to follow film growth in real time, which was the original motivation for the instrument. But against the 20 μs with which the photoelastic modulator of post 1 tracked liquid crystal molecules, it is four orders of magnitude away. The price of all sixteen is paid in time.
 
@@ -172,13 +172,13 @@ The exchange from post 1 changes shape once more here. Null ellipsometry spent t
 
 Having established that it is slow, the next question is how to make it fast. Two approaches diverge.
 
-One pushes on the hardware. The high-speed instrument Collins's group reported in 2001 took that path, refining multichannel detection and rotation drive together to gain speed on the same principle. The design table of section 5 already points that way: the ratio, the highest harmonic, the integration time and the motor frequency are linked in one chain, so a faster detector lets the whole chain be tightened. The ceiling of this approach is set by the detector.
+One pushes on the hardware. Collins's group reported the instrument built to the 1999 design in 2001. With the fundamental lowered to 2 Hz it took at least 0.25 s per Mueller matrix — a little slower than the 0.2 s of the design. The design table of section 5 already points that way: the ratio, the highest harmonic, the integration time and the motor frequency are linked in one chain, so a faster detector lets the whole chain be tightened. The ceiling of this approach is set by the detector.
 
 The other redesigns when to read. The approach published in 2019 starts from the observation that there is no reason for sampling points in a continuous measurement to be evenly spaced. Building an objective that tolerates both systematic error and detection noise, and searching for optimal unevenly spaced points with a multi-objective genetic algorithm, reaches a globally minimal number of samples while improving error immunity rather than degrading it.
 
 The contrast is sharp. The first wants to read faster; the second wants to read less.
 
-The second is possible because of what section 6 established. Twenty-four coefficients for fifteen elements left room to cut samples from the start, and since the ratio does not touch the condition number, where the samples sit can be rearranged freely. Even spacing was never a requirement of the physics — it was a convenience imposed to keep the Fourier analysis simple.
+The second is possible because twenty-four coefficients for fifteen elements left room to cut samples from the start. Cut them close to sixteen, though, and the conclusion of section 6 no longer holds: with exactly sixteen measurements Smith found an intricate dependence on the angular increments, and Meng et al. report that the optimum is highly sensitive to the speed ratio. That is why where the samples sit had to be solved as an optimization problem. Even spacing was never a requirement of the physics — it was a convenience imposed to keep the Fourier analysis simple.
 
 This also connects to the later parts of the series. Raising the rotation speed eventually runs into the motor and the detector. What remains is to change how the reading is done, or to remove the rotation altogether. Azzam's 1978 mention of Faraday cells is one end of that thought; the instruments of posts 5 and 6 are the other.
 
@@ -194,7 +194,7 @@ Retardance should not depend on how the sample was mounted, so it is determined 
 
 The method falls out of the coefficient structure. Squaring and summing the cosine and sine coefficients of a harmonic cancels the phase angle, which yields the polarizer and analyzer offsets; taking their ratio instead leaves the phase angle intact, which gives the compensator phase offsets.
 
-Those phase angles are not spread evenly over the two compensators. Only the first compensator's phase appears at $10C$, only the second's at $12C$. A window onto each compensator separately is already open in the signal. At the other harmonics the two enter mixed as sums and differences.
+Those phase angles are not spread evenly over the two compensators. Only the first compensator's phase appears at $10C$ and $20C$, only the second's at $6C$ and $12C$. A window onto each compensator separately is already open in the signal. At the other harmonics the two enter mixed as sums and differences.
 
 Several routes to the same quantity therefore exist. For one combination of polarizer offset and first-compensator phase alone there are five different paths through different harmonics. Agreement among the five says the instrument is sound; divergence narrows down what has shifted.
 

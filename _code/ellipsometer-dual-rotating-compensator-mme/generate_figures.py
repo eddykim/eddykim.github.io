@@ -83,7 +83,7 @@ LABELS = {
         "rce_t": "1편의 RCE — 보상자 하나",
         "mme_t": "DRC-MME — 보상자 둘 (5:3)",
         "rce_note": "$2\\omega$ 와 $4\\omega$ 둘뿐",
-        "mme_note": "$2C$ 부터 $32C$ 까지 24개",
+        "mme_note": "$2C$ 부터 $32C$ 까지 12개",
         "dead": "$n$ = 9, 12, 14, 15 는 소멸한다",
         # 그림 3
         "fig3": "어느 뮬러 요소가 어느 고조파에 실리는가",
@@ -101,7 +101,7 @@ LABELS = {
         "fig5": "정밀도를 정하는 것은 지연량이다",
         "opt": "최소 {:.0f}°  (조건수 {:.2f})",
         "at90": "90°에서 {:.2f}",
-        "gain": "90° 대신 {:.0f}°를 쓰면\n잡음 증폭이 {:.1f}배 줄어든다",
+        "gain": "90° 대신 {:.0f}°를 쓰면\n조건수가 {:.1f}배 작아진다",
         "overlap": "5:3 과 5:1 이 완전히 겹친다",
     },
     "en": {
@@ -118,7 +118,7 @@ LABELS = {
         "rce_t": "RCE from post 1 — one compensator",
         "mme_t": "DRC-MME — two compensators (5:3)",
         "rce_note": "only $2\\omega$ and $4\\omega$",
-        "mme_note": "24 of them, $2C$ through $32C$",
+        "mme_note": "12 of them, $2C$ through $32C$",
         "dead": "$n$ = 9, 12, 14, 15 vanish",
         "fig3": "Which Mueller element rides on which harmonic",
         "elem": "elements carried", "factor": "strength factor",
@@ -133,7 +133,7 @@ LABELS = {
         "fig5": "It is the retardance that sets the precision",
         "opt": "minimum at {:.0f}°  (condition number {:.2f})",
         "at90": "{:.2f} at 90°",
-        "gain": "choosing {:.0f}° over 90° cuts the\nnoise amplification by {:.1f}x",
+        "gain": "choosing {:.0f}° over 90° lowers the\ncondition number by {:.1f}x",
         "overlap": "5:3 and 5:1 coincide exactly",
     },
 }
