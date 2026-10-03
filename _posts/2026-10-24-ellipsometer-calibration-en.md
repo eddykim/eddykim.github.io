@@ -48,14 +48,14 @@ What matters is the relation between the measured $(\alpha', \beta')$ and the tr
 
 $$\begin{bmatrix}\alpha'\\ \beta'\end{bmatrix} = \eta\begin{bmatrix}\cos 2A_s & -\sin 2A_s\\ \sin 2A_s & \cos 2A_s\end{bmatrix}\begin{bmatrix}\alpha\\ \beta\end{bmatrix}$$
 
-This is a coordinate rotation by $A_s$ multiplied by a scale factor $\eta$. Knowing $A_s$ and $\eta$ is therefore enough: invert the matrix and the true values come straight back. The error list ran to seven branches, but what must be undone reduces to **one rotation and one scale factor**. That reduction is what makes calibration tractable.
+This is a coordinate rotation through $2A_s$ in the $(\alpha, \beta)$ plane, multiplied by a scale factor $\eta$. Knowing $A_s$ and $\eta$ is therefore enough: invert the matrix and the true values come straight back. The error list ran to seven branches, but what must be undone reduces to **one rotation and one scale factor**. That reduction is what makes calibration tractable.
 
 Undoing $A_s$ mathematically matters most in multichannel instruments. A photodiode array is read out pixel by pixel, and the analyzer keeps turning during readout, so **$A_s$ differs from pixel to pixel.** No mechanical adjustment can fix that, so it has to be handled by calibration from the start. Post 1 noted that RAE is achromatic and therefore measures as many wavelengths simultaneously as the array has pixels; this is the price attached to that strength.
 
 The three errors leave different marks on the signal.
 
 <img src="/assets/img/posts/ellipsometer-calibration/en/fig1-error-anatomy.png" alt="What the three errors do to the measured signal" width="780">
-_Figure 1. Left, the detected intensity over one analyzer revolution. Right, the locus traced by $(\alpha', \beta')$ as the polarizer is scanned. The right panel uses a sample with large $\lvert\cos\Delta\rvert$ ($\Psi = 35°$, $\Delta = 50°$) so the ellipse is not flattened._
+_Figure 1. Left, the detected intensity over half an analyzer revolution (0°–180°, one signal period). Right, the locus traced by $(\alpha', \beta')$ as the polarizer is scanned. The right panel uses a sample with large $\lvert\cos\Delta\rvert$ ($\Psi = 35°$, $\Delta = 50°$) so the ellipse is not flattened._
 
 In the waveform the three look like similar distortions, but in the $(\alpha', \beta')$ plane they separate cleanly. Scanning the polarizer from $-90°$ to $+90°$ traces a closed ellipse with semi-axes $1$ and $\lvert\cos\Delta\rvert$; $\Psi$ does not enter. Substituting $u = \tan(P - P_s) = \tan\Psi\,\tan\theta$ gives $\alpha = \cos 2\theta$ and $\beta = \cos\Delta\,\sin 2\theta$, and $\Psi$ cancels. $A_s$ rotates this ellipse about the origin, $\eta$ shrinks it whole, and $P_s$ **leaves the ellipse untouched and only slides the operating point along it.**
 
@@ -70,13 +70,13 @@ _Figure 2. Errors propagated into $\Psi$ and $\Delta$ for a sample with $\Psi = 
 
 The three errors go to different places. A polarizer offset $P_s = 0.1°$ shifts $\Psi$ by $0.055°$ but does **not** propagate into $\Delta$ at all. In the ideal inversion $\cos\Delta = \beta' / \sqrt{1 - \alpha'^2}$, and the polarizer angle cancels between numerator and denominator. The $10^{-13}$ degrees left in the computation are floating-point noise.
 
-An analyzer offset $A_s = 0.1°$ does the opposite. It barely touches $\Psi$ and shifts $\Delta$ by $0.30°$, amplified threefold over the injected error.
+Near $\Delta \approx 90°$ an analyzer offset $A_s = 0.1°$ does the opposite. It barely touches $\Psi$ and shifts $\Delta$ by $0.30°$, amplified threefold over the injected error. This $\Delta$ error, however, scales with $\sin\Delta$ and shrinks toward $0°$ and $180°$ ($0.016°$ at $\Delta = 3°$), while the $\Psi$ error grows to nearly $0.1°$ instead.
 
 The detector coefficient $\eta$ leaves $\Delta$ untouched at $\Delta = 90°$ and degrades sharply as $\Delta$ approaches $0°$ or $180°$. An attenuation of one part in a thousand, $\eta = 0.999$, produces a $2.5°$ error on a sample with $\Delta = 3°$. This is the region where Post 1 put the RAE amplification factor at $1/\lvert\sin\Delta\rvert$.
 
 That the vulnerable region lies at the extremes of $\Delta$ follows from the structure of RAE. The instrument obtains only $\cos\Delta$ and inverts it, and since $\cos\Delta$ is not linear in $\Delta$, its slope vanishes where $\cos\Delta = \pm1$. Change the configuration and the region moves. PME measures $S_2$ and $S_3$, so on the $\Psi$ side it obtains only $\sin 2\Psi$, and the error grows at $\Psi = 45°$. Measuring twice in two configurations resolves it, but that is a poor remedy for real-time work.
 
-The conclusion is plain. A $0.1°$ alignment error appears as $0.3°$ in the result, and several degrees in the unfavourable regions. Calibration is not optional.
+The conclusion is plain. A $0.1°$ alignment error appears as $0.3°$ in the result, and a one-part-in-a-thousand detector attenuation grows to several degrees in the unfavourable regions. Calibration is not optional.
 
 ## 4. Residual calibration reads three numbers off one curve
 
@@ -115,7 +115,7 @@ So why not keep narrowing the interval? Because the measured $R$ values then dif
 
 ## 5. Where the measurement is dark, the calibration is dark too
 
-Residual calibration carries a more fundamental restriction, because the $P$ dependence of $R(P)$ scales with $\sin\Delta$.
+Residual calibration carries a more fundamental restriction, because the $P$ dependence of $R(P)$ scales with $\sin^2\Delta$ (in Fujiwara's Eq. 4.61c, $\sin\Delta$ enters squared).
 
 A sample with little absorption has $\Delta$ near $0°$ or $\pm180°$. Then $\sin\Delta \to 0$ and $R(P)$ becomes nearly independent of $P$. The minimum flattens, and the position of a flat floor cannot be read.
 
@@ -144,7 +144,7 @@ $$\alpha_0 = \frac{\tan^2\Psi - \tan^2(P - P_s)}{\tan^2\Psi + \tan^2(P - P_s)}, 
 
 The model is this with the rotation and scale factor of Section 2 applied, and the free parameters are the five $\Psi$, $\Delta$, $P_s$, $A_s$, $\eta$. That the optical constants of the sample need not be known in advance is essential. The sample is fitted along with the instrument.
 
-With the parabolic approximation gone there is no reason to stay in a narrow interval, and where $\sin\Delta$ goes to zero the $P$ dependence of $\alpha_0$ survives. Running regression calibration on the same data for the $\Delta = 1°$ sample that failed 19 times out of 40 in the previous section returns $P_s$ to a precision of $10^{-17}$. What residual calibration calls a blind spot is not one here.
+With the parabolic approximation gone there is no reason to stay in a narrow interval, and where $\sin\Delta$ goes to zero the $P$ dependence of $\alpha_0$ survives. Add the same noise ($\sigma = 2\times10^{-4}$) to the $\Delta = 1°$ sample that failed 19 times out of 40 in the previous section, scan the polarizer broadly from $5°$ to $85°$, and run regression calibration: all 40 fits converge, with a median $P_s$ error of $0.0009°$, more than a thousand times smaller than the $1.15°$ of residual calibration. What residual calibration calls a blind spot is not one here.
 
 There is a price. Initial values are required, and fitting five parameters simultaneously leaves correlated combinations poorly resolved. Above all, **a model cannot account for what is not in it.**
 
@@ -208,7 +208,7 @@ If Post 1 asked what cannot be measured, Post 2 where the components stop workin
 Every number and figure in this post is computed from products of component Mueller matrices alone. Closed-form expressions from the literature are kept out of the synthesis and reserved as an independent path for the verification script to check against. This practice caught a transcription error from the references in each of the three preceding posts.
 
 - `calibration.py` — error injection, residual calibration, regression calibration, ideal inversion
-- `verify_calibration.py` — checks against Fujiwara's Eqs. 4.59–4.61 and Johs's Eqs. 2–5. It also confirms that the expressions reduce to the ideal RAE of Post 1 when the errors are set to zero, that the inversion returns the true values, that the locus semi-axes are $1$ and $\lvert\cos\Delta\rvert$, that injected values are recovered, and that residual and regression calibration agree
+- `verify_calibration.py` — checks against Fujiwara's Eqs. 4.59–4.60 and Johs's Eqs. 2–5. It also confirms that the expressions reduce to the ideal RAE of Post 1 when the errors are set to zero, that the inversion returns the true values, that the locus semi-axes are $1$ and $\lvert\cos\Delta\rvert$, that injected values are recovered, and that residual and regression calibration each recover the injected values
 - `generate_figures.py` — Figures 1–5 in both languages
 
 The full code sits in `_code/ellipsometer-calibration/`.

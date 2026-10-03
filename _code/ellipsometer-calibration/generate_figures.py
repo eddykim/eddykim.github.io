@@ -403,7 +403,7 @@ LABELS = {
         "ddel_ax": "$\\Delta$ 오차 (deg)",
         # 그림 1
         "fig1": "세 가지 오차가 측정 신호에 하는 일",
-        "fig1a": "(a) 분석기 한 바퀴 동안의 파형",
+        "fig1a": "(a) 분석기 반 바퀴 동안의 파형",
         "fig1b": "(b) 편광자를 훑을 때 $(\\alpha', \\beta')$ 가 그리는 타원",
         "ana_ax": "분석기 눈금 $A$ (deg)",
         "norm_int": "정규화 검출 세기",
@@ -466,7 +466,7 @@ LABELS = {
         "dpsi_ax": "error in $\\Psi$ (deg)",
         "ddel_ax": "error in $\\Delta$ (deg)",
         "fig1": "What the three errors do to the measured signal",
-        "fig1a": "(a) waveform over one analyzer revolution",
+        "fig1a": "(a) waveform over half an analyzer revolution",
         "fig1b": "(b) ellipse traced by $(\\alpha', \\beta')$ as the polarizer is scanned",
         "ana_ax": "analyzer reading $A$ (deg)",
         "norm_int": "normalized intensity",

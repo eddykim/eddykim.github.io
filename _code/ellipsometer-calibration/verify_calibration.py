@@ -250,6 +250,43 @@ def verify_blind_spot():
     return ok
 
 
+def verify_regression_blind_spot_noise():
+    """잔차 보정이 무너지는 Delta=1° 에서 회귀 보정은 같은 잡음을 견디는가.
+
+    verify_blind_spot 의 잔차 보정과 같은 시편(Psi=27°, Ps=0.26°, As=0, eta=1),
+    같은 잡음(sigma=2e-4), 같은 시드 규칙으로 40회 반복한다. 다른 것은 훑는 범위다.
+    본문 5절의 "중앙값 0.0009°, 40번 모두 수렴"이 이 출력의 넓은 훑기 행이다.
+    """
+    print("회귀 보정의 맹점 — 잔차 보정과 같은 잡음(sigma=2e-4)에서 Ps 오차")
+    psi, ps = D(27.0), D(0.26)
+    scans = (("넓은 훑기 5°–85°, 90점", D(np.linspace(5.0, 85.0, 90)) + ps),
+             ("잔차 보정과 같은 ±5°, 21점", D(np.arange(-5, 5.01, 0.5) + 0.26)))
+    print(f"{'훑기':<26s} {'Delta':>7} {'Ps 오차 중앙값':>14} {'최대':>9} {'실패':>7}")
+    rows = {}
+    for label, P in scans:
+        for d_deg in (90.0, 1.0):
+            errs, fail = [], 0
+            for k in range(N_TRIAL):
+                rng = np.random.default_rng(1000 * int(d_deg) + k)
+                a_exp, b_exp = np.array([measure(psi, D(d_deg), p, ps=ps,
+                                                 noise=2e-4, rng=rng)
+                                         for p in P]).T
+                guess = (D(20), D(10 if d_deg < 10 else 60), 0.0, D(5), 0.95)
+                r = regression_calibration(P, a_exp, b_exp, guess=guess)
+                fail += 0 if r['ok'] else 1
+                errs.append(abs(np.rad2deg(r['params'][2]) - 0.26))
+            med, mx = float(np.median(errs)), float(np.max(errs))
+            rows[(label, d_deg)] = (med, fail)
+            print(f"{label:<26s} {d_deg:6.1f}° {med:13.4f}° {mx:8.4f}° "
+                  f"{f'{fail}/{N_TRIAL}':>7}")
+    med_wide, fail_wide = rows[(scans[0][0], 1.0)]
+    ok = fail_wide == 0 and med_wide < 0.002
+    print(f"  [{'OK  ' if ok else 'FAIL'}] Delta=1°, 넓은 훑기: 40번 모두 수렴, "
+          f"Ps 오차 중앙값 {med_wide:.4f}° (잔차 보정 1.15° 의 "
+          f"1/{1.15 / med_wide:.0f})")
+    return ok
+
+
 def verify_model_mismatch():
     """모형에 없는 효과가 eta 를 오염시키는가 — Johs 표 2 의 재현."""
     print("모형 불일치 — 넣지 않은 PDS 가 eta 를 오염시킨다")
@@ -274,6 +311,7 @@ if __name__ == "__main__":
                verify_inversion_roundtrip(), verify_locus_ellipse(),
                verify_residual_roundtrip(), verify_parabolic_approximation(),
                verify_regression_roundtrip(),
-               verify_blind_spot(), verify_model_mismatch()]
+               verify_blind_spot(), verify_regression_blind_spot_noise(),
+               verify_model_mismatch()]
     print("\n전체 결과:", "모두 통과" if all(results) else "실패 항목 있음")
     raise SystemExit(0 if all(results) else 1)
