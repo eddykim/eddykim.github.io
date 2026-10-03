@@ -17,7 +17,7 @@ There is one point in particular worth watching for here. The Fresnel equations 
 
 ## 1. From Maxwell's equations to a plane wave
 
-The behaviour of electromagnetic waves is described by Maxwell's equations. In a medium free of charge and current — vacuum, or a dielectric — they take the following form.
+The behaviour of electromagnetic waves is described by Maxwell's equations. In vacuum, free of charge and current, they take the following form.
 
 $$ \nabla \cdot \mathbf{E} = 0, \qquad \nabla \cdot \mathbf{B} = 0 $$
 
@@ -43,11 +43,13 @@ The angular frequency of visible light is on the order of $10^{15}\,\mathrm{rad/
 
 $$ \langle \mathbf{S} \rangle = \frac{1}{2}\,\mathrm{Re}(\mathbf{E} \times \mathbf{H}^*) $$
 
-Expanding this for a plane wave in an isotropic medium, the intensity $I$ the detector measures reduces to a scalar proportional to the squared magnitude of the field amplitude.
+Here $\mathbf{H} = \mathbf{B}/\mu_0$, and $\mathbf{E}$, $\mathbf{H}$ are complex amplitudes. Expanding this for a plane wave in vacuum, the intensity $I$ the detector measures reduces to a scalar proportional to the squared magnitude of the field amplitude.
 
 $$ I = \lvert \langle \mathbf{S} \rangle \rvert = \frac{1}{2}\sqrt{\frac{\epsilon_0}{\mu_0}}\, \lvert \mathbf{E}_0 \rvert^2 $$
 
-This expression is the starting point of the whole series. Section 1 ended by noting that the electric field carries both amplitude and phase; the intensity $I$ keeps only the amplitude, $\lvert \mathbf{E}_0 \rvert$, and erases the phase completely in the squaring and time-averaging. Measurements that record only intensity — reflectance, transmittance, what is usually called photometry — have no access in principle to that phase information. This point is taken up again later.
+Inside a medium of refractive index $n$ the right-hand side gains a factor $n$, but the intensity is still proportional to $\lvert \mathbf{E}_0 \rvert^2$.
+
+This expression is the starting point of the whole series. Section 1 ended by noting that the electric field carries both amplitude and phase; the intensity $I$ keeps only the amplitude, $\lvert \mathbf{E}_0 \rvert$, and erases the phase completely in the squaring and time-averaging. Measurements that record only intensity — reflectance, transmittance, what is usually called photometry — have no access, from the intensity at a single wavelength, to that phase information. (A Kramers–Kronig analysis of a broadband reflectance spectrum can recover the phase, but only with extrapolation beyond the measured range and for a bulk sample.) This point is taken up again later.
 
 ## 3. At the interface: refraction and Snell's law
 
@@ -57,7 +59,7 @@ The plane containing the propagation direction of the incident light and the sur
 
 $$ \theta_i = \theta_r, \qquad N_1 \sin\theta_i = N_2 \sin\theta_t $$
 
-Here $N_1$ and $N_2$ are the refractive indices of the two media. A real absorbing material is described by a complex refractive index $N = n - jk$, whose real part $n$ is the ordinary refractive index and whose imaginary part $k$, the extinction coefficient, expresses how strongly the material absorbs light. The minus sign pairs with the $e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}$ convention fixed in section 1: substituting $\mathbf{k} = N\omega/c$ under that convention yields a decay $e^{-k\omega z/c}$ along the direction of propagation. Under the physics convention, with a time factor $e^{-j\omega t}$, the same decay requires writing $N = n + jk$ instead. Either is valid, but mixing the two turns absorption into gain, so one convention is used throughout.
+Here $N_1$ and $N_2$ are the refractive indices of the two media. A real absorbing material is described by a complex refractive index $N = n - jk$, whose real part $n$ is the ordinary refractive index and whose imaginary part $k$, the extinction coefficient, expresses how strongly the material absorbs light. The minus sign pairs with the $e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}$ convention fixed in section 1: substituting the wavenumber $\lvert \mathbf{k} \rvert = N\omega/c$ under that convention yields a decay $e^{-k\omega z/c}$ along the direction of propagation. Under the physics convention, with a time factor $e^{-j\omega t}$, the same decay requires writing $N = n + jk$ instead. Either is valid, but mixing the two turns absorption into gain, so one convention is used throughout.
 
 Snell's law here is the very expression carried over into the lens refraction calculation of [Geometrical Optics 1](/en/posts/raytracing-spherical-lens-refraction/). That post used it as a given result without addressing why it holds; the answer is here. The condition that the tangential component of the wave vector match on both sides of the interface — phase matching — *is* Snell's law. For the plane-wave solution $e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}$ to join continuously in phase across the incident, reflected and refracted waves at every point on the interface and at every instant, the projections of their wave vectors along the interface must agree; writing that condition in terms of angles gives exactly $N_1\sin\theta_i = N_2\sin\theta_t$.
 
@@ -83,7 +85,7 @@ Computing $R_p$ and $R_s$ against angle of incidence for the index pair $N_1=1.0
 <img src="/assets/img/posts/ellipsometry-electromagnetic-fresnel/en/fig2-fresnel-reflectance.png" alt="Fresnel reflectance R_p and R_s against angle of incidence, with the Brewster angle marked" width="600">
 _Fig 2. Fresnel reflectance $R_p$ and $R_s$ (N1=1.0, N2=1.5), with the Brewster angle marked_
 
-$R_s$ increases monotonically with angle, but $R_p$ passes through a point where it is exactly zero. That angle is the Brewster angle; solving the condition that the numerator of $r_p$ vanish, $N_2\cos\theta_i = N_1\cos\theta_t$, together with Snell's law gives $\theta_B = \arctan(N_2/N_1)$ — 56.3° for the air-glass pair. At the Brewster angle no p-polarized component is reflected at all and the reflected light is purely s-polarized, a property used in practice to produce reference light of known polarization for calibrating a source or a detector chain. Pursuing the Brewster angle further is outside the scope of this series; it appears here only as an illustration of the Fresnel equations in use.
+$R_s$ increases monotonically with angle, but $R_p$ passes through a point where it is exactly zero. That angle is the Brewster angle; solving the condition that the numerator of $r_p$ vanish, $N_2\cos\theta_i = N_1\cos\theta_t$, together with Snell's law gives $\theta_B = \arctan(N_2/N_1)$ — 56.3° for the air-glass pair. At the Brewster angle no p-polarized component is reflected at all and the reflected light is purely s-polarized, a property used in practice to calibrate the azimuth reference of a polarizer, that is, the direction of the plane of incidence. Pursuing the Brewster angle further is outside the scope of this series; it appears here only as an illustration of the Fresnel equations in use.
 
 ## 6. Absorption: the Beer-Lambert law and penetration depth
 
@@ -95,17 +97,17 @@ The depth at which the incident intensity has fallen to $1/e$ is the penetration
 
 $$ \delta = \frac{1}{\alpha_{abs}} = \frac{\lambda}{4\pi k} $$
 
-This explains why thin-film metrology is mostly done in reflection. In a wavelength region of strong absorption, $\delta$ falls below the film thickness itself, the light does not pass through the sample, and transmission measurement becomes impossible. That is why ellipsometry of films on silicon and other absorbing substrates is built around a reflection geometry.
+This explains why thin-film metrology is mostly done in reflection. In a wavelength region where the substrate absorbs, $\delta$ becomes far shorter than the substrate thickness (about 3 µm for silicon at 633 nm, against a wafer several hundred µm thick), the light does not pass through the sample, and transmission measurement becomes impossible. This is one reason ellipsometry of films on silicon and other absorbing substrates is built around a reflection geometry.
 
 ## 7. Why ellipsometry
 
-The thread left hanging in section 2 can now be picked up. The intensity a detector records, $I \propto \lvert E_0 \rvert^2$, carries only the magnitude $\lvert r \rvert$ of the reflection coefficient; the phase of $r$ vanishes in the measurement. However precisely the reflectance $R=\lvert r \rvert^2$ is measured, it gives no access to the phase difference between the s- and p-polarized reflected waves — precisely the quantity that responds sensitively to film thickness and optical constants.
+The thread left hanging in section 2 can now be picked up. The intensity a detector records, $I \propto \lvert E_0 \rvert^2$, carries only the magnitude $\lvert r \rvert$ of the reflection coefficient; the phase of $r$ vanishes in the measurement. However precisely the reflectance $R=\lvert r \rvert^2$ is measured at a single wavelength, it gives no direct access to the phase difference between the s- and p-polarized reflected waves — precisely the quantity that responds sensitively to film thickness and optical constants.
 
 This is where ellipsometry's choice to measure the change in polarization state, rather than intensity, comes from. Preparing the incident light in a known polarization state (usually linear) and measuring how that state has changed after reflection yields the ratio of the two reflection coefficients:
 
 $$ \rho = \frac{r_p}{r_s} = \tan\Psi \, e^{j\Delta} $$
 
-Here $\tan\Psi$ is the amplitude ratio of the two coefficients and $\Delta$ their phase difference. A reflectance measurement, recording only intensity — the time-averaged Poynting vector — can at best obtain the magnitudes $\lvert r_p \rvert$ and $\lvert r_s \rvert$ separately, whereas measuring the change in polarization state, a relative quantity, yields the entire ratio of the two coefficients at once: magnitude ratio and phase difference together. The inaccessibility of phase established in section 2 is circumvented not by measuring an absolute quantity but by comparing two polarization components against each other. This pair $\Psi, \Delta$ is what ellipsometry actually measures, and recovering thickness and refractive index from it is the subject of the third post.
+Here $\tan\Psi$ is the amplitude ratio of the two coefficients and $\Delta$ their phase difference. A reflectance measurement, recording only intensity — the time-averaged Poynting vector — can at best obtain the magnitudes $\lvert r_p \rvert$ and $\lvert r_s \rvert$ separately, whereas measuring the change in polarization state, a relative quantity, yields the entire ratio of the two coefficients at once: magnitude ratio and phase difference together. The inaccessibility of phase established in section 2 is circumvented not by measuring an absolute quantity but by comparing two polarization components against each other. This pair $\Psi, \Delta$ is what ellipsometry actually measures, and the thin-film reflection model needed to recover thickness and refractive index from it is built in the third post.
 
 ## Summary and what comes next
 
@@ -116,6 +118,6 @@ The next post covers the tools that describe a polarization state quantitatively
 ## References
 
 - Youngjoon Kim, "라인 스캔 분광기와 후초점면 분광 간섭을 이용한 스냅샷 각도 분해 엘립소메트리 개발" [Development of snapshot angle-resolved ellipsometry using a line-scan spectrometer and back-focal-plane spectral interference], Ph.D. dissertation, Seoul National University, 2025 (in Korean), sections 2.1–2.2.
-- E. Hecht, *Optics*, 5th ed., Pearson, 2016, ch. 3–4 (electromagnetic waves and boundary conditions).
+- E. Hecht, *Optics*, 5th ed., Pearson, 2017, ch. 3–4 (electromagnetic waves and boundary conditions).
 - M. Born and E. Wolf, *Principles of Optics*, 7th ed., Cambridge University Press, 1999, ch. 1 (the standard derivation of the Fresnel equations).
-- H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, ch. 2 (linking the ellipsometric parameters to the Fresnel equations).
+- H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, ch. 2 and 4 (the Fresnel equations in §2.3; their link to the ellipsometric parameters in §4.1).
