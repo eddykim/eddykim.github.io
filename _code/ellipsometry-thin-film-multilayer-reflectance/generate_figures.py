@@ -30,12 +30,12 @@ BASE_DIR = os.path.join(
 LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
-        "ref_path": "기준 경로 (OB, 공기 중 환산)",
+        "ref_path": "기준 경로\n" + r"($\overline{OB}\sin\theta_0$)",
         "real_path": "실제 경로 O→A→B\n(박막 내부, 길이 $\\propto N_1$)",
         "phase_diff": r"위상차 $2\beta_{phase}$",
         "fig1": "단층 박막에서의 다중반사와 광경로차",
-        "rouard_bottom": r"$r_{m-1,m}$" + "\n(기판 경계)",
-        "rouard_top": r"$r_{total}$" + "\n(공기 경계)",
+        "rouard_bottom": r"$\rho_{M+1}=r_{M,M+1}$" + "\n(기판 경계)",
+        "rouard_top": r"$r_{total}=\rho_1$" + "\n(공기 경계)",
         "rouard": "로아드 방법",
         "rouard_sub": "하부층 → 상부층\n등가계면으로 순차 치환",
         "tmm": "전달행렬법 (TMM)",
@@ -55,12 +55,12 @@ LABELS = {
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
-        "ref_path": "reference path (OB, referred to air)",
+        "ref_path": "reference path\n" + r"($\overline{OB}\sin\theta_0$)",
         "real_path": "actual path O→A→B\n(inside the film, length $\\propto N_1$)",
         "phase_diff": r"phase difference $2\beta_{phase}$",
         "fig1": "Multiple reflection and optical path difference in a single film",
-        "rouard_bottom": r"$r_{m-1,m}$" + "\n(substrate interface)",
-        "rouard_top": r"$r_{total}$" + "\n(air interface)",
+        "rouard_bottom": r"$\rho_{M+1}=r_{M,M+1}$" + "\n(substrate interface)",
+        "rouard_top": r"$r_{total}=\rho_1$" + "\n(air interface)",
         "rouard": "Rouard's method",
         "rouard_sub": "bottom layer → top layer\nfolded into equivalent interfaces",
         "tmm": "Transfer Matrix Method",
@@ -187,11 +187,23 @@ def render(L):
     ray(D, er3_end, "tab:red")
     ax.text(*(er3_end + [0.03, 0.02]), r"$E_{r3}$", color="tab:red", fontsize=11, **L["font"])
 
-    # 광경로차 주석: O->A->B(박막 내부, 실제 경로) vs O->B(상부계면을 따르는 기준 경로)
-    ref_y = 0.22
-    ax.plot([O[0], B[0]], [ref_y, ref_y], color="gray", lw=1.2, ls=(0, (4, 3)))
-    ax.text((O[0] + B[0]) / 2, ref_y + 0.06, L["ref_path"], color="gray",
-            fontsize=8.5, ha="center", **L["font"])
+    # 광경로차 주석: O->A->B(박막 내부, 실제 경로) vs 기준 경로.
+    # 기준 경로는 첫 반사광 Er1 이 B 를 지나는 파면(Er1 에 수직인 면)까지 공기 중에서
+    # 가는 거리 OP = OB sin(theta0) 다. P 는 B 에서 Er1 광선에 내린 수선의 발이다
+    # (C 는 이미 아래 계면 점 이름이라 P 를 쓴다).
+    u_r = np.array([np.sin(theta0), np.cos(theta0)])   # Er1 진행 방향
+    P = O + np.dot(B - O, u_r) * u_r
+    # 파면 B-P (점선)
+    ax.plot([B[0], P[0]], [B[1], P[1]], color="gray", lw=1.0, ls=":")
+    # 기준 경로 O-P (파선): Er1 화살표와 겹치지 않게 왼쪽 위로 조금 띄워 나란히 긋는다.
+    n_off = 0.07 * np.array([-np.cos(theta0), np.sin(theta0)])
+    ax.plot([O[0] + n_off[0], P[0] + n_off[0]], [O[1] + n_off[1], P[1] + n_off[1]],
+            color="gray", lw=1.4, ls=(0, (4, 3)))
+    # 라벨은 입사광·theta0 표기와 겹치지 않도록 Er1 과 Er2 사이, P 오른쪽 위에 둔다.
+    ax.text(P[0] + 0.25, P[1] + 0.24, L["ref_path"], color="gray", fontsize=8.5,
+            ha="left", va="center", **L["font"])
+    ax.scatter(*P, s=14, color="gray", zorder=5)
+    ax.text(P[0] + 0.07, P[1] + 0.02, "P", fontsize=10, color="gray", ha="left", zorder=6)
     ax.text((O[0] + A[0] + B[0]) / 3, -d * 0.62,
             L["real_path"], color="tab:green",
             fontsize=8.5, ha="center", **L["font"])
@@ -238,7 +250,7 @@ def render(L):
 
     # (a) 로아드 방법: 아래(기판)에서 위(공기)로 등가계면을 순차 병합
     ax = axes[0]
-    labels_bottom_up = [L["rouard_bottom"], r"$\rho_m$", r"$\rho_{m-1}$", L["rouard_top"]]
+    labels_bottom_up = [L["rouard_bottom"], r"$\rho_M$", r"$\rho_{M-1}$", L["rouard_top"]]
     ys = [0.05, 0.35, 0.65, 0.95]
     for y, lab in zip(ys, labels_bottom_up):
         box(ax, (0.32, y), 0.36, 0.16, lab, fc="#fff3d6", fontsize=9.5)
