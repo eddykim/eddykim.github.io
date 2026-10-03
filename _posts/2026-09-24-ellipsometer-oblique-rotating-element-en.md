@@ -19,7 +19,7 @@ There are several ways to survey them, but the sharpest framing is a sentence Fu
 
 ## 1. Why Oblique Incidence
 
-What happens if you send the beam in along the surface normal? On an isotropic sample there is no longer any direction that distinguishes p from s. The plane of incidence is undefined, so $r_p = r_s$ and $\rho = r_p/r_s = 1$. That pins $\Psi = 45°$ and $\Delta = 0°$ regardless of the sample, which tells you nothing about it.
+What happens if you send the beam in along the surface normal? On an isotropic sample there is no longer any direction that distinguishes p from s. The plane of incidence is undefined, so both polarizations reflect identically; in the Fresnel sign convention of post 1 this appears as $r_p = -r_s$, giving $\rho = r_p/r_s = -1$. That pins $\Psi = 45°$ and $\Delta = 180°$ regardless of the sample, which tells you nothing about it.
 
 This is why ellipsometry insists on oblique incidence. An angle of incidence $\theta$ defines the plane of incidence, gives p and s different Fresnel coefficients, and loads that difference onto $\rho$. The difference is largest near the Brewster angle.
 
@@ -40,7 +40,7 @@ $$S_1 = -\cos 2\Psi, \qquad S_2 = \sin 2\Psi \cos\Delta, \qquad S_3 = -\sin 2\Ps
 
 The minus sign on $S_3$ is a matter of convention. $\Delta$ is defined as $\phi_p - \phi_s$, whereas the Stokes parameters take the phase difference in the order $\phi_s - \phi_p$, following the definition in post 2. It is the same sign that $M_{sample}$ of post 3 produces.
 
-Knowing any two of these three yields $\Psi$ and $\Delta$. But the detector reads only $S_0$. It has no direct access to $S_1$, $S_2$ or $S_3$.
+Knowing all three fixes $\Psi$ and $\Delta$ over their full ranges; with only two the range shrinks — as we will see, $S_1$ and $S_2$ alone leave the sign of $\Delta$ undetermined. But the detector reads only $S_0$. It has no direct access to $S_1$, $S_2$ or $S_3$.
 
 This is where modulation enters. Vary one component of the PSA in time and it will bring different Stokes components of the reflected beam into the $S_0$ slot in turn. The detected intensity then oscillates, and $S_1$, $S_2$ and $S_3$ take up residence in the Fourier coefficients of that oscillation. For a detector that reads a single intensity, this is the only route to polarization information: spend time to separate the unknowns one at a time.
 
@@ -53,7 +53,7 @@ The second and third rows deserve attention. $PSCA_R$ and $PSC_RA$ contain exact
 
 ## 3. Null Ellipsometry
 
-The earliest method varies nothing at all. In the technique Drude used at the end of the nineteenth century, the polarizer and analyzer are turned by hand until the detected intensity drops to zero, and the angles are read off at that point. The name comes from the search for that zero, the null. In a $PCSA$ configuration with the compensator at $C = 45°$ and a retardation of $\delta = 90°$, the extinction condition gives
+The earliest method varies nothing at all. In the technique Drude used at the end of the nineteenth century, the polarizer and analyzer are turned by hand until the detected intensity drops to zero, and the angles are read off at that point. The name comes from the search for that zero, the null. In a $PCSA$ configuration with the compensator's fast axis at $C = 45°$ and a retardation of $\delta = 90°$, the extinction condition gives (in the zone with $-A > 0$)
 
 $$\Psi = -A, \qquad \Delta = -2P + 90°$$
 
@@ -89,7 +89,7 @@ Look again at the equation above and the problem appears: $\Delta$ enters only a
 
 Suppose a measurement returns $\cos\Delta = 0.707$. Is $\Delta = +45°$ or $-45°$? The cosine is even, so both answers fit equally well, and nothing distinguishes them. The measurement range of RAE therefore shrinks to $0° \le \Delta \le 180°$, half of the full $-180° \le \Delta \le 180°$.
 
-The root cause lies in the definitions of section 2. The sign of $\Delta$ is held by $S_3 = -\sin 2\Psi \sin\Delta$, and only $S_1$ and $S_2$ appear in the RAE intensity. Failing to measure $S_3$, which carries the handedness of circular polarization, is what erases the sign of the phase. This is the same statement as "an intensity measurement loses phase information" from post 2, repeating itself one level up, at the instrument.
+The root cause lies in the definitions of section 2. The sign of $\Delta$ is held by $S_3 = -\sin 2\Psi \sin\Delta$, and only $S_1$ and $S_2$ appear in the RAE intensity. Failing to measure $S_3$, which carries the handedness of circular polarization, is what erases the sign of the phase. This is the same statement as "an intensity measurement loses phase information" from post 1, repeating itself one level up, at the instrument.
 
 <img src="/assets/img/posts/ellipsometer-oblique-rotating-element/en/fig3-rae-delta-ambiguity.png" alt="Sign ambiguity of Delta in RAE" width="760">
 _Figure 3. Two samples with identical $\Psi$ and opposite signs of $\Delta$. (a) In RAE the two waveforms differ by exactly zero. (b) In RCE the $2\omega$ component flips sign and separates them immediately._
@@ -117,15 +117,17 @@ What happens if the analyzer is held fixed and the compensator turns instead? Th
 
 $$I = I_0 \left[ (2 + S_1) - 2 S_3 \sin 2C + S_1 \cos 4C + S_2 \sin 4C \right]$$
 
+Here $C$ is the azimuth of the compensator's fast axis. The $\Delta' = \Delta - \delta$ of the previous section assumes the slow axis lies along p at $C = 0°$, so the two sections' $C$ differ by $90°$ (Fujiwara, end of 4.2.3); mixing the conventions flips the sign of the $\sin 2C$ term and with it the sign of $\Delta$.
+
 Terms in $2C$ and $4C$ appear together, and — more importantly — $S_3$ rides on the $2C$ term while $S_1$ and $S_2$ ride on $4C$. Because the frequencies split, extracting the Fourier coefficients separates all three Stokes parameters at once. No second measurement at a different retardation is needed.
 
-Why do the frequencies split? If the reflected light is linearly polarized, the beam leaving the rotating compensator returns to the same state every $90°$; if it is circularly polarized, every $180°$. The linear components $S_1$ and $S_2$ modulate the intensity with a $4C$ period, the circular component $S_3$ with a $2C$ period. A property of the polarization state is translated directly into a modulation frequency.
+Why do the frequencies split? If the reflected light is linearly polarized, the detected intensity behind the rotating compensator repeats every $90°$; if it is circularly polarized, every $180°$. For linear input, a $90°$ turn yields the same ellipse with opposite handedness, which the analyzer cannot tell apart. The linear components $S_1$ and $S_2$ modulate the intensity with a $4C$ period, the circular component $S_3$ with a $2C$ period. A property of the polarization state is translated directly into a modulation frequency.
 
 Obtaining $S_1$ through $S_3$ in a single measurement means $\Delta$ can be measured over the full $-180°$ to $180°$, and that the sensitivity is uniform across that range. This is why RCE became the standard in commercial instruments. There is a bonus as well: the degree of polarization can be extracted alongside the Fourier coefficients, which makes the depolarization discussed in post 2 measurable as a function of wavelength.
 
 ## 6. PME (Phase-Modulation Ellipsometry)
 
-Every method so far turned a component mechanically. Can one modulate without turning anything? PME drives the retardation itself electrically, using a photoelastic modulator (PEM). Driving a quartz crystal into resonance with a piezoelectric transducer produces stress birefringence, and the retardation oscillates at the resonant frequency:
+Every method so far turned a component mechanically. Can one modulate without turning anything? PME drives the retardation itself electrically, using a photoelastic modulator (PEM). Driving a fused-quartz bar into resonance with a piezoelectric transducer makes the otherwise isotropic bar birefringent under stress, and the retardation oscillates at the resonant frequency:
 
 $$\delta(t) = F \sin \omega t$$
 
@@ -170,7 +172,7 @@ This unified view has a practical consequence: how many times the detector must 
 | RAE | $0°$ to $180°$ (half) | about 10 ms | about 200 | achromatic |
 | RAE + compensator | $-180°$ to $180°$ | 10 ms or more | about 200 | chromatic |
 | RCE | $-180°$ to $180°$ | about 10 ms | about 200 | chromatic |
-| PME | errors in specific ranges | 20 μs | about 10 | chromatic |
+| PME | restricted, depending on configuration (errors grow in specific ranges) | 20 μs | about 10 | chromatic |
 
 The last column is the hook into the next post. RAE uses only a polarizer and an analyzer, and those components barely change their behavior across a wide spectral band. Such an instrument is called achromatic, and that is why it can measure as many wavelengths simultaneously as a photodiode array has pixels. RCE, by contrast, has a compensator whose retardation depends on wavelength, and PME requires a different drive voltage at every wavelength to hold the retardation constant. Both are chromatic. This is the fundamental reason the number of wavelengths PME can handle in real time is an order of magnitude smaller.
 
@@ -195,12 +197,12 @@ Every waveform and Fourier coefficient in this post was computed directly as a p
 - `modulation.py` — computes the detected intensity $I(t)$ for all four configurations as a Mueller product. It uses no closed-form expressions.
 - `verify_modulation.py` — checks those numerical results against Fujiwara's closed forms (4.18, 4.28, 4.32, 4.41, 4.44). The two paths have to be independent for a sign-convention error to show itself. This cross-check did in fact catch a misreading introduced while transcribing one of the reference equations.
 - `generate_figures.py` — produces the five figures.
-- `smm_tensor.py` — the scattering matrix implementation from post 3, which supplies the $\Psi$ and $\Delta$ of the reference sample in figure 5.
+- `smm_tensor.py` — the scattering matrix implementation from post 3, which supplies the $\Psi$ and $\Delta$ of the reference sample in figures 3 and 5.
 
 ## References
 
 - H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, sections 4.2–4.3 (comparison of measurement methods and Fourier analysis).
 - R. W. Collins, "Automatic rotating element ellipsometers: Calibration, operation, and real-time applications," *Rev. Sci. Instrum.* **61**, 2029 (1990).
-- R. M. A. Azzam and N. M. Bashara, *Ellipsometry and Polarized Light*, North-Holland, 1987, sections 5.2–5.3 and 5.7 (null ellipsometers and rotating-element methods).
+- R. M. A. Azzam and N. M. Bashara, *Ellipsometry and Polarized Light*, North-Holland, 1977, sections 5.2–5.3 and 5.7 (null ellipsometers and rotating-element methods).
 - H. G. Tompkins and E. A. Irene (eds.), *Handbook of Ellipsometry*, William Andrew, 2005, chapters 5–6 (rotating-element and phase-modulation instruments).
 - Youngjoon Kim, "Development of Snapshot Angle-Resolved Spectroscopic Ellipsometry Using a Line-Scan Spectrometer and Back Focal Plane Spectral Interference," PhD thesis, Seoul National University, 2025, section 1.2.
