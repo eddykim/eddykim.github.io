@@ -95,7 +95,7 @@ LABELS = {
         "fig4a": "(a) 지연량 자체 — 세로축이 로그다",
         "fig4b": "(b) 360°로 나눈 나머지 — 실제로 편광에 작용하는 값",
         "ret_mod": "지연량 mod 360° (deg)",
-        "multi_note": "다중차는 이 대역에서\n치명적인 값을 {:d}번 지나간다",
+        "multi_note": "다중차는 이 대역에서\n180°를 {n180:d}번, 0°·360°를 {n0:d}번 지나간다",
         # 그림 5
         "fig5": "프레넬 롬 — 복굴절 없이 전반사만으로 지연을 만든다",
         "aoi": "롬 내부 입사각 (deg)",
@@ -143,7 +143,7 @@ LABELS = {
         "fig4a": "(a) retardance itself — note the logarithmic axis",
         "fig4b": "(b) retardance mod 360° — what actually acts on the polarization",
         "ret_mod": "retardance mod 360° (deg)",
-        "multi_note": "the multi-order plate sweeps past\nthe fatal values {:d} times here",
+        "multi_note": "the multi-order plate crosses\n180° {n180:d} times and 0°/360° {n0:d} times here",
         "fig5": "The Fresnel rhomb — retardance from total internal reflection alone",
         "aoi": "angle of incidence inside the rhomb (deg)",
         "ps_deg": "p–s phase difference per reflection (deg)",
@@ -214,25 +214,38 @@ def figure2(L):
             ax.text(b[0] + 0.02, 0.80, gap, ha="center", fontsize=9.5,
                     color=gapcol, zorder=4, **L["font"])
         # 광선: y=0.52 에서 대각면과 만난다
-        t = (0.52 - a[1]) / (b[1] - a[1])
-        hit = a + t * (b - a)
         ax.add_patch(FancyArrowPatch((0.02, 0.52), (0.16, 0.52), arrowstyle="-|>",
                                      mutation_scale=13, color="tab:blue", lw=2.0, zorder=5))
         ax.add_patch(FancyArrowPatch((0.86, 0.52), (0.98, 0.52), arrowstyle="-|>",
                                      mutation_scale=13, color="tab:blue", lw=2.0, zorder=5))
         ax.plot([0.16, 0.86], [0.52, 0.52], color="tab:blue",
                 lw=1.8, ls=":" if title == L["roch"] else "-", zorder=5)
-        if title != L["roch"]:
-            ax.add_patch(FancyArrowPatch(tuple(hit), (hit[0] - 0.13, 0.26),
-                                         arrowstyle="-|>", mutation_scale=11,
-                                         color="#999", lw=1.5, zorder=5))
-            ax.text(hit[0] - 0.15, 0.19, L["reject"], fontsize=8.2, color="#888",
-                    ha="center", zorder=5, **L["font"])
         ax.set_title(title, fontsize=11.5, pad=8, **L["font"])
         ax.text(0.5, 0.015, note, ha="center", va="bottom", fontsize=8.8,
                 color="#444", linespacing=1.45, **L["font"])
     fig.suptitle(L["fig2"], fontsize=12.5, **L["font"])
     fig.tight_layout(rect=(0, 0, 1, 0.92))
+    # 글랜형: 전반사된 상광선. 축 배치가 정해진 뒤 화면 좌표에서 반사 법칙으로 방향을 잡는다.
+    for ax, (title, *_rest) in zip(axes, specs):
+        if title == L["roch"]:
+            continue
+        t = (0.52 - a[1]) / (b[1] - a[1])
+        hit = a + t * (b - a)
+        to_px = ax.transData.transform
+        tang = to_px(b) - to_px(a)
+        tang /= np.linalg.norm(tang)
+        nrm = np.array([-tang[1], tang[0]])
+        d_in = np.array([1.0, 0.0])
+        d_out = d_in - 2 * np.dot(d_in, nrm) * nrm          # 화면 좌표의 반사 방향
+        hit_px = to_px(hit)
+        y_end = 0.90                                         # 첫 프리즘 윗면(0.74)을 지나 밖으로
+        s_len = (ax.transData.transform((0, y_end))[1] - hit_px[1]) / d_out[1]
+        end = ax.transData.inverted().transform(hit_px + s_len * d_out)
+        ax.add_patch(FancyArrowPatch(tuple(hit), tuple(end),
+                                     arrowstyle="-|>", mutation_scale=11,
+                                     color="#999", lw=1.5, zorder=5))
+        ax.text(end[0] - 0.02, end[1] + 0.03, L["reject"], fontsize=8.2, color="#888",
+                ha="center", va="bottom", zorder=5, **L["font"])
     fig.savefig(os.path.join(L["dir"], "fig2-polarizer-types.png"), dpi=150)
     plt.close(fig)
 
@@ -312,8 +325,10 @@ def figure4(L):
         m = np.mod(r, 360.0)
         m[np.abs(np.diff(m, prepend=m[0])) > 180] = np.nan   # 되돌아오는 선 끊기
         ax2.plot(nm, m, color=col, lw=lw, zorder=3)
-    n_cross = int(np.sum(np.abs(np.diff(np.mod(rm, 360.0))) > 180))
-    ax2.text(0.985, 0.94, L["multi_note"].format(n_cross), transform=ax2.transAxes,
+    # 0°·360°(정수 파장)와 180°(반정수 파장)를 지나는 횟수를 따로 센다
+    n0 = int(np.sum(np.diff(np.floor(rm / 360.0)) != 0))
+    n180 = int(np.sum(np.diff(np.floor((rm - 180.0) / 360.0)) != 0))
+    ax2.text(0.985, 0.94, L["multi_note"].format(n180=n180, n0=n0), transform=ax2.transAxes,
              ha="right", va="top", fontsize=9.2, color=C_MULTI,
              linespacing=1.45, **L["font"])
     ax2.axvline(550, color="#666", lw=1.0, ls=":")

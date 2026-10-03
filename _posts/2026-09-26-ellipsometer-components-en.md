@@ -91,7 +91,7 @@ The first is to stack two plates with their axes offset. Overlapping plates desi
 It is not free. The lower panel of figure 3 shows the price. Stack two plates with offset axes and the effective fast axis of the combination is no longer fixed; it moves with wavelength, by 29° in this calculation. Both the retardance and the axis have to be known at every wavelength, so calibration becomes correspondingly harder. Using cheap components and making up the difference in calibration is in fact the design philosophy behind commercial rotating-compensator instruments, and that story belongs to post 4.
 
 <img src="/assets/img/posts/ellipsometer-components/en/fig4-zero-vs-multi-order.png" alt="Zero order versus multi order" width="760">
-_Figure 4. Both curves pass through 90° at 550 nm. Take the retardance modulo 360°, as in the lower panel, and the multi-order plate sweeps past the fatal values five times across the same band._
+_Figure 4. Both curves pass through 90° at 550 nm. Take the retardance modulo 360°, as in the lower panel, and the multi-order plate crosses 180° five times and 0° (360°) five times across the same band._
 
 Figure 4 compares zero and multi order the same way. Retardance is $2\pi$-periodic, so what actually acts on the polarization is the value modulo 360°. In the lower panel the zero-order plate crosses 180° once across the band while the multi-order plate crosses five times. That both plates give exactly 90° at the 550 nm design wavelength only sharpens the contrast.
 
@@ -100,9 +100,9 @@ The second route abandons birefringence altogether. On total internal reflection
 <img src="/assets/img/posts/ellipsometer-components/en/fig5-fresnel-rhomb.png" alt="Phase difference on total internal reflection" width="760">
 _Figure 5. The p–s phase difference from a single total internal reflection. At an index of 1.51, entering at 42.3° or 74.7° gives 22.5° per bounce, and four bounces make a quarter wave._
 
-Figure 5 is the calculation. In glass of index 1.51 the critical angle is 41.5°, and the phase difference rises to a maximum of 45.9° at 51.3°. Two angles give 22.5° — 42.3° and 74.7° — so four reflections at either angle sum to 90°. That is the double Fresnel rhomb, arranged so the exit beam lies on the same axis as the entrance beam.
+Figure 5 is the calculation. In glass of index 1.51 the critical angle is 41.5°, and the phase difference rises to a maximum of 45.9° at 51.3°. Two angles give 22.5° — 42.3° and 74.7°. The double Fresnel rhomb uses the 74.7° branch, with four reflections summing to 90°, arranged so the exit beam lies on the same axis as the entrance beam.
 
-What is gained? In figure 5 the three curves for indices from 1.50 to 1.52 nearly coincide. The refractive index depends only weakly on wavelength, so the retardance is nearly wavelength-independent as well — in contrast to a wave plate, which goes as $1/\lambda$. This is why an old method is still in use when a wide-band achromatic retarder is needed.
+What is gained? In figure 5 the three curves for indices from 1.50 to 1.52 nearly coincide around 74.7° (four bounces give 89.5–90.5°); near the critical angle, at 42.3°, the same change swings the total from 70° to 106°, which is why that branch is not used. The refractive index depends only weakly on wavelength, so the retardance is nearly wavelength-independent as well — in contrast to a wave plate, which goes as $1/\lambda$. This is why an old method is still in use when a wide-band achromatic retarder is needed.
 
 The third route is to make the retardance adjustable rather than fixed. The Babinet-Soleil compensator drives a wedge of birefringent material with a micrometer screw to change the thickness, so it can be set to 90° at whatever wavelength is wanted. It was used in manual instruments before lasers.
 
@@ -140,17 +140,17 @@ The construction inverts the equation of section 1. In a wedge of birefringent c
 
 ## 6. Sources, Detectors and Spectrometers
 
-The classical source was a gas-discharge lamp. Mercury-arc lamps were used extensively, the strong 5461 Å mercury green line in particular. A discharge source also emits a continuum between its strong resonance lines, which makes it useful for spectroscopic work when paired with a monochromator. Lasers offer ideal monochromaticity and collimation, but the polarization state of the output must be stable, and unpolarized output is actually preferred, since a quarter-wave plate converts linear to circular easily enough. Modern instruments sometimes use a white light-emitting diode.
+The classical source was a gas-discharge lamp. Mercury-arc lamps were used extensively, the strong 5461 Å mercury green line in particular. A discharge source also emits a continuum between its strong resonance lines, which makes it useful for spectroscopic work when paired with a monochromator. Lasers offer ideal monochromaticity and collimation, but the polarization state of the output must be stable, and unpolarized output is preferred — although linearly polarized output can easily be made circular with a suitable quarter-wave plate. Modern instruments sometimes use a white light-emitting diode.
 
 Detectors are chosen by spectral range. Photomultiplier tubes served visible ellipsometry for a long time and sometimes need cooling to stay stable; silicon photodiodes are widely used as well. But the spectral response curve is not the only thing to look at when choosing a detector. Its noise characteristic directly governs the precision of the measurement.
 
-That sentence answers post 1 from the component side. Null ellipsometry never uses an absolute intensity — it only judges whether the signal is zero — and so is free of detector noise in principle. Photometric methods trust the intensity reading and are fast in return. The limit of that trust shows up as the noise characteristic of the detector.
+That sentence answers post 1 from the component side. Null ellipsometry never uses an absolute intensity — it only judges whether the signal is zero — and so is free of detector nonlinearity in principle. How precisely the null can be located still depends on detector noise, and the Azzam–Bashara sentence above sits in their section on the null ellipsometer. Photometric methods trust the intensity reading and are fast in return. The limit of that trust shows up as the noise characteristic of the detector.
 
 Spectrometers moved from prisms to diffraction gratings. The $m$-th order of a grating interferes constructively at angles satisfying
 
 $$\sin\phi + \sin\theta = m\lambda G$$
 
-where $G$ is the number of grooves per unit length and $\phi$ and $\theta$ are the incidence and diffraction angles. A practical problem falls straight out of this equation: 400 nm in first order emerges at the same angle as 800 nm in second order. For a spectroscopic ellipsometer trying to cover the ultraviolet through the near infrared in one shot, this order overlap is a real constraint, and filters are needed to separate them.
+where $G$ is the number of grooves per unit length and $\phi$ and $\theta$ are the incidence and diffraction angles. A practical problem falls straight out of this equation: 800 nm in first order emerges at the same angle as 400 nm in second order. For a spectroscopic ellipsometer trying to cover the ultraviolet through the near infrared in one shot, this order overlap is a real constraint, and filters are needed to separate them.
 
 What choosing components actually involves is clearest in a concrete design. One line-scan spectrometer was built specifically to capture angle-resolved data from a back focal plane in a single shot. With a 6.144 mm detector, a 400–700 nm band and a grating of 830 grooves per millimetre, the ideal focal lengths work out to 22.1 mm for the focusing lens and 24.6 mm for the collimating lens, with a minimum numerical aperture of 0.124 from the Bragg condition. The nearest available lenses, 22.5 mm and 25 mm, were chosen as achromatic doublets to suppress chromatic and geometric aberration. The word achromatic, which sorted the methods in post 1, reappears here as the name of a lens.
 
@@ -174,7 +174,7 @@ What links the components is a component too. An optical fibre lets the spectrom
 
 One last point. Everything above assumed the retardance and axis orientation of each component are known. In practice they are not.
 
-The birefringence quoted by a manufacturer carries an error. Precise work therefore starts by measuring the Mueller matrix of the component itself. A dual-rotating-compensator ellipsometer is assembled separately to measure the Mueller matrices of the polarizer, the multi-order retarder and the beam splitter; each matrix is decomposed by LU decomposition into retarder, diattenuation and depolarization matrices; and the depolarization term, which is awkward to carry in the model, is dropped. What comes out is the actual retardance as a function of wavenumber, measured rather than assumed.
+The birefringence quoted by a manufacturer carries an error. Precise work therefore starts by measuring the Mueller matrix of the component itself. A dual-rotating-compensator ellipsometer is assembled separately to measure the Mueller matrices of the polarizer, the multi-order retarder and the beam splitter; each matrix is decomposed by the Lu–Chipman (polar) decomposition into retarder, diattenuation and depolarization matrices; and the depolarization term, which is awkward to carry in the model, is dropped. What comes out is the actual retardance as a function of wavenumber, measured rather than assumed.
 
 The component azimuths are not arbitrary either. There is an orientation that minimizes the condition number of the system of equations built from the measured quantities, and setting the components there makes the measurement less sensitive to noise. With the polarizer at 0°, the compensator at 45° and the analyzer at 45°, the signals reduce to
 
@@ -208,7 +208,7 @@ The birefringence is held constant at $n_e - n_o = 0.009$. This is an approximat
 
 - H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, section 3.2 (polarizers, compensators, photoelastic modulators and depolarizers).
 - H. G. Tompkins and E. A. Irene (eds.), *Handbook of Ellipsometry*, William Andrew, 2005, chapter 4 (optical components and the simple PCSA ellipsometer).
-- R. M. A. Azzam and N. M. Bashara, *Ellipsometry and Polarized Light*, North-Holland, 1987, section 5.2 (polarizing elements, light sources and detectors).
+- R. M. A. Azzam and N. M. Bashara, *Ellipsometry and Polarized Light*, North-Holland, 1977, section 5.2 (polarizing elements, light sources and detectors).
 - B. Johs, J. Hale, N. J. Ianno, C. M. Herzinger, T. Tiwald, J. A. Woollam, "Recent developments in spectroscopic ellipsometry for in-situ applications," *SPIE Proceedings* **4449** (2001) — source of the two-element compensator.
 - B. Johs, "Regression calibration method for rotating element ellipsometers," *Thin Solid Films* **234**, 395–398 (1993) — making up for non-ideal components in calibration.
-- Youngjoon Kim, "Development of Snapshot Angle-Resolved Spectroscopic Ellipsometry Using a Line-Scan Spectrometer and Back Focal Plane Spectral Interference," PhD thesis, Seoul National University, 2025, sections 4.4–4.5.
+- Youngjoon Kim, "Snapshot Angle-Resolved Spectroscopic Ellipsometry Using Line-Scan Spectrometer and Back Focal Plane Spectral Interference," PhD thesis, Seoul National University, 2025, sections 4.4–4.5.
