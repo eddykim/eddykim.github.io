@@ -151,29 +151,42 @@ def verify_calcite_gamma():
 
 
 def verify_calcite_extra_channel():
-    """이색성이 있으면 L1 자리에 없던 채널이 생기고, 2:1 이면 L1-L2 와 겹치는가."""
-    print("Okabe 2009 — 이색성이 만드는 여분 채널과 2:1 의 충돌")
+    """이색성이 있으면 L1 자리에 없던 채널이 생기고, 1:2 면 그것이 L1-L2 와 겹치는가.
+
+    이 글의 번호(오카 배치, 지연자가 분석부 쪽)에서는 S1 이 L2, S23 이 L1+-L2 를 타고
+    투과율 불균형이 만드는 새 항이 L1 에 선다. 이상적으로 등간격이던 1:2 (L2 = 2 L1)
+    에서는 L2 - L1 = L1 이 되어 새 항이 L1-L2 채널 위에 정확히 떨어진다.
+    오카베 2009 는 지연자를 시편 앞에 두어 번호가 반대라 같은 상황을 2:1 로 적는다.
+    """
+    print("Okabe 2009 — 이색성이 만드는 여분 채널과 1:2 의 충돌")
     g = fresnel_gamma(N_E_CALCITE, N_O_CALCITE)
     S = np.tile(np.array([1.0, 0.3, -0.5, 0.6])[:, None], (1, len(SIGMA)))
     ok = True
-    for tag, (t1, t2) in (("3:1", (3000.0, 1000.0)), ("2:1", (2000.0, 1000.0))):
+    for tag, (t1, t2) in (("3:1", (3000.0, 1000.0)), ("1:2", (1000.0, 2000.0))):
         apod = np.hanning(len(SIGMA))      # 유한 대역의 사이드로브를 억눌러야 잰다
         ideal = spectrum_stokes(S, SIGMA, t1, t2) * apod
         real = spectrum_stokes(S, SIGMA, t1, t2, gamma1=g, gamma2=g) * apod
         h, Ci = to_opd(ideal, SIGMA)
         _, Cr = to_opd(real, SIGMA)
         L1, L2 = opd(t1), opd(t2)
+        carriers = np.array([L2, abs(L1 - L2), L1 + L2])     # 이상적인 반송파 셋
         sel = np.abs(h - L1) < 0.5
         a_i = np.abs(Ci[sel]).max() / np.abs(Ci).max()
         a_r = np.abs(Cr[sel]).max() / np.abs(Cr).max()
         print(f"         {tag}: L1={L1:.1f} um 자리 세기  이상적 {a_i:.2e} -> 이색성 {a_r:.2e}"
-              f"  ({a_r / a_i:.0f}배)   L1-L2={abs(L1-L2):.1f} um")
+              f"  ({a_r / a_i:.0f}배)   반송파 {', '.join(f'{c:.1f}' for c in sorted(carriers))} um")
         if tag == "3:1":
-            ok &= a_r / a_i > 100.0          # 없던 채널이 뚜렷하게 생긴다
-            ok &= abs(abs(L1 - L2) - L2) > 1.0   # 겹치지 않는다
+            ok &= a_r / a_i > 100.0                       # 없던 채널이 뚜렷하게 생긴다
+            ok &= np.min(np.abs(carriers - L1)) > 1.0     # L1 은 빈 칸에 선다
         else:
-            ok &= abs(abs(L1 - L2) - L2) < 1e-9  # 2:1 은 L1-L2 = L2 로 정확히 겹친다
-    print(f"  [{'OK  ' if ok else 'FAIL'}] 3:1 은 아홉 자리로 갈라지고 2:1 은 겹친다")
+            c = np.sort(carriers)
+            # 이상적인 채널과 같은 자리라 세기만으로는 안 보이므로 복소 진폭의 차이로 잰다
+            extra = np.abs(Cr[sel] - Ci[sel]).max() / np.abs(Ci).max()
+            print(f"               L1 자리에 더해진 성분 (이색성 - 이상적) {extra:.2e}")
+            ok &= abs((c[1] - c[0]) - (c[2] - c[1])) < 1e-9   # 이상적이면 등간격
+            ok &= abs(abs(L1 - L2) - L1) < 1e-9          # 새 L1 항이 L1-L2 와 정확히 겹친다
+            ok &= extra > 1e-3                            # 그 자리에 실제로 성분이 더해진다
+    print(f"  [{'OK  ' if ok else 'FAIL'}] 3:1 은 L1 이 빈 칸에 서고 1:2 는 L1-L2 와 겹친다")
     return ok
 
 
@@ -218,20 +231,29 @@ def verify_thickness_window():
     t_lo4, t_hi4 = thickness_window(0.400, 0.800, 0.0005, ratio=(2, 1, 7, 15))
     print(f"         뮬러   CSP (2:1:7:15): {t_lo4:8.0f} ~ {t_hi4:8.0f} um")
     ok &= t_lo < t_hi                       # 스토크스는 창이 열린다
-    ok &= t_hi4 < t_lo4                      # 뮬러는 같은 분광기로 창이 비어 있다
+    ok &= t_lo4 < t_hi4                      # 이 분광기(0.5 nm)면 뮬러도 창이 열린다
     ok &= t_hi4 < t_hi                       # 지연자가 늘면 상한이 내려간다
     ok &= abs(t_lo - t_lo4) < 1e-9           # 하한은 지연자 수와 무관하다
+    lo2, hi2 = thickness_window(0.400, 0.800, 0.0020, ratio=(2, 1, 7, 15))
+    ok &= hi2 < lo2                          # 2 nm 분광기면 뮬러 CSP 의 창이 비어 있다
+    # 뮬러 CSP 의 창이 닫히는 분해능: 상한 = 하한
+    dl_close = 0.400 * 0.800 / (t_lo4 * BETA_QUARTZ * (2 * sum((2, 1, 7, 15)) + 1))
     print(f"  [{'OK  ' if ok else 'FAIL'}] 지연자가 넷이면 상한이 "
           f"{t_hi / t_hi4:.1f} 배 내려가고 하한은 그대로다 "
-          f"-> 이 분광기로는 뮬러 CSP 의 창이 비어 있다")
-    for dl_nm in (0.5, 0.3, 0.24, 0.2):
+          f"-> 뮬러 CSP 의 창은 dlambda = {dl_close * 1000:.2f} nm 에서 닫힌다")
+    for dl_nm in (0.5, 1.0, 1.37, 1.4, 2.0):
         lo4, hi4 = thickness_window(0.400, 0.800, dl_nm / 1000.0, ratio=(2, 1, 7, 15))
         print(f"           dlambda={dl_nm:4.2f} nm -> {lo4:6.0f} ~ {hi4:6.0f} um  "
               f"{'창이 열린다' if lo4 < hi4 else '빈다'}")
-    # 이승우 2021 의 유도를 beta 만 바꿔 재현한다
-    L_min = 18.0 / (1.0 / 0.400 - 1.0 / 0.800)
-    print(f"         이승우 식 3.26 재현: L > {L_min:.1f} um "
-          f"-> t > {L_min / BETA_QUARTZ:.0f} um (논문은 dn=0.0045 로 3200 um)")
+    # 이승우 2021 식 3.26 을 그대로 옮기면 (1.5 STD, STD_h = 6/dsigma) L > 18/dsigma 다.
+    # 같은 논문 식 3.9 의 변환 핵 e^{-2 pi j h sigma} 에서는 STD_h 를 2pi 로 더 나눠야 한다.
+    dsig = 1.0 / 0.400 - 1.0 / 0.800
+    L_paper = 18.0 / dsig
+    L_fixed = 18.0 / (2.0 * np.pi * dsig)
+    print(f"         이승우 식 3.26 그대로: L > {L_paper:.1f} um "
+          f"-> dn=0.0045 면 t > {L_paper / 0.0045:.0f} um (논문 3200 um)")
+    print(f"         2pi 를 바로잡으면: L > {L_fixed:.2f} um "
+          f"-> dn=0.0045 면 t > {L_fixed / 0.0045:.0f} um")
     return ok
 
 

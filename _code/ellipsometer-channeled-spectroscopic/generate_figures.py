@@ -115,7 +115,7 @@ def figure2(L):
     close = x[np.argmin(np.abs(hi_m - t_lo))]
     ax.axvline(close, color=C_THICK, lw=1.0, ls=":")
     ax.annotate(L["f2_close"].format(close), xy=(close, t_lo),
-                xytext=(close * 1.9, t_lo * 0.30), fontsize=9.2, color=C_THICK,
+                xytext=(close * 0.12, t_lo * 0.30), fontsize=9.2, color=C_THICK,
                 **L["font"], arrowprops=dict(arrowstyle="->", color=C_THICK, lw=1.0))
     ax.text(x[3], t_lo * 1.12, L["f2_lo"].format(t_lo), fontsize=9.2, color=C_BAD,
             va="bottom", **L["font"])
@@ -124,7 +124,7 @@ def figure2(L):
     ax.set_xlabel(L["f2_x"], fontsize=10.5, **L["font"])
     ax.set_ylabel(L["f2_y"], fontsize=10.5, **L["font"])
     ax.set_title(L["fig2"], fontsize=12.5, pad=10, **L["font"])
-    ax.set_ylim(200, 6e4)
+    ax.set_ylim(60, 6e4)
     ax.legend(fontsize=9.2, prop=L["legend"], loc="upper right", framealpha=0.92)
     ax.grid(alpha=0.25, which="both")
     fig.tight_layout()
@@ -151,7 +151,7 @@ def ratio_channels(t1, t2, gamma):
 
 def figure3(L):
     fig, axes = plt.subplots(1, 2, figsize=(11.4, 4.6))
-    for ax, (tag, t1, t2) in zip(axes, (("2:1", 2000.0, 1000.0),
+    for ax, (tag, t1, t2) in zip(axes, (("1:2", 1000.0, 2000.0),
                                         ("3:1", 3000.0, 1000.0))):
         L1, L2 = opd(t1), opd(t2)
         h, m_ideal = cached(f"f3i_{t1}", lambda t1=t1, t2=t2:
@@ -198,7 +198,7 @@ def figure3(L):
 # 그림 4 — 채널 예산
 # ---------------------------------------------------------------------------
 
-CONFIGS = [("f4_c1", 1, 3), ("f4_c2", 2, 7), ("f4_c3", 2, 9), ("f4_c4", 4, 25)]
+CONFIGS = [("f4_c1", 1, 3), ("f4_c2", 2, 7), ("f4_c3", 2, 9), ("f4_c4", 4, 51)]
 
 
 def figure4(L):
@@ -208,11 +208,14 @@ def figure4(L):
     pts = [rp / n for _, _, n in CONFIGS]
     colors = [C_OK, C_DC, C_THICK, C_BAD]
     bars = ax.bar(range(len(CONFIGS)), pts, color=colors, alpha=0.85, width=0.6)
-    for b, (_, nret, nch), p in zip(bars, CONFIGS, pts):
+    for b, (_, nret, nch), p, c in zip(bars, CONFIGS, pts, colors):
         ax.text(b.get_x() + b.get_width() / 2, p + 4, f"{p:.0f}",
                 ha="center", fontsize=10.5, fontweight="bold")
-        ax.text(b.get_x() + b.get_width() / 2, 6, L["f4_nch"].format(nch),
-                ha="center", fontsize=9.0, color="white", **L["font"])
+        # 막대가 낮아 글자가 안 들어가면 숫자 위에 막대 색으로 적는다
+        inside = p > 40
+        ax.text(b.get_x() + b.get_width() / 2, 6 if inside else p + 34,
+                L["f4_nch"].format(nch), ha="center", fontsize=9.0,
+                color="white" if inside else c, **L["font"])
     ax.axhline(rp, color="gray", lw=1.2, ls="--")
     ax.text(0.985, rp / (rp * 1.15) + 0.018, L["f4_total"].format(rp),
             transform=ax.transAxes, fontsize=9.4, ha="right", va="bottom",
@@ -351,12 +354,12 @@ LABELS = {
         "f2_close": "$\\Delta\\lambda$가 {:.2f} nm보다 거칠면\n뮬러 CSP는 쓸 두께가 없다",
         # 그림 3
         "fig3": "두께비가 채널 배치를 정한다 (방해석 지연자)",
-        "f3_21": "2 : 1 — $L_1 - L_2$ 가 $L_2$ 와 같아진다",
+        "f3_12": "1 : 2 — $L_1$ 이 $L_2 - L_1$ 과 같아진다",
         "f3_31": "3 : 1 — 아홉 자리가 고르게 선다",
         "f3_ideal": "이색성 없음",
         "f3_real": "방해석 ($\\gamma$ = 44.32°)",
-        "f3_collide": "프레넬 불균형이 만든 $L_2$ 성분이\n$L_1-L_2$ 채널 위에 겹쳐 올라온다",
-        "f3_clear": "$L_2$ 성분이 빈자리로 들어가\n교정에 쓸 수 있다",
+        "f3_collide": "프레넬 불균형이 만든 $L_1$ 성분이\n$L_1-L_2$ 채널 위에 겹쳐 올라온다",
+        "f3_clear": "$L_1$ 성분이 빈자리로 들어가\n교정에 쓸 수 있다",
         # 그림 4
         "fig4": "분광기의 분해 점수를 채널이 나눠 갖는다",
         "f4_y": "스토크스 성분 하나당 분해 가능한 점 수",
@@ -395,12 +398,12 @@ LABELS = {
         "f2_lo": "lower {:.0f} $\\mu$m — channels must not overlap",
         "f2_close": "coarser than {:.2f} nm and no\nthickness works for Mueller CSP",
         "fig3": "The thickness ratio fixes the channel layout (calcite retarders)",
-        "f3_21": "2 : 1 — $L_1 - L_2$ coincides with $L_2$",
+        "f3_12": "1 : 2 — $L_1$ coincides with $L_2 - L_1$",
         "f3_31": "3 : 1 — nine slots spaced evenly",
         "f3_ideal": "no diattenuation",
         "f3_real": "calcite ($\\gamma$ = 44.32°)",
-        "f3_collide": "the $L_2$ term from the Fresnel imbalance\nlands on top of the $L_1-L_2$ channel",
-        "f3_clear": "the $L_2$ term falls into an empty slot\nand becomes calibration data",
+        "f3_collide": "the $L_1$ term from the Fresnel imbalance\nlands on top of the $L_1-L_2$ channel",
+        "f3_clear": "the $L_1$ term falls into an empty slot\nand becomes calibration data",
         "fig4": "The channels share out the spectrometer's resolvable points",
         "f4_y": "resolvable points per Stokes component",
         "f4_c1": "1 retarder\n$\\Psi, \\Delta$",
@@ -428,7 +431,7 @@ def main():
           + ", ".join(f"{n}채널 {rp/n:.0f}점" for _, _, n in CONFIGS))
     t_lo = opd_min_gaussian(S_MIN, S_MAX) / BETA_QUARTZ
     print(f"두께 하한 {t_lo:.0f} um (가시광 400~800 nm, 석영 beta={BETA_QUARTZ})")
-    for dl in (0.5, 0.3, 0.24, 0.2):
+    for dl in (0.5, 1.0, 1.37, 1.4, 2.0):
         lo, hi = thickness_window(LAM_MIN, LAM_MAX, dl / 1000.0, ratio=RATIO_M)
         print(f"  뮬러 CSP dlambda={dl:4.2f} nm: {lo:.0f} ~ {hi:.0f} um "
               f"{'(창이 열린다)' if lo < hi else '(빈다)'}")

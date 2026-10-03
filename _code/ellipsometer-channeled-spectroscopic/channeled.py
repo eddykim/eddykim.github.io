@@ -200,13 +200,18 @@ def extract_channel(signal, sigma, center, half_width, window="hann"):
 
 
 def opd_min_gaussian(sigma_min, sigma_max, n_std=3.0):
-    """채널이 겹치지 않을 OPD 하한 (이승우 2021 식 3.26).
+    """채널이 겹치지 않을 OPD 하한 (착상은 이승우 2021 식 3.26).
 
-    광원을 파수에 대한 가우스 분포로 두고 파장 폭을 6 STD 로 잡으면 h 영역의
-    표준편차가 6/(smax-smin) 이 된다. 기저 봉우리와 측대역이 각각 n_std 배만큼
-    떨어져야 하므로 L > 2 * n_std * STD_h 다. n_std = 1.5 면 논문의 18/(smax-smin).
+    광원을 파수에 대한 가우스 분포로 두고 파장 폭을 6 STD 로 잡으면 파수 표준편차가
+    s = (smax-smin)/6 이다. 위상을 2*pi*h*sigma 로 쓰는 h 축(변환 핵 e^{-i 2pi h sigma})
+    에서 이 가우스의 변환은 exp(-2 pi^2 s^2 h^2) 이므로 h 영역의 표준편차는
+    1/(2 pi s) = 6/(2 pi (smax-smin)) 이다. 기저 봉우리와 측대역이 각각 n_std 배만큼
+    떨어져야 하므로 L > 2 * n_std * STD_h 다.
+
+    이승우 2021 식 3.26 은 STD_h = 6/(smax-smin) 으로 2pi 가 빠져 있다. 같은 논문
+    식 3.9 가 변환 핵을 e^{-2 pi j h sigma} 로 정의하므로 2pi 로 한 번 더 나눠야 한다.
     """
-    std_h = 6.0 / (sigma_max - sigma_min)
+    std_h = 6.0 / (2.0 * np.pi * (sigma_max - sigma_min))
     return 2.0 * n_std * std_h
 
 

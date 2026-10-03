@@ -60,13 +60,13 @@ How large must $L$ be for the peaks to stay apart? The answer follows from the f
 
 Treat the source intensity as a Gaussian along the wave-number axis and take its wavelength span as $6\,\mathrm{STD}$. Each peak in the Fourier domain then has a standard deviation of
 
-$$\mathrm{STD}\big\vert_h = \frac{6}{\sigma_{max}-\sigma_{min}}$$
+$$\mathrm{STD}\big\vert_h = \frac{6}{2\pi(\sigma_{max}-\sigma_{min})}$$
 
-Requiring the dc peak and the sidebands to sit $3\,\mathrm{STD}$ apart gives
+The Fourier transform of a Gaussian inverts its width, and on an $h$ axis defined through the phase $2\pi h\sigma$ a factor of $2\pi$ comes along. Requiring the dc peak and the sidebands to sit $3\,\mathrm{STD}$ apart gives
 
-$$L > \frac{36}{\sigma_{max}-\sigma_{min}}$$
+$$L > \frac{36}{2\pi(\sigma_{max}-\sigma_{min})}$$
 
-Over the visible range 400–800 nm, $\sigma$ runs from $1.25$ to $2.5\ \mu m^{-1}$, so $L > 28.8\ \mu m$ and a quartz plate must exceed **about 2.9 mm**. Post 2 put the zero-order quarter-wave plate at 17.6 μm; this is more than 160 times thicker. That is the scale meant by a "thick" plate in channeled spectroscopy.
+Over the visible range 400–800 nm, $\sigma$ runs from $1.25$ to $2.5\ \mu m^{-1}$, so $L > 4.6\ \mu m$ and a quartz plate must exceed **about 0.46 mm**. Post 2 put the zero-order quarter-wave plate at 17.6 μm; this is roughly 26 times thicker. That is the scale meant by a "thick" plate in channeled spectroscopy.
 
 Stated generally, the condition is that **the bandwidth of the spectral structure the sample produces must fit inside one channel.** Hu and colleagues write it as
 
@@ -90,7 +90,7 @@ One caution applies when computing $\Delta\sigma$. A dispersive spectrometer sam
 
 $$\Delta\sigma_{avg} = \frac{\Delta\lambda}{\lambda_{min}\lambda_{max}}$$
 
-Hagen and Hu arrive at this same expression by different routes.
+Hagen derives it as the geometric mean of the resolutions at the two ends of the band, and Hu quotes it in this compact form.
 
 Combining the two inequalities leaves a window of allowed thicknesses.
 
@@ -99,7 +99,7 @@ _Figure 2. Quartz retarders over 400–800 nm. The horizontal axis is the spectr
 
 The lower bound is a horizontal line. It is fixed by the sample bandwidth and the source width, so it has nothing to do with spectrometer performance. The upper bound slopes: a finer spectrometer raises it.
 
-What matters is where the two meet. **Going to four retarders to measure the full Mueller matrix drops the upper bound by a factor of $7.3$,** because the highest carrier frequency jumps from $m+n$ to $m+n+p+q$. As a result, a spectrometer coarser than $0.22$ nm leaves **no usable thickness at all.** The window closes.
+What matters is where the two meet. **Going to four retarders to measure the full Mueller matrix drops the upper bound by a factor of $7.3$,** because the highest carrier frequency jumps from $m+n$ to $m+n+p+q$. As a result, a spectrometer coarser than $1.4$ nm leaves **no usable thickness at all.** The window closes.
 
 In Post 3, going from one compensator to two in order to reach all sixteen Mueller elements cost speed. Moved onto the wavelength axis, the same cost appears as a **spectrometer specification**.
 
@@ -128,7 +128,7 @@ This imbalance creates a term the signal did not have: **one whose carrier frequ
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/en/fig3-thickness-ratio.png" alt="Channel layout for two thickness ratios" width="780">
 _Figure 3. Channel layout for one input polarization seen through two calcite retarders. The dark curve assumes no diattenuation; the red curve includes the Fresnel imbalance of calcite._
 
-The left panel is the problem. A ratio of $2:1$ makes $L_1 = 2L_2$, so $L_1 - L_2 = L_2$ and two channels land on **exactly the same position**. The ratio that was optimal in the ideal calculation becomes unusable once the new $L_1$ term is taken into account.
+The left panel is the problem. With a thickness ratio $d_1 : d_2$ of $1:2$, $L_2 = 2L_1$, so the new $L_1$ term lands at $L_2 - L_1 = L_1$, **exactly on top of** the $L_1-L_2$ channel. The ratio that was optimal in the ideal calculation, with its even spacing, becomes unusable once the new $L_1$ term is taken into account. (Okabe places the retarders before the sample, which reverses the numbering, so he describes the same situation as $2:1$.)
 
 Switching to $3:1$ puts the peaks at $L_2, 2L_2, 3L_2, 4L_2$, nine slots spaced evenly. And the slot at $L_1 = 3L_2$ is **one that should be empty if everything were ideal.** If a signal rises there, its size reports the diattenuation and misalignment of the retarders.
 
@@ -147,7 +147,7 @@ meaning 629 resolvable points along the wave-number axis. Those 629 points are s
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/en/fig4-channel-budget.png" alt="Resolvable points shared among channels" width="780">
 _Figure 4. Points left per Stokes component for each arrangement. The number inside each bar is how many channels that arrangement creates._
 
-One retarder measuring only $\Psi$ and $\Delta$ leaves 210 points per component. Two retarders for the full Stokes vector leave 90; the $3:1$ ratio forced by calcite leaves 70; going all the way to sixteen Mueller elements leaves **25**.
+One retarder measuring only $\Psi$ and $\Delta$ leaves 210 points per component. Two retarders for the full Stokes vector leave 90; the $3:1$ ratio forced by calcite leaves 70; going all the way to sixteen Mueller elements leaves **12**.
 
 This is the exact price of a single shot. A rotating-element instrument can spend all 629 points on every Stokes component. A channeled instrument takes one frame and divides the points instead.
 
@@ -204,7 +204,7 @@ The way to undo it also resembles Post 4. The three channels at different carrie
 
 The second dial runs deeper: **the wavelength scale itself**.
 
-A channeled instrument writes its information into fringes along the wavelength axis. The moment the pixel-to-wavelength mapping drifts, the carrier phase is corrupted directly. A group at Jeonbuk National University identified exactly this while working on an interferometric snapshot ellipsometer. Ordinary wavelength calibration — matching the known lines of a calibration lamp to pixels — was not enough, and a separate Mach–Zehnder interferometer had to be used.
+A channeled instrument writes its information into fringes along the wavelength axis. The moment the pixel-to-wavelength mapping drifts, the carrier phase is corrupted directly. A group at Jeonbuk National University identified exactly this while working on an interferometric snapshot ellipsometer. Ordinary wavelength calibration — matching the known lines of a calibration lamp to the pixels of its two spectrometers — was not enough; the spectrometers had to be calibrated against the dense peaks produced by the instrument's own Mach–Zehnder interferometer.
 
 Post 4 dealt with an angular dial; Post 5 deals with a retardance and a wavelength scale. Change the instrument and the dial you must distrust changes with it.
 
@@ -214,7 +214,7 @@ Having spent this long on the costs, the gains deserve equal space.
 
 Okabe's instrument has a sensing head of $220 \times 45 \times 30$ mm — palm sized — and an acquisition time of **20 ms**. The paper gives the reason in one line: the configuration is simple and **there are no mechanical or active components for polarization control**. The performance holds up too. Twelve SiO$_2$ films spanning 3 to 4000 nm agreed with a commercial rotating-compensator instrument, and reference samples matched their certified values. **Thickness measurements stayed within $0.11$ nm as the temperature was varied from 5 to 45 °C.**
 
-It is worth noting where the field is heading. The doubt the snapshot family has long carried is accuracy — the belief that it falls well short of commercial spectroscopic ellipsometry. Recent work confronts that directly. A snapshot approach using the back focal plane brings the thickness RMS error down to $0.2$ nm against a commercial instrument and, at $1$ ms exposure, maps 60,000 points on a 4-inch wafer in 600 s, more than a hundred times faster than a commercial spectroscopic ellipsometer.
+It is worth noting where the field is heading. The doubt the snapshot family has long carried is accuracy — the belief that it falls well short of commercial spectroscopic ellipsometry. Recent work confronts that directly. The snapshot approach of Wang and colleagues, using the back focal plane, brings the thickness RMS error down to $0.2$ nm against a commercial instrument and, at $1$ ms exposure, maps 60,000 points on a 4-inch wafer in 600 s, more than a hundred times faster than a commercial spectroscopic ellipsometer.
 
 With 3D NAND at 232 tiers and CFET stacking twenty to thirty layers under 10 nm each, the number of layers whose thickness and composition must be verified has exploded. An instrument that holds its accuracy while taking one frame is what breaks that bottleneck.
 
@@ -222,7 +222,7 @@ With 3D NAND at 232 tiers and CFET stacking twenty to thirty layers under 10 nm 
 
 Where a rotating-element instrument scans its modulator along the time axis, a channeled instrument lets the spectrometer's wavelength dispersion do it. A thick birefringent plate becomes a variable retarder once it meets a spectroscopic device, and the polarization goes into the fringes riding on a single spectrum.
 
-The cost is quantitative. Thickness is squeezed from both sides — too thin and the channels overlap, too thick and they alias. The spectrometer's resolvable points are divided among the channels, so each Stokes component keeps a smaller share, and reaching all sixteen Mueller elements turns 629 points into 25. The demodulation that cuts out a channel leaves distortion of its own.
+The cost is quantitative. Thickness is squeezed from both sides — too thin and the channels overlap, too thick and they alias. The spectrometer's resolvable points are divided among the channels, so each Stokes component keeps a smaller share, and reaching all sixteen Mueller elements turns 629 points into 12. The demodulation that cuts out a channel leaves distortion of its own.
 
 And there is the warning Oka set down in 1999. **A single shot is not the same as a fast one.** Capturing the fine structure of the channels requires a large number of samples, and the spectrometer scan takes correspondingly longer. What is gained is not speed but **the absence of moving parts**.
 
@@ -244,7 +244,7 @@ Okabe writes the transmittance ratio angle as $\gamma = \tan^{-1}(T_s/T_f)$, but
 
 Two convention traps turned up as well. In the single-retarder arrangement, putting the analyzer at $+45°$ flips the sign of the $\sin\Delta$ term; sweeping the azimuths confirmed that $-45°$ is correct. Hagen's Eq. 1 is written with $R(45°)$, but under this series' rotation convention his expression matches $-45°$ — the handedness is opposite. The convention of Posts 1 through 4 was left alone and matched only for the comparison.
 
-The thickness lower bound derived in Lee's dissertation was reproduced in spirit but recomputed. The dissertation takes the birefringence of quartz as $0.0045$ and obtains a minimum thickness of $3200\ \mu m$, whereas the nominal value ($0.009$), Hagen's coefficient ($0.00998$) and the value back-calculated from Hagen's measurements ($0.0101$) are all roughly double that. This post uses $B_{\rm eff} = 0.00998$ and also takes the peak separation as $3\,\mathrm{STD}$ rather than the dissertation's $1.5\,\mathrm{STD}$. Both were changed, so the number here is not directly comparable with the one in that work.
+The thickness lower bound derived in Lee's dissertation was reproduced in spirit but recomputed. The dissertation takes the birefringence of quartz as $0.0045$ and obtains a minimum thickness of $3200\ \mu m$, whereas the nominal value ($0.009$), Hagen's coefficient ($0.00998$) and the value back-calculated from Hagen's measurements ($0.0101$) are all roughly double that. This post uses $B_{\rm eff} = 0.00998$ and also takes the peak separation as $3\,\mathrm{STD}$ rather than the dissertation's $1.5\,\mathrm{STD}$. Both were changed, so the number here is not directly comparable with the one in that work. The dissertation's Eq. 3.26 writes the $h$-domain standard deviation as $6/(\sigma_{max}-\sigma_{min})$, but with the transform kernel $e^{-2\pi jh\sigma}$ of its own Eq. 3.9 it must be divided by a further $2\pi$; that is corrected here as well.
 
 ## References
 
@@ -254,5 +254,6 @@ The thickness lower bound derived in Lee's dissertation was reproduced in spirit
 - J. Hu, X. Chen, W. Chen, S. Yang, Y. Wang, Z. Tang, S. Liu, "Frequency properties of channeled spectropolarimetry: an information theory perspective," *Opt. Express* **32**, 3735 (2024) — the general form of the thickness window.
 - B. Zhang and B. Zhao, "Channeled spectropolarimetry: A review of technological evolution, algorithmic breakthroughs, and diversifying applications," *Opt. Lasers Eng.* **196**, 109421 (2026) — twenty-six years reviewed.
 - V. Dembele, M. Jin, I. Choi, W. Chegal, D. Kim, "Interferometric snapshot spectro-ellipsometry," *Opt. Express* **26**, 1333 (2018), with the follow-up on calibration in *Curr. Opt. Photonics* **4**, 345 (2020) — the interferometric branch and the wavelength-scale problem.
+- J. Wang, Q. Xu, L. Peng, J. Yang, H. Zhu, J. Zhu, Y. Shi, O. Zakharov, H. Jiang, M. Xu, J. Liu, S. Liu, "Snapshot Fourier ellipsometry: Pushing to sub-nanometer accuracy for high-throughput thin film metrology," *Adv. Sci. Instrum.* **1**, 100008 (2026) — accuracy and throughput of back-focal-plane snapshot ellipsometry, and the 3D-stacking background.
 - Seung Woo Lee, "Co-axial spectroscopic snapshot ellipsometry for micro-spot measurement using high-frequency modulation and selective detection of spectral signals," Ph.D. dissertation, Seoul National University, 2021.
 - Young Joon Kim, "Development of snapshot angle-resolved ellipsometry using a line-scan spectrograph and back focal plane spectral interference," Ph.D. dissertation, Seoul National University, 2025, Ch. 3 — the extrema envelope method.
