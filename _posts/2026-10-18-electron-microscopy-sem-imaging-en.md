@@ -15,7 +15,7 @@ math: true
 
 Here the SEM parts ways with the optical microscope and the TEM. An optical microscope has a lens that maps each point of the specimen onto a point of the image plane. An SEM has no such lens. Its objective only converges the beam to a point; it does not spatially resolve the signal leaving that point. The detector amounts to a current meter with no sense of direction.
 
-An image appears nonetheless. This post starts by building up how, then shows that where a detector sits, and over what angle it collects, is what defines contrast. It then computes the $\sec\theta$ law behind topographic contrast and the edge effect that follows from it, and closes with the charging problem on insulators and how low-voltage SEM answers it.
+An image appears nonetheless. This post starts by building up how, then shows that where a detector sits, and over what angle it collects, is what defines contrast. It then computes the $\sec\theta$ law behind topographic contrast and the tilt contrast that follows from it, and closes with the charging problem on insulators and how low-voltage SEM answers it.
 
 ## 1. Time, not a lens, forms the image
 
@@ -40,9 +40,9 @@ _Fig 1. Layout of three detector types and the paths each signal takes_
 
 Energy is what separates them. As post 3 showed, secondary electrons sit below 50 eV while backscattered electrons retain nearly the incident energy. A few tens of eV bends easily in a field of a few hundred volts; a few tens of keV barely notices the same field.
 
-The Everhart-Thornley (ET) detector exploits that difference. Mounted off to the side with a grid held near $+200$ V, it draws in secondary electrons regardless of the direction they left the specimen, as the orange curves in Figure 1 show. Collection efficiency is high as a result, and even electrons emitted away from the detector are captured. Backscattered electrons, travelling straight, reach it only if they happen to head that way. An ET signal is therefore mostly secondary with a small backscattered admixture.
+The Everhart-Thornley (ET) detector exploits that difference. Mounted off to the side with a grid held near $+200$ V, it draws in secondary electrons regardless of the direction they left the specimen, as the orange curves in Figure 1 show. Collection efficiency is high as a result, and even electrons emitted away from the detector are captured. Backscattered electrons, travelling straight, reach it only if they happen to head that way. Direct backscattered electrons are only a small share, but secondaries generated where backscattered electrons leave the specimen or strike the pole piece and chamber walls are drawn in too, so an ET signal is a mixture carrying substantial backscatter information.
 
-The annular BSE detector is designed the opposite way. It sits directly below the objective as a ring around the optical axis and carries no bias. Only electrons arriving straight along a line of sight register, which selects backscattered electrons exclusively, and the ring's axial symmetry keeps the signal free of directional bias.
+The annular BSE detector is designed the opposite way. It sits directly below the objective as a ring around the optical axis and applies no field to draw electrons in, so only electrons arriving straight along a line of sight reach it. A semiconductor detector also responds only to electrons that penetrate its entrance electrode, a threshold of roughly 1–3 keV, so secondary electrons of a few eV leave no signal and only backscattered electrons register. The ring's axial symmetry keeps the signal free of directional bias.
 
 The in-lens detector sits inside the objective, above the bore in the pole piece. It exploits the way the lens field spirals secondary electrons toward the axis, catching those drawn up through the bore. A shorter working distance strengthens the effect and raises collection efficiency, which helps particularly when signal runs short at low voltage. The cost is that the specimen must sit close to the lens, which rules out large or heavily tilted specimens.
 
@@ -56,22 +56,22 @@ Post 3 established that only secondary electrons generated within about 5 nm of 
 
 $$ \frac{\delta(\theta)}{\delta(0)} = \sec\theta $$
 
-<img src="/assets/img/posts/electron-microscopy-sem-imaging/en/fig2-edge-effect.png" alt="Secondary electron yield against tilt, and the edge effect appearing in a line scan across a trapezoidal feature" width="820">
+<img src="/assets/img/posts/electron-microscopy-sem-imaging/en/fig2-edge-effect.png" alt="Secondary electron yield against tilt, and the tilt contrast appearing in a line scan across a trapezoidal feature" width="820">
 _Fig 2. Secondary electron yield against tilt (left) and a line scan reproduced from that law (right)_
 
 The left panel is that law: 1.41 at $45°$, 2 at $60°$, 3.86 at $75°$. The brightness difference between a flat floor and a steep sidewall comes from this curve.
 
 As $\theta$ approaches $90°$ the secant diverges, but real surfaces do not. At steep incidence electrons pass out through the side face rather than remaining in the specimen, and no surface is perfectly flat at atomic scale. Hence the cap at six in the figure.
 
-The right panel reproduces a line scan from this law alone. Sweeping across a 200 nm trapezoidal feature, the local surface tilt at each point gives $\sec\theta$ as the signal. The flat top and the floor return the same level; only the sidewalls rise, by nearly a factor of 2.5. This is the edge effect that makes outlines glow.
+The right panel reproduces a line scan from this law alone. Sweeping across a 200 nm trapezoidal feature, the local surface tilt at each point gives $\sec\theta$ as the signal. The flat top and the floor return the same level; only the sidewalls rise, by nearly a factor of 2.5. This tilt (inclination) contrast is the first reason outlines glow. The calculation contains only the tilt; the edge effect at corners adds on top of it.
 
-The effect is stronger at thin protrusions and sharp corners. There the interaction volume overlaps two or more free surfaces, so escape routes open in several directions at once. Particle edges burning out white in SEM photographs are this. It flatters the eye but troubles anyone measuring a linewidth, since the boundary becomes hard to place — which is why CD-SEM systems in semiconductor metrology carry dedicated algorithms for deciding a linewidth from the shape of this waveform.
+The edge effect proper appears at thin protrusions and sharp corners. There the interaction volume overlaps two or more free surfaces, so escape routes open in several directions at once. Particle edges burning out white in SEM photographs are this. It flatters the eye but troubles anyone measuring a linewidth, since the boundary becomes hard to place — which is why CD-SEM systems in semiconductor metrology carry dedicated algorithms for deciding a linewidth from the shape of this waveform.
 
 ## 4. Compositional contrast, and separating the two
 
 What does a backscattered electron image show? The backscatter coefficient $\eta$ computed in post 3 rises monotonically with atomic number, and that alone becomes contrast. Heavier elements appear brighter, and a difference of one or two in atomic number is detectable.
 
-The difficulty is that the two contrasts mix. Backscattered electrons also respond to surface tilt, and a secondary electron image carries a backscattered admixture. For clean compositional contrast, an annular BSE detector used symmetrically about the axis works better: summing the whole ring cancels directional dependence and leaves only the atomic number term.
+The difficulty is that the two contrasts mix. Backscattered electrons also respond to surface tilt, and a secondary electron image carries backscatter information through the secondaries that backscattered electrons generate. For clean compositional contrast, an annular BSE detector used symmetrically about the axis works better: summing the whole ring cancels directional dependence and leaves only the atomic number term.
 
 Split the ring in half and take the difference instead, and the compositional term cancels while the tilt term survives. Choosing the sum or the difference from one detector to obtain a compositional image or a topographic image separately is the standard way of reading BSE signals.
 
@@ -93,16 +93,16 @@ A quiet assumption has run underneath everything so far: that electrons entering
 
 They accumulate at the surface. The field from that accumulated negative charge repels and deflects the beam that follows. Images bloom, streak, or shift bodily as the beam is thrown off. It is the first wall anyone imaging an insulator meets.
 
-The traditional answer is a few nanometres of sputtered gold or platinum to provide a conductive path. Simple, but it damages the specimen, and the coating itself obscures structure at the nanometre scale, ruling it out for high-resolution work.
+The traditional answer is a few nanometres of sputtered gold or platinum to provide a conductive path. Simple, but it covers the surface irreversibly and can harm heat-sensitive specimens during deposition, and a thick or island-forming coating such as pure gold hides nanometre-scale structure. High-resolution work therefore uses only 1–2 nm of platinum, chromium or iridium.
 
 Another route exists. Balance the number of electrons arriving against the number leaving. The outgoing side is the sum of the secondary electron yield $\delta$ and the backscatter coefficient $\eta$, so a total yield $\sigma_T = \delta + \eta$ of exactly one leaves zero net accumulated charge.
 
 <img src="/assets/img/posts/electron-microscopy-sem-imaging/en/fig3-charging-crossover.png" alt="Total electron yield against accelerating voltage and the two crossover points where charging vanishes" width="800">
-_Fig 3. Total yield curves for two insulators_
+_Fig 3. Total yield curves for two insulators (universal yield curve model)_
 
 The total yield rises at low voltage, peaks at a few hundred eV, and falls again. At low voltage the electron dumps its energy just below the surface and generates many escapable secondaries; at high voltage it penetrates deep and the secondaries it generates cannot get out. The escape-depth argument of post 3 carries straight over.
 
-The curve therefore crosses one twice, at a lower crossover $E_1$ and an upper crossover $E_2$. Between them $\sigma_T > 1$, more electrons leave than arrive, and the specimen charges positive; outside them $\sigma_T < 1$ and it charges negative. For $\mathrm{SiO_2}$ the upper crossover sits at 2.72 kV, for PMMA near 1.54 kV.
+The curve therefore crosses one twice, at a lower crossover $E_1$ and an upper crossover $E_2$. Between them $\sigma_T > 1$, more electrons leave than arrive, and the specimen charges positive; outside them $\sigma_T < 1$ and it charges negative. In the model curves of Figure 3 (the Lin–Joy universal yield curve with representative parameters), the upper crossover comes out at 2.72 kV for $\mathrm{SiO_2}$ and 1.54 kV for PMMA. Reported measurements are about 3.0 kV for quartz and about 1.6 kV for PMMA, with wide scatter between methods and specimens.
 
 What makes $E_2$ special is that it is stable. Drop slightly below it and the specimen charges positive, raising the surface potential, which recaptures secondary electrons and reduces the outgoing count until $\sigma_T$ returns to one. Rise slightly above and negative charging decelerates the incoming electrons, pulling their effective landing energy back toward $E_2$. Feedback acts in both directions, converging on $E_2$.
 
@@ -112,7 +112,7 @@ This is what low-voltage SEM does. Working in the 1–2 kV range images insulato
 
 An SEM has no lens mapping specimen points onto image points. A scan circuit that pairs time with position does that job while the detector supplies only brightness. Magnification therefore follows the scanned width rather than any lens, and the small aperture angle grants a large depth of field.
 
-What becomes visible is decided by where the detector sits. Placed to the side with a field applied, it draws in low-energy secondary electrons and shows topography; placed as a ring around the axis, it filters for straight-travelling backscattered electrons and shows composition. Topographic contrast rests on the path through the escape layer lengthening as $\sec\theta$, and that alone reproduces the edge effect that brightens sidewalls.
+What becomes visible is decided by where the detector sits. Placed to the side with a field applied, it draws in low-energy secondary electrons and shows topography; placed as a ring around the axis, it registers only the straight-travelling, high-energy backscattered electrons and shows composition. Topographic contrast rests on the path through the escape layer lengthening as $\sec\theta$, and that alone reproduces the brightening of sidewalls; the edge effect at corners adds on top.
 
 On insulators the assumption that charge drains away fails. Imaging near $E_2$, where the total yield passes one, balances electrons arriving against electrons leaving and permits imaging without a coating, and the feedback stability of that point is what makes low-voltage SEM practical.
 
@@ -120,7 +120,7 @@ That covers reading signals emitted from a specimen surface. From the next post 
 
 ## References
 
-- J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer, 2018, ch. 6–10 (image formation, detectors, contrast mechanisms).
+- J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer, 2018, ch. 5–11 (instrumentation and detectors, image formation, contrast mechanisms, charging, low-voltage SEM).
 - L. Reimer, *Scanning Electron Microscopy: Physics of Image Formation and Microanalysis*, 2nd ed., Springer, 1998, ch. 4–6 (angular dependence of secondary electron yield, detector efficiency).
 - D. C. Joy and C. S. Joy, "Low voltage scanning electron microscopy," *Micron*, vol. 27, pp. 247–263, 1996 (total yield curves and the $E_2$ crossover).
 - H. Seiler, "Secondary electron emission in the scanning electron microscope," *Journal of Applied Physics*, vol. 54, pp. R1–R18, 1983 (standard account of secondary electron emission).

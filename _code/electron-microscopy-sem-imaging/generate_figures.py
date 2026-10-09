@@ -96,14 +96,14 @@ LABELS = {
         "f1se": "이차전자 — 에너지가 낮아\n전기장에 휘어 끌려온다",
         "f1bse": "후방산란전자 — 에너지가 커서\n직진한다. 시선이 닿아야 잡힌다",
         # 그림2
-        "fig2": "기울어진 면이 밝은 이유, 그리고 엣지 효과",
+        "fig2": "기울어진 면이 밝은 이유",
         "f2a": "기울기에 따른 이차전자 수율",
         "f2ax": "표면 기울기 θ (도)", "f2ay": "수율 (평탄면 = 1)",
         "f2sec": "$\\sec θ$", "f2cap": "실제 표면에서는 이만큼 오르지 않는다",
         "f2b": "사다리꼴 구조를 가로지른 라인 스캔",
         "f2bx": "가로 위치 (nm)", "f2by1": "표면 높이 (nm)", "f2by2": "SE 신호 (임의 단위)",
         "f2prof": "표면 형상", "f2sig": "SE 신호",
-        "f2edge": "측벽에서 신호가 솟는다\n— 엣지 효과",
+        "f2edge": "측벽에서 신호가 솟는다\n— 기울기 대비",
         # 그림3
         "fig3": "전체 수율이 1을 지나는 곳에서 대전이 사라진다",
         "f3x": "가속전압 (kV)", "f3y": "전체 수율 $\\sigma_T$ = δ + η",
@@ -122,7 +122,7 @@ LABELS = {
         "f1bsed": "Annular BSE detector",
         "f1se": "Secondary electrons — low energy,\nbent in and collected by the field",
         "f1bse": "Backscattered electrons — high energy,\ntravel straight. Line of sight required",
-        "fig2": "Why tilted surfaces look bright, and the edge effect",
+        "fig2": "Why tilted surfaces look bright",
         "f2a": "Secondary electron yield against tilt",
         "f2ax": "Surface tilt θ (degrees)", "f2ay": "Yield (flat surface = 1)",
         "f2sec": "$\\sec θ$", "f2cap": "Real surfaces do not rise this far",
@@ -130,7 +130,7 @@ LABELS = {
         "f2bx": "Lateral position (nm)", "f2by1": "Surface height (nm)",
         "f2by2": "SE signal (arb. units)",
         "f2prof": "Surface profile", "f2sig": "SE signal",
-        "f2edge": "Signal peaks on the sidewalls\n— the edge effect",
+        "f2edge": "Signal peaks on the sidewalls\n— tilt contrast",
         "fig3": "Charging vanishes where the total yield passes one",
         "f3x": "Accelerating voltage (kV)", "f3y": "Total yield $\\sigma_T$ = δ + η",
         "f3sio2": "SiO$_2$ (insulator)", "f3pmma": "PMMA (polymer, insulator)",
@@ -207,12 +207,19 @@ def fig1_detector_layout(L):
         ax.add_patch(FancyArrowPatch((0, 0.02), (t * np.cos(a), BSE_Y0),
                                      arrowstyle="-|>", mutation_scale=11,
                                      color=ACCENT, lw=1.3, alpha=0.85))
-    for ang in (82, 98):                     # 구멍을 지나 인렌즈로 가는 것
-        a = np.radians(ang)
-        t = INLENS_Y / np.sin(a)
-        ax.add_patch(FancyArrowPatch((0, 0.02), (t * np.cos(a), INLENS_Y),
+    # 인렌즈 검출기로 가는 것은 후방산란전자가 아니라 이차전자다. 렌즈 자기장에
+    # 붙잡혀 광축 둘레를 나선으로 돌며 구멍을 거슬러 올라간다(Goldstein 4판
+    # §5.4.5, 그림 5.26). 나선을 옆에서 본 모양이라 사인 곡선으로 그리고,
+    # 진폭은 환형 BSE 검출기 안쪽 구멍(|x| < 0.7)을 넘지 않게 둔다.
+    ys = np.linspace(0.02, INLENS_Y - 0.03, 400)
+    amp = 0.55 * (1.0 - np.exp(-ys / 0.8))
+    for side in (1, -1):
+        xs = side * amp * np.sin(np.pi * ys)
+        ax.plot(xs[:-8], ys[:-8], color=ORANGE, lw=1.4, alpha=0.95)
+        ax.add_patch(FancyArrowPatch((xs[-9], ys[-9]), (xs[-1], ys[-1]),
                                      arrowstyle="-|>", mutation_scale=11,
-                                     color=ACCENT, lw=1.3, alpha=0.85))
+                                     shrinkA=0, shrinkB=0,
+                                     color=ORANGE, lw=1.4, alpha=0.95))
     ax.annotate(L["f1bse"], xy=(-1.05, 1.35), xytext=(-3.3, 0.85),
                 ha="right", va="center", fontsize=9, color=ACCENT, **L["font"],
                 arrowprops=dict(arrowstyle="-", color=ACCENT, lw=0.9))
