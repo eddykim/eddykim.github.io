@@ -27,7 +27,7 @@ $$ d = \frac{\lambda}{2\,\mathrm{NA}} $$
 
 where $\lambda$ is the wavelength and $\mathrm{NA} = n\sin\alpha$ is the numerical aperture, a measure of how wide a cone of light the lens collects from the specimen. Substituting the middle of the visible range, $\lambda = 550$ nm, together with $\mathrm{NA} = 1.4$ for an oil-immersion objective gives $d \approx 196$ nm.
 
-The equation says something simple. To improve resolution, shorten the wavelength or enlarge the numerical aperture. But $\mathrm{NA} = n\sin\alpha$ caps out near 1.5 no matter how high the index of the immersion fluid, since $\sin\alpha$ cannot exceed one. Wavelength is the only remaining route, and visible light closes that route too.
+The equation says something simple. To improve resolution, shorten the wavelength or enlarge the numerical aperture. But $\mathrm{NA} = n\sin\alpha$ tops out at 1.4–1.5 for ordinary oil-immersion objectives, and even specialist objectives that pair high-index immersion fluid with high-index cover glass stop near 1.7, since $\sin\alpha$ cannot exceed one. Wavelength is the only remaining route, and visible light closes that route too.
 
 ## 2. Treating an electron as a wave
 
@@ -66,7 +66,7 @@ def wavelength(volts, relativistic=True):
 <img src="/assets/img/posts/electron-microscopy-why-electrons/en/fig1-wavelength-vs-voltage.png" alt="Electron de Broglie wavelength against accelerating voltage, and the error of the non-relativistic approximation" width="750">
 _Fig 1. De Broglie wavelength against accelerating voltage (left), and how far the non-relativistic approximation overestimates it (right)_
 
-The two curves on the left nearly coincide below 30 kV and separate above it. The right-hand panel expresses that separation as a percentage: an error of 1.5 % at 30 kV grows to 9.3 % at 200 kV and 13.7 % at 300 kV. For the 1–30 kV range typical of a scanning electron microscope (SEM), the non-relativistic form causes little harm. In the TEM range, dropping the correction misstates the wavelength by more than ten percent.
+The two curves on the left nearly coincide below 30 kV and separate above it. The right-hand panel expresses that separation as a percentage: an error of 1.5 % at 30 kV grows to 9.3 % at 200 kV and 13.7 % at 300 kV. For the 1–30 kV range typical of a scanning electron microscope (SEM), the non-relativistic form causes little harm. In the TEM range (100–300 kV), dropping the correction misstates the wavelength by 5–14 %.
 
 At the standard TEM condition of 200 kV, then, the electron wavelength is 2.51 pm. Interatomic spacings run around 0.2 nm, or 200 pm, so the wavelength is one eightieth of the spacing between atoms.
 
@@ -79,7 +79,7 @@ Even at $\mathrm{NA} = 1$ the result is $d = \lambda/2 = 1.3$ pm, a figure appro
 <img src="/assets/img/posts/electron-microscopy-why-electrons/en/fig2-resolution-gap.png" alt="Electron de Broglie wavelength compared with electron microscope resolution achieved in each era" width="750">
 _Fig 2. The wavelength of a 200 kV electron (dashed line) against resolution actually achieved_
 
-Ruska's first TEM, built in 1933, managed around 50 nm. The 1970s brought 0.3 nm. High-resolution TEM (HRTEM) sat near 0.2 nm for years before aberration correctors became commercial. Aberration-corrected scanning TEM (STEM) opened up 0.05 nm, and recent electron ptychography reports the 0.02 nm range.
+The first electron microscope was a two-stage instrument built by Knoll and Ruska in 1931; Ruska's 1933 TEM was the first to surpass the optical microscope (its resolution is often quoted at around 50 nm). The 1970s brought 0.3 nm. High-resolution TEM (HRTEM) sat near 0.2 nm for years before aberration correctors became commercial. Aberration-corrected scanning TEM (STEM) opened up 0.05 nm, and recent electron ptychography reports the 0.02 nm range.
 
 Not one bar reaches down to the dashed line at 2.5 pm. Measured against uncorrected HRTEM, the ratio of resolution to wavelength is about eighty. An optical microscope operates at roughly 0.4 times its wavelength; the electron microscope, by comparison, barely exploits its own.
 
@@ -112,32 +112,36 @@ $$ \beta = \frac{I}{A\,\Omega} $$
 Current per unit area per unit solid angle. Brightness is conserved as lenses demagnify the beam and apertures trim it, so how much current can finally be packed into a small probe is decided at the source.
 
 <img src="/assets/img/posts/electron-microscopy-why-electrons/en/fig3-electron-guns.png" alt="Brightness, energy spread and source size for tungsten and LaB6 thermionic guns and Schottky and cold field emission guns" width="800">
-_Fig 3. Brightness, energy spread and source size of four electron guns_
+_Fig 3. Brightness, energy spread and source size of four electron guns (at 100 kV)_
 
 Electrons are extracted in two broad ways. Thermionic emission heats a metal until thermal energy carries electrons over the work function; field emission applies a strong field that thins the barrier until they tunnel through.
 
-The left panel of Figure 3 puts a tungsten thermionic gun near $10^5$ A/cm²·sr against $10^9$ for a cold field emission gun (CFEG) — four orders of magnitude. The energy spread $\Delta E$ in the middle panel follows the same trend, 2.3 eV for tungsten against 0.3 eV for cold field emission. Since energy spread feeds directly into chromatic aberration, that difference reaches resolution as well. Source size on the right shrinks from 50 µm to 5 nm, another four orders.
+The left panel of Figure 3 puts a tungsten thermionic gun near $10^6$ A/cm²·sr against $10^9$ for a cold field emission gun (CFEG), both at 100 kV — three orders of magnitude. The energy spread $\Delta E$ in the middle panel follows the same trend, 3 eV for tungsten against 0.3 eV for cold field emission. Since energy spread feeds directly into chromatic aberration, that difference reaches resolution as well. Source size on the right shrinks from 50 µm to 5 nm, four orders of magnitude.
 
 Cold field emission for everything, then? There is a price. A thermionic gun operates around $10^{-3}$ Pa, whereas a field emission gun demands ultra-high vacuum near $10^{-8}$ Pa. A single adsorbed monolayer on the emitter tip alters the work function and makes the current drift. This is why a CFEG must periodically heat its tip to drive the adsorbed layer off.
 
 It is also worth separating brightness from sheer output. Brightness is current per unit area per unit solid angle, so a cold field emitter — whose emitting area is extremely small — ranks highest in brightness while falling short of a thermionic gun in total current. That is why Schottky field emission is preferred for analytical work, where a wide field must be scanned quickly or enough X-rays generated. The choice trades brightness against total current, stability and cost.
 
-## 7. An electron travels centimetres in air
+## 7. An electron beam does not survive a millimetre of air
 
 Since vacuum has come up, it deserves its own note. Electron microscopes are vacuum instruments for more than the sake of gun lifetime.
 
-Being charged, electrons scatter readily off gas molecules. The mean free path, the average distance travelled between collisions, is
+Being charged, electrons scatter readily off gas molecules. The mean free path of a gas, the average distance a molecule travels between collisions with other molecules, is
 
 $$ \ell = \frac{k_B T}{\sqrt{2}\,\pi d_m^2 P} $$
 
-with $d_m$ the molecular collision diameter and $P$ the pressure. The inverse dependence on pressure is the point.
+with $d_m$ the molecular collision diameter and $P$ the pressure. A fast electron is effectively pointlike and far faster than the molecules, so the geometric cross-section $\pi d_m^2$ gives way to an energy-dependent electron–gas scattering cross-section $\sigma_T$ (elastic plus inelastic):
+
+$$ \ell_e = \frac{k_B T}{\sigma_T P} $$
+
+Either way, the inverse dependence on pressure is the point.
 
 <img src="/assets/img/posts/electron-microscopy-why-electrons/en/fig4-mean-free-path.png" alt="Mean free path against pressure, compared with the length of an electron microscope column" width="750">
-_Fig 4. Electron mean free path against vacuum level_
+_Fig 4. Mean free path of gas molecules and of 200 keV electrons against vacuum level_
 
-At atmospheric pressure the mean free path is 66 nm. An electron microscope column runs a little over a metre, so in air an electron would scatter more than ten million times before reaching the specimen. There would be no image, and no beam to speak of.
+At atmospheric pressure the mean free path of air molecules is 66 nm. A 200 keV electron sees a cross-section about a thousand times smaller, so its own mean free path is around 0.1 mm; over a column a little over a metre long it would still scatter some ten thousand times before reaching the specimen. There would be no image, and no beam to speak of.
 
-The red line in Figure 4 marks a column length of 1 m. Crossing it requires $6.7 \times 10^{-3}$ Pa, roughly the $10^{-2}$ Pa level. That real instruments go far beyond this, down to $10^{-4}$ Pa and below, has less to do with letting electrons through than with specimen contamination and gun lifetime. Residual hydrocarbon molecules cracked by the beam deposit as a carbon film on the specimen surface, darkening it as the observation proceeds. Much of the electron microscope's reputation as a demanding instrument traces back to these vacuum requirements.
+The red line in Figure 4 marks a column length of 1 m. The electron mean free path crosses it from roughly 10 Pa, and about 0.1 Pa is enough for scattering to be negligible. That real instruments go far beyond this, down to $10^{-4}$ Pa and below, has less to do with letting electrons through than with specimen contamination and gun lifetime. Residual hydrocarbon molecules cracked by the beam deposit as a carbon film on the specimen surface, darkening it as the observation proceeds. Much of the electron microscope's reputation as a demanding instrument traces back to these vacuum requirements.
 
 ## Summary and what comes next
 
@@ -149,10 +153,10 @@ Post 2 enters the electron optics behind this gap. It covers how a lens that foc
 
 ## References
 
-- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 1–6 (electron wavelength, sources, vacuum).
-- J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer, 2018, ch. 2 (electron guns and brightness).
+- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 1, 5, 6, 8 (electron wavelength, sources, lenses and resolution, vacuum).
+- J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer, 2018, ch. 5 (electron guns and brightness).
 - O. Scherzer, "Über einige Fehler von Elektronenlinsen," *Zeitschrift für Physik*, vol. 101, pp. 593–603, 1936 (spherical aberration of rotationally symmetric electron lenses).
 - P. E. Batson, N. Dellby, and O. L. Krivanek, "Sub-ångstrom resolution using aberration corrected electron optics," *Nature*, vol. 418, pp. 617–620, 2002.
-- [Aberration correction for TEM, *Materials Today*](https://www.sciencedirect.com/science/article/pii/S1369702104005711) (resolution before and after correction).
+- C. Hetherington, "[Aberration correction for TEM](https://www.sciencedirect.com/science/article/pii/S1369702104005711)," *Materials Today*, vol. 7, no. 12, pp. 50–55, 2004 (resolution before and after correction).
 - [FE electron gun, JEOL glossary](https://www.jeol.com/words/semterms/20121024.062458.php) (brightness and energy spread of field emission guns).
 - [Scanning Electron Microscopy, Thermo Fisher Scientific](https://www.thermofisher.com/us/en/home/materials-science/learning-center/applications/scanning-electron-microscope-sem-electron-column.html) (electron column overview).

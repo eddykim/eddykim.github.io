@@ -25,7 +25,7 @@ $$ d = \frac{\lambda}{2\,\mathrm{NA}} $$
 
 여기서 $\lambda$는 파장, $\mathrm{NA} = n\sin\alpha$는 개구수(numerical aperture)로 렌즈가 시편에서 나온 빛을 얼마나 넓은 각도까지 받아들이는지를 나타낸다. 가시광 한복판인 $\lambda = 550$ nm에 유침 대물렌즈의 $\mathrm{NA} = 1.4$를 넣으면 $d \approx 196$ nm가 나온다.
 
-이 식이 말하는 바는 단순하다. 분해능을 좋게 하려면 파장을 줄이거나 개구수를 키워야 한다. 그런데 개구수는 $n\sin\alpha$이므로 아무리 굴절률이 높은 침지액을 써도 1.5 근처가 한계다. 남는 길은 파장뿐이고, 가시광을 쓰는 한 그 길도 막혀 있다.
+이 식이 말하는 바는 단순하다. 분해능을 좋게 하려면 파장을 줄이거나 개구수를 키워야 한다. 그런데 개구수는 $n\sin\alpha$이므로 보통의 유침 대물렌즈는 1.4~1.5에서 멈추고, 고굴절 침지액과 커버글라스를 함께 쓰는 특수 대물렌즈도 1.7 정도가 한계다. 남는 길은 파장뿐이고, 가시광을 쓰는 한 그 길도 막혀 있다.
 
 ## 2. 전자를 파동으로 다루기
 
@@ -64,7 +64,7 @@ def wavelength(volts, relativistic=True):
 <img src="/assets/img/posts/electron-microscopy-why-electrons/fig1-wavelength-vs-voltage.png" alt="가속전압에 따른 전자의 드브로이 파장과 비상대론 근사의 오차" width="750">
 _그림1. 가속전압에 따른 드브로이 파장(왼쪽)과 비상대론 근사가 파장을 과대평가하는 정도(오른쪽)_
 
-왼쪽 그래프에서 두 곡선은 30 kV 아래에서는 거의 겹치다가 위로 갈수록 벌어진다. 오른쪽이 그 차이를 백분율로 나타낸 것인데, 30 kV에서 1.5 %에 불과하던 오차가 200 kV에서 9.3 %, 300 kV에서 13.7 %까지 커진다. 주사전자현미경(scanning electron microscope, SEM)이 주로 쓰는 1~30 kV 영역이라면 비상대론 식으로도 큰 문제가 없지만, TEM 영역에서는 보정을 빼면 파장을 10 % 넘게 틀리게 된다.
+왼쪽 그래프에서 두 곡선은 30 kV 아래에서는 거의 겹치다가 위로 갈수록 벌어진다. 오른쪽이 그 차이를 백분율로 나타낸 것인데, 30 kV에서 1.5 %에 불과하던 오차가 200 kV에서 9.3 %, 300 kV에서 13.7 %까지 커진다. 주사전자현미경(scanning electron microscope, SEM)이 주로 쓰는 1~30 kV 영역이라면 비상대론 식으로도 큰 문제가 없지만, TEM 영역(100~300 kV)에서는 보정을 빼면 파장을 5~14 % 틀리게 된다.
 
 정리하면 TEM의 표준 조건인 200 kV에서 전자의 파장은 2.51 pm다. 원자 사이 거리가 대략 0.2 nm, 즉 200 pm이므로 파장이 원자 간격의 80분의 1에 불과하다.
 
@@ -77,7 +77,7 @@ _그림1. 가속전압에 따른 드브로이 파장(왼쪽)과 비상대론 근
 <img src="/assets/img/posts/electron-microscopy-why-electrons/fig2-resolution-gap.png" alt="전자의 드브로이 파장과 시대별로 실제 달성된 전자현미경 분해능 비교" width="750">
 _그림2. 200 kV 전자의 파장(점선)과 실제로 달성된 분해능_
 
-루스카(Ruska)가 1933년에 만든 첫 TEM은 50 nm 수준이었다. 1970년대에 0.3 nm에 도달했고, 수차보정기가 상용화되기 전의 고분해능 TEM(high-resolution TEM, HRTEM)이 0.2 nm 근처에서 오래 머물렀다. 수차를 보정한 주사투과전자현미경(scanning TEM, STEM)이 0.05 nm 수준을 열었고, 최근의 전자 타이코그래피(electron ptychography)는 0.02 nm대를 보고한다.
+첫 전자현미경은 1931년 크놀(Knoll)과 루스카(Ruska)의 2단 장치였고, 루스카가 1933년에 만든 TEM이 처음으로 광학현미경의 분해능을 넘어섰다(분해능은 흔히 50 nm 수준으로 인용된다). 1970년대에 0.3 nm에 도달했고, 수차보정기가 상용화되기 전의 고분해능 TEM(high-resolution TEM, HRTEM)이 0.2 nm 근처에서 오래 머물렀다. 수차를 보정한 주사투과전자현미경(scanning TEM, STEM)이 0.05 nm 수준을 열었고, 최근의 전자 타이코그래피(electron ptychography)는 0.02 nm대를 보고한다.
 
 점선으로 그은 파장 2.5 pm까지 내려온 막대는 하나도 없다. 수차보정 이전 HRTEM을 기준으로 삼으면 파장과 분해능의 비는 약 80배다. 광학현미경이 파장의 0.4배 수준까지 내려가 있는 것과 비교하면 전자현미경은 자기 파장을 전혀 활용하지 못하고 있는 셈이다.
 
@@ -110,32 +110,36 @@ $$ \beta = \frac{I}{A\,\Omega} $$
 단위 면적, 단위 입체각당 전류를 뜻한다. 렌즈로 빔을 줄이거나 조리개로 잘라내도 밝기는 보존되므로, 최종적으로 작은 점에 얼마나 많은 전류를 넣을 수 있는지는 전자원의 밝기가 결정한다.
 
 <img src="/assets/img/posts/electron-microscopy-why-electrons/fig3-electron-guns.png" alt="텅스텐·LaB6 열전자총과 쇼트키·냉전계방출총의 밝기, 에너지폭, 소스 크기 비교" width="800">
-_그림3. 전자총 4종의 밝기, 에너지폭, 소스 크기_
+_그림3. 전자총 4종의 밝기, 에너지폭, 소스 크기 (100 kV 기준)_
 
 전자를 빼내는 방식은 크게 둘이다. 금속을 가열해 열에너지로 일함수를 넘기는 열전자방출(thermionic emission)과, 강한 전계를 걸어 장벽을 얇게 만들고 터널링시키는 전계방출(field emission)이다.
 
-그림3의 왼쪽을 보면 텅스텐 열전자총이 $10^5$ A/cm²·sr 수준인 데 비해 냉전계방출총(cold field emission gun, CFEG)은 $10^9$까지 올라간다. 네 자릿수 차이다. 가운데 그래프의 에너지폭 $\Delta E$도 마찬가지 경향인데, 텅스텐이 2.3 eV인 반면 냉전계방출은 0.3 eV에 그친다. 에너지폭은 색수차(chromatic aberration)와 직결되므로 이 차이도 분해능에 그대로 반영된다. 오른쪽의 소스 크기는 50 µm에서 5 nm로 네 자릿수 작아진다.
+그림3의 왼쪽을 보면 텅스텐 열전자총이 $10^6$ A/cm²·sr 수준인 데 비해 냉전계방출총(cold field emission gun, CFEG)은 $10^9$까지 올라간다(100 kV 기준). 세 자릿수 차이다. 가운데 그래프의 에너지폭 $\Delta E$도 마찬가지 경향인데, 텅스텐이 3 eV인 반면 냉전계방출은 0.3 eV에 그친다. 에너지폭은 색수차(chromatic aberration)와 직결되므로 이 차이도 분해능에 그대로 반영된다. 오른쪽의 소스 크기는 50 µm에서 5 nm로 네 자릿수 작아진다.
 
 그러면 모두 냉전계방출을 쓰면 될 것 같지만, 대가가 있다. 열전자총이 $10^{-3}$ Pa 정도에서 동작하는 데 비해 전계방출총은 $10^{-8}$ Pa급 초고진공을 요구한다. 방출 팁 표면에 기체 분자가 한 층만 붙어도 일함수가 바뀌어 전류가 흔들리기 때문이다. 냉전계방출총이 주기적으로 팁을 가열해 흡착층을 털어내는 이유가 여기에 있다.
 
 밝기가 높다는 것이 전자를 많이 내놓는다는 뜻이 아니라는 점도 짚어둘 만하다. 밝기는 단위 면적·단위 입체각당 전류이므로, 방출 면적이 극히 좁은 냉전계방출총은 밝기가 가장 높으면서도 총 전류로는 열전자총에 미치지 못한다. 넓은 시야를 빠르게 훑거나 X선을 충분히 발생시켜야 하는 분석 용도에서 쇼트키 전계방출총이 선호되는 이유가 이것이다. 밝기와 총 전류, 안정성, 장비 가격 사이의 선택인 셈이다.
 
-## 7. 전자는 공기 중에서 몇 cm도 못 간다
+## 7. 전자빔은 공기 속에서 1 mm도 버티지 못한다
 
 진공 이야기가 나왔으니 짚고 넘어가자. 전자현미경이 진공 장비인 이유는 전자총 수명 때문만이 아니다.
 
-전자는 하전 입자라 기체 분자와 쉽게 산란한다. 산란 없이 평균적으로 얼마나 갈 수 있는지를 나타내는 평균자유행로(mean free path)는 다음과 같다.
+전자는 하전 입자라 기체 분자와 쉽게 산란한다. 기체 분자끼리 부딪히기까지 평균적으로 가는 거리, 즉 기체의 평균자유행로(mean free path)는 다음과 같다.
 
 $$ \ell = \frac{k_B T}{\sqrt{2}\,\pi d_m^2 P} $$
 
-$d_m$은 분자의 충돌 지름, $P$는 압력이다. 압력에 반비례한다는 점이 핵심이다.
+$d_m$은 분자의 충돌 지름, $P$는 압력이다. 빠른 전자는 분자에 비해 크기가 없다시피 하고 훨씬 빠르므로, 분자의 기하 단면적 $\pi d_m^2$ 대신 에너지에 따라 달라지는 전자–기체 산란 단면적 $\sigma_T$(탄성+비탄성)를 쓴다.
+
+$$ \ell_e = \frac{k_B T}{\sigma_T P} $$
+
+어느 쪽이든 압력에 반비례한다는 점이 핵심이다.
 
 <img src="/assets/img/posts/electron-microscopy-why-electrons/fig4-mean-free-path.png" alt="압력에 따른 평균자유행로와 전자현미경 경통 길이의 비교" width="750">
-_그림4. 진공도에 따른 전자의 평균자유행로_
+_그림4. 진공도에 따른 기체 분자와 200 keV 전자의 평균자유행로_
 
-대기압에서 평균자유행로는 66 nm다. 전자현미경 경통(column)이 1 m 남짓이므로, 대기 중이라면 전자는 시편에 닿기 전에 천만 번 넘게 산란한다. 상을 만드는 것은 고사하고 빔이라는 것 자체가 성립하지 않는다.
+대기압에서 공기 분자의 평균자유행로는 66 nm다. 200 keV 전자의 산란 단면적은 분자의 기하 단면적보다 천 배가량 작아 전자의 평균자유행로는 0.1 mm 안팎이지만, 전자현미경 경통(column)이 1 m 남짓이므로 대기 중이라면 전자는 시편에 닿기 전에 만 번 안팎 산란한다. 상을 만드는 것은 고사하고 빔이라는 것 자체가 성립하지 않는다.
 
-그림4의 붉은 선이 경통 길이 1 m다. 이 선을 넘으려면 $6.7 \times 10^{-3}$ Pa, 대략 $10^{-2}$ Pa 수준의 진공이 필요하다. 실제 장비가 그보다 훨씬 좋은 $10^{-4}$ Pa 이하까지 내려가는 것은 전자를 통과시키기 위해서라기보다 시편 오염과 전자총 수명 때문이다. 경통 안에 남은 탄화수소 분자가 전자빔에 분해되어 시편 표면에 탄소막으로 쌓이면, 관찰하는 동안 시편이 점점 검어진다. 전자현미경이 다루기 까다로운 장비로 여겨지는 이유의 상당 부분이 이 진공 요구 조건에서 온다.
+그림4의 붉은 선이 경통 길이 1 m다. 전자의 평균자유행로가 이 선을 넘는 것은 대략 10 Pa부터이고, 산란을 무시해도 되려면 0.1 Pa 정도면 충분하다. 실제 장비가 그보다 훨씬 좋은 $10^{-4}$ Pa 이하까지 내려가는 것은 전자를 통과시키기 위해서라기보다 시편 오염과 전자총 수명 때문이다. 경통 안에 남은 탄화수소 분자가 전자빔에 분해되어 시편 표면에 탄소막으로 쌓이면, 관찰하는 동안 시편이 점점 검어진다. 전자현미경이 다루기 까다로운 장비로 여겨지는 이유의 상당 부분이 이 진공 요구 조건에서 온다.
 
 ## 정리 및 다음 편 예고
 
@@ -147,10 +151,10 @@ _그림4. 진공도에 따른 전자의 평균자유행로_
 
 ## 참고자료
 
-- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 1–6 (전자의 파장, 전자원, 진공).
-- J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer, 2018, ch. 2 (전자총과 밝기).
+- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 1, 5, 6, 8 (전자의 파장, 전자원, 렌즈와 분해능, 진공).
+- J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer, 2018, ch. 5 (전자총과 밝기).
 - O. Scherzer, "Über einige Fehler von Elektronenlinsen," *Zeitschrift für Physik*, vol. 101, pp. 593–603, 1936 (회전 대칭 전자렌즈의 구면수차 정리).
 - P. E. Batson, N. Dellby, and O. L. Krivanek, "Sub-ångstrom resolution using aberration corrected electron optics," *Nature*, vol. 418, pp. 617–620, 2002.
-- [Aberration correction for TEM, *Materials Today*](https://www.sciencedirect.com/science/article/pii/S1369702104005711) (수차보정 전후 분해능 변화 정리).
+- C. Hetherington, "[Aberration correction for TEM](https://www.sciencedirect.com/science/article/pii/S1369702104005711)," *Materials Today*, vol. 7, no. 12, pp. 50–55, 2004 (수차보정 전후 분해능 변화 정리).
 - [FE electron gun, JEOL 용어집](https://www.jeol.com/words/semterms/20121024.062458.php) (전계방출총의 밝기와 에너지폭 수치).
 - [Scanning Electron Microscopy, Thermo Fisher Scientific](https://www.thermofisher.com/us/en/home/materials-science/learning-center/applications/scanning-electron-microscope-sem-electron-column.html) (전자 칼럼 구성 개요).

@@ -48,18 +48,35 @@ def wavelength(volts, relativistic=True):
 
 
 def mean_free_path(pressure_pa, temperature=293.0, diameter=3.7e-10):
-    """분자 지름 d 인 기체의 평균자유행로 [m]. 공기 기준 d ~ 0.37 nm."""
+    """분자 지름 d 인 기체 분자끼리의 평균자유행로 [m]. 공기 기준 d ~ 0.37 nm."""
     p = np.asarray(pressure_pa, dtype=float)
     return KB * temperature / (np.sqrt(2.0) * np.pi * diameter**2 * p)
 
 
+# 200 keV 전자가 공기 분자 하나와 산란하는 총단면적(탄성+비탄성) [m^2].
+# Lenz 모형으로 어림한 값이며 모형에 따라 4배쯤 오르내린다.
+# 분자의 기하 단면적 pi d^2 (~4.3e-19 m^2)보다 천 배가량 작다.
+SIGMA_E_200KEV = 4e-22
+
+
+def electron_mean_free_path(pressure_pa, temperature=293.0, sigma=SIGMA_E_200KEV):
+    """기체 속 빠른 전자의 평균자유행로 [m]: l_e = k_B T / (sigma_T P).
+
+    전자는 분자보다 훨씬 빨라 분자를 멈춰 있는 표적으로 보므로 sqrt(2) 가 붙지 않는다.
+    """
+    p = np.asarray(pressure_pa, dtype=float)
+    return KB * temperature / (sigma * p)
+
+
 # ── 전자총 4종의 대표값 ────────────────────────────────────
-# 제조사 사양과 교과서 값의 범위를 대표하는 자릿수 수준의 값이다.
+# 밝기와 에너지폭은 100 kV 기준 Williams & Carter 2판 Table 5.1 의 값이다.
+# 밝기는 가속전압에 비례하므로 같은 전압끼리 비교해야 한다.
+# 소스 크기와 요구 진공은 제조사 사양과 교과서 값을 대표하는 자릿수 수준의 값이다.
 GUNS = [
     # key,        밝기[A/cm^2·sr], 에너지폭[eV], 소스크기[m], 동작온도[K], 요구진공[Pa]
-    ("w",         1e5,  2.3, 50e-6, 2800, 1e-3),
-    ("lab6",      1e6,  1.5, 10e-6, 1900, 1e-4),
-    ("schottky",  1e8,  0.7, 20e-9, 1800, 1e-7),
+    ("w",         1e6,  3.0, 50e-6, 2800, 1e-3),
+    ("lab6",      5e7,  1.5, 10e-6, 1900, 1e-4),
+    ("schottky",  5e8,  0.7, 20e-9, 1800, 1e-7),
     ("cfe",       1e9,  0.3,  5e-9,  300, 1e-8),
 ]
 
@@ -90,7 +107,7 @@ LABELS = {
         "f2y": "분해능 (nm, 로그 눈금)",
         "wavelength": "200 kV 전자의 드브로이 파장 (2.5 pm)",
         "optical": "광학현미경\n(가시광 한계)",
-        "ruska": "최초의 TEM\n(1933)",
+        "ruska": "광학 한계를 넘은\n첫 TEM (1933)",
         "tem1970": "1970년대 TEM",
         "hrtem": "수차보정 이전\nHRTEM",
         "corrected": "수차보정 STEM",
@@ -104,7 +121,8 @@ LABELS = {
         "w": "텅스텐\n열전자", "lab6": "LaB$_6$\n열전자",
         "schottky": "쇼트키\n전계방출", "cfe": "냉전계방출",
         # 그림4
-        "fig4": "진공도에 따른 전자의 평균자유행로",
+        "fig4": "진공도에 따른 기체 분자와 200 keV 전자의 평균자유행로",
+        "f4gas": "기체 분자 (공기)", "f4e": "200 keV 전자",
         "f4x": "압력 (Pa)", "f4y": "평균자유행로 (m)",
         "f4col": "경통 길이 ~1 m",
         "f4atm": "대기압", "f4hv": "고진공\n(열전자총)", "f4uhv": "초고진공\n(전계방출총)",
@@ -121,7 +139,7 @@ LABELS = {
         "f2y": "Resolution (nm, log scale)",
         "wavelength": "De Broglie wavelength, 200 kV electron (2.5 pm)",
         "optical": "Optical microscope\n(visible light)",
-        "ruska": "First TEM\n(1933)",
+        "ruska": "First TEM past\nthe optical\nlimit (1933)",
         "tem1970": "TEM, 1970s",
         "hrtem": "HRTEM,\nuncorrected",
         "corrected": "Aberration-\ncorrected STEM",
@@ -133,7 +151,8 @@ LABELS = {
         "f3c": "Source size", "f3cy": "Source diameter (m)",
         "w": "Tungsten\nthermionic", "lab6": "LaB$_6$\nthermionic",
         "schottky": "Schottky\nfield emission", "cfe": "Cold field\nemission",
-        "fig4": "Electron mean free path vs. vacuum level",
+        "fig4": "Mean free path of gas molecules and 200 keV electrons vs. vacuum level",
+        "f4gas": "Gas molecules (air)", "f4e": "200 keV electrons",
         "f4x": "Pressure (Pa)", "f4y": "Mean free path (m)",
         "f4col": "Column length ~1 m",
         "f4atm": "Atmosphere", "f4hv": "High vacuum\n(thermionic gun)",
@@ -265,9 +284,11 @@ def fig3_guns(L):
 def fig4_mean_free_path(L):
     p = np.logspace(5, -8, 400)
     mfp = mean_free_path(p)
+    mfp_e = electron_mean_free_path(p)
 
     fig, ax = plt.subplots(figsize=(9.5, 4.4))
-    ax.loglog(p, mfp, color=BLUE, lw=2.2, zorder=3)
+    ax.loglog(p, mfp_e, color=BLUE, lw=2.2, zorder=3, label=L["f4e"])
+    ax.loglog(p, mfp, color=GRAY, lw=1.6, ls="--", zorder=3, label=L["f4gas"])
     ax.set_xlabel(L["f4x"], **L["font"])
     ax.set_ylabel(L["f4y"], **L["font"])
     ax.invert_xaxis()
@@ -276,19 +297,21 @@ def fig4_mean_free_path(L):
     ax.axhline(1.0, color=ACCENT, ls="--", lw=1.4)
     ax.text(3e4, 1.5, L["f4col"], color=ACCENT, fontsize=9.5, **L["font"])
 
-    # 점마다 라벨이 축 밖으로 나가지 않도록 위치를 따로 준다.
+    # 점은 전자 곡선 위에 찍는다. 라벨이 축 밖으로 나가지 않도록 위치를 따로 준다.
     markers = [
         (1e5,  "f4atm", (12, 16),   "left"),
         (1e-4, "f4hv",  (-14, 12),  "right"),
         (1e-8, "f4uhv", (-16, 14),  "right"),
     ]
     for pressure, key, offset, ha in markers:
-        m = mean_free_path(pressure)
+        m = electron_mean_free_path(pressure)
         ax.plot([pressure], [m], "o", color="#2c3e50", ms=6, zorder=5)
         ax.annotate(L[key], xy=(pressure, m), xytext=offset,
                     textcoords="offset points", ha=ha, fontsize=9,
                     color="#2c3e50", **L["font"])
-    ax.set_ylim(top=mean_free_path(1e-8) * 60)
+    ax.set_ylim(top=electron_mean_free_path(1e-8) * 3000)
+    ax.set_yticks(10.0 ** np.arange(-6, 13, 2))   # 1 m 선(10^0)에 눈금이 오도록
+    ax.legend(loc="upper left", prop=L["legend"] or None, framealpha=0.95)
 
     ax.set_title(L["fig4"], fontsize=13, **L["font"])
     fig.tight_layout()
@@ -318,8 +341,14 @@ def main():
         lam_nr = wavelength(kv * 1e3, False) * 1e12
         print(f"{kv:3d} kV : lambda = {lam:6.3f} pm "
               f"(비상대론 {lam_nr:6.3f} pm, +{(lam_nr / lam - 1) * 100:4.1f} %)")
-    for pressure in (1e5, 1e-3, 1e-4, 1e-7, 1e-8):
-        print(f"{pressure:8.0e} Pa : mfp = {mean_free_path(pressure):.3e} m")
+    for pressure in (1e5, 1e1, 1e-1, 1e-3, 1e-4, 1e-7, 1e-8):
+        print(f"{pressure:8.0e} Pa : 기체 분자 mfp = {mean_free_path(pressure):.3e} m, "
+              f"200 keV 전자 mfp = {electron_mean_free_path(pressure):.3e} m")
+    l_atm = electron_mean_free_path(1e5)
+    print(f"대기압에서 1 m 동안 전자의 산란 횟수 ~ {1.0 / l_atm:.0f}")
+    print(f"전자 mfp = 1 m 이 되는 압력 = {KB * 293.0 / SIGMA_E_200KEV:.1f} Pa")
+    print(f"분자 기하 단면적 / 전자 산란 단면적 = "
+          f"{np.pi * 3.7e-10**2 / SIGMA_E_200KEV:.0f}")
 
 
 if __name__ == "__main__":
