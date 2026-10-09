@@ -187,7 +187,7 @@ class Singlet:
     r2: float = -1000.0
     thickness: float = 100.0
     wavelength_um: float = 0.750
-    n_air: float = 1.0002778
+    n_air: float = 1.0  # 유리는 카탈로그(공기 기준 상대) 굴절률이므로 공기는 1
 
     @property
     def n_glass(self):

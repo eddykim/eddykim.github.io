@@ -187,7 +187,7 @@ from opticore.surface import Surface
 from opticore.system import OpticalSystem
 g = SellmeierMaterial(B=(1.03961212, 0.231792344, 1.01046945),
                       C=(0.00600069867, 0.0200179144, 103.560653))
-a = ConstantMaterial(1.0002778)
+a = ConstantMaterial(1.0)  # 유리는 카탈로그(공기 기준 상대) 굴절률이므로 공기는 1
 s = OpticalSystem(ambient=a)
 s.add(Surface(Sphere(1000.0), g, Refractive(), position=(0, 0, 0)))
 s.add(Surface(Sphere(-1000.0), a, Refractive(), position=(0, 0, 100.0)))
@@ -218,8 +218,9 @@ def verify_singlet():
 
     heights = [1.0, 30.0, 60.0, 90.0, 100.0]
     mine = lens.axis_crossing(heights)
-    # Optiland 오라클 기록값 (repo_opticore/design_docs/PHASE0_OPTILAND_STUDY.md 절 B, Py=h/100)
-    optiland = {30.0: 1059.444, 60.0: 1055.200, 90.0: 1048.055, 100.0: 1045.011}
+    # Optiland 오라클 기록값: PHASE0_OPTILAND_STUDY.md 절 B 와 같은 처방(trace_generic, Py=h/100)을
+    # 공기 IdealMaterial(n=1.0) 으로 다시 돌린 값 (2026-10-10). 절 B 의 원 기록은 공기 1.0002778 처방이다
+    optiland = {30.0: 1058.646, 60.0: 1054.400, 90.0: 1047.254, 100.0: 1044.209}
     ok &= check("↔ Optiland 기록값 [mm] (기록이 소수 셋째 자리)",
                 [mine[heights.index(h)] for h in optiland], list(optiland.values()), 1e-2)
 
