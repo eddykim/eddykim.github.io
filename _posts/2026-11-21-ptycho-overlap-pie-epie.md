@@ -89,7 +89,7 @@ Maiden과 Rodenburg가 2009년에 내놓은 ePIE(extended PIE)는 프로브도 �
 
 $$ O \leftarrow O + \frac{P^*}{\lvert P \rvert_{\max}^2} (\psi' - \psi), \qquad P \leftarrow P + \frac{O^*}{\lvert O \rvert_{\max}^2} (\psi' - \psi) $$
 
-PIE와 비교하면 가중이 더 단순하다. 나눗셈 대신 켤레를 곱하고 최댓값의 제곱으로 나눌 뿐이다. 이 형태에는 깔끔한 해석이 있다. 위치 하나의 오차 $\lVert\, \lvert \mathcal{F}(P\,O) \rvert - \sqrt{I_j} \,\rVert^2$ 를 시편으로 미분한 기울기는 $2P^*(\psi - \psi')$ 이다. ePIE의 시편 갱신은 그 기울기의 반대 방향으로 $1/(2\lvert P \rvert_{\max}^2)$ 만큼 가는 것과 정확히 같다. 유한차분으로 구한 기울기와 대조해 보면 $10^{-9}$ 수준까지 맞고, 갱신량은 $10^{-16}$ 까지 같다. 전체 오차를 한꺼번에 줄이는 [경사하강](/posts/optimization-gradient-descent/)과 달리, 위치를 무작위로 하나씩 골라 그 위치의 오차만 줄여 나간다. 이런 방식을 확률적 경사하강(stochastic gradient descent)이라고 부른다. 7편에서 이 관점으로 다시 돌아온다.
+PIE와 비교하면 가중이 더 단순하다. 나눗셈 대신 켤레를 곱하고 최댓값의 제곱으로 나눌 뿐이다. 이 형태에는 깔끔한 해석이 있다. 위치 하나의 오차 $\lVert\, \lvert \mathcal{F}(P\,O) \rvert - \sqrt{I_j} \,\rVert^2$ 를 시편으로 미분한 기울기는 $2P^*(\psi - \psi')$ 이다. ePIE의 시편 갱신은 그 기울기의 반대 방향으로 $1/(2\lvert P \rvert_{\max}^2)$ 만큼 가는 것과 정확히 같다. 유한차분으로 구한 기울기와 대조해 보면 $10^{-9}$ 수준까지 맞고, 갱신량은 $10^{-16}$ 까지 같다. 전체 오차를 한꺼번에 줄이는 [경사하강](/posts/optimization-gradient-descent/)과 달리, 위치를 무작위로 하나씩 골라 그 위치의 오차만 줄여 나간다. 이런 방식을 확률적 경사하강(stochastic gradient descent)이라고 부른다. 8편에서 이 관점으로 다시 돌아온다.
 
 <img src="/assets/img/posts/ptycho-overlap-pie-epie/fig5-epie-probe.png" alt="초기 원판 프로브, ePIE가 찾은 프로브, 참 프로브의 진폭과 위상" width="700">
 _그림5. ePIE는 크기만 대충 맞는 원판에서 출발해 프로브의 무늬와 위상까지 찾는다_
@@ -127,7 +127,7 @@ ePIE는 선량이 높을 때 PIE보다 오차가 크다. 200회로는 아직 프
 
 ## 다음 편
 
-ePIE에서 프로브까지 미지수가 되면서 모호성이 새로 생겼다. 척도 교환과 위상 기울기는 오차를 잴 때만 맞추면 되는 무해한 것처럼 보이지만, 주사 격자가 너무 규칙적이면 이것들이 결합해 복원에 격자 모양의 무늬를 새긴다. 4편은 이 모호성들이 언제 실제로 말썽이 되는지 보고, ePIE를 개량한 rPIE와 mPIE, 그리고 2편의 차분 사상을 타이코그래피에 쓴 방법(difference map, DM)을 비교한다.
+ePIE에서 프로브까지 미지수가 되면서 모호성이 새로 생겼다. 척도 교환과 위상 기울기는 오차를 잴 때만 맞추면 되는 무해한 것처럼 보이지만, 주사 격자가 너무 규칙적이면 이것들이 결합해 복원에 격자 모양의 무늬를 새긴다. 4편은 이 모호성들이 언제 실제로 말썽이 되는지 보고, ePIE를 개량한 rPIE를 다룬다. 5편은 여기에 모멘텀을 더한 mPIE와, 2편의 차분 사상을 타이코그래피에 쓴 방법(difference map, DM)을 비교한다.
 
 ## 참고자료
 

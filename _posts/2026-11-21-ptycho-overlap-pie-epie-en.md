@@ -91,7 +91,7 @@ The ePIE (extended PIE) of Maiden and Rodenburg (2009) corrects the probe as wel
 
 $$ O \leftarrow O + \frac{P^*}{\lvert P \rvert_{\max}^2} (\psi' - \psi), \qquad P \leftarrow P + \frac{O^*}{\lvert O \rvert_{\max}^2} (\psi' - \psi) $$
 
-The weighting is simpler than PIE's: multiply by the conjugate and divide by the squared maximum, with no division by the probe itself. This form has a clean interpretation. The gradient of the error at one position, $\lVert\, \lvert \mathcal{F}(P\,O) \rvert - \sqrt{I_j} \,\rVert^2$, with respect to the specimen is $2P^*(\psi - \psi')$. The ePIE specimen update is exactly a step of $1/(2\lvert P \rvert_{\max}^2)$ against that gradient. Checked against a finite-difference gradient, the gradient agrees to about $10^{-9}$, and the updates agree to $10^{-16}$. Unlike [gradient descent](/en/posts/optimization-gradient-descent/), which reduces the total error at once, it picks positions one at a time in random order and reduces only that position's error. This is called stochastic gradient descent. Post 7 returns to this view.
+The weighting is simpler than PIE's: multiply by the conjugate and divide by the squared maximum, with no division by the probe itself. This form has a clean interpretation. The gradient of the error at one position, $\lVert\, \lvert \mathcal{F}(P\,O) \rvert - \sqrt{I_j} \,\rVert^2$, with respect to the specimen is $2P^*(\psi - \psi')$. The ePIE specimen update is exactly a step of $1/(2\lvert P \rvert_{\max}^2)$ against that gradient. Checked against a finite-difference gradient, the gradient agrees to about $10^{-9}$, and the updates agree to $10^{-16}$. Unlike [gradient descent](/en/posts/optimization-gradient-descent/), which reduces the total error at once, it picks positions one at a time in random order and reduces only that position's error. This is called stochastic gradient descent. Post 8 returns to this view.
 
 <img src="/assets/img/posts/ptycho-overlap-pie-epie/en/fig5-epie-probe.png" alt="Amplitude and phase of the initial disc probe, the probe found by ePIE, and the true probe" width="700">
 _Fig 5. Starting from a disc of roughly the right size, ePIE recovers the probe's fringes and phase_
@@ -129,7 +129,7 @@ When the probe is unknown, ePIE corrects specimen and probe symmetrically, as st
 
 ## Next
 
-Making the probe unknown in ePIE introduced new ambiguities. Scale exchange and phase ramps look harmless, something to align only when measuring error, but on an overly regular scan grid they combine to imprint a grid pattern on the reconstruction. Post 4 looks at when these ambiguities cause real trouble and compares ePIE's refinements rPIE and mPIE with the difference map (DM), Post 2's algorithm applied to ptychography.
+Making the probe unknown in ePIE introduced new ambiguities. Scale exchange and phase ramps look harmless, something to align only when measuring error, but on an overly regular scan grid they combine to imprint a grid pattern on the reconstruction. Post 4 looks at when these ambiguities cause real trouble and introduces rPIE, a refinement of ePIE. Post 5 then compares mPIE, which adds momentum, with the difference map (DM), Post 2's algorithm applied to ptychography.
 
 ## References
 
