@@ -166,7 +166,7 @@ def _reciprocity_panel(ax, L, reverse):
             ax.plot([x0, x1], [y0, y1], color=ACCENT, lw=1.3, alpha=0.85)
 
     # 진행 방향 화살표 — 두 패널에서 반대로 그린다
-    ay0, ay1 = (Y_TOP - 0.35, Y_TOP - 1.1) if not reverse else (Y_BOT + 1.1, Y_BOT + 0.35)
+    ay0, ay1 = (Y_TOP - 0.35, Y_TOP - 1.1) if not reverse else (Y_BOT + 0.35, Y_BOT + 1.1)
     ax.add_patch(FancyArrowPatch((1.75, ay0), (1.75, ay1), arrowstyle="-|>",
                                  mutation_scale=15, color=DARK, lw=1.8))
 

@@ -23,7 +23,7 @@ This post closes the series. It starts from the principle behind STEM, covers th
 
 Converging a beam and scanning looks like a wholly different instrument from illuminating broadly. Why then do the two produce similar images?
 
-Because of the principle of reciprocity. Electromagnetic propagation carries time-reversal symmetry, so reversing the direction of every ray leaves the same paths valid. Put a detector where the source was and a source where the detector was, and the result is unchanged.
+Because of the principle of reciprocity. For elastic scattering, electron wave propagation carries time-reversal symmetry, so reversing the direction of every ray leaves the same paths valid. Put a detector where the source was and a source where the detector was, and the result is unchanged.
 
 <img src="/assets/img/posts/electron-microscopy-stem-analytical/en/fig1-reciprocity.png" alt="TEM and STEM ray diagrams compared side by side under the principle of reciprocity" width="800">
 _Fig 1. One set of ray paths, read once as TEM and once as STEM_
@@ -38,7 +38,7 @@ If they correspond, why use STEM at all? Two reasons. First, several detectors c
 
 If the signal divides by angle, which angles show what?
 
-The screened Rutherford cross section of post 3 answers. The differential cross section was
+The screened Rutherford model of post 3 answers. Its differential cross section is as follows, and the total cross section of post 3 is this integrated over all directions ($E$ in keV):
 
 $$ \frac{d\sigma}{d\Omega} \;\propto\; \frac{Z^2}{\left(\sin^2(\theta/2) + \alpha_s\right)^2}, \qquad \alpha_s = \frac{3.4\times10^{-3}\,Z^{0.67}}{E} $$
 
@@ -53,9 +53,9 @@ How much it eats depends on the inner angle. An inner angle well above the scree
 <img src="/assets/img/posts/electron-microscopy-stem-analytical/en/fig2-z-exponent.png" alt="Effective atomic number exponent against detector inner angle, and cross section by element" width="820">
 _Fig 2. The screened Rutherford cross section of post 3 integrated over annular detector ranges_
 
-The left panel is that calculation. The effective exponent is 1.60 at an inner angle of 20 mrad, 1.93 at 80 mrad, and 1.97 at 150 mrad. This is the basis for textbooks quoting HAADF contrast as somewhere between $Z^{1.7}$ and $Z^2$, and it follows from post 3's screening constant with no further assumption.
+The left panel is that calculation. The effective exponent is 1.60 at an inner angle of 20 mrad, 1.93 at 80 mrad, and 1.97 at 150 mrad. Screening is one reason textbooks and measurements put the HAADF exponent below two (often 1.6–1.9), and post 3's screening constant alone reproduces the trend. The model covers only elastic scattering by isolated atoms, though; real exponents shift further with thermal diffuse scattering, channelling and the pair of elements compared.
 
-The dotted lines mark the screening angles: 20 mrad for silicon, 36 mrad for gold. The curve shows that the inner angle must exceed these before the exponent approaches two, which is why high-angle annular dark field (HAADF) detectors typically start above 50 mrad.
+The dotted lines mark the screening angles: 20 mrad for silicon, 36 mrad for gold. The curve shows that the inner angle must exceed these before the exponent approaches two. This is one reason high-angle annular dark field (HAADF) detectors typically start above 50 mrad; the primary purpose of so large an inner angle is to exclude Bragg and other coherent scattering so that the image becomes incoherent.
 
 The right panel runs the same calculation element by element. The slope on log-log axes is the exponent, and the two inner angles give visibly different slopes.
 
@@ -90,7 +90,7 @@ Summing the centre gives a bright field image; summing the ring gives an annular
 
 More becomes possible. Measuring how far the centre of mass of the diffraction disc has shifted yields a quantity proportional to the local electric field. Mapping electric or magnetic fields inside a specimen this way is differential phase contrast (DPC).
 
-Ptychography goes furthest. Scanning finely enough that neighbouring diffraction patterns overlap allows the specimen phase to be recovered from that redundancy. Only intensities were measured, yet phase comes back — a direct attack on the problem post 6 described, where phase detaches from intensity.
+Ptychography goes furthest. Scanning finely enough that the areas illuminated at neighbouring probe positions overlap allows the specimen phase to be recovered from that redundancy. Only intensities were measured, yet phase comes back — a direct attack on the problem post 6 described, where phase detaches from intensity.
 
 The recovery is posed as an optimization. The specimen phase and the probe shape become unknowns, iteratively adjusted until the diffraction patterns they predict match those measured. The iterative optimization of the [optimization series](/en/posts/optimization-gradient-descent/) enters here unchanged. The computation is heavy, but resolution beyond the information limit of post 6 repays it. The 0.02 nm figure quoted in post 1 comes from this method.
 
@@ -100,9 +100,9 @@ Every TEM technique assumes one thing: a sufficiently thin specimen. The diffrac
 
 Real samples, however, are wafers and devices. A chosen location must be thinned to that dimension.
 
-A focused ion beam (FIB) does this. Accelerated gallium ions mill away the surroundings, leaving a thin slab that is then detached and mounted on a grid. This lift-out procedure produces a 10–20 nm foil from the region of interest. Sectioning one specific transistor became possible because of it.
+A focused ion beam (FIB) does this. Accelerated gallium ions mill away the surroundings, leaving a thin slab that is then detached and mounted on a grid. This lift-out procedure produces a foil under 100 nm thick — a few tens of nanometres for high-resolution work — from the region of interest. Sectioning one specific transistor became possible because of it.
 
-There is a price. Gallium ions batter the foil surfaces, destroying crystallinity and leaving an amorphous layer, and gallium itself implants into the specimen. Milling at 30 kV leaves damage layers more than 20 nm thick on each face — nearly half the material if the foil is 50 nm. Final polishing at 2–5 kV therefore reduces the damage to a few nanometres.
+There is a price. Gallium ions batter the foil surfaces, destroying crystallinity and leaving an amorphous layer, and gallium itself implants into the specimen. Milling at 30 kV alone leaves an amorphous layer of some 20 nm on each face — most of the material, counting both faces, if the foil is 50 nm. Final polishing at 2–5 kV therefore reduces the damage to a few nanometres.
 
 This is the most common trap in electron microscopy. Whether an amorphous layer in the image was in the specimen or created by the FIB, and whether a defect belongs to the device or to the preparation, has to be settled. Reading an image means first knowing how the specimen was made.
 
@@ -112,7 +112,7 @@ Let the series close on the metrology side. Where does electron microscopy sit i
 
 Linewidth measurement uses CD-SEM, a dedicated instrument that exploits the edge effect in secondary electron images from post 4 to measure pattern width and line width roughness. It is non-destructive and takes whole wafers, so it runs in production lines. As post 4 noted, though, the signal peaks at edges, leaving the placement of the boundary to an algorithm — and differing definitions across instruments give differing numbers.
 
-Cross-sectional structure calls for TEM. Gate stack layer thicknesses, interface roughness and dopant distribution can only be seen by making a foil. Being destructive and slow per image, it serves process development and failure analysis rather than production metrology.
+Cross-sectional structure calls for TEM. Gate stack layer thicknesses and interface roughness can only be seen by making a foil (dopant profiles are left to SIMS and scanning-probe methods). Being destructive and slow per image, it serves mainly process development, failure analysis and the reference metrology that calibrates inline tools.
 
 Recently the push has been toward the quantitative. Work has appeared measuring in three dimensions how far the nanosheets of a gate-all-around transistor are strained, using electron ptychography. That is past viewing structure and into reading strain as a number at atomic scale.
 
@@ -126,7 +126,7 @@ One question ran through the series, posed in post 1: a 200 kV electron has a wa
 
 Post 2 answered. Scherzer's theorem denies a rotationally symmetric electron lens any escape from spherical aberration, pinning the aperture angle near 6.5 mrad and trapping resolution at a value proportional to $C_s^{1/4}\lambda^{3/4}$. Aberration correctors circumvented the prohibition, but the fourth-root exponent returned a factor of five for a factor of five hundred in effort.
 
-From post 3 the story moved inside the specimen. That the elastic cross section scales as $Z^2/E^2$ determined most properties of the interaction volume, and that escape depths differ by three orders of magnitude between signals separated the contrast mechanisms of the SEM in post 4. Posts 5 and 6 thinned the specimen to transmit electrons: selecting a diffracted beam gave diffraction contrast, letting it interfere gave phase contrast. And in phase contrast, a bright spot was not guaranteed to be an atom.
+From post 3 the story moved inside the specimen. The cross section for large-angle scattering scales as $Z^2/E^2$, but because of screening the total cross section scales roughly as $Z^{4/3}/E$. This determined most properties of the interaction volume, and that escape depths differ by three orders of magnitude between signals separated the contrast mechanisms of the SEM in post 4. Posts 5 and 6 thinned the specimen to transmit electrons: selecting a diffracted beam gave diffraction contrast, letting it interfere gave phase contrast. And in phase contrast, a bright spot was not guaranteed to be an atom.
 
 This post resolved that. Counting scattered electrons by angle instead of letting them interfere removes the sign. The detector inner angle that sets the angular range decided whether the atomic number dependence lands nearer $Z^{1.6}$ or $Z^{2}$, and that calculation followed directly from post 3's screening constant.
 
@@ -134,8 +134,8 @@ One structure recurred across all seven posts. What becomes visible is decided n
 
 ## References
 
-- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 22 (reciprocity), ch. 32–37 (STEM, EDS, EELS).
-- S. J. Pennycook and P. D. Nellist (eds.), *Scanning Transmission Electron Microscopy*, Springer, 2011 (HAADF Z-contrast and thermal diffuse scattering).
+- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, §6.2.A (reciprocity), §9.4 (STEM detectors), ch. 22 (amplitude contrast), ch. 32–36 (XEDS), ch. 37–40 (EELS).
+- S. J. Pennycook and P. D. Nellist (eds.), *Scanning Transmission Electron Microscopy: Imaging and Analysis*, Springer, 2011 (HAADF Z-contrast and thermal diffuse scattering).
 - R. F. Egerton, *Electron Energy-Loss Spectroscopy in the Electron Microscope*, 3rd ed., Springer, 2011 (standard treatment of EELS).
 - [Four-Dimensional Scanning Transmission Electron Microscopy (4D-STEM), *Microscopy and Microanalysis*](https://academic.oup.com/mam/article/25/3/563/6887544) (overview of 4D-STEM).
 - [3D Atomic-Scale Metrology of Strain Relaxation and Roughness in Gate-All-Around Transistors via Electron Ptychography, arXiv](https://arxiv.org/pdf/2507.07265) (strain metrology on GAA transistors).
