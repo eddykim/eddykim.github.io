@@ -78,7 +78,7 @@
 | 2026-11-21 | 토 | ptycho-overlap-pie-epie | 계산 이미징과 타이코그래피 3편 | 한·영 | 푸시됨 |
 | 2026-11-23 | 월 | geometric-optics-aberrations | 기하광학 배경이론 4편 | 한·영 | 푸시됨 |
 | 2026-11-25 | 수 | wave-optics-interference | 파동광학 배경이론 1편 | 한·영 | 푸시됨 |
-| 2026-11-27 | 금 | ptycho-probe-ambiguity-raster-rpie | 계산 이미징과 타이코그래피 4편 | 한·영 | 미커밋 |
+| 2026-11-27 | 금 | ptycho-probe-ambiguity-raster-rpie | 계산 이미징과 타이코그래피 4편 | 한·영 | 푸시됨 |
 | 2026-11-29 | 일 | | | | |
 | 2026-12-01 | 화 | | | | |
 | 2026-12-03 | 목 | | | | |
