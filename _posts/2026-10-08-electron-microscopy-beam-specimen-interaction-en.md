@@ -21,7 +21,7 @@ Yet scanning electron micrographs do resolve structures at the nanometre scale. 
 
 A specimen contains nuclei and orbital electrons. The incident electron interacts with both, but the outcomes differ.
 
-Collisions with a nucleus are elastic. A nucleus outweighs an electron by thousands, so the electron loses almost no energy and simply changes direction, much as a billiard ball rebounds off a cushion. This scattering spreads electrons sideways and, applied often enough, turns them around entirely.
+Collisions with a nucleus are elastic. A nucleus outweighs an electron by tens to hundreds of thousands of times (about 50,000 for silicon), so the electron loses almost no energy and simply changes direction, much as a billiard ball rebounds off a cushion. This scattering spreads electrons sideways and, applied often enough, turns them around entirely.
 
 Collisions with orbital electrons are inelastic. The masses match, so energy transfers readily while the direction barely changes. The transferred energy generates secondary electrons inside the specimen, and knocking out an inner-shell electron produces a characteristic X-ray as the vacancy fills.
 
@@ -35,7 +35,7 @@ $$ \sigma \;\propto\; \frac{Z^2}{E^2} \cdot \frac{1}{\alpha_s(1+\alpha_s)}, \qqu
 
 $Z$ is the atomic number and $E$ the electron energy in keV. The screening parameter $\alpha_s$ measures how far orbital electrons shield the nuclear charge. Nearly every conclusion in this post sits in the first two factors.
 
-The $Z^2$ in the numerator says heavier elements deflect far more often and far more sharply. Tungsten ($Z=74$) exceeds silicon ($Z=14$) by a factor of 28 in $Z^2$. The $E^2$ in the denominator says slower electrons deflect more readily, so lowering the accelerating voltage costs an electron its direction before it penetrates far.
+The $Z^2$ in the numerator says heavier elements deflect far more sharply. The cross section for large-angle scattering scales as $Z^2/E^2$, but because of screening the total cross section scales roughly as $Z^{4/3}/E$. For large-angle deflection alone, tungsten ($Z=74$) exceeds silicon ($Z=14$) by a factor of 28 in $Z^2$ (27.7 counting only deflections beyond 90°). But $\alpha_s$ itself carries $Z^{0.67}/E$, so in this energy range, where $\alpha_s \ll 1$, part of the leading factor cancels; per atom, tungsten scatters about ten times as often as silicon. The $E^2$ in the denominator says slower electrons deflect more readily, so lowering the accelerating voltage costs an electron its direction before it penetrates far.
 
 The cross section gives a mean free path. With $N$ atoms per unit volume,
 
@@ -73,7 +73,7 @@ The four panels display the two factors from section 2 directly.
 
 Raising the accelerating voltage from 5 kV to 30 kV (left to right) inflates the whole volume. In silicon the penetration depth grows from 0.47 µm to 9.31 µm, a factor of 20. Higher energy means a smaller cross section, less deflection, and more energy to spend before stopping.
 
-Raising the atomic number (top to bottom) shrinks the volume and reshapes it. At 30 kV silicon reaches 9.31 µm against 1.68 µm for tungsten, a fifth as far. The shape matters more. Silicon's volume is a teardrop that swells sideways below the surface, while tungsten's is closer to a hemisphere pressed against it. In silicon an electron travels some distance before losing its direction; in tungsten it deflects sharply on entry. That is the $Z^2$ at work.
+Raising the atomic number (top to bottom) shrinks the volume and reshapes it. At 30 kV silicon reaches 9.31 µm against 1.68 µm for tungsten, a fifth as far. Most of that difference, though, comes from density (2.33 against 19.25 g/cm³, a factor of 8.3). Density enters the mean free path and the stopping power alike and so shrinks every length as $1/\rho$; give tungsten silicon's density and its maximum depth is only 16 % shallower than silicon's. What atomic number itself changes is the shape more than the size. Silicon's volume is a teardrop that swells sideways below the surface, while tungsten's is closer to a hemisphere pressed against it. In silicon an electron travels some distance before losing its direction; in tungsten it deflects sharply on entry. That is the $Z^2$ at work.
 
 The dashed semicircle marks the Kanaya-Okayama penetration depth.
 
@@ -100,7 +100,7 @@ The orange band marks the escape depth of secondary electrons. Their energy is v
 
 One more signal is missing from Figure 2: the Auger electron. When an incident electron ejects an inner-shell electron, an outer-shell electron drops in to fill the vacancy, and the leftover energy sometimes kicks out another orbital electron instead of leaving as an X-ray. That ejected electron is the Auger electron, and its energy is element-specific, so it carries compositional information. Its escape depth, 1–2 nm, is shallower still than that of secondary electrons. Auger electron spectroscopy rests on exactly this, which is also why the slightest surface contamination buries the signal. Attacking the same class of problem with X-rays instead of electrons gives [XPS](/en/posts/xps-photoemission-binding-energy/).
 
-That resolves the opening contradiction. The interaction volume spans micrometres, but the information secondary electrons carry comes from a few nanometres of surface. Only secondary electrons generated in the narrow column directly beneath the entry point — before the beam has spread sideways — ever escape, so the resolution of an SE image approaches the beam diameter. An SEM shows topography at nanometre scale not by defeating the interaction volume but by viewing only a very thin shell of it.
+That resolves the opening contradiction. The interaction volume spans micrometres, but the information secondary electrons carry comes from a few nanometres of surface. Secondary electrons generated in the narrow column directly beneath the entry point, before the beam spreads sideways (SE1), give a resolution close to the beam diameter. Backscattered electrons leaving the surface also generate secondaries in the same shallow layer (SE2), but these are spread over the wide area the backscattered electrons exit from and form a background without resolution; in silicon SE2 amounts to roughly half of SE1. An SEM shows topography at nanometre scale not by defeating the interaction volume but by viewing only a very thin shell of it.
 
 ## 5. The backscatter coefficient and compositional contrast
 
@@ -115,13 +115,13 @@ The values rise monotonically from 0.06 for carbon ($Z=6$) to 0.54 for gold ($Z=
 
 This curve underwrites compositional contrast. Place two phases of differing atomic number side by side and the number of returning electrons differs, so a BSE detector renders the heavier one brighter. The slope is what makes a difference of one or two in atomic number detectable.
 
-Figure 3 also holds a discrepancy worth naming. At high atomic number the Monte Carlo points sit systematically above the empirical fit. Silicon agrees well, 0.168 against 0.164, but tungsten runs about 12 % high, 0.532 against 0.476. This is not statistical fluctuation but a limitation of the model. The screened Rutherford cross section treats the nucleus as a point charge and compresses orbital screening into a single constant, and the approximation degrades as atomic number grows. Accurate values require tabulated Mott cross sections from relativistic wave calculations.
+Figure 3 also holds a discrepancy worth naming. At high atomic number the Monte Carlo points sit systematically above the empirical fit. Silicon agrees well, 0.168 against 0.164, but tungsten runs about 12 % high, 0.532 against 0.476. This is not statistical fluctuation but a limitation of the model. The screened Rutherford cross section is a first Born approximation, which treats the nuclear charge as a weak perturbation, with orbital screening added as a single empirical constant, and the approximation degrades as the nuclear charge grows. Accurate values require tabulated Mott cross sections from relativistic wave calculations.
 
 Leaving the discrepancy visible seems the more honest choice. A Monte Carlo of this kind demonstrates trends, not measurements. It is enough to understand why the interaction volume takes the shape it does and which depth each signal comes from, but using it as a correction factor for quantitative analysis would mean replacing the cross section first.
 
 ## Summary and what comes next
 
-What happens to an electron inside a specimen splits two ways. Elastic scattering off nuclei changes direction; inelastic scattering off orbital electrons removes energy. Almost every property of the interaction volume follows from the single fact that the elastic cross section scales as $Z^2/E^2$. Raising the accelerating voltage enlarges the volume; raising the atomic number shrinks it and turns the teardrop into a hemisphere.
+What happens to an electron inside a specimen splits two ways. Elastic scattering off nuclei changes direction; inelastic scattering off orbital electrons removes energy. Almost every property of the interaction volume's shape follows from the fact that elastic scattering, large-angle scattering in particular, goes as $Z^2/E^2$. Raising the accelerating voltage enlarges the volume; elements of high atomic number are usually dense as well, which shrinks it, and the atomic number itself turns the teardrop into a hemisphere.
 
 That the volume spans micrometres while an SEM resolves nanometres comes down to escape depth. Characteristic X-rays emerge from nearly the whole volume, backscattered electrons from the upper third, secondary electrons from within 5 nm of the surface, and Auger electrons from a shallower 1–2 nm. The 5 nm for secondary electrons is 0.171 % of the penetration depth. The same beam striking the same point is read at depths differing by three orders of magnitude depending on which detector receives it.
 
@@ -134,4 +134,5 @@ The next post takes up those detectors. It builds up how scanning forms an image
 - D. C. Joy and S. Luo, "An empirical stopping power relationship for low-energy electrons," *Scanning*, vol. 11, pp. 176–180, 1989 (low-energy Bethe modification).
 - K. Kanaya and S. Okayama, "Penetration and energy-loss theory of electrons in solid targets," *Journal of Physics D*, vol. 5, pp. 43–58, 1972 (penetration depth fit).
 - L. Reimer, *Scanning Electron Microscopy: Physics of Image Formation and Microanalysis*, 2nd ed., Springer, 1998, ch. 3–4 (scattering theory and signal generation depth).
-- [Scanning Electron Microscopy, Carleton SERC](https://serc.carleton.edu/research_education/geochemsheets/techniques/SEM.html) (overview of escape depths by signal).
+- H. Seiler, "Secondary electron emission," in *Electron Beam Interactions with Solids*, SEM Inc., 1984, pp. 33–42 (50 eV secondary-electron convention, escape depth T ≈ 5λ).
+- [Scanning Electron Microscopy, Carleton SERC](https://serc.carleton.edu/research_education/geochemsheets/techniques/SEM.html) (qualitative overview of SEM signals).

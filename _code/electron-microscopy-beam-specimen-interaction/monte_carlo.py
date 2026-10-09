@@ -108,6 +108,9 @@ def trace_electron(mat, e0_kev, rng, keep_path=True):
       path         (n,3) 궤적 [cm] — keep_path 가 False 면 None
       backscattered 표면으로 되돌아 나왔는가
       depths/losses 구간 중점의 깊이 [cm] 와 그 구간에서 잃은 에너지 [keV]
+      z_start/z_end 각 구간 양 끝의 깊이 [cm]. 손실을 구간 길이를 따라 나눠
+                   쌓을 때 쓴다 (중점 한 곳에 몰면 평균자유행로보다 얕은 층이
+                   비어 보인다)
       energies     각 구간에 들어갈 때의 전자 에너지 [keV]
       exit_depth   후방산란 직전 마지막 산란의 깊이 [cm], 아니면 None
       max_depth    도달한 최대 깊이 [cm]
@@ -117,6 +120,7 @@ def trace_electron(mat, e0_kev, rng, keep_path=True):
     e = float(e0_kev)
     path = [pos.copy()]
     depths, losses, energies = [], [], []
+    z_start, z_end = [], []
     backscattered = False
     last_pos = pos.copy()
 
@@ -133,9 +137,11 @@ def trace_electron(mat, e0_kev, rng, keep_path=True):
                 path.append(pos + direction * t)
             break
 
-        # 이동 구간에서 잃은 에너지를 구간 중점의 깊이에 쌓는다.
+        # 이동 구간에서 잃은 에너지와 구간의 깊이(중점, 양 끝)를 기록한다.
         loss = min(-stopping_power(mat, e) * step, e - E_MIN * 0.5)
         depths.append(0.5 * (pos[2] + new_pos[2]))
+        z_start.append(pos[2])
+        z_end.append(new_pos[2])
         losses.append(max(loss, 0.0))
         energies.append(e)
         e -= loss
@@ -159,6 +165,8 @@ def trace_electron(mat, e0_kev, rng, keep_path=True):
         "depths": np.array(depths),
         "losses": np.array(losses),
         "energies": np.array(energies),
+        "z_start": np.array(z_start),
+        "z_end": np.array(z_end),
         "exit_depth": float(last_pos[2]) if backscattered else None,
         "max_depth": float(np.max(all_z)) if len(all_z) else 0.0,
     }

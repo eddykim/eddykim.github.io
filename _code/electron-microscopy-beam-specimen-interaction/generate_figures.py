@@ -144,26 +144,49 @@ def fig1_interaction_volume(L, cache):
     return fig
 
 
+def _segment_histogram(z0, z1, w, edges):
+    """구간 [z0, z1] 에서 잃은 에너지 w 를 구간 길이를 따라 고르게 나눠 쌓는다.
+
+    중점 한 곳에 몰아 쌓으면 평균자유행로(15 keV Si 에서 약 20 nm)보다 얕은 층이
+    비어 보이는 인공물이 생긴다. 각 경계 e 아래에 놓인 몫 F(e) 를 누적해 차분한다.
+    """
+    lo, hi = np.minimum(z0, z1), np.maximum(z0, z1)
+    span = hi - lo
+    flat = span <= 0
+    safe = np.where(flat, 1.0, span)
+    cum = np.empty(len(edges))
+    for k, e in enumerate(edges):
+        frac = np.where(flat, (lo < e).astype(float), np.clip((e - lo) / safe, 0.0, 1.0))
+        cum[k] = np.sum(w * frac)
+    return np.diff(cum), np.asarray(edges)
+
+
 def fig2_depth_distribution(L, cache):
     res = cache["fig2"]
     r_ko_um = mc.kanaya_okayama_range(FIG2_MAT, FIG2_E0) * 1e4
 
-    dep_z = np.concatenate([r["depths"] for r in res]) * 1e4      # µm
+    z0 = np.concatenate([r["z_start"] for r in res]) * 1e4        # µm
+    z1 = np.concatenate([r["z_end"] for r in res]) * 1e4
     dep_w = np.concatenate([r["losses"] for r in res])
     ene = np.concatenate([r["energies"] for r in res])
-    xray = dep_z[ene > SI_K_EDGE]
-    xray_w = dep_w[ene > SI_K_EDGE]
+    xr = ene > SI_K_EDGE
     bse_depth = np.array([r["max_depth"] for r in res if r["backscattered"]]) * 1e4
 
     fig, (ax, ax2) = plt.subplots(1, 2, figsize=(12.5, 4.6))
 
     fine = np.linspace(0, r_ko_um * 1.05, 90)
     coarse = np.linspace(0, r_ko_um * 1.05, 32)     # 표본이 적은 후방산란용
-    for data, weights, color, key, ls, bins in [
-            (dep_z, dep_w, BLUE, "f2dep", "-", fine),
-            (xray, xray_w, GREEN, "f2xray", "--", fine),
-            (bse_depth, None, ACCENT, "f2bse", ":", coarse)]:
-        h, edges = np.histogram(data, bins=bins, weights=weights)
+    # 에너지 침착과 X선은 구간 길이를 따라 나눠 쌓고, 후방산란 최대 깊이는 점 자료다.
+    for kind, color, key, ls, bins in [
+            ("dep", BLUE, "f2dep", "-", fine),
+            ("xray", GREEN, "f2xray", "--", fine),
+            ("bse", ACCENT, "f2bse", ":", coarse)]:
+        if kind == "dep":
+            h, edges = _segment_histogram(z0, z1, dep_w, bins)
+        elif kind == "xray":
+            h, edges = _segment_histogram(z0[xr], z1[xr], dep_w[xr], bins)
+        else:
+            h, edges = np.histogram(bse_depth, bins=bins)
         if h.max() > 0:
             h = h / h.max()
         ax.plot(0.5 * (edges[1:] + edges[:-1]), h, color=color, lw=1.9, ls=ls,
@@ -185,7 +208,7 @@ def fig2_depth_distribution(L, cache):
 
     # 오른쪽: 표면 20 nm 확대
     bins2 = np.linspace(0, 20e-3, 11)
-    h, edges = np.histogram(dep_z, bins=bins2, weights=dep_w)
+    h, edges = _segment_histogram(z0, z1, dep_w, bins2)
     centers = 0.5 * (edges[1:] + edges[:-1]) * 1e3            # nm
     ax2.bar(centers, h / h.max(), width=(centers[1] - centers[0]) * 0.9,
             color=BLUE, alpha=0.75, zorder=3)
