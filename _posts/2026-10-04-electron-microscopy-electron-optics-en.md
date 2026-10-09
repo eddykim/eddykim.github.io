@@ -53,7 +53,7 @@ A glass lens becomes diverging when the sign of the curvature or the index ratio
 
 ## 3. Simulation — an electron in a bell-shaped field
 
-Equations alone are hard to feel, so integrate them. For the field, the analytically convenient Glaser bell model $B_z(z) = B_0 / (1 + (z/a)^2)$ serves, with $B_0 = 0.3$ T and $a = 5$ mm, close to a real objective lens.
+Equations alone are hard to feel, so integrate them. For the field, the analytically convenient Glaser bell model $B_z(z) = B_0 / (1 + (z/a)^2)$ serves, with $B_0 = 0.3$ T and $a = 5$ mm — a much weaker lens than a real objective (peak field about 2 T, $a$ of 1–2 mm), chosen so the trajectory is easy to see. Here $a$ is the half-width at half maximum.
 
 ```python
 # core of generate_figures.py (full code: _code/electron-microscopy-electron-optics/)
@@ -72,9 +72,9 @@ def deriv(z, y):                       # y = [r, r', theta]
 <img src="/assets/img/posts/electron-microscopy-electron-optics/en/fig1-magnetic-lens-trajectory.png" alt="Bell-shaped axial field, paraxial electron trajectories converging within it, and the same path seen along the axis" width="850">
 _Fig 1. Axial field (left), paraxial rays converging in the Larmor frame (centre), and the same trajectory viewed along the axis (right)_
 
-In the centre panel, three electrons entering parallel to the axis meet at one point. The focal length is 18.0 mm, the same order as a real objective. That they meet at precisely one point regardless of entry height follows from solving the paraxial equation; it is not a statement about real lenses. The paraxial approximation keeps only the first-order term in $r$, and as the height grows the discarded third-order term revives and pulls the focus forward. That discrepancy is spherical aberration, and everything from section 4 onward is the price of the discarded term.
+In the centre panel, three electrons entering parallel to the axis meet at one point. The focal length is 18.0 mm. A real high-resolution objective has a focal length of about 2 mm, so this is a weak lens roughly ten times longer; a stronger, narrower field brings it down to that scale. That they meet at precisely one point regardless of entry height follows from solving the paraxial equation; it is not a statement about real lenses. The paraxial approximation keeps only the first-order term in $r$, and as the height grows the discarded third-order term revives and pulls the focus forward. That discrepancy is spherical aberration, and everything from section 4 onward is the price of the discarded term.
 
-The right-hand panel shows what the Larmor frame cost. Seen along the axis, the electron spirals into the axis rather than running straight, turning through 70° by the time it reaches focus. This is not a calculational device but something that physically happens. Changing magnification in an electron microscope changes the lens current, and a change in current changes the rotation, so the whole image rotates. Nothing like it occurs in an optical microscope, and every electron microscope user meets it whenever they adjust magnification.
+The right-hand panel shows what the Larmor frame cost. Seen along the axis, the electron spirals into the axis rather than running straight, turning through 70° between the left edge of the plot (z = −30 mm) and the focus (about 75° with the field's tails included). This is not a calculational device but something that physically happens. Changing magnification in an electron microscope changes the lens current, and a change in current changes the rotation, so the whole image rotates. Nothing like it occurs in an optical microscope. Many TEMs therefore combine the currents of several imaging lenses, or add a compensating lens, so that the image does not turn as magnification changes; on instruments without that compensation the rotation has to be calibrated at each magnification.
 
 ## 4. Scherzer's theorem — a list of prohibitions
 
@@ -85,7 +85,7 @@ Scherzer answered in 1936. Any electron lens satisfying all four of the followin
 1. It is rotationally symmetric.
 2. Its electric and magnetic fields are static.
 3. There is no space charge on the axis.
-4. It actually converges.
+4. It forms a real image of a real object.
 
 Positive means uncorrectable. Stacking any number of lenses with positive spherical aberration leaves a positive sum. The cancellation strategy of glass optics is blocked at the level of principle.
 
@@ -107,14 +107,14 @@ The third is chromatic aberration. Electrons of slightly different energy focus 
 
 $$ d_c = C_c\,\alpha\,\frac{\Delta E}{E} $$
 
-Post 1 compared electron guns and noted that a cold field emission gun holds its energy spread to 0.3 eV against 2.3 eV for tungsten. This is where that number enters.
+Post 1 compared electron guns and noted that a cold field emission gun holds its energy spread to 0.3 eV against 3 eV for tungsten. This is where that number enters.
 
 Adding the three in quadrature and setting the derivative with respect to $\alpha$ to zero gives the optimum. Keeping only diffraction and spherical aberration yields a closed form.
 
 $$ \alpha_{opt} = \left(\frac{0.61\,\lambda}{\sqrt{3}\,C_s}\right)^{1/4}, \qquad d_{min} \propto C_s^{1/4}\,\lambda^{3/4} $$
 
 <img src="/assets/img/posts/electron-microscopy-electron-optics/en/fig2-aperture-tradeoff.png" alt="Diffraction, spherical and chromatic blur against aperture semi-angle, compared before and after aberration correction" width="800">
-_Fig 2. The three blurs set by aperture angle and their sum. Left, before correction; right, after_
+_Fig 2. The three blurs set by aperture angle and their sum. Left, before correction; right, after. 200 kV, $C_c = 1.2$ mm, $\Delta E = 0.7$ eV for a Schottky field emission gun_
 
 The left panel is the uncorrected case. At $C_s = 0.5$ mm the optimum is 6.5 mrad, the same order as the 10 mrad quoted loosely in post 1. The sum reaches its minimum near where the blue dashed curve (diffraction) crosses the red one (spherical), and the value there is 0.27 nm. Chromatic aberration sits far below the other two in this range and hardly matters.
 
@@ -124,7 +124,7 @@ $$ d = 0.66\,(C_s\,\lambda^3)^{1/4} $$
 
 Substituting $C_s = 0.5$ mm and $\lambda = 2.51$ pm returns 0.197 nm, matching exactly the 0.2 nm quoted in post 1 for uncorrected HRTEM.
 
-The right panel reduces $C_s$ to 1 µm. The red curve shifts far to the right, the optimum widens almost threefold to 19 mrad, and resolution improves to 0.11 nm. The more consequential change is in the green curve. Chromatic aberration now contributes meaningfully to the sum. Once spherical aberration is removed, chromatic aberration becomes the next wall, which is why gun energy spread and power-supply stability matter increasingly in corrected instruments.
+The right panel reduces $C_s$ to 1 µm. The red curve shifts far to the right, and on diffraction and spherical aberration alone the optimum would widen to 31 mrad. The minimum of the sum stops at 19 mrad (resolution 0.11 nm) instead. The green curve makes the difference: chromatic aberration now enters the sum at the same size as diffraction and holds the aperture back. Once spherical aberration is removed, chromatic aberration becomes the next wall, which is why gun energy spread and power-supply stability matter increasingly in corrected instruments.
 
 ## 6. Why buying down $C_s$ costs so much
 
@@ -151,13 +151,13 @@ Since the cause is broken symmetry, the cure breaks symmetry too. A stigmator, a
 
 A magnetic field becomes a lens in two stages. The radial component of an axially symmetric field gives the electron a rotational velocity, and that rotational velocity, meeting the main field, produces a force toward the axis. The converging force scales with the square of the field, which is why a magnetic lens converges regardless of current direction. Moving to the Larmor frame makes the paraxial ray equation identical in form to the one for light, so geometrical optics carries over — at the cost of the image rotating whenever magnification changes.
 
-That no concave counterpart exists is confirmed at the level of principle by Scherzer's theorem: a rotationally symmetric, static, space-charge-free converging lens has strictly positive spherical and chromatic aberration. The aperture angle is therefore pinned near 6.5 mrad, where diffraction and aberration balance, and resolution is trapped at a value proportional to $C_s^{1/4}\lambda^{3/4}$. Evaluated as the Scherzer point resolution with $C_s = 0.5$ mm, that is 0.197 nm — which is where the 0.2 nm of post 1 comes from. A corrector escapes by giving up the rotational symmetry Scherzer assumed, but the fourth-root exponent means a factor of 500 in effort returns a factor of 5 in resolution.
+That no concave counterpart exists is confirmed at the level of principle by Scherzer's theorem: a rotationally symmetric, static, space-charge-free lens that forms a real image has strictly positive spherical and chromatic aberration. The aperture angle is therefore pinned near 6.5 mrad, where diffraction and aberration balance, and resolution is trapped at a value proportional to $C_s^{1/4}\lambda^{3/4}$. Evaluated as the Scherzer point resolution with $C_s = 0.5$ mm, that is 0.197 nm — which is where the 0.2 nm of post 1 comes from. A corrector escapes by giving up the rotational symmetry Scherzer assumed, but the fourth-root exponent means a factor of 500 in effort returns a factor of 5 in resolution.
 
 That covers getting electrons onto the specimen. The next post takes up what happens after they arrive. It separates elastic from inelastic collisions, computes the interaction volume the beam spreads into using a Monte Carlo calculation, and establishes the depth from which secondary electrons, backscattered electrons and characteristic X-rays each emerge. Where the contrast in an electron micrograph comes from is decided there.
 
 ## References
 
-- P. W. Hawkes and E. Kasper, *Principles of Electron Optics*, 2nd ed., Academic Press, 2018, vol. 1 (paraxial ray equation and magnetic lenses), vol. 2 (aberration theory).
+- P. W. Hawkes and E. Kasper, *Principles of Electron Optics*, 2nd ed., Academic Press, 2018, vol. 1 (paraxial ray equation, aberrations of round lenses), vol. 2 (magnetic lenses, aberration correction).
 - D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 6 (lenses, apertures, resolution).
 - O. Scherzer, "Über einige Fehler von Elektronenlinsen," *Zeitschrift für Physik*, vol. 101, pp. 593–603, 1936 (aberration theorem for rotationally symmetric electron lenses).
 - O. Scherzer, "Sphärische und chromatische Korrektur von Elektronen-Linsen," *Optik*, vol. 2, pp. 114–132, 1947 (correction using multipole elements).
