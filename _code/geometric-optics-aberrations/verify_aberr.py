@@ -2,7 +2,7 @@
 
 실행: python verify_aberr.py
 
-  A. 실광선 추적기             ↔  1편의 2차원 추적기 rays.py (종구면수차 15.844 mm)
+  A. 실광선 추적기             ↔  1편의 2차원 추적기 rays.py (종구면수차 15.845 mm)
   B. 자이델 합 S_I…S_V          ↔  Optiland SeidelAberrations (평볼록 렌즈, 쿡 삼중렌즈)
   C. 자이델 계수 → 파면수차      ↔  같은 렌즈의 실광선 OPD 에 다항식을 맞춘 값 (이 모듈의 추적기)
   D. 실광선 OPD 지도             ↔  opticore sample_pupil_opd (다른 사람이 짠 추적기·기준 구면)
@@ -56,7 +56,7 @@ def verify_tracer():
     z_new = axis_crossing(lens, s.wavelength_um, hs, z_start=-300.0, n0=na)
     z_old = s.axis_crossing(hs)
     ok = check("광축을 지나는 z (높이 0.001~100 mm)", z_new, z_old, 1e-8)
-    ok &= check("종구면수차 = 15.844 mm (1편)", z_new[0] - z_new[-1], 15.844, 5e-4)
+    ok &= check("종구면수차 = 15.845 mm (1편)", z_new[0] - z_new[-1], 15.845, 5e-4)
     return ok
 
 
