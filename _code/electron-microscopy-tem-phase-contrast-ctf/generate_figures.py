@@ -84,7 +84,7 @@ def envelope_spatial(k, df, alpha=CONVERGENCE, cs=CS, lam=LAM):
 
 
 def ctf(k, df, damped=True):
-    """대비 전달 함수 sin(chi). 약위상물체의 대비는 -2 sin(chi) 에 비례한다."""
+    """대비 전달 함수 sin(chi). 약위상물체의 대비는 2 sin(chi) 에 비례한다."""
     t = np.sin(chi(k, df))
     if damped:
         t = t * envelope_temporal(k) * envelope_spatial(k, df)
@@ -133,10 +133,9 @@ def simulate_lattice_image(df, n=320, field=4.0, sigma_v=0.30, atom_sigma=0.045)
     kxx, kyy = np.meshgrid(kx, kx)
     kr = np.sqrt(kxx**2 + kyy**2)
 
-    # numpy 의 정방향 FFT 는 exp(-2 pi i k x) 를 쓰는데, TEM 교재의 광학 관례는
-    # 부호가 반대다. 그래서 전달 함수에 exp(+i chi) 를 곱해야 약위상물체의
-    # 예측(Scherzer 디포커스에서 원자가 어둡게 나온다)과 맞는다.
-    transfer = np.exp(1j * chi(kr, df)) * envelope_temporal(kr) \
+    # 물체가 exp(+i sigma V)이므로 전달 함수는 exp(-i chi)다. chi 는 k 의
+    # 짝함수라 FFT 부호 규약과 무관하다.
+    transfer = np.exp(-1j * chi(kr, df)) * envelope_temporal(kr) \
         * envelope_spatial(kr, df)
     img = np.abs(np.fft.ifft2(np.fft.fft2(psi) * transfer)) ** 2
     return x, v, img
@@ -161,7 +160,7 @@ LABELS = {
         "fig3": "같은 시편, 디포커스만 바꾼 상",
         "f3obj": "실제 원자 위치\n(투영 퍼텐셜)",
         "f3panel": "Δf = {:.1f} nm\n$\\sin χ$({:.0f} nm$^{{-1}}$) = {:+.2f}",
-        "f3dark": "원자가 어둡다", "f3none": "격자가 거의 사라진다\n(진폭이 30분의 1)",
+        "f3dark": "원자가 어둡다", "f3none": "격자가 거의 사라진다\n(진폭이 약 20분의 1)",
         "f3bright": "원자가 밝다 — 대비가 뒤집혔다",
     },
     "en": {
@@ -182,7 +181,7 @@ LABELS = {
         "fig3": "Same specimen, defocus alone changed",
         "f3obj": "True atom positions\n(projected potential)",
         "f3panel": "Δf = {:.1f} nm\n$\\sin χ$({:.0f} nm$^{{-1}}$) = {:+.2f}",
-        "f3dark": "Atoms appear dark", "f3none": "The lattice nearly vanishes\n(amplitude down 30x)",
+        "f3dark": "Atoms appear dark", "f3none": "The lattice nearly vanishes\n(amplitude down ~20x)",
         "f3bright": "Atoms appear bright — contrast inverted",
     },
 }
@@ -268,7 +267,7 @@ def fig3_lattice_images(L):
     axes[0].set_title(L["f3obj"], fontsize=9.5, **L["font"])
 
     # 세 상을 같은 명암 범위로 그린다. 패널마다 따로 정규화하면 대비가 거의
-    # 사라진 상까지 끝까지 늘어나, 실제로는 30 분의 1 인 진폭이 똑같아 보인다.
+    # 사라진 상까지 끝까지 늘어나, 실제로는 20 분의 1 남짓인 진폭이 똑같아 보인다.
     imgs = [simulate_lattice_image(df)[2] for df, _ in cases]
     lo = min(im.min() for im in imgs)
     hi = max(im.max() for im in imgs)

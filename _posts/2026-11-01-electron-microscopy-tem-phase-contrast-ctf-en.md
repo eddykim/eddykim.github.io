@@ -76,7 +76,7 @@ Substituting the $C_s = 0.5$ mm and $\lambda = 2.51$ pm of post 2 gives $-42.5$ 
 
 $$ \frac{1}{5.2\ \mathrm{nm^{-1}}} = 0.192\ \mathrm{nm} $$
 
-Post 2 obtained 0.197 nm from the Scherzer formula $0.66(C_s\lambda^3)^{1/4}$. The two differ by about 2 %, since the formula approximates where the passband ends, but they are the same quantity computed two ways. The 0.2 nm quoted in post 1 for uncorrected HRTEM is ultimately this number.
+Post 2 obtained 0.197 nm from the Scherzer formula $0.66(C_s\lambda^3)^{1/4}$. The 0.66 coefficient is the first zero for a defocus of $-\sqrt{4/3}\,\sqrt{C_s\lambda} \approx -1.15\sqrt{C_s\lambda}$; with the $-1.2$ used here it becomes 0.646, hence the difference of about 2 %, but they are the same quantity computed two ways. The 0.2 nm quoted in post 1 for uncorrected HRTEM is ultimately this number.
 
 ## 4. Damping envelopes and the information limit
 
@@ -106,7 +106,7 @@ A phase object was built by placing Gaussian projected potentials on a square la
 ```python
 # core of generate_figures.py (full code: _code/electron-microscopy-tem-phase-contrast-ctf/)
 psi = np.exp(1j * v)                       # phase object: it alters only phase
-transfer = np.exp(1j * chi(kr, df)) * envelope_temporal(kr) \
+transfer = np.exp(-1j * chi(kr, df)) * envelope_temporal(kr) \
     * envelope_spatial(kr, df)
 img = np.abs(np.fft.ifft2(np.fft.fft2(psi) * transfer)) ** 2
 ```
@@ -118,7 +118,7 @@ Leftmost is the truth — the projected potential, showing where the atoms are. 
 
 At the Scherzer defocus of $-42.5$ nm, $\sin\chi = -0.82$ at the lattice frequency of 4 nm$^{-1}$, and the atom sites appear **dark**, exactly the sign the weak phase object approximation predicts.
 
-At $-50.1$ nm, $\sin\chi$ passes through zero. The lattice pattern effectively disappears, its amplitude falling by a factor of thirty. The specimen is unchanged, yet the lattice is gone from the image.
+At $-50.1$ nm, $\sin\chi$ passes through zero. The lattice pattern effectively disappears, its amplitude falling by a factor of about twenty. The specimen is unchanged, yet the lattice is gone from the image.
 
 At $-62.5$ nm, $\sin\chi$ reaches $+1$ and the atom sites appear **bright**. The contrast has inverted completely.
 
@@ -132,7 +132,7 @@ What happens to the CTF when $C_s$ shrinks?
 
 Post 2 noted that correctors bring $C_s$ down to the micrometre range. The $k^4$ term of $\chi$ shrinks accordingly, widening the passband and improving the point resolution. Push the first zero past the information limit and point resolution and information limit coincide, at which moment the ambiguous shaded band disappears. The range that can be read by eye extends all the way to the information limit.
 
-Something interesting follows. Drive $C_s$ to zero and $\chi$ approaches zero too, returning to the problem of section 1: phase contrast vanishes. Corrected instruments therefore sometimes tune $C_s$ to a small negative value and work at overfocus. Atoms then appear bright against a dark background, which is often easier to interpret. This is negative $C_s$ imaging.
+Something interesting follows. Drive $C_s$ to zero and bring the image exactly into focus, and $\chi$ vanishes, returning to the problem of section 1: phase contrast vanishes. Corrected instruments therefore sometimes tune $C_s$ to a small negative value and work at overfocus. Atoms then appear bright against a dark background, which is often easier to interpret. This is negative $C_s$ imaging.
 
 The goal has shifted from eliminating aberration to leaving exactly as much as wanted, with the sign chosen deliberately. Scherzer's theorem in post 2 forbade negative aberration in a rotationally symmetric lens; once correctors circumvented that prohibition, aberration became a design variable.
 
@@ -144,11 +144,11 @@ The defocus and spherical aberration terms of $\chi$ can oppose one another. At 
 
 Figure 3 carries the central conclusion. Photograph one specimen at three focus settings and the atoms come out dark, invisible, or bright. A high-resolution image is not a photograph of an atomic arrangement but the output of a transfer function, and interpreting it requires knowing the conditions that produced it.
 
-The next post closes the series. Illumination has been a broad beam until now; post 7 converges it back to a point and scans. It covers why reciprocity holds in scanning transmission electron microscopy, and how a high-angle annular dark field detector produces contrast proportional to atomic number, free of the sign-reversal problem met here. EDS and EELS for reading composition follow, along with 4D-STEM, which stores whole diffraction patterns and recovers phase by computation, and finally FIB specimen preparation and semiconductor metrology applications.
+The next post closes the series. Illumination has been a broad beam until now; post 7 converges it back to a point and scans. It covers why reciprocity holds in scanning transmission electron microscopy, and how a high-angle annular dark field detector produces contrast scaling as roughly the 1.6th to 2nd power of atomic number, free of the sign-reversal problem met here. EDS and EELS for reading composition follow, along with 4D-STEM, which stores whole diffraction patterns and recovers phase by computation, and finally FIB specimen preparation and semiconductor metrology applications.
 
 ## References
 
-- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 27–31 (phase contrast, the CTF, image simulation).
+- D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 23, 28, 30 (phase contrast, the CTF, image simulation).
 - J. C. H. Spence, *High-Resolution Electron Microscopy*, 4th ed., Oxford University Press, 2013 (standard treatment of the weak phase object approximation and transfer theory).
 - O. Scherzer, "The theoretical resolution limit of the electron microscope," *Journal of Applied Physics*, vol. 20, pp. 20–29, 1949 (derivation of the optimum defocus).
 - C. L. Jia, M. Lentzen, and K. Urban, "Atomic-resolution imaging of oxygen in perovskite ceramics," *Science*, vol. 299, pp. 870–873, 2003 (negative $C_s$ imaging).
