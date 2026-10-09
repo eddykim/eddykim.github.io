@@ -64,19 +64,16 @@ import json, sys, numpy as np
 from optiland import optic
 from optiland.materials import IdealMaterial
 s = lambda v: float(np.asarray(v).reshape(-1)[0])
-out = {}
-for na in (1.0002778, 1.0):
-    air = IdealMaterial(n=na)
-    L = optic.Optic()
-    L.surfaces.add(index=0, radius=float("inf"), thickness=float("inf"), material=air)
-    L.surfaces.add(index=1, radius=1000.0, thickness=100.0, material="N-BK7", is_stop=True)
-    L.surfaces.add(index=2, radius=-1000.0, thickness=1000.0, material=air)
-    L.surfaces.add(index=3)
-    L.set_aperture(aperture_type="EPD", value=20.0); L.fields.set_type("angle"); L.fields.add(y=0.0)
-    L.wavelengths.add(value=0.75, is_primary=True)
-    p = L.paraxial
-    out[str(na)] = dict(f1=s(p.f1()), f2=s(p.f2()), F1=s(p.F1()), F2=s(p.F2()), P1=s(p.P1()), P2=s(p.P2()))
-print(json.dumps(out))
+air = IdealMaterial(n=1.0)  # 유리는 카탈로그(공기 기준 상대) 굴절률이므로 공기는 1
+L = optic.Optic()
+L.surfaces.add(index=0, radius=float("inf"), thickness=float("inf"), material=air)
+L.surfaces.add(index=1, radius=1000.0, thickness=100.0, material="N-BK7", is_stop=True)
+L.surfaces.add(index=2, radius=-1000.0, thickness=1000.0, material=air)
+L.surfaces.add(index=3)
+L.set_aperture(aperture_type="EPD", value=20.0); L.fields.set_type("angle"); L.fields.add(y=0.0)
+L.wavelengths.add(value=0.75, is_primary=True)
+p = L.paraxial
+print(json.dumps(dict(f1=s(p.f1()), f2=s(p.f2()), F1=s(p.F1()), F2=s(p.F2()), P1=s(p.P1()), P2=s(p.P2()))))
 """
 
 ORACLE_PYTHON = os.environ.get("OPTILAND_PYTHON", os.path.join(
@@ -93,21 +90,16 @@ def verify_optiland():
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
     res = json.loads(subprocess.run([py, "-c", OPTILAND_SNIPPET], capture_output=True, text=True,
                                     env=env, check=True).stdout.strip().splitlines()[-1])
-    o = res["1.0002778"]
+    o = res
     ok = check("물체 쪽 초점거리 f1 [mm]", -o["f1"], CP.f_obj, 1e-6)
     ok &= check("앞 초점 F1 (앞 꼭짓점 기준) [mm]", o["F1"], CP.z_front_focus, 1e-6)
     ok &= check("앞 주점 P1 (앞 꼭짓점 기준) [mm]", o["P1"], CP.z_front_principal, 1e-6)
-    # 상 쪽: Optiland 의 f2 는 1/Φ 로, 상 공간 굴절률 n' 을 곱하지 않는다
-    ok &= check("Optiland f2 × n_air ↔ 상 쪽 초점거리 n'/Φ", o["f2"] * NA, CP.f_img, 1e-6)
-    # 공기를 정확히 1 로 두면 두 규약이 같아진다
-    m1 = system(surface(1.0, N, R1), prop(T, N), surface(N, 1.0, R2))
-    c1 = cardinal_points(m1, 1.0, 1.0)
-    o1 = res["1.0"]
-    ok &= check("n_air = 1: f2 ↔ 행렬", o1["f2"], c1.f_img, 1e-6)
+    # Optiland 의 f2 는 1/Φ 다. 공기가 1 이므로 상 쪽 초점거리 n'/Φ 와 같다
+    ok &= check("상 쪽 초점거리 f2 [mm]", o["f2"], CP.f_img, 1e-6)
     # Optiland 의 F2, P2 는 상면(마지막 면에서 1000 mm 뒤) 기준이다
-    ok &= check("n_air = 1: F2 (상면 기준) ↔ 행렬", o1["F2"], c1.z_back_focus - 1000.0, 1e-6)
-    ok &= check("n_air = 1: P2 (상면 기준) ↔ 행렬", o1["P2"], c1.z_back_principal - 1000.0, 1e-6)
-    print(f"      n_air = 1.0002778 에서 Optiland f2 = {o['f2']:.6f} (행렬 n'/Φ = {CP.f_img:.6f})")
+    ok &= check("뒤 초점 F2 (상면 기준) [mm]", o["F2"], CP.z_back_focus - 1000.0, 1e-6)
+    ok &= check("뒤 주점 P2 (상면 기준) [mm]", o["P2"], CP.z_back_principal - 1000.0, 1e-6)
+    print(f"      Optiland f2 = {o['f2']:.6f} (행렬 {CP.f_img:.6f})")
     return ok
 
 
