@@ -48,7 +48,7 @@ Where do the diffracted electrons converge? Consider what the objective lens doe
 
 Electrons leaving different points of the specimen in the same direction converge to one point of the back focal plane (BFP). Conversely, electrons leaving one point in many directions converge to one point of the image plane. Direction maps to position in the back focal plane; origin maps to position in the image plane.
 
-[Ellipsometry 1](/en/posts/ellipsometry-electromagnetic-fresnel/) made the same statement about light: different angles of incidence separate by position in the objective's back focal plane. Light or electrons, a lens converts direction into position, and the back focal plane is where that happens.
+[Ellipsometry 3](/en/posts/ellipsometry-thin-film-multilayer-reflectance/) made the same statement about light: different angles of incidence separate by position in the objective's back focal plane. Light or electrons, a lens converts direction into position, and the back focal plane is where that happens.
 
 So the diffraction pattern forms in the back focal plane and the image forms in the image plane. Focusing the intermediate lens on the back focal plane puts a diffraction pattern on the screen; focusing it on the image plane puts an image there. That is the substance of switching between diffraction mode and imaging mode with one control.
 
@@ -65,7 +65,7 @@ Place the aperture on the axis, at the transmitted 000 beam, and the diffracted 
 
 Move the aperture aside onto a particular diffracted beam $g$ and the situation reverses. This is dark field (DF), where strongly diffracting regions appear **bright**. Same specimen, same point, and the contrast inverts with nothing but the aperture position.
 
-Recording both is standard practice. A region dark in bright field and bright in dark field owes its contrast to diffraction; one dark in both owes it to absorption or thickness. It is the simplest test for separating the causes of contrast.
+Recording both is standard practice. A region dark in bright field and bright in the dark field of that $g$ owes its contrast to diffraction into that reflection; one dark in both is either scattering by thickness or atomic number (mass–thickness contrast) or diffraction into some other reflection that was not selected. It is a simple first test for narrowing down the cause.
 
 Dark field carries one caution. Moving the aperture alone means working with an off-axis beam, which raises aberration and blurs the image. In practice the aperture stays on the axis and the incident beam itself is tilted so that the wanted diffracted beam travels along the axis. Centered dark field, this is called, and the fact from post 2 that off-axis rays suffer more aberration is what drives it.
 
@@ -81,7 +81,7 @@ In the two-beam approximation the diffracted intensity comes out as
 
 $$ I_g = \frac{\sin^2(\pi t\, s_{\text{eff}})}{(\xi_g\, s_{\text{eff}})^2}, \qquad s_{\text{eff}} = \sqrt{s^2 + \frac{1}{\xi_g^2}} $$
 
-where $\xi_g$ is the extinction distance, a length set by the crystal, the reflection and the accelerating voltage. For a typical silicon reflection at 200 kV it is around 60 nm.
+where $\xi_g$ is the extinction distance, a length set by the crystal, the reflection and the accelerating voltage. For the silicon 111 reflection it is 60 nm at 100 kV, growing with voltage to about 76 nm at 200 kV; the calculation below uses the round figure of 60 nm.
 
 ```python
 # core of generate_figures.py (full code: _code/electron-microscopy-tem-diffraction-contrast/)
@@ -105,9 +105,9 @@ Departing from $s = 0$ shortens the period and lowers the amplitude, as the blue
 
 Assembling the pieces explains how a TEM shows dislocations and grain boundaries.
 
-A dislocation in an otherwise perfect crystal bends the atomic planes around it. Bent planes mean a locally different $s$. If the surrounding crystal is set to $s = 0$, then near the dislocation $s \ne 0$, and the diffracted intensity swings along the steep curve of Figure 3. Hence the dark line a dislocation draws in a bright field image.
+A dislocation in an otherwise perfect crystal bends the atomic planes around it. Bent planes mean a locally different $s$. Defects are therefore imaged with the crystal tilted deliberately a little off the Bragg condition, to a small positive $s$ (the reciprocal lattice point just inside the Ewald sphere). On one side of the dislocation the bent planes then rotate back towards the Bragg condition ($s \approx 0$), climbing the steep curve of Figure 3 so that the diffracted beam strengthens there and only there. The transmitted beam loses that much, and the dislocation draws a dark line on a bright background in a bright field image. For the same reason the line sits to one side of the core rather than directly over it.
 
-A dislocation core is a few atoms across, yet the line in the image runs several nanometres wide, because what is seen is not the dislocation but the distorted strain field around it. For the same reason, the same dislocation appears or vanishes depending on which $g$ is used. If the distortion leaves the spacing along $g$ unchanged, that reflection is unaffected and the contrast disappears. Imaging with several $g$ and noting when it vanishes is the standard way of determining a Burgers vector.
+A dislocation core is a few atoms across, yet under strong-beam conditions the line in the image is roughly $\xi_g/3$ wide, some 20 nm here, because what is seen is not the dislocation but the distorted strain field around it. For the same reason, the same dislocation appears or vanishes depending on which $g$ is used. If the displacement is perpendicular to $g$ ($g\cdot R = 0$, for a dislocation usually $g\cdot b = 0$), the planes behind that reflection merely slide within themselves, neither bending nor shifting along their normal, so the reflection is unaffected and the contrast disappears. Imaging with several $g$ and noting when it vanishes is the standard way of determining a Burgers vector.
 
 Grain boundaries are simpler. Crystal orientation differs across the boundary, so the two grains start from different $s$. Whichever sits closer to the diffraction condition goes dark in bright field, and grain-to-grain differences in brightness reveal the microstructure. Measuring grain size or examining texture rests on this.
 
@@ -125,5 +125,5 @@ So far the diffracted beams have only been switched on or off. The next post let
 
 - D. B. Williams and C. B. Carter, *Transmission Electron Microscopy: A Textbook for Materials Science*, 2nd ed., Springer, 2009, ch. 11–12 (Ewald construction), ch. 22–26 (diffraction contrast, thickness fringes, dislocation contrast).
 - P. B. Hirsch et al., *Electron Microscopy of Thin Crystals*, Butterworths, 1965 (classic treatment of the two-beam approximation and defect contrast).
-- J. M. Cowley, *Diffraction Physics*, 3rd ed., North-Holland, 1995, ch. 5–6 (kinematical and dynamical diffraction theory).
+- J. M. Cowley, *Diffraction Physics*, 3rd ed., North-Holland, 1995, ch. 6–9 (kinematical diffraction by crystals and two-beam dynamical theory).
 - L. Reimer and H. Kohl, *Transmission Electron Microscopy: Physics of Image Formation*, 5th ed., Springer, 2008, ch. 7–9 (extinction distance and excitation error).
