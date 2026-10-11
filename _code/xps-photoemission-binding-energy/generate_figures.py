@@ -103,11 +103,11 @@ for _, c, w, a, s, _k in survey_peaks:
     survey += peak_with_step(be, c, w, a, s)
 survey_noisy = rng.poisson(survey * 20) / 20
 
-# 그림3: C 1s 네 성분. 인접 간격 1.7~3.1 eV, 전체 폭 약 8 eV
-# (Travnikova et al. 2012)에 맞춘 모사값이다.
+# 그림3: C 1s 네 성분. Travnikova 2012 측정값(CH3 기준 1.72, 4.33, 7.46 eV)에
+# 맞춘 모사값이다.
 rel = np.linspace(-3, 11, 1400)
 c1s_components = [
-    (r"CH$_3$", 0.0), (r"O–CH$_2$", 1.7), (r"O–C=O", 4.8), (r"CF$_3$", 7.9),
+    (r"CH$_3$", 0.0), (r"O–CH$_2$", 1.72), (r"O–C=O", 4.33), (r"CF$_3$", 7.46),
 ]
 C1S_FWHM, C1S_AREA = 1.0, 42.6   # 피크 높이 약 40
 c1s_parts = [gaussian(rel, pos, C1S_FWHM, C1S_AREA) for _, pos in c1s_components]
