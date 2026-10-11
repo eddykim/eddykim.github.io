@@ -129,7 +129,7 @@ When the probe is unknown, ePIE corrects specimen and probe symmetrically, as st
 
 ## Next
 
-Making the probe unknown in ePIE introduced new ambiguities. Scale exchange and phase ramps look harmless, something to align only when measuring error, but on an overly regular scan grid they combine to imprint a grid pattern on the reconstruction. Post 4 looks at when these ambiguities cause real trouble and introduces rPIE, a refinement of ePIE. Post 5 then compares mPIE, which adds momentum, with the difference map (DM), Post 2's algorithm applied to ptychography.
+Making the probe unknown in ePIE introduced new ambiguities. Scale exchange and phase ramps are harmless, something to align only when measuring error, but a regular scan grid admits a different and much larger ambiguity that imprints a grid pattern on the reconstruction. Post 4 looks at when these ambiguities cause real trouble and introduces rPIE, a refinement of ePIE. Post 5 then compares mPIE, which adds momentum, with the difference map (DM), Post 2's algorithm applied to ptychography.
 
 ## References
 
