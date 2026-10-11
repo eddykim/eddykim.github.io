@@ -29,7 +29,7 @@ LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         "ke": "운동에너지 (eV)", "imfp": r"IMFP $\lambda$ (nm)",
-        "sd": "Seah–Dench 유니버설 커브 (원소, a = 0.25 nm)",
+        "sd": "Seah–Dench 유니버설 커브 (감쇠길이, 원소, a = 0.25 nm)",
         "alka": "Al K$\\alpha$ XPS 영역",
         "fig1": "운동에너지에 따른 비탄성 평균자유행로 (TPP-2M)",
         "depth": r"깊이 $z$ (nm)", "weight": "상대 기여 (단위 깊이당)",
@@ -45,7 +45,7 @@ LABELS = {
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
         "ke": "Kinetic energy (eV)", "imfp": r"IMFP $\lambda$ (nm)",
-        "sd": "Seah–Dench universal curve (elements, a = 0.25 nm)",
+        "sd": "Seah–Dench universal curve (attenuation length, elements, a = 0.25 nm)",
         "alka": "Al K$\\alpha$ XPS range",
         "fig1": "Inelastic mean free path versus kinetic energy (TPP-2M)",
         "depth": r"Depth $z$ (nm)", "weight": "Relative contribution (per unit depth)",

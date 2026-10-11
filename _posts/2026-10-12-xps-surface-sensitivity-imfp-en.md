@@ -54,14 +54,14 @@ Only the IMFP is a material property fixed by material and energy; the other thr
 
 ## 3. The Universal Curve — How λ Depends on Kinetic Energy
 
-Which peak is more surface sensitive? $\lambda$ varies with material, but it varies even more with the electron's kinetic energy. When the values measured on many materials in the 1970s are plotted against kinetic energy, most of them fall on a similar V-shaped curve, known as the universal curve. Seah and Dench (1979) condensed the curve for elements into a single empirical formula in units of monolayers.
+Which peak is more surface sensitive? $\lambda$ varies with material, but it varies even more with the electron's kinetic energy. When attenuation lengths measured on many materials by the overlayer method in the late 1960s and 1970s are plotted against kinetic energy, most of them fall on a similar V-shaped curve, known as the universal curve. Seah and Dench (1979) condensed the curve for elements into a single empirical formula in units of monolayers. Those measurements assumed exponential attenuation with no elastic scattering, so strictly the compiled values are not IMFPs but what Section 2 called EALs. Today the formula serves only as a qualitative guide.
 
 $$ \lambda_m = \frac{538}{E^2} + 0.41\,(aE)^{1/2} $$
 
-$E$ is the kinetic energy in eV, $a$ the monolayer thickness in nm, and $\lambda_m$ the number of monolayers. The first term describes the drop in scattering at low energy, where the electron has too little energy to excite valence electrons. The second describes high energies, where a faster electron spends less time interacting. With $a = 0.25$ nm the minimum is 0.41 nm at about 41 eV. Electrons of a few tens of eV are the most surface sensitive.
+$E$ is the electron energy above the Fermi level in eV, $a$ the monolayer thickness in nm, and $\lambda_m$ the number of monolayers. The first term describes the drop in scattering at low energy, where the electron has too little energy to excite valence electrons. The second describes high energies, where a faster electron spends less time interacting. With $a = 0.25$ nm, converted to nanometers ($a\lambda_m$), the minimum is 0.41 nm at about 41 eV. Electrons of a few tens of eV are the most surface sensitive.
 
 <img src="/assets/img/posts/xps-surface-sensitivity-imfp/en/fig1-imfp-universal-curve.png" alt="TPP-2M IMFPs for Si, SiO2 and Au with the Seah–Dench universal curve and representative Al Kα peaks" width="640">
-_Figure 1. IMFP versus kinetic energy. Solid lines: the TPP-2M predictive formula (valid above 50 eV). Dashed line: the Seah–Dench empirical formula. Circles mark Si 2p (Si), O 1s (SiO₂) and Au 4f (Au) photoelectrons excited by Al K$\alpha$._
+_Figure 1. IMFP versus kinetic energy. Solid lines: the TPP-2M predictive formula (valid above 50 eV). Dashed line: the Seah–Dench empirical formula (fitted to measured attenuation lengths, so it includes elastic-scattering effects). Circles mark Si 2p (Si), O 1s (SiO₂) and Au 4f (Au) photoelectrons excited by Al K$\alpha$._
 
 The values used in practice today are calculated, not empirical. Tanuma, Powell and Penn calculated IMFPs from energy-loss functions derived from optical constants, and built a predictive formula that reproduces the results from four material parameters: the number of valence electrons, density, molecular weight and band gap. This is TPP-2M. The solid lines in Figure 1 were computed directly from it.
 
@@ -114,9 +114,9 @@ This is also where a common practical mistake needs pointing out. The literature
 
 A typical example is the Strohmeier equation, widely used to compute oxide thickness.
 
-$$ d = \lambda_{ox}\sin\theta\,\ln\!\left(\frac{N_m\lambda_m I_{ox}}{N_{ox}\lambda_{ox} I_m} + 1\right) $$
+$$ d = \lambda_{ox}\sin\theta'\,\ln\!\left(\frac{N_m\lambda_m I_{ox}}{N_{ox}\lambda_{ox} I_m} + 1\right) $$
 
-$N$ is the volume density of metal atoms, and $I$ the peak areas of the oxide and metal components. For this equation to express the same physics as the normal-referenced $\cos\theta$ form, $\theta$ must be measured from the surface, so that at normal emission $\sin 90° = 1$ and $\lambda_{ox}$ remains unchanged. Yet many popular practical resources that present this equation simply call $\theta$ the "take-off angle" without saying which plane it is measured from. On an instrument whose angle is not 45° from the normal, plugging that angle directly into the equation gives the wrong thickness. For an analyzer tilted 30° from the normal, the correct value is $\sin 60°$ = 0.87; using $\sin 30°$ = 0.5 instead gives a thickness 42% too small. Before borrowing an equation, check the reference plane of its angle.
+$N$ is the volume density of metal atoms, and $I$ the peak areas of the oxide and metal components. For this equation to express the same physics as the normal-referenced $\cos\theta$ form, $\theta'$ must be measured from the surface, i.e. $\theta' = 90° - \theta$, so that at normal emission $\sin 90° = 1$ and $\lambda_{ox}$ remains unchanged. Yet many popular practical resources that present this equation simply call $\theta'$ the "take-off angle" without saying which plane it is measured from. On an instrument whose angle is not 45° from the normal, plugging that angle directly into the equation gives the wrong thickness. For an analyzer tilted 30° from the normal, the correct value is $\sin 60°$ = 0.87; using $\sin 30°$ = 0.5 instead gives a thickness 42% too small. Before borrowing an equation, check the reference plane of its angle.
 
 ## 6. The Price of Surface Sensitivity
 
