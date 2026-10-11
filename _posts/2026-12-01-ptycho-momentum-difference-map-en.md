@@ -126,7 +126,7 @@ In practice this suggests an order. Start with rPIE and a reduced specimen step 
 
 ## Next
 
-All the data so far have been ideal: no noise, exact scan positions, and fully coherent light. Post 6 breaks these assumptions one at a time. It covers a cost function suited to the Poisson noise of photon counting (maximum likelihood), correcting the scan positions along with the specimen when they are wrong, and representing partial coherence with several probe modes. The noise-model discussion deferred from Post 1 returns there as well.
+All the data so far have been ideal: no noise, exact scan positions, and fully coherent light. Post 6 breaks the first of these assumptions, noise. It covers a cost function suited to the Poisson noise of photon counting (maximum likelihood), and the noise-model discussion deferred from Post 1 returns there. Correcting the scan positions along with the specimen when they are wrong, and representing partial coherence with several probe modes, follow in Post 7.
 
 ## References
 
