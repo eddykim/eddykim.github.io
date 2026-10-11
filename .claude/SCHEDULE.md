@@ -80,7 +80,7 @@
 | 2026-11-25 | 수 | wave-optics-interference | 파동광학 배경이론 1편 | 한·영 | 푸시됨 |
 | 2026-11-27 | 금 | ptycho-probe-ambiguity-raster-rpie | 계산 이미징과 타이코그래피 4편 | 한·영 | 푸시됨 |
 | 2026-11-29 | 일 | wave-optics-coherence | 파동광학 배경이론 2편 | 한·영 | 푸시됨 |
-| 2026-12-01 | 화 | ptycho-momentum-difference-map | 계산 이미징과 타이코그래피 5편 | 한·영 | 미커밋 |
+| 2026-12-01 | 화 | ptycho-momentum-difference-map | 계산 이미징과 타이코그래피 5편 | 한·영 | 푸시됨 |
 | 2026-12-03 | 목 | | | | |
 | 2026-12-05 | 토 | | | | |
 | 2026-12-07 | 월 | | | | |
