@@ -44,7 +44,7 @@ The binding energy is the energy difference between the $N$-electron system befo
 
 The key fact is that there need not be only one final state. Right after the core hole forms, the system does not only go to its lowest-energy state. Several final states with slightly different energies are possible: one in which a valence electron is excited at the same time, others in which the hole's spin pairs with valence spins in different ways. If $E_f(N-1)$ can take several values, photoelectrons from the same core level emerge with several kinetic energies and the peak splits into several. That is the origin of satellite structure.
 
-In this framework, the spin-orbit splitting of Section 1 is also a final-state effect: the hole has two final states, $j = 1/2$ and $3/2$. Being fixed for each atom, though, it carries almost no chemical information. The structures in Sections 3 to 5 are all variations on the same principle: one initial state with several final states gives several peaks.
+In this framework, the spin-orbit splitting of Section 1 is also a final-state effect: the hole has two final states, $j = 1/2$ and $3/2$. Being fixed for each atom, though, it carries almost no chemical information. The satellites of Section 3 and the asymmetric metal line shape of Section 4 are variations on this principle: one initial state with several final states gives several peaks. Plasmon losses in Section 4 belong here only in part, most of them being energy lost on the way to the surface, and the Auger peaks of Section 5 are different electrons emitted as the core hole decays. Those two lie outside this equation and are treated separately.
 
 ## 3. Satellite Structure — Shake-up, Shake-off, Multiplet Splitting
 
@@ -67,9 +67,9 @@ Multiplets are what practitioners most need to watch for. Fit Fe 2p or Mn 2p wit
 
 ## 4. Plasmon Losses and the Asymmetric Line Shape of Metals
 
-Why do metal peaks have a long tail on one side? A metal holds a sea of conduction electrons that are not bound to any atom. A photoelectron crossing that sea loses energy in two ways.
+Why do metal peaks have a long tail on one side? A metal holds a sea of conduction electrons that are not bound to any atom. That sea takes energy from the photoelectron in two ways: one while the photoelectron travels through it, the other at the instant the core hole forms.
 
-The first is plasmon loss. A plasmon is a collective oscillation of the whole conduction-electron gas, and its energy is fixed by the electron density. Each time a photoelectron excites a plasmon, it loses exactly that amount of energy, so loss peaks line up at regular intervals on the high-binding-energy side of the main peak. They are especially clear in aluminum, which is close to a free-electron metal. In Al 2p the bulk plasmon appears 15.3 eV from the main peak and the surface plasmon 10.4 eV away, with several orders of the bulk plasmon lined up at integer multiples. Thermo Fisher's data warn that these loss peaks are strong enough to obscure other peaks at higher binding energy, such as Si 2p and Si 2s.
+The first is plasmon loss. A plasmon is a collective oscillation of the whole conduction-electron gas, and its energy is fixed by the electron density. Each time a photoelectron excites a plasmon, it loses exactly that amount of energy, so loss peaks line up at regular intervals on the high-binding-energy side of the main peak. They are especially clear in aluminum, which is close to a free-electron metal. In aluminum core-level spectra (Balal et al. measured Al 1s and 2s) the bulk plasmon appears 15.3 eV from the main peak and the surface plasmon 10.4 eV away, with several orders of the bulk plasmon lined up at integer multiples. Thermo Fisher's data warn that these loss peaks are strong enough to obscure other peaks at higher binding energy, such as Si 2p and Si 2s.
 
 The second is an asymmetry of the line shape itself. In a metal, lifting an electron from just below the Fermi level to an empty level just above it costs almost no energy. Such small excitations can occur continuously when the core hole forms, so the photoelectron can lose any amount of energy starting from nearly zero. As a result the main peak itself becomes asymmetric, trailing toward higher binding energy. Doniach and Šunjić (1970) derived this shape theoretically, and it is usually called the DS line shape.
 
@@ -81,7 +81,7 @@ def doniach_sunjic(be, e0, alpha, f):
             / (f**2 + u**2) ** ((1 - alpha) / 2))
 ```
 
-With $\alpha = 0$ this reduces to a Lorentzian; larger $\alpha$ gives a longer tail. The observed line shape is this convolved with a Gaussian representing instrumental resolution. Figure 3 shows a metal peak built by convolving a DS line shape with $\alpha$ = 0.12 with a Gaussian. For this peak, 68% of the area lies on the high-binding-energy side of the maximum; a symmetric peak would have 50%.
+With $\alpha = 0$ this reduces to a Lorentzian; larger $\alpha$ gives a longer tail. The observed line shape is this convolved with a Gaussian representing instrumental resolution. Figure 3 shows a metal peak built by convolving a DS line shape with $\alpha$ = 0.12 with a Gaussian. For this peak, 64% of the area lies on the high-binding-energy side of the maximum; a symmetric peak would have 50%.
 
 <img src="/assets/img/posts/xps-spectrum-structure-satellites/en/fig3-asymmetric-lineshape.png" alt="Asymmetric metal peak compared with a symmetric Voigt, and residuals and a spurious component when fitting with symmetric functions" width="760">
 _Figure 3. Fitting a metal's asymmetric line with symmetric functions (synthetic spectra). (a) DS⊗Gauss compared with a symmetric Voigt. (b) Fit with one symmetric Voigt, with residual. (c) Fitting with two symmetric Voigts creates a spurious component at higher binding energy._
@@ -90,7 +90,7 @@ Insulator and oxide peaks, lacking conduction electrons, are close to symmetric;
 
 The DS line shape has one more awkward property. For $\alpha > 0$ the tail falls off slowly enough that the area diverges. Because the area depends on where the integration range is cut, quantification with asymmetric line shapes requires fixing the range and the background together. The out-of-window tail problem seen for Ti 2p₁/₂ in Section 1 is worse here.
 
-Plasmon losses, asymmetric tails and the stepped background from Part 2 are not separate phenomena. All of them are photoelectrons losing energy in the solid. A fixed amount of loss (a plasmon) gives a peak; a continuous loss starting from zero gives the tail of a peak; many large losses give the background.
+Plasmon losses, asymmetric tails and the stepped background of Section 7 all make the photoelectron leave with less kinetic energy than it would otherwise have. A fixed amount of loss (a plasmon) gives a peak; a continuous loss starting from zero gives the tail of a peak; many large losses give the background. Their origins differ, though. The asymmetric tail is a final-state effect, the response of the conduction electrons at the instant the core hole forms (an intrinsic loss); the stepped background and most of the plasmon loss arise on the way to the surface through the inelastic scattering seen in Part 2 (extrinsic losses). Plasmons also have an intrinsic share excited directly by the core hole, about one fifth of the first plasmon loss in aluminum.
 
 ## 5. Why Auger Peaks Appear in an XPS Spectrum
 
@@ -125,7 +125,7 @@ Spreading these two quantities over one plane gives the Wagner plot, also called
 
 Copper in Figure 4(a) shows why both axes are needed. Cu₂O nearly coincides with the metal in binding energy but has an $\alpha'$ 2 eV lower, dropping two diagonals down. CuO, conversely, differs from the metal in $\alpha'$ by only 0.3 eV but has a binding energy 1 eV higher, moving it sideways. On either axis alone, two of the three chemical states overlap; on both axes together, all three separate.
 
-The change in $\alpha'$ also has a physical interpretation. A photoelectron process leaves one hole, and an Auger process leaves two holes in the final state. If $R$ is the extra-atomic relaxation energy, the energy lowered by neighboring atoms screening a hole, a two-hole state gains roughly twice that. Add the approximation that the core levels involved all shift by the same amount through initial-state effects, and the initial-state contribution cancels in $\alpha'$, leaving
+The change in $\alpha'$ also has a physical interpretation. A photoelectron process leaves one hole, and an Auger process leaves two holes in the final state. Let $R$ be the extra-atomic relaxation energy, the energy lowered by neighboring atoms screening a hole. Because it comes from polarizing the surroundings, it scales with the square of the hole charge, so a two-hole state gains roughly four times as much, $4R$, which is $2R$ more than two separate holes would gain. Add the approximation that the core levels involved all shift by the same amount through initial-state effects, and the initial-state contribution cancels in $\alpha'$, leaving
 
 $$ \Delta\alpha' \approx 2\,\Delta R $$
 
@@ -158,6 +158,6 @@ The next part takes this knowledge into quantification. Extracting composition f
 - Thermo Fisher Scientific, XPS Periodic Table (Cu, Ti, Al, Zn). <https://www.thermofisher.com/us/en/home/materials-science/learning-center/periodic-table.html>
 - "Auger Peaks and the Auger Parameter," XPS Reference Pages. <https://www.xpsfitting.com/2012/08/auger-peaks-and-auger-parameter.html>
 - "Workshop Exercises: The Auger Parameter and Wagner Plots," XPS Reference Pages. <https://www.xpsfitting.com/2016/09/workshop-exercises-auger-parameter-and.html>
-- "Initial vs Final State Effects," HarwellXPS. <https://www.harwellxps.guru/xpskb/initial-vs-final-state-effects/>
+- "Initial vs Final State Effects," HarwellXPS. <https://web.archive.org/web/20260417131843/https://www.harwellxps.guru/xpskb/initial-vs-final-state-effects/> (archived copy, 2026-04-17)
 - S. Hüfner, *Photoelectron Spectroscopy: Principles and Applications*, 3rd ed., Springer, 2003.
 - D. J. Morgan, "X-Ray Photoelectron Spectroscopy (XPS): An Introduction," Cardiff Catalysis Institute. <https://sites.cardiff.ac.uk/xpsaccess/files/2014/07/AccessXPS_Primer_Paper.pdf>

@@ -143,8 +143,8 @@ DS_ALPHA, DS_F, G_FWHM = 0.12, 0.15, 0.8
 ds_raw = gauss_convolve(x_m, doniach_sunjic(x_m, 0.0, DS_ALPHA, DS_F), G_FWHM)
 metal = ds_raw / area(x_m, ds_raw)
 sym_same = voigt(x_m, 0.0, 1.0, G_FWHM * FWHM_TO_SIGMA, DS_F)       # 같은 위치·면적의 대칭형
-tail_high = area(x_m[x_m > 0], metal[x_m > 0])                     # 높은 BE 쪽 몫
 peak_pos = x_m[np.argmax(metal)]
+tail_high = area(x_m[x_m > peak_pos], metal[x_m > peak_pos])       # 최대점보다 높은 BE 쪽 몫
 noise_level = 0.004
 metal_noisy = metal + rng.normal(0, noise_level, x_m.size)
 
