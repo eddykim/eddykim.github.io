@@ -82,7 +82,7 @@
 | 2026-11-29 | 일 | wave-optics-coherence | 파동광학 배경이론 2편 | 한·영 | 푸시됨 |
 | 2026-12-01 | 화 | ptycho-momentum-difference-map | 계산 이미징과 타이코그래피 5편 | 한·영 | 푸시됨 |
 | 2026-12-03 | 목 | ptycho-noise-maximum-likelihood | 계산 이미징과 타이코그래피 6편 | 한·영 | 푸시됨 |
-| 2026-12-05 | 토 | wave-optics-diffraction | 파동광학 배경이론 3편 | 한·영 | 미커밋 |
+| 2026-12-05 | 토 | wave-optics-diffraction | 파동광학 배경이론 3편 | 한·영 | 푸시됨 |
 | 2026-12-07 | 월 | | | | |
 | 2026-12-09 | 수 | | | | |
 | 2026-12-11 | 금 | | | | |
