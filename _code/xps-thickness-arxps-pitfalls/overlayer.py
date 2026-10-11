@@ -5,7 +5,7 @@
       generate_figures.py가 이 모듈을 불러 그림을 그린다.
 
 기준 계는 SiO2/Si의 Si 2p다.
-- 감쇠길이 L = 3.0 nm: 2편에서 TPP-2M으로 구한 SiO2 속 Si 2p의 IMFP(3.88 nm)에
+- 감쇠길이 L = 3.0 nm: 2편에서 TPP-2M으로 구한 SiO2 속 Si 2p의 IMFP(3.90 nm)에
   Powell(2020)이 정리한 Si의 EAL/IMFP 비 하한 0.77을 곱한 수준. 산화물과 기판에 같은 값을 쓴다.
 - R0 = I(두꺼운 SiO2) / I(Si) = 0.88 (실측), 0.53 (계산): Seah & Spencer, SIA 33, 640 (2002).
 """
