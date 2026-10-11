@@ -87,9 +87,13 @@ vo = voigt_profile(xg, FW * X.FWHM_TO_SIGMA, FW / 2)
 
 
 def fwhm(x, y):
+    """반값 경계를 격자 사이에서 선형 보간해 FWHM을 구한다 (격자 칸을 세면 0.005 eV 단위로 잘린다)."""
     half = y.max() / 2
     idx = np.where(y >= half)[0]
-    return x[idx[-1]] - x[idx[0]]
+    i, j = idx[0], idx[-1]
+    left = x[i - 1] + (half - y[i - 1]) * (x[i] - x[i - 1]) / (y[i] - y[i - 1])
+    right = x[j] + (half - y[j]) * (x[j + 1] - x[j]) / (y[j + 1] - y[j])
+    return right - left
 
 
 fw_v = fwhm(xg, vo)

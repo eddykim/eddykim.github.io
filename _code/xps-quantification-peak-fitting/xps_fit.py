@@ -225,13 +225,20 @@ def main():
     for k, a in areas.items():
         print(f"  {k:9s} {a:8.1f}  ({100 * (a / a_true - 1):+.1f}%)")
     print(f"  참 면적   {a_true:8.1f}")
-    print("  배경 세기에 따른 민감도 (배율: 계단 높이/피크 높이 → 면적 오차 linear/Shirley/Tougaard)")
+    print("  배경 세기에 따른 민감도 (배율: 계단 높이/피크 높이 → 면적 오차 linear/Shirley/Tougaard,")
+    print("  잡음 실현 20회(seed 1–20) 평균 ± 표준편차. 실현 한 번의 값은 잡음만으로 ±2%쯤 흔들린다)")
+    models = ("linear", "Shirley", "Tougaard")
     for m in (1.0, 3.0, 6.0):
         bgt = true_background(mult=m)
         step = 100 * (bgt[-1] - bgt[0]) / true_signal().max()
-        _, _, ar, at = background_comparison(mult=m)
-        errs = "/".join(f"{100 * (ar[k] / at - 1):+.1f}%" for k in ("linear", "Shirley", "Tougaard"))
-        print(f"    ×{m:.0f}: 계단 {step:.1f}% → {errs}")
+        errs = {k: [] for k in models}
+        for s in range(1, 21):
+            _, _, ar, at = background_comparison(seed=s, mult=m)
+            for k in models:
+                errs[k].append(100 * (ar[k] / at - 1))
+        txt = "/".join(f"{np.mean(errs[k]):+.1f}%" for k in models)
+        sd = "/".join(f"{np.std(errs[k]):.1f}" for k in models)
+        print(f"    ×{m:.0f}: 계단 {step:.1f}% → {txt}  (표준편차 {sd})")
 
     y, bg, n_iter, p, err, chi2r, (p_ex, err_ex, c2_ex) = constrained_demo()
     print(f"\n=== 7.3절: 제약 피팅 (Shirley {n_iter}회 반복 수렴, χ²_red = {chi2r:.2f})")
