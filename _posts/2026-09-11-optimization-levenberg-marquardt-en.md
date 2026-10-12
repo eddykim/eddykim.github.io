@@ -25,7 +25,7 @@ With thickness as the only parameter, $J^TJ$ is the scalar $A=\sum_i r_i'^2$ and
 
 $$ h_{lm} = -\frac{g}{A+\mu}, \qquad g = \sum_i r_i' r_i $$
 
-The role of $\mu$ is clearest at the extremes. As $\mu \to 0$, $h_{lm}$ becomes exactly the Gauss-Newton step. As $\mu \to \infty$, $A$ becomes negligible and $h_{lm} \approx -g/\mu$ — steepest descent, moving opposite the gradient by $1/\mu$. A single parameter serves as the handle that slides between "safe but slow" and "fast but vulnerable to curvature."
+The role of $\mu$ is clearest at the extremes. As $\mu \to 0$, $h_{lm}$ becomes exactly the Gauss-Newton step. As $\mu \to \infty$, $A$ becomes negligible and $h_{lm} \approx -g/\mu$ — steepest descent, a step of $1/\mu$ times the gradient in the opposite direction (post 1's learning rate $\alpha=1/\mu$). A single parameter serves as the handle that slides between "safe but slow" and "fast but vulnerable to curvature."
 
 The initial damping is set as $\mu_0 = \tau \cdot A$. The scale factor $\tau$ is chosen by the user: small ($10^{-6}$) if the initial value is believed to be close to the solution, larger ($10^{-3}$, or 1) if it is not — the recommendation of Madsen and co-authors.
 
@@ -66,12 +66,12 @@ That transition happens automatically, driven by a gain ratio $\rho$ computed at
 
 $$ \rho = \frac{F(d) - F(d+h_{lm})}{L(0) - L(h_{lm})}, \qquad L(0)-L(h_{lm}) = \frac{1}{2}h_{lm}(\mu h_{lm} - g) $$
 
-The denominator is the reduction predicted by the local quadratic model; the numerator is the reduction actually achieved. If $\rho>0$, the model is holding up: the step is accepted and $\mu$ is reduced by $\mu \leftarrow \mu \cdot \max\{1/3,\ 1-(2\rho-1)^3\}$. If $\rho \le 0$, the step is rejected, $\mu \leftarrow \nu\mu$ enlarges the damping, and $\nu$ is doubled. Marquardt's original rule simply multiplied and divided, which produced flutter; the rule used here, due to Nielsen, damps that oscillation.
+Here $F(d)=\frac{1}{2}\sum_i r_i^2$ is the objective $J(d)$, and $L(h)=F(d)+gh+\frac{1}{2}Ah^2$ is the local quadratic model obtained by linearizing the residuals. The denominator is the reduction predicted by the local quadratic model; the numerator is the reduction actually achieved. If $\rho>0$, the model is holding up: the step is accepted and $\mu$ is reduced by $\mu \leftarrow \mu \cdot \max\{1/3,\ 1-(2\rho-1)^3\}$. If $\rho \le 0$, the step is rejected, $\mu \leftarrow \nu\mu$ enlarges the damping, and $\nu$ is doubled. Marquardt's original rule simply multiplied and divided, which produced flutter; the rule used here, due to Nielsen, damps that oscillation.
 
 <img src="/assets/img/posts/optimization-levenberg-marquardt/en/fig2-mu-adaptation.png" alt="Adaptation of mu driven by the gain ratio" width="600">
 _Fig 2. Adaptation of μ driven by the gain ratio_
 
-In both cases $\mu$ shrinks by exactly a factor of 1/3 at every accepted step — a straight line on the log scale — because the local quadratic approximation fits well enough that $\rho$ stays close to 1. What happens after the $\tau=10^{-6}$ run (blue) reaches the noise floor is the interesting part. Once the objective $J$ stops decreasing, at the floor set by the noise, subsequent steps give $\rho \le 0$ and are rejected, and $\mu$ grows again by $\times2, \times4, \times8, \dots$ — the algorithm detecting that there is nothing left to reduce and turning conservative on its own.
+In both cases $\mu$ shrinks by exactly a factor of 1/3 at every accepted step — a straight line on the log scale — because the local quadratic approximation fits well enough that $\rho$ stays above about 0.94 (values above 1 included), where $\max\{1/3,\ 1-(2\rho-1)^3\}$ hits its floor of 1/3. What happens after the $\tau=10^{-6}$ run (blue) reaches the noise floor is the interesting part. Once the objective $J$ stops decreasing, at the floor set by the noise, subsequent steps give $\rho \le 0$ and are rejected, and $\mu$ grows again by $\times2, \times4, \times8, \dots$ — the algorithm detecting that there is nothing left to reduce and turning conservative on its own.
 
 ## 4. The four methods side by side
 
@@ -93,7 +93,7 @@ With $\tau$ small enough, LM traces a trajectory indistinguishable from Gauss-Ne
 
 ## 5. LM is not a cure-all — the basin problem remains
 
-Damping changes the conditioning of the normal equation, not the shape of the objective. The local-minimum basin problem seen in post 2 therefore survives in LM untouched. Restarting from around 1300 nm and 1690 nm, and varying $\tau$ across three orders of magnitude, LM converges to exactly the same neighbouring minima as GN.
+Damping changes the conditioning of the normal equation, not the shape of the objective. The local-minimum basin problem seen in post 2 therefore survives in LM untouched. Restarting from around 1300 nm and 1690 nm, and varying $\tau$ across five orders of magnitude ($10^{-3}$ to $10^{2}$), LM converges to exactly the same neighbouring minima as GN.
 
 | Initial value $d_0$ | Gauss-Newton | LM ($\tau=10^{-3}$) | LM ($\tau=1$) | LM ($\tau=100$) |
 |---|---|---|---|---|
@@ -104,9 +104,9 @@ Damping guarantees safe arrival at the minimum *within a basin*; which basin is 
 
 ## 6. A real failure case — assuming the wrong refractive index
 
-The theoretical limit of GN flagged in post 2 — failure when the residuals are large or the Jacobian near-singular — was reproduced deliberately. Suppose the fitting model assumes a refractive index of 1.02 for SiO2 instead of the actual 1.46. Being so close to air (1.0), that value all but erases the interference contrast at the SiO2/Si interface. Evaluating $\sum_i r_i'^2$ at $d=1490$ nm gives $4.34\times10^{-6}$ against $2.58\times10^{-3}$ for the correct model — smaller by a factor of about 595. The Jacobian has collapsed toward zero.
+The theoretical limit of GN flagged in post 2 — failure when the residuals are large or the Jacobian near-singular — was reproduced deliberately. Suppose the fitting model assumes a refractive index of 1.02 for SiO2 instead of the actual 1.46. Being so close to air (1.0), that value all but removes the reflection at the air/SiO2 interface (reflectance 0.035 → about $10^{-4}$), and with it the thin-film interference contrast. Evaluating $\sum_i r_i'^2$ at $d=1490$ nm gives $4.34\times10^{-6}$ against $2.58\times10^{-3}$ for the correct model — smaller by a factor of about 595. The Jacobian has collapsed toward zero.
 
-Running Gauss-Newton from $d_0=1540$ nm in this state, the estimate simply cycles among 1665.5 nm, 1543.4 nm and 1416.8 nm, showing no convergence at all over twenty steps. The denominator of the normal equation, $\sum_i r_i'^2$, is so small that every step overshoots badly. Levenberg-Marquardt under identical conditions converges steadily to the true minimum of this (wrong) model, $d\approx1486.6$ nm.
+Running Gauss-Newton from $d_0=1540$ nm in this state, the estimate simply cycles among 1665.5 nm, 1543.4 nm and 1416.8 nm, showing no convergence at all over twenty steps. The denominator of the normal equation, $\sum_i r_i'^2$, is tiny while the residuals stay large, so the discarded term $\sum_i r_i r_i''$ — about three times the denominator at this model's minimum — dominates the approximate Hessian and every step overshoots badly. Levenberg-Marquardt under identical conditions converges steadily to the local minimum of this (wrong) model nearest the start, $d\approx1486.6$ nm (the lowest point between 1400 and 1700 nm).
 
 <img src="/assets/img/posts/optimization-levenberg-marquardt/en/fig4-gn-failure-lm-rescue.png" alt="GN fails, LM succeeds" width="600">
 _Fig 4. With a wrongly assumed refractive index: GN fails, LM rescues_

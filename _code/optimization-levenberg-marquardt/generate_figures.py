@@ -48,7 +48,7 @@ LABELS = {
         "gn": "Gauss-Newton", "lm": r"Levenberg-Marquardt ($\tau$=1e-6)",
         "fig3": "그림3. 네 방법 비교 (d0=1540nm)",
         "gn_cycle": "Gauss-Newton (영원히 진동)", "lm_plain": "Levenberg-Marquardt",
-        "wrong_floor": "이 모델의 실제 최솟값",
+        "wrong_floor": "이 모델의 국소 최솟값 (1400–1700nm)",
         "fig4": "그림4. 굴절률을 잘못 가정한 모델에서: GN 실패 vs LM 성공",
     },
     "en": {
@@ -65,7 +65,7 @@ LABELS = {
         "gn": "Gauss-Newton", "lm": r"Levenberg-Marquardt ($\tau$=1e-6)",
         "fig3": "Fig 3. The four methods compared (d0=1540nm)",
         "gn_cycle": "Gauss-Newton (cycles forever)", "lm_plain": "Levenberg-Marquardt",
-        "wrong_floor": "true minimum of this model",
+        "wrong_floor": "local minimum of this model (1400–1700 nm)",
         "fig4": "Fig 4. With a wrong refractive index: GN fails, LM rescues",
     },
 }
@@ -169,7 +169,7 @@ N_ITER_FAIL = 20
 d_gn_wrong = gauss_newton_wrong(initial_guess, N_ITER_FAIL)
 d_lm_wrong = levenberg_marquardt_wrong(initial_guess, N_ITER_FAIL, tau=1e-3)
 
-# 이 (잘못된) 모델의 실제 최솟값 위치를 촘촘한 스캔으로 찾는다.
+# 이 (잘못된) 모델의 1400–1700nm 구간의 최솟값 위치를 촘촘한 스캔으로 찾는다.
 _ds = np.linspace(1400, 1700, 3000)
 _Js = np.array([objective_wrong(d) for d in _ds])
 wrong_floor_d = float(_ds[np.argmin(_Js)])
