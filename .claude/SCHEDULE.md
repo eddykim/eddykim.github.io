@@ -85,7 +85,7 @@
 | 2026-12-05 | 토 | wave-optics-diffraction | 파동광학 배경이론 3편 | 한·영 | 푸시됨 |
 | 2026-12-07 | 월 | ptycho-position-correction-mixed-states | 계산 이미징과 타이코그래피 7편 | 한·영 | 푸시됨 |
 | 2026-12-09 | 수 | wave-optics-fourier-imaging | 파동광학 배경이론 4편 | 한·영 | 푸시됨 |
-| 2026-12-11 | 금 | ptycho-fourier-ptychography | 계산 이미징과 타이코그래피 8편 | 한·영 | 미커밋 |
+| 2026-12-11 | 금 | ptycho-fourier-ptychography | 계산 이미징과 타이코그래피 8편 | 한·영 | 푸시됨 |
 | 2026-12-13 | 일 | | | | |
 | 2026-12-15 | 화 | | | | |
 | 2026-12-17 | 목 | | | | |
