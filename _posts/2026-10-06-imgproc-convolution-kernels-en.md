@@ -37,7 +37,7 @@ Two conditions separate out here. Preserving the brightness of flat regions requ
 
 A box kernel of width $k$ has $\sum w^2 = 1/k$, so noise falls as $1/\sqrt{k}$ — the same form as the $1/\sqrt{N}$ of frame averaging in Post 1. The cost differs, though. Frame averaging spends time; spatial averaging spends resolution.
 
-A two-dimensional Gaussian is the one-dimensional kernel applied once along each axis, so its noise ratio is the square of the one-dimensional ratio, namely $\sum w^2$.
+A two-dimensional Gaussian is the one-dimensional kernel applied once along each axis, so its noise ratio is the square of the one-dimensional ratio, that is, $\sum w^2$ of the one-dimensional kernel. Summing $w^2$ over the 2-D kernel gives the variance ratio, the square of that.
 
 <img src="/assets/img/posts/imgproc-convolution-kernels/en/fig1-noise-gain.png" alt="Noise reduction versus smoothing width, theory compared with measurement" width="700">
 _Fig 1. Noise reduction is set by the sum of squared kernel weights_
@@ -95,7 +95,7 @@ CENTRAL_DIFF = np.array([-0.5, 0.0, 0.5])
 w_dog = np.gradient(gaussian_kernel(2.0))   # derivative of a Gaussian
 ```
 
-The familiar Sobel kernel has the same structure: a $[-1, 0, 1]$ derivative component multiplied by a $[1, 2, 1]$ smoothing component along the orthogonal axis, shown as the green curve in Fig 3. Scharr's $[3, 10, 3]$ revises that smoothing component, with the aim of improving the rotational symmetry of the gradient direction rather than the noise.
+The familiar Sobel kernel has the same structure: a $[-1, 0, 1]$ derivative component multiplied by a $[1, 2, 1]$ smoothing component along the orthogonal axis. That smoothing leaves the response along the derivative axis untouched, so along that axis Sobel responds exactly like the central difference; what it does is suppress noise in the orthogonal direction, lowering $\sqrt{\sum w^2}$ from $0.707$ to $0.433$. The green curve in Fig 3 is the response with the same $[1, 2, 1]$ applied along the derivative axis, which equals the diagonal cross-section of the Sobel response. Scharr's $[3, 10, 3]$ revises that smoothing component, with the aim of improving the rotational symmetry of the gradient direction rather than the noise.
 
 ## 5. How much smoothing to apply
 
@@ -116,11 +116,11 @@ def estimate_edge(profile, smooth_sigma):
 <img src="/assets/img/posts/imgproc-convolution-kernels/en/fig4-edge-tradeoff.png" alt="Edge position scatter traded against edge width as smoothing increases" width="700">
 _Fig 4. The smoothing trade — position stabilizes, the edge blurs_
 
-Without smoothing the position scatter is $0.094$ pixels. It improves 2.6-fold to $0.037$ pixels at $\sigma=2$, then degrades again, reaching $0.051$ pixels at $\sigma=10$. Over the same range the edge width grows monotonically from $3.2$ to $25.8$ pixels.
+Without smoothing the position scatter is $0.094$ pixels. It improves 2.6-fold to $0.037$ pixels at $\sigma=2$, stays nearly flat up to $\sigma=4$, then degrades again, reaching $0.051$ pixels at $\sigma=10$. Over the same range the edge width grows monotonically from $3.2$ to $25.8$ pixels.
 
 That the scatter worsens again is the key result. Early on, the gain from noise reduction dominates. Past a certain width the gradient peak becomes too flat for its vertex to be located reliably. A flat peak means the denominator $a-2b+c$ of the parabolic interpolation approaches zero, so small noise is amplified into large position error.
 
-The practical rule is to set the smoothing width near the width of the optical PSF. With a PSF of $1.2$ pixels, this experiment found an optimum at $2.0$ pixels. Going far beyond the PSF spends resolution for nothing.
+The practical rule is to keep the smoothing width within two to three times the optical PSF width. With a PSF of $1.2$ pixels, the scatter in this experiment bottomed out at $0.036$–$0.038$ pixels for smoothing widths of $2$–$4$ pixels; the floor is flat enough that 400 trials cannot locate a minimum within it. Going far beyond the PSF spends resolution for nothing.
 
 One more thing deserves attention: the bias of the estimated position stayed below $0.02$ pixels throughout. Smoothing with a symmetric kernel widens an edge but does not shift it to one side. Where subpixel estimation does acquire a genuine bias is treated separately in Post 4.
 
@@ -137,7 +137,7 @@ _Fig 5. Error left at the borders by each padding mode (right panel rescaled)_
 
 Zero padding produces errors an order of magnitude apart from the others: $191$ DN RMS over the outer five pixels, peaking at $493$ DN. This is the familiar darkening of a bright image's border, and searching for edges on top of it yields a strong spurious edge tracing the frame.
 
-The other two are two orders of magnitude smaller. Replication gives $18.7$ DN RMS and reflection $37.4$ DN. Reflection came out worse here because this scene carries a gradient across the border; folding the signal also inverts the sign of that gradient, creating a kink. Had the scene been flat near the border, the ranking could reverse.
+The other two are five to ten times smaller. Replication gives $18.7$ DN RMS and reflection $37.4$ DN. Reflection came out worse here because this scene carries a gradient across the border; folding the signal also inverts the sign of that gradient, creating a kink. Had the scene been flat near the border, the ranking could reverse.
 
 No mode is therefore universally better. In metrology the reliable solution is not to choose the assumption well but to avoid depending on it. Shrinking the region of interest by half the kernel width keeps invented values from ever reaching the result. A little field of view is traded for the complete removal of border artifacts.
 
@@ -145,27 +145,27 @@ No mode is therefore universally better. In metrology the reliable solution is n
 
 The discussion so far assumed noise of comparable size on every pixel. Dead pixels and cosmic ray hits break that assumption: a single point takes an entirely wrong value. Is a Gaussian still the answer?
 
-Extreme values were planted on 1.02% of the pixels and both filters were compared against the clean original.
+Extreme values were planted on 1.01% of the pixels (259) and both filters were compared against the clean original.
 
 <img src="/assets/img/posts/imgproc-convolution-kernels/en/fig6-median-vs-gaussian.png" alt="Gaussian and median filters applied to an image with spike pixels" width="750">
 _Fig 6. A linear filter smears a spike instead of removing it_
 
-The numbers are unambiguous. The spiked image has an RMS error of $14.5$ DN against the original. A Gaussian raises it to $15.3$ DN — **it makes things worse**. A median filter brings it down to $9.2$ DN.
+The numbers are unambiguous. The spiked image has an RMS error of $14.5$ DN against the original. A Gaussian raises it to $15.3$ DN — **it makes things worse**. A median filter brings it down to $9.2$ DN. Most of the Gaussian's $15.3$ DN, however, comes from blurring image detail rather than from the spikes: the same Gaussian applied to the spike-free original already gives $14.9$ DN. Isolating the spike contribution, the Gaussian reduces it to $2.8$ DN and the median to $1.8$ DN.
 
-The Gaussian fails because of linearity itself. A linear filter returns a weighted sum of its input, so it cannot destroy the total error an outlier brings; it can only distribute that error among the neighbours. The grey blobs where white dots used to be, in the centre panel of Fig 6, are the result. A single contaminated point has been widened to the kernel width, so the peak error drops while the contaminated area grows.
+The Gaussian cannot remove a spike cleanly because of linearity itself. A linear filter returns a weighted sum of its input, so it cannot destroy the total error an outlier brings; it can only distribute that error among the neighbours. The grey blobs where white dots used to be, in the centre panel of Fig 6, are the result. A single contaminated point has been widened to the kernel width, so the peak error drops while the contaminated area grows.
 
-A median filter sorts and takes the middle value. Being non-linear, it discards outliers outright. The cost is real, though. It is not a convolution, so frequency response says nothing about it, and it erases lines and corners finer than its kernel. Where fine structure is itself the measurand, a median filter cannot be applied casually.
+A median filter sorts and takes the middle value. Being non-linear, it discards outliers outright. The cost is real, though. It is not a convolution, so frequency response says nothing about it, and it erases lines narrower than half its window and rounds off sharp corners. Where fine structure is itself the measurand, a median filter cannot be applied casually.
 
 ## Summary and what comes next
 
-Choosing a kernel fixes its noise reduction through $\sum w^2$ and its signal preservation through the frequency response. Those two numbers are the whole of smoothing kernel selection. A derivative kernel has $\sum w = 0$ with a response that grows with frequency, so it must be fused with smoothing — which is what the DoG and Sobel families are. Smoothing width has an optimum, found here at roughly 1.7 times the PSF width. Borders and spikes are the two places where the assumptions behind linear convolution break, answered respectively by shrinking the region of interest and by switching to a non-linear filter.
+Choosing a kernel fixes its noise reduction through $\sum w^2$ and its signal preservation through the frequency response. Those two numbers are the whole of smoothing kernel selection. A derivative kernel has $\sum w = 0$ with a response that grows with frequency, so it must be fused with smoothing — which is what the DoG does; the Sobel family applies its smoothing orthogonally to cut noise. Smoothing width has an optimal range, here around two to three times the PSF width. Borders and spikes are the two places where the assumptions behind linear convolution break, answered respectively by shrinking the region of interest and by switching to a non-linear filter.
 
 The next post moves to the frequency domain. Having explained kernel behaviour through frequency response, it asks what happens when filters are designed there directly. It covers the removal of periodic noise such as illumination ripple and grating patterns, which cannot be touched in the spatial domain, and goes on to why an ideal filter produces ringing, and what the extrema envelope method developed in the dissertation does about it.
 
 ## References
 
 - R. C. Gonzalez, R. E. Woods, _Digital Image Processing_, 4th ed., Pearson, 2018, ch. 3 (spatial filtering), ch. 10 (edge detection).
-- H. Scharr, "Optimal Operators in Digital Image Processing," Ph.D. dissertation, Universität Heidelberg, 2000 (optimizing gradient kernels for rotational symmetry).
+- H. Scharr, "Optimale Operatoren in der Digitalen Bildverarbeitung" (Optimal Operators in Digital Image Processing), Ph.D. dissertation, Universität Heidelberg, 2000, [doi:10.11588/heidok.00000962](https://doi.org/10.11588/heidok.00000962) (optimizing gradient kernels for rotational symmetry).
 - J. Canny, "[A Computational Approach to Edge Detection](https://doi.org/10.1109/TPAMI.1986.4767851)," _IEEE Trans. Pattern Anal. Mach. Intell._, PAMI-8(6), 679-698, 1986 (the case for fusing differentiation with smoothing).
 - I. T. Young, L. J. van Vliet, "[Recursive implementation of the Gaussian filter](https://doi.org/10.1016/0165-1684(95)00020-E)," _Signal Processing_, 44(2), 139-151, 1995 (separability and fast implementations).
-- S. van der Walt et al., "[scikit-image: image processing in Python](https://doi.org/10.7717/peerj.453)," _PeerJ_, 2, e453, 2014 (the standard test image in Fig 6).
+- S. van der Walt et al., "[scikit-image: image processing in Python](https://doi.org/10.7717/peerj.453)," _PeerJ_, 2, e453, 2014 (the test image in Fig 6, `skimage.data.camera`, photo by Lav Varshney, CC0).

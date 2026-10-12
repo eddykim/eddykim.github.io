@@ -65,10 +65,12 @@ def separable_cost(k):
 def convolve1d_edge(sig, w, mode):
     """경계 처리 방식만 바꿔가며 1차원 컨볼루션을 수행한다.
 
-    mode 는 numpy.pad 의 이름을 그대로 쓴다.
+    mode 는 그림 라벨용 이름이며 numpy.pad 의 constant / edge / reflect 에 대응한다.
       zero      -> 바깥을 0 으로 (constant). 밝은 영상의 가장자리가 어두워진다.
       replicate -> 끝 값을 늘림 (edge). 무난하지만 기울기를 0 으로 만든다.
-      reflect   -> 거울 반사. 기울기까지 이어지므로 계측에서 기본값으로 쓸 만하다.
+      reflect   -> 거울 반사(가장자리 화소를 반복하지 않음. numpy 'reflect' = scipy 'mirror'
+                   = OpenCV BORDER_REFLECT_101). 기울기 부호를 뒤집으므로 경계를 가로지르는
+                   기울기가 있는 장면에서는 replicate 보다 나쁘다.
     """
     pad = len(w) // 2
     npmode = {"zero": "constant", "replicate": "edge", "reflect": "reflect"}[mode]

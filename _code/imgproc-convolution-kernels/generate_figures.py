@@ -34,11 +34,11 @@ LABELS = {
         "fig1": "그림2. 박스 커널은 고주파를 깔끔하게 자르지 못하고 부엽을 남긴다",
 
         "sigma_ax": r"평활화 폭 $\sigma$ (픽셀)", "ratio": r"$\sigma_{out}/\sigma_{in}$",
-        "measured": "측정", "theory": r"이론 $\sum w^2$ (2차원)",
+        "measured": "측정", "theory": r"이론: 1차원 커널의 $\sum w^2$",
         "gauss_m": "가우시안 (측정)", "box_m": "같은 폭 박스 (측정)",
         "fig2": "그림1. 평활화가 노이즈를 줄이는 정도는 커널 제곱합이 정한다",
 
-        "ideal_d": "이상적 미분", "central": "중심차분", "sobel": "Sobel 평활 결합",
+        "ideal_d": "이상적 미분", "central": "중심차분", "sobel": "[1,2,1] 같은 축 결합 (Sobel 대각 단면)",
         "dog": r"DoG ($\sigma$ = 2)",
         "fig3": "그림3. 미분 커널의 응답은 주파수와 함께 커진다 — 평활화와 묶어야 하는 이유",
 
@@ -63,12 +63,12 @@ LABELS = {
         "fig1": "Fig 2. A box kernel cuts high frequencies poorly, leaving sidelobes",
 
         "sigma_ax": r"Smoothing width $\sigma$ (pixel)", "ratio": r"$\sigma_{out}/\sigma_{in}$",
-        "measured": "Measured", "theory": r"Theory $\sum w^2$ (2-D)",
+        "measured": "Measured", "theory": r"Theory: $\sum w^2$ of 1-D kernel",
         "gauss_m": "Gaussian (measured)", "box_m": "Box of equal width (measured)",
         "fig2": "Fig 1. Noise reduction is set by the sum of squared kernel weights",
 
         "ideal_d": "Ideal derivative", "central": "Central difference",
-        "sobel": "Sobel (with smoothing)", "dog": r"DoG ($\sigma$ = 2)",
+        "sobel": "[1,2,1] along same axis (Sobel diagonal)", "dog": r"DoG ($\sigma$ = 2)",
         "fig3": "Fig 3. Derivative response grows with frequency — hence the pairing with smoothing",
 
         "pos_std": "Std of edge position (pixel)", "width_ax": "Edge width 10-90% (pixel)",
@@ -111,6 +111,9 @@ meas_b = np.array([uniform_filter(white, int(k))[24:-24, 24:-24].std()
 # 그림3: 미분 커널의 주파수 응답
 f3, H_cd = frequency_response(CENTRAL_DIFF)
 H_ideal = np.pi * f3                                  # 이상적 미분의 크기
+# [1,2,1] 을 미분과 같은 축에 합성곱한 1차원 커널의 응답이다. 실제 Sobel 은 [1,2,1] 을
+# 직교 방향에 걸므로 미분 축 응답 H(fx, 0) 은 중심차분과 같고, 이 곡선은 Sobel 응답의
+# 대각선(fx = fy) 단면과 같다.
 _, H_sobel = frequency_response(np.convolve(CENTRAL_DIFF, SOBEL_SMOOTH))
 w_dog = np.gradient(gaussian_kernel(GAUSS_S))
 _, H_dog = frequency_response(w_dog)
