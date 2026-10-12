@@ -7,7 +7,7 @@ d^2J/dd^2 를 근사한다:
     d^2J/dd^2 = sum_i [ (dr_i/dd)^2 + r_i * d^2r_i/dd^2 ]  (Newton, 정확한 Hessian)
     d^2J/dd^2 ~= sum_i (dr_i/dd)^2                          (Gauss-Newton, 둘째 항을 버림)
 
-파라미터가 두께 d 하나뿐이라 정규방정식 (J^T J) h = -J^T r 이 스칼라 나눗셈으로 풀린다.
+파라미터가 두께 d 하나뿐이라 정규방정식 (J^T J) Δd = -J^T r 이 스칼라 나눗셈으로 풀린다.
 """
 import numpy as np
 from reflectance_model import reflectance
@@ -37,7 +37,7 @@ def gauss_newton(d0, wavelength_nm, measured_R, n_iter=100, h=1e-3):
     for _ in range(n_iter):
         r = residual(d, wavelength_nm, measured_R)
         Jr = numerical_jacobian(d, wavelength_nm, measured_R, h)
-        step = -np.sum(Jr * r) / np.sum(Jr ** 2)  # (J^T J) h = -J^T r
+        step = -np.sum(Jr * r) / np.sum(Jr ** 2)  # (J^T J) Δd = -J^T r
         d = d + step
         d_hist.append(d)
         J_hist.append(objective(d, wavelength_nm, measured_R))

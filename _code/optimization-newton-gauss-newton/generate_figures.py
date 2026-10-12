@@ -1,4 +1,4 @@
-"""최적화 2편 그림 4개 생성 (한국어판·영문판).
+"""최적화 2편 그림 5개 생성 (한국어판·영문판).
 
 실행: python generate_figures.py
 출력: ../../assets/img/posts/optimization-newton-gauss-newton/      (한국어)
@@ -59,6 +59,10 @@ LABELS = {
         "p_hess_good": "Newton Hessian @ d0={:.0f}: {:.6f} (양수 -> 정상)",
         "p_chaos_head": "발산 궤적의 초기값 민감도 (10스텝째 두께):",
         "p_chaos_row": "  d0={:.12f} -> {:.2f} nm",
+        "concave_quad": "d={:.0f}에서의 2차 근사 (위로 볼록)",
+        "concave_top": "포물선 꼭대기 = Newton 스텝 후 d={:.1f}",
+        "fig5": "그림5. 곡률이 음수인 지점(d=1540)의 2차 근사",
+        "p_concave": "Newton 스텝 @ d0={:.0f}: {:+.2f} nm -> d={:.2f}, 포물선 꼭대기 J={:.2f}",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"),
@@ -83,6 +87,10 @@ LABELS = {
         "p_hess_good": "Newton Hessian @ d0={:.0f}: {:.6f} (positive -> well behaved)",
         "p_chaos_head": "sensitivity of the diverging trajectory to the initial value (10th-step thickness):",
         "p_chaos_row": "  d0={:.12f} -> {:.2f} nm",
+        "concave_quad": "quadratic approximation at d={:.0f} (opens downward)",
+        "concave_top": "top of the parabola = after Newton step, d={:.1f}",
+        "fig5": "Fig 5. Quadratic approximation at negative curvature (d=1540)",
+        "p_concave": "Newton step @ d0={:.0f}: {:+.2f} nm -> d={:.2f}, top of parabola J={:.2f}",
     },
 }
 
@@ -137,13 +145,24 @@ chaos = [
     for eps in CHAOS_EPS
 ]
 
+# 그림5용: 곡률이 음(-)인 지점(d=1540)에서 Newton의 국소 모델.
+# 포물선이 위로 볼록하므로 기울기가 0인 점은 바닥이 아니라 꼭대기이고,
+# Newton 스텝은 그 꼭대기로 뛴다(약 +336nm).
+grad_c, hess_c = numerical_grad_hess(initial_guess, wavelength_nm, R_measured)
+J_c = objective(initial_guess, wavelength_nm, R_measured)
+d_top = initial_guess - grad_c / hess_c
+J_top = J_c + grad_c * (d_top - initial_guess) + 0.5 * hess_c * (d_top - initial_guess) ** 2
+d_wide = np.linspace(1440, 1940, 501)
+J_wide = np.array([objective(d, wavelength_nm, R_measured) for d in d_wide])
+J_quad_c = J_c + grad_c * (d_wide - initial_guess) + 0.5 * hess_c * (d_wide - initial_guess) ** 2
+
 
 # ---------------------------------------------------------------------------
 # 그리기
 # ---------------------------------------------------------------------------
 
 def render(L):
-    """주어진 라벨 묶음으로 그림 4개를 그리고 검증 수치를 출력한다."""
+    """주어진 라벨 묶음으로 그림 5개를 그리고 검증 수치를 출력한다."""
     out, F, LF = L["dir"], L["font"], L["legend"]
     os.makedirs(out, exist_ok=True)
 
@@ -203,6 +222,22 @@ def render(L):
     plt.savefig(os.path.join(out, "fig4-newton-success-vs-failure.png"), dpi=150)
     plt.close()
 
+    # 그림5: 곡률이 음수인 지점의 2차 근사 (위로 볼록한 포물선)
+    plt.figure(figsize=(6, 4))
+    plt.plot(d_wide, J_wide, "-", color="C0", label=L["actual_J"])
+    plt.plot(d_wide, J_quad_c, "--", color="C3", label=L["concave_quad"].format(initial_guess))
+    plt.axvline(initial_guess, color="gray", linestyle=":", label=L["current"].format(initial_guess))
+    plt.axvline(d_top, color="C3", linestyle=":", alpha=0.6, label=L["concave_top"].format(d_top))
+    plt.plot([d_top], [J_top], "o", color="C3", markersize=5)
+    plt.xlabel(L["thickness"], **F)
+    plt.ylabel(L["objective"], **F)
+    plt.ylim(0, 24)  # 범례가 포물선 꼭대기를 가리지 않도록 위에 여유를 둔다
+    plt.legend(prop=LF, fontsize=8, loc="upper left")
+    plt.title(L["fig5"], **F)
+    plt.tight_layout()
+    plt.savefig(os.path.join(out, "fig5-concave-quadratic-approximation.png"), dpi=150)
+    plt.close()
+
     print(L["p_nt"].format(initial_guess, d_hist_nt[-1]))
     print(L["p_gn"].format(initial_guess, d_hist_gn[-1]))
     print(L["p_gd"].format(initial_guess, d_hist_gd[-1]))
@@ -212,6 +247,7 @@ def render(L):
     print(L["p_chaos_head"])
     for d0, last in chaos:
         print(L["p_chaos_row"].format(d0, last))
+    print(L["p_concave"].format(initial_guess, d_top - initial_guess, d_top, J_top))
 
 
 for lang, labels in LABELS.items():
