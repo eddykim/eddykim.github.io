@@ -59,7 +59,9 @@ class Sensor:
 
         read_e = self.read_noise_e * rng.standard_normal(self.shape)
 
-        total_e = np.clip(signal_e + dark_e + read_e, 0.0, self.full_well_e)
+        # 전자 영역에서는 위(최대 전하 용량)만 자른다. 아래쪽은 오프셋을 더한 뒤 DN 영역
+        # 클립이 맡는다. 여기서 0 e- 를 자르면 오프셋이 있어도 어두운 화소가 0 에 붙는다.
+        total_e = np.minimum(signal_e + dark_e + read_e, self.full_well_e)
         dn = self.gain_K * total_e + self.offset_dn
         if quantize:
             dn = np.floor(dn)
@@ -97,7 +99,7 @@ def photon_transfer_curve(sensor, photon_levels, exposure_s, rng, n_pairs=1):
 def fit_ptc(signal_dn, var_dn, fit_range, sigma_q_sq=0.0):
     """광전달곡선의 선형 구간에 직선을 맞춰 K 와 어두운 영역 노이즈를 되찾는다.
 
-    signal_dn 은 오프셋을 뺀 값(mu_y - y_0)이어야 한다. 그래야 기울기가 K [DN/e-],
+    signal_dn 은 빛을 막고 찍은 암평균을 뺀 값(mu_y - mu_y.dark, EMVA 1288 식 9)이어야 한다. 그래야 기울기가 K [DN/e-],
     절편이 K^2 * sigma_dark^2 로 곧장 읽힌다. 최소자승 직선 하나로 데이터시트 없이
     센서의 두 상수를 얻는 셈이다.
 

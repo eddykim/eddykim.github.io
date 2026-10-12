@@ -30,14 +30,15 @@ LABELS = {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         # 그림1
         "chain": ["광자", "신호 전자", "전압", "DN"],
-        "chain_ops": ["양자효율\n$\\eta$", "전하-전압\n변환", "ADC\n이득 $K$"],
-        "noise_shot": "샷 노이즈\n(신호에 비례)",
+        "chain_ops": ["양자효율\n$\\eta$", "전하-전압\n변환", "ADC"],
+        "noise_shot": "샷 노이즈\n(분산이 신호에 비례)",
         "noise_dark": "암전류\n+ 고정패턴",
         "noise_read": "읽기 노이즈\n(신호와 무관)",
         "noise_quant": "양자화\n노이즈",
+        "gain_span": "시스템 이득 $K$ (DN/e$^-$) = 전자→DN 전체",
         "fig1": "그림1. 광자에서 픽셀 값까지의 사슬과 각 단계에서 끼어드는 노이즈",
         # 그림2
-        "mean_dn": "평균 신호 $\\mu_y - y_0$ (DN)",
+        "mean_dn": "평균 신호 $\\mu_y - \\mu_{y.dark}$ (DN)",
         "var_dn": "분산 $\\sigma_y^2$ (DN$^2$)",
         "ptc_data": "측정 (두 장 차이로 구한 분산)",
         "ptc_fit": "선형 구간 직선 맞춤",
@@ -77,13 +78,14 @@ LABELS = {
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": {}, "legend": {},
         "chain": ["Photons", "Signal electrons", "Voltage", "DN"],
-        "chain_ops": ["Quantum\nefficiency $\\eta$", "Charge-to-\nvoltage", "ADC\ngain $K$"],
-        "noise_shot": "Shot noise\n(scales with signal)",
+        "chain_ops": ["Quantum\nefficiency $\\eta$", "Charge-to-\nvoltage", "ADC"],
+        "noise_shot": "Shot noise\n(variance ∝ signal)",
         "noise_dark": "Dark current\n+ fixed pattern",
         "noise_read": "Read noise\n(signal independent)",
         "noise_quant": "Quantization\nnoise",
+        "gain_span": "System gain $K$ (DN/e$^-$): electrons → DN",
         "fig1": "Fig 1. From photons to pixel values, and where each noise source enters",
-        "mean_dn": "Mean signal $\\mu_y - y_0$ (DN)",
+        "mean_dn": "Mean signal $\\mu_y - \\mu_{y.dark}$ (DN)",
         "var_dn": "Variance $\\sigma_y^2$ (DN$^2$)",
         "ptc_data": "Measured (variance from frame difference)",
         "ptc_fit": "Linear-range fit",
@@ -133,7 +135,8 @@ EXPOSURE_S = 0.01
 # 분해된다 — 실제 카메라 특성 측정에서도 레벨당 수십 장을 찍는 이유다.
 ptc_mean, ptc_var = photon_transfer_curve(
     sensor, photon_levels, EXPOSURE_S, rng, n_pairs=24)
-ptc_signal = ptc_mean - sensor.offset_dn
+# 가로축은 측정한 암평균 기준이다 (EMVA 1288 식 9). 첫 레벨이 무광(0 광자)이다.
+ptc_signal = ptc_mean - ptc_mean[0]
 FIT_LO, FIT_HI = 0.0, 200.0
 SIGMA_Q_SQ = 1.0 / 12.0   # 양자화 노이즈 분산 [DN^2], 균등 분포 가정
 K_hat, sigma_read_hat, slope, intercept = fit_ptc(
@@ -222,13 +225,18 @@ def draw(labels):
     for (x, txt, col), y0 in zip(noises, [0.35, 0.35, 0.35, 0.35]):
         pass
     for x, txt, col, dx in [(1.25, labels["noise_shot"], "#c0392b", -0.9),
-                            (1.25, labels["noise_dark"], "#c0392b", 0.95),
+                            (3.95, labels["noise_dark"], "#c0392b", 0.0),
                             (6.65, labels["noise_read"], "#7d3c98", 0.0),
                             (9.35, labels["noise_quant"], "#7d3c98", 0.0)]:
         ax.add_patch(FancyArrowPatch((x + dx, 1.05), (x + dx * 0.25, 1.65),
                                      arrowstyle="-|>", mutation_scale=12,
                                      lw=1.1, color=col, ls="--"))
         ax.text(x + dx, 0.95, txt, ha="center", va="top", fontsize=8, color=col, **F)
+    # K 는 ADC 하나의 이득이 아니라 전하-전압 변환과 ADC 를 합친 전자→DN 환산 비율이다.
+    gx0, gx1, gy = box_x[1] + 0.95, box_x[3] + 0.95, 3.55
+    ax.plot([gx0, gx0, gx1, gx1], [gy - 0.12, gy, gy, gy - 0.12], color="#2b5c9b", lw=1.0)
+    ax.text((gx0 + gx1) / 2, gy + 0.06, labels["gain_span"], ha="center", va="bottom",
+            fontsize=8.5, color="#2b5c9b", **F)
     fig.text(0.5, 0.015, labels["fig1"], ha="center", fontsize=9, **F)
     fig.tight_layout(rect=(0, 0.06, 1, 1))
     fig.savefig(os.path.join(out, "fig1-photon-to-dn-chain.png"), dpi=150)
