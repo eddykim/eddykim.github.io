@@ -156,4 +156,4 @@ for lang, labels in LABELS.items():
     print(f"[{lang}] 그림 4개 저장: {os.path.normpath(labels['dir'])}")
 
 print(f"[alpha=300]  최종 추정 두께: {d_hist_good[-1]:.2f} nm (실제: {true_thickness} nm)")
-print(f"[alpha=1500] 최종 추정 두께: {d_hist_bad[-1]:.2f} nm (발산)")
+print(f"[alpha=1500] 최종 추정 두께: {d_hist_bad[-1]:.2f} nm (진동)")
