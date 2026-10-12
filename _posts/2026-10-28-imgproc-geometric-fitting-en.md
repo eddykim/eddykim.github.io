@@ -7,7 +7,7 @@ page_id: imgproc-geometric-fitting
 date: 2026-10-28 20:00:00 +0900
 categories: [Computation, Image Processing]
 tags: [image-processing, circle-fitting, ellipse-fitting, ransac, algebraic-distance, metrology]
-description: "Minimizing the algebraic distance to extract one radius from hundreds of edge points underestimates it by 47% on a short arc. This traces where that bias comes from."
+description: "Minimizing the algebraic distance to extract one radius from hundreds of edge points underestimates it by 47% on a 30-degree arc. This traces where that bias comes from."
 math: true
 ---
 
@@ -63,17 +63,17 @@ Over a full circle the four methods are indistinguishable, all biased by less th
 | 30° | $-18.87$ | $+0.633$ | $+0.642$ |
 | 20° | $-32.23$ | $+2.85$ | $+2.91$ |
 
-On a 30-degree arc the Kåsa method reports 21.1 for a radius of 40. **That is 47% low, and neither less noise nor more points removes it.** This is what a systematic bias means.
+On a 30-degree arc the Kåsa method reports 21.1 for a radius of 40. **That is 47% low, and more points do not remove it.** More points shrink the scatter but do not pull the mean back to the truth — that is what a systematic bias means. The bias does, however, grow with the square of the noise: at the same 30 degrees, halving the noise brings it to $-7.5$, and cutting it tenfold to $-0.4$.
 
 Pratt and Taubin use the same algebraic distance yet are essentially unbiased. Both changed the constraint. Seeing the difference requires opening the circle equation one place further.
 
 $$ A(x^2+y^2) + Bx + Cy + D = 0 $$
 
-The form $x^2+y^2+Dx+Ey+F=0$ used in section 1 is this with $A$ fixed to 1. That fixing is precisely what Kåsa does, and it nails down the weight that scales with radius. It leaves open the route of shrinking all coefficients together to lower the objective. Pratt instead imposes $B^2+C^2-4AD=1$, and Taubin normalizes the algebraic distance by the magnitude of its gradient. Both constraints close that route. The letters $A$ through $D$ here belong to this section only and differ from the conic coefficients of section 4.
+The form $x^2+y^2+Dx+Ey+F=0$ used in section 1 is this with $A$ fixed to 1. That fixing is precisely what Kåsa does, and it nails down the weight that scales with radius. With $A=1$ the algebraic distance is $d^2-R^2 \approx 2R\,d^{geo}$, so the objective keeps a factor of $4R^2$. Pratt instead imposes $B^2+C^2-4AD=1$; for a circle $B^2+C^2-4AD = 4A^2R^2$, so this amounts to dividing the objective by $4R^2$. Taubin divides the sum of squared algebraic distances by the mean squared gradient magnitude, which on a circle is again close to $4R^2$. Both constraints strip out the radius-dependent weight. The letters $A$ through $D$ here belong to this section only and differ from the conic coefficients of section 4.
 
-Worth noting is that Taubin and the geometric fit agree to three decimal places. For circles, a well-chosen algebraic method effectively reaches the geometric optimum, which means there is no reason to iterate. Where iteration is wanted anyway, the Levenberg-Marquardt method of [Optimization 3](/en/posts/optimization-levenberg-marquardt/) converges in three or four steps from an algebraic starting point.
+Worth noting is that Taubin and the geometric fit agree in bias to within 0.01 even at 30 degrees. For circles, a well-chosen algebraic method effectively reaches the geometric optimum, which means there is no reason to iterate. Where iteration is wanted anyway, the Levenberg-Marquardt method of [Optimization 3](/en/posts/optimization-levenberg-marquardt/) converges in three or four steps on a full circle, and in about ten on a 30-degree arc, from an algebraic starting point.
 
-The right panel shows scatter, and the order reverses there. At 30 degrees Kåsa scatters by 1.28 against 3.79 for the others. The biased estimator is the steadier one — the same shape as Post 4.
+The right panel shows scatter, and the order reverses there. At 30 degrees Kåsa scatters by 1.28 against 3.79 for the others. The biased estimator is the steadier one, echoing the observation in Post 4 that the less biased method can lose on scatter.
 
 ## 3. Where the unbiased methods lose
 
@@ -82,11 +82,11 @@ Since bias and scatter move oppositely, they have to be combined.
 <img src="/assets/img/posts/imgproc-geometric-fitting/en/fig3-total-error.png" alt="Total radius error of four methods against arc span" width="700">
 _Fig 3. Below 20 degrees the unbiased methods are the ones that fail_
 
-Down to 20 degrees Taubin and the geometric fit win: at 30 degrees their total error is 3.85 against 18.9 for Kåsa. Below 15 degrees the order flips, with Kåsa at 36.2 while Taubin reaches 90.9 and the geometric fit 104.
+Down to 20 degrees Taubin and the geometric fit win: at 30 degrees their total error is 3.85 against 18.9 for Kåsa. From 15 degrees down the order flips, with Kåsa at 36.2 while Taubin reaches 90.9 and the geometric fit 104.
 
 This reversal must not be read as "Kåsa is better on short arcs." On a 10-degree arc the geometric fit scatters by 2760. Measuring a radius of 40 with an error of 2760 is not a measurement. Kåsa's error looks smaller only because this method always collapses toward a smaller radius, so its error cannot exceed $R$ itself. Both have failed; they merely fail differently.
 
-The rule that follows concerns design rather than method selection. Below 90 degrees the uncertainty of the radius estimate must be computed explicitly, and below 20 degrees the radius should not be measured at all. Needing only the centre helps somewhat, but even the centre error reaches 2.9 pixels at 30 degrees. That section 4.3 of the dissertation could use a full circle when setting the reference radius in back focal plane images was a requirement, not luck.
+The rule that follows concerns design rather than method selection. Under these conditions — noise at 1% of the radius and 120 points — the uncertainty of the radius estimate must be computed explicitly below 90 degrees, and below 20 degrees the radius should not be measured at all. The thresholds move with the noise: at 0.1% of the radius, even a 15-degree arc gives the radius to within 4%. Needing only the centre helps somewhat, but even the centre error averages 3 pixels at 30 degrees. Section 4.3 of the dissertation did not set the reference radius in the back focal plane by fitting a circle; it located the Brewster angle, where $\tan^2\Psi$ is smallest, along a diametral profile — a reference that does not depend on arc length at all.
 
 ## 4. Ellipses demand one more thing
 
@@ -101,7 +101,7 @@ _Fig 4. Without the constraint a conic fit does not guarantee an ellipse_
 
 Eighty points on a 120-degree arc were fitted 300 times at increasing noise. At low noise the unconstrained fit always returns an ellipse, but the rate falls to 66% at a noise of 2 and to 15% at 5. The rest are hyperbolas or parabolas. The right panel shows one such case: the same points yield an ellipse under one method and a two-branch hyperbola under the other.
 
-The method proposed by Fitzgibbon and colleagues in 1999 imposes $4AC - B^2 = 1$. The left side is the discriminant with its sign flipped, so setting it to 1 is the same as demanding an ellipse. Absorbing the constraint into the normalization reduces the problem to a single generalized eigenproblem, and **an ellipse comes out for any input whatsoever.** That is why the green curve sits at 100% across all noise levels.
+The method Fitzgibbon and colleagues published in 1996, and in journal form in 1999, imposes $4AC - B^2 = 1$. The left side is the discriminant with its sign flipped, so setting it to 1 is the same as demanding an ellipse. Absorbing the constraint into the normalization reduces the problem to a single generalized eigenproblem, and **an ellipse comes out for any input whatsoever.** That is why the green curve sits at 100% across all noise levels.
 
 The property cuts both ways. An ellipse is returned even when the points are not on one, so the fact that the result is an ellipse is no evidence that the fit is sound. The residual has to be checked separately.
 
@@ -132,7 +132,7 @@ The radius error was measured as the outlier fraction rose from 0 to 40%. Least 
 
 The logic is simple. Instead of using every point, draw the three points that minimally determine a circle, build the model, and count how many points fall within a set distance of it. Repeat a few hundred times, keep the model with the most agreement, then refit precisely using only those points.
 
-There is one knob: the distance threshold. It is set to two or three times the scatter of the inliers, which is exactly what Post 4 measured for subpixel edge points. Too tight and inliers are discarded; too loose and outliers are embraced. In the example on the left, 30 outliers were planted and RANSAC classified 93 points as inliers — 120 minus 93 leaves 27, close to the true count.
+The knob that actually has to be chosen is the distance threshold. The number of iterations is a parameter too, but once the inlier fraction $w$ and the desired success probability $p$ are fixed it follows from $N = \log(1-p)/\log(1-w^3)$; even with 60% inliers, 19 draws reach $p=0.99$, so a few hundred is generous. The threshold is set at about twice the inlier scatter — for Gaussian noise, 1.96 times keeps 95% of the inliers — and that scatter is exactly what Post 4 measured for subpixel edge points. Too tight and inliers are discarded; too loose and outliers are embraced. In the example on the left, 30 outliers were planted and RANSAC classified 93 points as inliers — 120 minus 93 leaves 27, close to the true count.
 
 ## 6. On a real image
 
@@ -141,15 +141,15 @@ Whether the synthetic result carries over was checked on a real image. Canny edg
 <img src="/assets/img/posts/imgproc-geometric-fitting/en/fig6-real-image.png" alt="Circle fits to a coin contour and to a 45-degree arc of it" width="750">
 _Fig 6. The same bias appears on a real image_
 
-Using the whole contour gives a radius of 31.55 pixels, with the four methods agreeing to two decimal places. Keeping only the 32 points spanning 45 degrees gives 26.80 for Kåsa, 33.83 for Taubin and 33.85 for the geometric fit.
+Using the whole contour gives a radius of 31.55 pixels, with the four methods agreeing to within 0.02 pixels. Keeping only the 32 points spanning 45 degrees gives 26.80 for Kåsa, 33.83 for Taubin and 33.85 for the geometric fit.
 
-One caution belongs here. The true value is unknown in this case. Taking the 31.55 from the full contour as a reference makes Kåsa 15% low and Taubin 7% high, but the discrepancy on the Taubin side looks like the coin rim not being perfectly circular rather than a bias, since the value shifts with the choice of arc. This is why the synthetic experiment used a known truth and 400 repetitions. A single real image cannot separate a systematic bias from the shape error of that particular specimen.
+One caution belongs here. The true value is unknown in this case. Taking the 31.55 from the full contour as a reference makes Kåsa 15% low and Taubin 7% high, but the Taubin discrepancy looks like the scatter of fitting a short arc with 32 points rather than a bias. Cutting eight different 45-degree pieces from the same contour, Taubin ranges from 23.5 to 45.6, while Kåsa comes out below 31.55 on all eight. This is why the synthetic experiment used a known truth and 400 repetitions. A single real image cannot separate a systematic bias from the shape error of that particular specimen.
 
 ## Summary and what comes next
 
-Extracting one number from many points means choosing what to minimize. The algebraic distance is cheap to compute but is not a distance, so it systematically shrinks the radius as the arc gets shorter — by 47% at 30 degrees. Pratt and Taubin remove that bias by changing the constraint, and for circles they effectively reach the geometric optimum, so iteration is not required. For ellipses the constraint serves a different purpose: guaranteeing the kind of solution rather than removing a bias. And whichever method is used, a radius from an arc shorter than 20 degrees is not a measurement.
+Extracting one number from many points means choosing what to minimize. The algebraic distance is cheap to compute but is not a distance, so it systematically shrinks the radius as the arc gets shorter — by 47% at 30 degrees when the noise is 1% of the radius. Pratt and Taubin remove that bias by changing the constraint, and for circles they effectively reach the geometric optimum, so iteration is not required. For ellipses the constraint serves a different purpose: guaranteeing the kind of solution rather than removing a bias. And when the noise is about 1% of the radius, a radius from an arc shorter than 20 degrees is not a measurement, whichever method is used.
 
-The next post turns to phase. All five posts so far have been about reading intensity. In interferometric and moiré images the information sits in the phase rather than the intensity, and phase is never measured directly. The Hilbert transform used in Post 3 gets treated head-on, along with how phase shifting cancels background and modulation depth, and the unwrapping problem that arises when the phase is recovered.
+The next post turns to phase. All five posts so far have been about reading intensity. In interferometric and moiré images the information sits in the phase rather than the intensity, and phase is never measured directly. The Hilbert transform gets treated head-on, extending the frequency-domain filtering of Post 3, along with how phase shifting cancels background and modulation depth, and the unwrapping problem that arises when the phase is recovered.
 
 ## References
 
@@ -158,6 +158,6 @@ The next post turns to phase. All five posts so far have been about reading inte
 - N. Chernov, C. Lesort, "[Least squares fitting of circles](https://doi.org/10.1007/s10851-005-0482-8)," _Journal of Mathematical Imaging and Vision_, 23(3), 239-252, 2005 (bias analysis of Kåsa, Pratt and Taubin, and stable implementations).
 - A. Fitzgibbon, M. Pilu, R. B. Fisher, "[Direct least square fitting of ellipses](https://doi.org/10.1109/34.765658)," _IEEE Trans. Pattern Anal. Mach. Intell._, 21(5), 476-480, 1999.
 - R. Halíř, J. Flusser, "Numerically stable direct least squares fitting of ellipses," _Proc. WSCG_, 125-132, 1998.
-- M. A. Fischler, R. C. Bolles, "[Random sample consensus](https://doi.org/10.1145/358669.358692)," _Communications of the ACM_, 24(6), 381-395, 1981.
+- M. A. Fischler, R. C. Bolles, "[Random sample consensus: a paradigm for model fitting with applications to image analysis and automated cartography](https://doi.org/10.1145/358669.358692)," _Communications of the ACM_, 24(6), 381-395, 1981.
 - S. van der Walt et al., "[scikit-image: image processing in Python](https://doi.org/10.7717/peerj.453)," _PeerJ_, 2, e453, 2014 (the coin test image in Fig 6).
 - Y. Kim, "Snapshot Angle-Resolved Spectroscopic Ellipsometry Using Line-Scan Spectrometer and Back Focal Plane Spectral Interference," Ph.D. dissertation, Seoul National University, 2025, sec. 4.3 (setting the reference radius in back focal plane images).
