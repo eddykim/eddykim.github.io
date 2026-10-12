@@ -36,10 +36,10 @@ LABELS = {
         "fig3": "그림3. 포물선 보간의 편향은 화소 격자를 따라 되풀이된다",
         "blur_ax": r"PSF 흐림 폭 $w$ (화소)", "maxbias": "최대 절대 편향 (화소)",
         "w10": "10-90% 엣지 폭 (화소)",
-        "fig4": "그림4. 포물선은 봉우리, 모멘트는 U자, 면적은 단조 증가 — 최적 흐림이 다 다르다",
+        "fig4": "그림4. 포물선은 봉우리, 모멘트는 U자, 면적은 흐림과 함께 증가 — 최적 흐림이 다 다르다",
         "noise_ax": "노이즈 (DN)", "scatter": "추정 위치 표준편차 (화소)",
         "winlen": "면적법의 창 길이 (화소)", "wb": "편향 (창을 자르지 않았을 때)",
-        "ws": r"산포 (노이즈 5 DN)", "sqrtn": r"$\sqrt{n}$ 기준선",
+        "ws": r"산포 (노이즈 5 DN)", "nref": r"$n$ 기준선",
         "fig5": "그림5. 편향이 작은 방법이 산포는 크고, 면적법의 창 길이는 그 안의 또 다른 교환이다",
         "rmse": "총 오차 RMSE (화소)", "winner": "가장 작은 총 오차를 내는 방법",
         "fig6": "그림6. 흐림 폭과 노이즈가 승자를 바꾼다",
@@ -60,7 +60,7 @@ LABELS = {
         "fig4": "Fig 4. A peak, a U and a rise — each method has its own optimal blur",
         "noise_ax": "Noise (DN)", "scatter": "Std of estimated position (pixel)",
         "winlen": "Window length of the area method (pixel)", "wb": "Bias (uncropped window)",
-        "ws": r"Scatter (noise 5 DN)", "sqrtn": r"$\sqrt{n}$ reference",
+        "ws": r"Scatter (noise 5 DN)", "nref": r"$n$ reference",
         "fig5": "Fig 5. Smaller bias comes with larger scatter, and the area window is a trade of its own",
         "rmse": "Total error RMSE (pixel)", "winner": "Method with the smallest total error",
         "fig6": "Fig 6. Blur width and noise change the winner",
@@ -119,7 +119,7 @@ for nz in NOISE_GRID:
         scatter[k].append(est[k].std())
 scatter = {k: np.array(v) for k, v in scatter.items()}
 
-# 면적법의 창 길이 의존성. 산포는 창 길이의 제곱근을 따라 커지고, 창이 너무 짧으면
+# 면적법의 창 길이 의존성. 산포는 창 길이에 거의 비례해 커지고, 창이 너무 짧으면
 # 평탄부를 잘못 잡아 편향이 폭발한다. 두 곡선이 만나는 곳이 실용적인 창 길이다.
 WIN_LENS = np.array([6, 8, 10, 12, 16, 20, 24, 32, 40, 52, 64])
 rngw = np.random.default_rng(7)
@@ -245,8 +245,8 @@ def draw(L):
                  color="#c0392b", label=L["wb"])
     ax[1].loglog(WIN_LENS, np.maximum(win_std, 5e-5), "^-", ms=4,
                  color=COLORS["area"], label=L["ws"])
-    ref = win_std[4] * np.sqrt(WIN_LENS / WIN_LENS[4])
-    ax[1].loglog(WIN_LENS, ref, ":", lw=1.2, color="#555", label=L["sqrtn"])
+    ref = win_std[4] * (WIN_LENS / WIN_LENS[4])
+    ax[1].loglog(WIN_LENS, ref, ":", lw=1.2, color="#555", label=L["nref"])
     ax[1].set_ylim(3e-5, 3.0)
     ax[1].set_xlabel(L["winlen"], **F)
     ax[1].legend(prop=LG, fontsize=8.5); ax[1].grid(alpha=0.3, which="both")
