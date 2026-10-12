@@ -11,13 +11,13 @@ description: "The frequency domain erases periodic noise the spatial domain cann
 math: true
 ---
 
-[Post 2](/en/posts/imgproc-convolution-kernels/) showed that the arguments for choosing a kernel all reduce to frequency response. Why not design the filter in the frequency domain directly, then? Two things are genuinely impossible in the spatial domain and become easy there: erasing periodic noise spread across the whole image, such as illumination ripple or reflections off a nearby grating, and specifying exactly which band to pass.
+[Post 2](/en/posts/imgproc-convolution-kernels/) showed that the arguments for choosing a kernel all reduce to frequency response. Why not design the filter in the frequency domain directly, then? Two things are genuinely impractical with a small spatial kernel and become easy there: erasing periodic noise spread across the whole image, such as illumination ripple or reflections off a nearby grating, and specifying exactly which band to pass.
 
 It is not free. The Fourier transform assumes the signal repeats periodically outside its own extent, and for real images that assumption is almost always false. This post puts what the frequency domain offers next to what it demands in return, and ends with a method that avoids paying the price at all, drawn from the dissertation.
 
 ## 1. Reading a spectrum
 
-What does a single point in a two-dimensional spectrum mean? Its direction from the origin gives the orientation of a fringe pattern in the image; its distance from the origin gives how closely that pattern is spaced. One fringe pattern becomes one point.
+What does a single point in a two-dimensional spectrum mean? Its direction from the origin is perpendicular to the fringes, the direction in which brightness varies; its distance from the origin gives how closely they are spaced. One fringe pattern becomes a pair of points facing each other across the origin.
 
 <img src="/assets/img/posts/imgproc-frequency-domain-filtering/en/fig1-reading-the-spectrum.png" alt="Amplitude spectra of a synthetic grating and a natural image" width="700">
 _Fig 1. Orientation and period appear as a single location in the spectrum_
@@ -26,7 +26,7 @@ The synthetic grating on the top row superimposes a tilted fringe pattern on a h
 
 The natural image below behaves differently. Energy concentrates at low frequencies and the rest spreads out broadly, because natural images have no dominant period. That contrast is what the next section rests on: periodic noise gathers into narrow points while image content spreads out, so the frequency domain can separate them.
 
-## 2. Periodic noise — what the spatial domain cannot do
+## 2. Periodic noise — what a small kernel struggles to do
 
 Suppose ripple from the illumination supply, or a reflection from an adjacent grating, has laid an even fringe pattern across the whole image. Can a kernel from Post 2 remove it? No. A smoothing kernel destroys image detail along with the fringes, and if the fringe period exceeds the kernel width it does nothing at all. Fringes span the entire image, so they are not a target for a local operation.
 
@@ -56,7 +56,7 @@ The numbers say the same. The original spans $[0, 255]$ in pixel value; the idea
 
 The Gaussian filter on the bottom row is Gaussian in space as well, so it has no negative trough at all ($-1.0\times10^{-18}$, at the level of numerical error). Its output spans $[3.5, 244.0]$, inside the original range.
 
-Post 2 noted that a box kernel's frequency response leaves sidelobes. What appears here is the same phenomenon seen from the other side. A box in one domain is a sinc in the other, and the tails of that sinc are the sidelobes and the rings alike. That the Gaussian is the only function smooth in both domains produces the same conclusion across two posts. This oscillation is the Gibbs phenomenon.
+Post 2 noted that a box kernel's frequency response leaves sidelobes. What appears here is the same phenomenon seen from the other side. A box in one domain is a sinc in the other (for a circular filter, its two-dimensional counterpart $2J_1(x)/x$), and those tails are the sidelobes and the rings alike. Because a Gaussian transforms into a Gaussian, it takes no negative values in either domain, and that property produces the same conclusion across two posts. This oscillation is the Gibbs phenomenon.
 
 ## 4. The assumption the Fourier transform carries
 
@@ -87,7 +87,7 @@ Conventional channeled spectral polarimetry performs this separation with a Four
 
 ## 6. The extrema envelope method
 
-Can the two components be separated without entering the frequency domain? The extrema envelope method (EEM) proposed in the dissertation uses a single property: the modulated signal oscillates symmetrically about the baseline. At the maxima and minima,
+Can the two components be separated without entering the frequency domain? The extrema envelope method (EEM), which the dissertation introduced for channeled spectra, uses a single property: the modulated signal oscillates symmetrically about the baseline. Taking the mean of the upper and lower envelopes as the local mean appeared earlier, in Huang et al.'s empirical mode decomposition (EMD). At the maxima and minima,
 
 $$ I_{max} = I_{BLS} + A, \qquad I_{min} = I_{BLS} - A $$
 
@@ -125,19 +125,19 @@ Both methods were applied to the same signal and compared against the true basel
 <img src="/assets/img/posts/imgproc-frequency-domain-filtering/en/fig6-lpf-vs-eem.png" alt="Baseline extraction error of FT+LPF and EEM, and their dependence on noise" width="750">
 _Fig 6. EEM wins at the borders but loses once noise grows_
 
-The left panel is the error profile without noise. The Fourier low-pass error spikes at both ends of the band and oscillates inward as it decays — the Gibbs ringing from the periodic-extension discontinuity promised in section 4. Its RMS is 0.00654 overall but 0.01828 over the outer 5%, nearly three times higher. The extrema envelope error hugs zero and is indistinguishable in the same plot: 0.00003 overall and 0.00008 at the borders, more than 200 times smaller.
+The left panel is the error profile without noise. The Fourier low-pass error spikes at both ends of the band and oscillates inward as it decays — the Gibbs ringing from the periodic-extension discontinuity promised in section 4. Over the range where EEM returns values (1293 of 1400 points) its RMS is 0.00654, but over the points of that range within the outer 5% of the band it is 0.01828, nearly three times higher. Including the band ends where EEM returns nothing, the low-pass error is 0.01737 overall and 0.05196 over the outer 5%. The extrema envelope error hugs zero and is indistinguishable in the same plot: 0.00003 over the same range and 0.00008 at its borders, more than 200 times smaller.
 
 On this evidence EEM looks decisively better, but the right panel overturns that. Repeating the comparison at increasing noise makes the two curves cross. Fourier low-pass error fails to double while noise grows sevenfold, whereas the extrema envelope degrades roughly in proportion to noise. The crossover sits just under 10% of the modulation amplitude, and beyond it the Fourier low-pass is the better choice.
 
-The reason is clear once you ask what EEM relies on. It trusts the position and height of each extremum outright, and noise is exactly what disturbs them. Worse, noise flips the sign of the derivative repeatedly, so spurious extrema pour in. With no protection at the detection step, a noise level of 0.005 turns 25 extrema into 43 and drives the RMS error to 0.128 — twenty times worse than the Fourier low-pass.
+The reason is clear once you ask what EEM relies on. It trusts the position and height of each extremum outright, and noise is exactly what disturbs them. Worse, noise flips the sign of the derivative repeatedly, so spurious extrema pour in. With no protection at the detection step, a noise level of 0.005 turns roughly 25 maxima and 25 minima into 43 of each and drives the RMS error to 0.128 — twenty times worse than the Fourier low-pass.
 
 Smoothing was therefore applied at the detection step alone, the smoothing of Post 2. A fringe period spans 56 pixels, so a smoothing width of 6 pixels leaves the extrema essentially unflattened while eliminating the spurious ones. The position and intensity of each extremum are then measured on the original signal, not the smoothed one. Separating detection from measurement is what makes EEM practical.
 
-The selection rule reduces to one statement. Where the signal-to-noise ratio is adequate and both ends of the band must be used, the extrema envelope is better. Where noise dominates, or the modulation frequency is cleanly separated, the Fourier low-pass is safer. The dissertation chose EEM because spectroscopic ellipsometry is the former case: the short-wavelength end of the band could not be discarded, and the optics delivered enough signal-to-noise in a single shot.
+The selection rule reduces to one statement. Where the signal-to-noise ratio is adequate and both ends of the band must be used, the extrema envelope is better. Where noise dominates, or the modulation frequency is cleanly separated, the Fourier low-pass is safer. The dissertation chose EEM because of errors at the signal boundaries: it set out to avoid the Gibbs and edge errors that a Fourier low-pass produces at both ends of the band, and the loss of the baseline's own high-frequency content (sec. 3.3). It did not examine sensitivity to noise. The comparison in this section adds the caveat that the choice pays off only when the signal-to-noise ratio is adequate.
 
 ## Summary and what comes next
 
-The frequency domain does two things the spatial domain cannot. It erases periodic noise spread across an entire image with a few points, and it specifies a passband exactly. The price comes in three parts. Cutting a band with a knife leaves rings in space; the periodic extension the Fourier transform assumes is almost always violated by real signals; and the leakage from that discontinuity means even a notch fails when the frequency does not land on a bin. The extrema envelope method avoids paying any of it, at the cost of fragility against noise. That neither option is free is the conclusion of this post.
+The frequency domain does two things that are impractical with a small spatial kernel. It erases periodic noise spread across an entire image with a few points, and it specifies a passband exactly. The price comes in three parts. Cutting a band with a knife leaves rings in space; the periodic extension the Fourier transform assumes is almost always violated by real signals; and the leakage from that discontinuity means even a notch fails when the frequency does not land on a bin. The extrema envelope method avoids paying any of it, at the cost of fragility against noise. That neither option is free is the conclusion of this post.
 
 The next post takes up edges and subpixel estimation. Post 2 interpolated an edge position to the vertex of a parabola while locating the optimal smoothing width, and this post refined extremum positions the same way. Post 4 confronts that interpolation directly: how something smaller than a pixel is measured, and why such estimates acquire a periodic bias that tracks the pixel grid.
 
@@ -146,5 +146,6 @@ The next post takes up edges and subpixel estimation. Post 2 interpolated an edg
 - R. C. Gonzalez, R. E. Woods, _Digital Image Processing_, 4th ed., Pearson, 2018, ch. 4 (frequency-domain filtering, notch filters, ringing).
 - F. J. Harris, "[On the use of windows for harmonic analysis with the discrete Fourier transform](https://doi.org/10.1109/PROC.1978.10837)," _Proceedings of the IEEE_, 66(1), 51-83, 1978 (the standard reference on window functions and spectral leakage).
 - K. Oka, T. Kato, "[Spectroscopic polarimetry with a channeled spectrum](https://doi.org/10.1364/OL.24.001475)," _Optics Letters_, 24(21), 1475-1477, 1999 (channeled spectral polarimetry and Fourier-based component separation).
+- N. E. Huang et al., "[The empirical mode decomposition and the Hilbert spectrum for nonlinear and non-stationary time series analysis](https://doi.org/10.1098/rspa.1998.0193)," _Proc. R. Soc. Lond. A_, 454(1971), 903-995, 1998 (the envelope mean and the limits of spline envelopes).
 - S. van der Walt et al., "[scikit-image: image processing in Python](https://doi.org/10.7717/peerj.453)," _PeerJ_, 2, e453, 2014 (the standard test image in Figs 1-4).
 - Y. Kim, "Snapshot Angle-Resolved Spectroscopic Ellipsometry Using Line-Scan Spectrometer and Back Focal Plane Spectral Interference," Ph.D. dissertation, Seoul National University, 2025, secs. 3.2 and 3.3 (signal model and the extrema envelope method).
