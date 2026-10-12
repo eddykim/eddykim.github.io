@@ -58,19 +58,19 @@ One practical point. Input reflectances span 0.09 to 0.35 while output thickness
 
 ### A bigger network is not a better one
 
-Three architectures were trained on identical data for 600 epochs each. The table reports both the error after running to the end and the error when the weights are restored to the epoch at which validation error was lowest.
+Three architectures were trained on identical data for 600 epochs each. The table reports the error when the weights are restored to the epoch at which validation error was lowest.
 
-| Architecture | After 600 epochs | Restored to best epoch | Best epoch |
-| --- | ---: | ---: | ---: |
-| 300 - 128 - 1 | 5.99 nm | 0.80 nm | 465 |
-| **300 - 256 - 1** | 2.61 nm | **0.51 nm** | 505 |
-| 300 - 256 - 128 - 1 | 2.64 nm | 0.63 nm | **55** |
+| Architecture | Validation RMSE (restored to best epoch) |
+| --- | ---: |
+| 300 - 128 - 1 | 0.750 nm |
+| **300 - 256 - 1** | **0.554 nm** |
+| 300 - 256 - 128 - 1 | 0.755 nm |
 
 Two things stand out.
 
-First, **one hidden layer outperformed two** (0.51 against 0.63 nm). Lee and Jin reached the same conclusion when they validated neural thickness measurement against certified reference materials: configurations with more nodes and more hidden layers drifted further from the certified values, which the authors attributed to overtraining on idealized synthetic spectra.
+First, **one hidden layer outperformed two** (0.554 against 0.755 nm). Lee and Jin reached the same conclusion when they validated neural thickness measurement against certified reference materials: configurations with more nodes and more hidden layers drifted further from the certified values, which the authors attributed to overtraining on idealized synthetic spectra.
 
-Second, **overtraining is severe.** Run to the end, all three architectures fall back to three to seven times their best validation error. The deepest network reaches its minimum at epoch 55 and degrades from there — the more capacity available, the faster the theoretical spectra are memorized.
+Second, **overtraining is severe.** The 300-256-1 network reaches its minimum validation error at epoch 217 and degrades from there; run to the full 600 epochs, its validation RMSE falls back to twice the best value (0.554 to 1.10 nm).
 
 The remedy was written down thirty years ago. Fried and Masa, pre-evaluating spectroscopic ellipsometry data with a neural network in 1994, noted that training error keeps falling while test error begins to rise past some point, so the network must be tested periodically against unfamiliar data during training to locate the optimum. Every experiment below restores the weights from the epoch of lowest validation error.
 
@@ -86,14 +86,14 @@ Feed the trained network the measured spectrum of the 1490 nm sample, then run L
 
 LM is more than three times as accurate. The last row is the failure already seen in post 3: with its starting point in a neighbouring basin, LM cannot leave.
 
-Accuracy and precision must be **separated** here. Taking the same 1490 nm sample and varying only the noise realization across 50 measurements, the mean error (accuracy) and the scatter (precision) were recorded separately. Because a network also depends on its training seed, six were trained and the results reported as a range.
+Accuracy and precision must be **separated** here. Taking the same 1490 nm sample and varying only the noise realization across 50 measurements, the mean error (accuracy) and the scatter (precision) were recorded separately. Because a network also depends on its training seed and architecture, six were trained — two architectures (300-256-1 and 300-256-128-1), three seeds each — and the results reported as a range.
 
 | Method | Error (nm) | Scatter, std (nm) |
 | --- | ---: | ---: |
-| Network (6 training seeds) | −0.98 to +0.33 | **0.10 to 2.68** |
+| Network (2 architectures × 3 seeds) | −0.98 to +0.33 | **0.10 to 2.68** |
 | **LM** | **+0.001** | **0.081** |
 
-LM is deterministic, so its value is fixed. The network is worse in both error and scatter. The striking part, though, is that **the scatter varies by a factor of 26 across training seeds.** Worse, the validation RMSE gives no warning of it: the network with a validation RMSE of 0.34 nm scattered by 2.68 nm, while the one at 0.53 nm scattered by 0.10 nm.
+LM is deterministic, so its value is fixed. The network is worse in both error and scatter. The striking part, though, is that **the scatter varies by a factor of 26 across these networks** (up to 17 within one architecture, from the seed alone). Worse, the validation RMSE gives no warning of it: the network with a validation RMSE of 0.34 nm scattered by 1.72 nm, while the one at 0.53 nm scattered by 0.10 nm.
 
 This is the most practical finding in the post. **A good aggregate metric does not guarantee the reliability of any individual sample.** Validation RMSE averages over thousands of cases; what we want to know is the thickness of the one wafer in front of us. The two come apart.
 
@@ -118,7 +118,7 @@ The picture inverts. LM from a random start **returns the wrong answer roughly t
 
 Seeded with the network's output, LM succeeds every time, and its median error of 0.060 nm is **15 times finer than the network alone** (0.930 nm). The network cannot deliver an accurate answer, but it **does pick the right basin**, and picking a basin demands a precision of only ±99 nm.
 
-The weakness found in section 3 — an untrustworthy final nanometre, scattering by a factor of 26 with the training seed — therefore does not matter here. The precision required is two orders of magnitude coarser. An unreliable instrument has been handed a job where unreliability is affordable.
+The weakness found in section 3 — an untrustworthy final nanometre, scattering by a factor of 26 from one network to the next — therefore does not matter here. The precision required is two orders of magnitude coarser. An unreliable instrument has been handed a job where unreliability is affordable.
 
 That was exactly the conclusion Fried and Masa drew in 1994. Neural pre-evaluation is neither more accurate nor more precise than ordinary multiparameter fitting, but it supplies such a good initial estimate for the subsequent regression that the time-consuming grid search becomes unnecessary. In their problem, an initial thickness wrong by as little as 50 nm was enough to land in a false minimum.
 
@@ -149,7 +149,7 @@ It is not free, of course. Generating 8,000 training spectra costs 8,000 forward
 | Forward-model calls | 30.1 samples | **4.5 samples** |
 | Wall clock (including 31 s of training) | 11,790 samples | 2,008 samples |
 
-The two numbers diverge because the forward model in this example — one line of Airy formula — is far too cheap. Recovering 31 seconds of training through saved reflectance evaluations takes 2,000 samples. Put differently, **this example is the case least favourable to a neural network.** Where a single forward evaluation takes seconds, as in transfer-matrix calculations over 200-plus layers or rigorous coupled-wave analysis (RCWA), the call-count yardstick governs and recovery comes far sooner. This is the point Kwak and Kim make in their review of semiconductor multilayer metrology when they note that machine learning computation time does not scale with the number of layers.
+The two numbers diverge because the forward model in this example — one line of Airy formula — is far too cheap. Recovering 31 seconds of training through saved reflectance evaluations takes 2,000 samples. Put differently, **this example is the case least favourable to a neural network.** Where a single forward evaluation takes seconds, as in rigorous coupled-wave analysis (RCWA), or tens of milliseconds, as in transfer-matrix calculations over 200-plus layers, the call-count yardstick governs and recovery comes far sooner. This is the point Kwak and Kim make in their review of semiconductor multilayer metrology when they note that machine learning computation time does not scale with the number of layers.
 
 ## 6. Where it breaks — and what goes unreported
 
@@ -160,7 +160,7 @@ So far the training and measurement distributions have matched. What happens whe
 <img src="/assets/img/posts/optimization-nn-regression/en/fig2-residual-alarm.png" alt="What recomputing the residual does and does not reveal" width="600">
 _Fig 2. What recomputing the residual does and does not reveal_
 
-| Case | Network error | Recomputed residual $J$ | LM error |
+| Case | Network error | Recomputed residual $J$ | Network → LM error |
 | --- | ---: | ---: | ---: |
 | (a) Outside training range (2000 nm) | **−382.3 nm** | **1,130×** baseline | −469.5 nm |
 | (b) Noise mismatch (std 0.02) | +1.5 nm | 23× | +0.6 nm |
@@ -170,9 +170,9 @@ The three cases behave entirely differently.
 
 **(a) Extrapolation fails badly, and the residual says so loudly.** Given a 2000 nm sample from outside the training range $[1200,1800]$, the network returns 1617.7 nm — not even pinned to the training boundary at 1800, but some arbitrary value inside the range. This is precisely what Fried and Masa warned of when they stated that a network extrapolates poorly and the training data must therefore cover the entire expected input space. Fortunately the residual rises to 1,130 times baseline, so the anomaly is immediately visible.
 
-**(b) The noise mismatch was survived, contrary to expectation.** Five times the training noise left an error of only 1.5 nm. This had been listed as a failure mode while preparing the post, and it turned out to do almost no harm. Noise scatters randomly across the whole spectrum and so does not systematically corrupt the fringe positions that determine thickness.
+**(b) The noise mismatch was survived, contrary to expectation.** Five times the baseline measurement noise (0.004 to 0.02) left an error of only 1.5 nm. This had been listed as a failure mode while preparing the post, and it turned out to do almost no harm. Noise scatters randomly across the whole spectrum and so does not systematically corrupt the fringe positions that determine thickness.
 
-**(c) Model error deceives both methods equally.** This is the most important result. Given a spectrum generated with the SiO2 index wrongly assumed to be 1.50 rather than 1.46, the network is off by +40.87 nm and LM by +40.91 nm. **The two answers agree to within 0.04 nm while both are wrong by 41 nm.** The residual, meanwhile, rises only to 4.4 times baseline — hardly an alarm next to the 1,130 of the extrapolation case.
+**(c) Model error deceives both methods equally.** This is the most important result. Given the spectrum of a film whose SiO2 index is actually 1.50, while both methods assume 1.46, the network is off by +40.87 nm and LM by +40.91 nm. **The two answers agree to within 0.04 nm while both are wrong by 41 nm.** The residual, meanwhile, rises only to 4.4 times baseline — hardly an alarm next to the 1,130 of the extrapolation case.
 
 Post 3 showed Gauss-Newton collapsing and LM rescuing it when the refractive index was wrongly assumed to be 1.02. There the difference between algorithms decided the outcome. Here it does not. **When the forward model itself is wrong, every method built on that model is wrong in the same direction by the same amount.** The network inherits the faulty physics through its training data, LM through its fitting model.
 
@@ -239,7 +239,7 @@ The band was narrowed to 595-605 nm (0.12 fringes) with the noise raised fivefol
 
 Bishop's prediction appears exactly. At 1500 nm, the centre of the training range, prediction nearly coincides with truth (−2.7 nm), because the candidates are symmetric about the centre and their average lands on the true value. Toward the edges, however, predictions are **pulled toward the centre by as much as 194 nm.** A 1750 nm sample reads as 1574.7 nm, a 1250 nm sample as 1415.9 nm.
 
-The point worth attention is that **the value pulled to is not any basin at all.** 1574.7 nm is neither 1490 nor 1689, but some value between the candidates. No thickness with that solution exists physically; only the arithmetic mean sits there. LM would have converged to one of the three — wrong, perhaps, but at a physically meaningful value.
+The point worth attention is that **the value pulled to is not any basin at all.** 1574.7 nm is none of the thicknesses this band cannot tell apart from the 1750 nm sample (about 1341, 1545 and 1750 nm), but a value between them. No thickness with that solution exists physically; only the arithmetic mean sits there. LM would have converged to one of the three — wrong, perhaps, but at a physically meaningful value.
 
 Repeating the test on the wide band (450-750 nm, 3.9 fringes) leaves every error below 2.5 nm. **The effect appears only when the ambiguity is real.** Nothing is wrong with the network; by the definition of the loss it has no choice but to average over what the data does not distinguish.
 
@@ -258,12 +258,12 @@ The simplest approach was tried first: widen the wavelength range from 450-750 n
 
 Add an unknown to see it more sharply. What happens if the refractive index $n_1$ is fitted alongside the thickness? Now the **cross-correlation** of the two parameters becomes visible: from the covariance $C = (J^\top J)^{-1}$ it is defined as $\rho = C_{01}/\sqrt{C_{00}C_{11}}$.
 
-| Range | $\rho(d, n_1)$ | cond($J^\top J$) | $d$ scatter (nm) |
+| Range | $\rho(d, n_1)$ | cond($J^\top J$) | $d$ scatter (nm, 30 noise trials) |
 | --- | ---: | ---: | ---: |
 | 450-750 nm | −0.997866 | 2.47e+08 | 0.962 |
 | 450-1000 nm | −0.996694 | 1.59e+08 | 0.967 |
 
-Widening the range moves the correlation only from −0.9979 to −0.9967, and the scatter does not change at all. The reason lies in the physics. At normal incidence the phase is $\beta = 2\pi n_1 d / \lambda$, so reflectance depends chiefly on the **product of $n_1$ and $d$**. However much data of the same kind is collected, none of it constrains that degenerate direction.
+Widening the range moves the correlation only from −0.9979 to −0.9967, and the thickness scatter shrinks by only 8-9%. The reason lies in the physics. At normal incidence the phase is $\beta = 2\pi n_1 d / \lambda$, so reflectance depends chiefly on the **product of $n_1$ and $d$**. However much data of the same kind is collected, none of it constrains that degenerate direction.
 
 ### Adding a different kind of measurement
 
@@ -285,7 +285,7 @@ _Fig 5. (d, n1) estimate scatter — same 300 points, different kinds of measure
 | **0°+60°, 150 points each** | **−0.976132** | **3.45e+07** | **0.458** | **0.00034** |
 | **0°+45°+70°, 100 points each** | −0.975515 | 3.84e+07 | **0.340** | **0.00024** |
 
-The same 300 points give different answers. Widening the wavelength range improves the thickness scatter by 9%, while **mixing angles improves it by a factor of 3.8 and the condition number by a factor of 6.4.**
+The same 300 points give different answers. Widening the wavelength range improves the thickness scatter by 9%, while **mixing angles improves it roughly threefold (3.1 from the linearized covariance, 3.8 in the 40-trial simulation) and the condition number by a factor of 6.4.**
 
 This is the conclusion of the post. **What is needed is not "enough data" but "data that sees the degenerate direction."** Kwak and Kim make exactly this point for semiconductor multilayer metrology when they write that single-wavelength ellipsometry does not yield a unique multilayer thickness solution, so multiangle or multisample measurements are used alongside it, and that this additional information improves the uniqueness of the characterization.
 
