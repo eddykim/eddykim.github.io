@@ -46,9 +46,10 @@ def refractive_index(nk_data, wavelength_nm):
 def make_spherical_lens(R1, R2, t, D, x=0.0, y=0.0, theta=0.0):
     """두 구면(R1, R2)으로 이루어진 렌즈를 정의한다.
 
-    R1: 입사 쪽(양수 = 볼록), R2: 출사 쪽(음수 = 볼록), t: 중심 두께, D: 지름.
+    R1: 첫 번째로 정의하는 면(양수 = 볼록), R2: 두 번째 면(음수 = 볼록),
+    t: 중심 두께, D: 지름. 광선이 어느 면에 먼저 닿는지는 find_entry_surface가 정한다.
     반환하는 dict의 BOUNDARY는 각 면을 20개 점으로 근사한 아크(arc), BD_OFFSET은
-    렌즈 가장자리(D/2)에서 구면과 그 접평면 사이의 sag(처짐량) — 부동소수점
+    렌즈 가장자리(D/2)에서 구면과 그 접평면 사이의 sag(처짐량)의 0.01배 — 부동소수점
     오차로 렌즈 경계 안쪽 점이 "경계 밖"으로 잘못 판정되는 걸 막는 여유값이다.
     """
     rot = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
@@ -255,6 +256,6 @@ if __name__ == "__main__":
     nk = load_nk_file("N-BK7.nk")
     lens = make_spherical_lens(R1=1000, R2=-1000, t=100, D=500)
     source = make_parallel_beam(x=1000, y=0, vx=-1, vy=0, D=200, num=11)
-    paths = trace_parallel_beam_through_lens(lens, source, 750, 1.0002778, nk, roi=(-1500, 1500, -500, 500))
+    paths = trace_parallel_beam_through_lens(lens, source, 750, 1.0, nk, roi=(-1500, 1500, -500, 500))
     for i, p in enumerate(paths):
         print(f"ray {i}: {p.shape[0]} points, end={p[-1][:2]}")

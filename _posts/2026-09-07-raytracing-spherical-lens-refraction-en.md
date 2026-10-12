@@ -25,7 +25,7 @@ $$ ax + by = c, \qquad a = -v_y,\ \ b = v_x,\ \ c = a x_0 + b y_0 $$
 
 Taking the coefficients as $(a,b)=(-v_y, v_x)$, perpendicular to the direction vector, lets vertical and horizontal rays alike be expressed in this single form without special cases. One face of the lens is an arc of a circle with centre $(c_x, c_y)$ and radius of curvature $R$, so parameterizing points on that circle as $(R\cos w + c_x,\ R\sin w + c_y)$ and substituting into the line equation yields a trigonometric equation in the angle $w$. A line meets a circle in at most two points, and the equation accordingly has two solutions in general.
 
-The difficulty is that only one of those two solutions is where the ray physically strikes the lens surface. The other is either the point met by extending the ray backwards, or a point lying outside the physical diameter $D$ of the lens — on the extension of the sphere, where no glass exists. The two are therefore treated as candidates rather than answers, and the true intersection is selected afterwards by testing whether the point falls within the lens boundary. The code obtains the two candidates from two different trigonometric identities, one using `arccos` and one using `arcsin`.
+The difficulty is that only one of those two solutions is where the ray physically strikes the lens surface. The other is either the point met by extending the ray backwards, or a point outside the region the lens surface actually occupies — on the far side or extension of the sphere, where no glass exists. The two are therefore treated as candidates rather than answers, and the true intersection is selected afterwards by testing whether the point falls within the lens boundary. The code obtains the two candidates from two different trigonometric identities, one using `arccos` and one using `arcsin`.
 
 ```python
 def find_entry_surface(ray, lens):
@@ -54,7 +54,7 @@ def find_entry_surface(ray, lens):
             ...
 ```
 
-At this stage the lens boundary is approximated by a chain of straight segments — a polygonal approximation of the arc — purely to decide which surface is reached first. The refraction itself (`refract_through_lens`) solves the circle equation exactly, obtains the two candidate angles $w_c$ (from `arccos`) and $w_s$ (from `arcsin`), and keeps whichever falls inside the physical diameter $D$.
+At this stage the lens boundary is approximated by a chain of straight segments — a polygonal approximation of the arc — purely to decide which surface is reached first. The refraction itself (`refract_through_lens`) solves the circle equation exactly, obtains the two candidate angles $w_c$ (from `arccos`) and $w_s$ (from `arcsin`), and keeps whichever falls within the region the lens surface actually occupies (the horizontal and vertical extent of its boundary points), taking the one nearer the starting point if both do.
 
 ```python
 def _pick_candidate(boundary, offset, wc, xc, yc, ws, xs, ys, ref_x, ref_y):
@@ -130,7 +130,7 @@ retrace arrival (first refraction point): (44.987, 100.000), direction (1.000, -
 position error: 0.00e+00 mm
 ```
 
-The entry surface comes back exactly reversed (2 → 1), and the retraced ray recovers the starting $y$ coordinate of the original incident ray (100 mm) and its direction — same magnitude, opposite sign — with no floating-point error at all.
+The entry surface comes back exactly reversed (2 → 1), and the retraced ray returns to the original first refraction point (44.987, 100 mm) with zero position error and recovers its direction — same magnitude, opposite sign — to floating-point round-off (1e-16).
 
 <img src="/assets/img/posts/raytracing-spherical-lens-refraction/en/fig2-reversibility.png" alt="Reversibility check" width="600">
 _Fig 2. Firing the exit ray backwards retraces the incident path exactly; the blue solid line and the red dashed line coincide completely between the lens and x=1000_
@@ -158,17 +158,17 @@ For this lens, theory and simulation separate as follows.
 ```text
 n(N-BK7, 750nm) = 1.511835
 thick-lens theory (paraxial): f=993.698mm, BFD=960.056mm, focus x=-1010.056
-simulated paraxial focus (|y0|<=20mm) x=-1010.229, vs theory -0.172mm (-0.017%)
-simulated marginal focus (|y0|=100mm) x=-995.010, vs paraxial +15.219mm (spherical aberration)
+simulated paraxial focus (|y0|<=20mm) x=-1009.431, vs theory +0.625mm (+0.062%)
+simulated marginal focus (|y0|=100mm) x=-994.211, vs paraxial +15.220mm (spherical aberration)
 ```
 
-Rays entering within 20 mm of the axis — 8% of the 250 mm lens radius — agree with theory to 0.017%, which is exact for practical purposes. Rays entering at the edge of the aperture, 100 mm off axis, focus 15.2 mm closer to the lens than the paraxial focus. That is the direction expected of undercorrected spherical aberration in a simple biconvex lens, where the focal distance shortens as the ray moves outward.
+Rays entering within 20 mm of the axis — 8% of the 250 mm lens radius — agree with theory to 0.062%, and even that small offset lies toward the lens, the direction of spherical aberration. Rays entering at the edge of the aperture, 100 mm off axis, focus 15.2 mm closer to the lens than the paraxial focus. That is the direction expected of undercorrected spherical aberration in a simple biconvex lens, where the focal distance shortens as the ray moves outward.
 
 <img src="/assets/img/posts/raytracing-spherical-lens-refraction/en/fig3-focus-vs-theory.png" alt="Comparison of focus positions" width="600">
 _Fig 3. The paraxial theoretical focus (black dashed) and the simulated paraxial focus (blue dotted) nearly coincide; only the marginal-ray focus (red dotted) is displaced, by the amount of the spherical aberration_
 
 ## 3. Summary and limitations
 
-This post rebuilt in Python the calculation of a ray refracting at a spherical surface — finding the entry point by line-circle intersection and obtaining the refracted direction there by Snell's law (`refract_through_lens`) — and checked the result two independent ways, by optical reversibility and against the thick-lens formulae. The reversibility check reproduced the incident path with no floating-point error, and the comparison with theory placed the paraxial focus within 0.017% while the marginal ray departed only by the spherical aberration expected, in the expected direction. Two independent methods reaching the same conclusion is good reason to trust the spherical refraction in `refract_through_lens`.
+This post rebuilt in Python the calculation of a ray refracting at a spherical surface — finding the entry point by line-circle intersection and obtaining the refracted direction there by Snell's law (`refract_through_lens`) — and checked the result two independent ways, by optical reversibility and against the thick-lens formulae. The reversibility check reproduced the incident path to floating-point round-off, and the comparison with theory placed the paraxial focus within 0.062% while the marginal ray departed only by the spherical aberration expected, in the expected direction. Two independent methods reaching the same conclusion is good reason to trust the spherical refraction in `refract_through_lens`.
 
-What this function does not do is test for total internal reflection. When $\sin\theta_2 = (n_1/n_2)\sin\theta_1$ exceeds 1, `arcsin` leaves its domain; the function does not intercept that case and passes the `NaN` returned by NumPy straight into the next calculation. The original MATLAB behaved the same way in its spherical-lens routine — total internal reflection was tested explicitly only in the prism routines. Rays entering a lens from air, into a denser medium, meet the surface at shallow enough angles that the condition is rarely reached, but a combination of strong curvature and a wide aperture can reach it. The next post covers the total-internal-reflection logic used for prisms, and what happens when it is applied to a lens instead.
+What this function does not do is test for total internal reflection. When $\sin\theta_2 = (n_1/n_2)\sin\theta_1$ exceeds 1, `arcsin` leaves its domain; the function does not intercept that case and passes the `NaN` returned by NumPy straight into the next calculation. The original MATLAB behaved the same way in its spherical-lens routine — total internal reflection was tested explicitly only in the prism routines. At the first surface, where light passes from air into the denser glass, total internal reflection cannot occur at all; at the second surface, glass to air, an ordinary lens keeps the internal angle well below the critical angle (about 41.4° for N-BK7 at 750 nm), so the condition is rarely reached. A combination of strong curvature and a wide aperture, however, can reach it there. The next post covers the total-internal-reflection logic used for prisms, and what happens when it is applied to a lens instead.

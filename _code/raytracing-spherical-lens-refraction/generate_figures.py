@@ -89,7 +89,7 @@ LABELS = {
 
 R1, R2, T, D = 1000.0, -1000.0, 100.0, 500.0
 WAVELENGTH_NM = 750.0
-N_AIR = 1.0002778
+N_AIR = 1.0  # SCHOTT 카탈로그 굴절률은 공기 기준 상대값이라 공기는 1로 둔다
 ROI = (-1500, 1500, -500, 500)
 
 lens = make_spherical_lens(R1=R1, R2=R2, t=T, D=D)
@@ -99,8 +99,8 @@ source = make_parallel_beam(x=1000, y=0, vx=-1, vy=0, D=200, num=11)
 paths = trace_parallel_beam_through_lens(lens, source, WAVELENGTH_NM, N_AIR, nk, ROI)
 
 # 광학 가역성(reversibility) 검증
-# R1 쪽으로 들어온 광선을 굴절시킨 뒤(정방향, entry_surface=1), 그 출사
-# 광선을 반대로 뒤집어 다시 쏘면(역방향, entry_surface=2 분기를 타게 됨)
+# R2 쪽으로 들어온 광선을 굴절시킨 뒤(정방향, entry_surface=2), 그 출사
+# 광선을 반대로 뒤집어 다시 쏘면(역방향, entry_surface=1 분기를 타게 됨)
 # 원래 입사 경로를 정확히 되짚어 나와야 한다 -- Snell's law 자체가 시간
 # 역전에 대해 대칭이기 때문이다. 이건 refract_through_lens의 두 분기
 # (entry_surface==1 / else)가 서로 모순 없이 같은 물리를 구현했는지 보는
