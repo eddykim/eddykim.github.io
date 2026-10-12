@@ -11,8 +11,11 @@ from levenberg_marquardt import levenberg_marquardt
 
 
 def basin_hopping(d0, wavelength_nm, measured_R, n_hops=15, T0=0.05,
-                   cooling=1.0, perturb_sigma=150.0, lm_kwargs=None, rng=None):
+                   cooling=1.0, perturb_sigma=150.0, lm_kwargs=None, rng=None,
+                   return_trials=False):
     """반환: trace_d, trace_J, best_d, best_J, n_accept.
+    return_trials=True 이면 hop마다 LM이 내려간 시도 바닥 (d_trial, J_trial, 수락 여부)
+    목록을 여섯 번째 값으로 더 돌려준다. 난수 사용 순서는 바뀌지 않는다.
 
     perturb_sigma: 현재 해 주변 제안 분포 N(0, perturb_sigma^2)의 표준편차 [nm].
     basin 간격(~200nm, 1편 그림2)보다 커야 다른 basin으로 건너뛸 수 있다.
@@ -29,17 +32,22 @@ def basin_hopping(d0, wavelength_nm, measured_R, n_hops=15, T0=0.05,
     trace_J = [J]
     T = T0
     n_accept = 0
+    trials = []
     for _ in range(n_hops):
         d_trial0 = d + rng.normal(0, perturb_sigma)
         d_hist_trial, J_hist_trial, _ = levenberg_marquardt(d_trial0, wavelength_nm, measured_R, **lm_kwargs)
         d_trial, J_trial = d_hist_trial[-1], J_hist_trial[-1]
         dJ = J_trial - J
-        if dJ < 0 or rng.random() < np.exp(-dJ / T):
+        accepted = dJ < 0 or rng.random() < np.exp(-dJ / T)
+        if accepted:
             d, J = d_trial, J_trial
             n_accept += 1
+        trials.append((d_trial, J_trial, bool(accepted)))
         if J < best_J:
             best_d, best_J = d, J
         trace_d.append(d)
         trace_J.append(J)
         T *= cooling
+    if return_trials:
+        return np.array(trace_d), np.array(trace_J), best_d, best_J, n_accept, trials
     return np.array(trace_d), np.array(trace_J), best_d, best_J, n_accept

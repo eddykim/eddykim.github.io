@@ -44,12 +44,15 @@ LABELS = {
         "fig2": "그림2. SA 온도 스케줄에 따른 탐색 궤적 (d0=1300nm)",
         "bh_low": r"$T_0$ 매우 낮음 (0.0005)", "bh_mid": r"$T_0$ 적당 (0.05)",
         "bh_high": r"$T_0$ 매우 높음 (5.0)",
-        "fig3": "그림3. Basin-hopping 온도 스케줄에 따른 궤적 (d0=1300nm)",
+        "fig3": "그림3. Basin-Hopping 온도에 따른 궤적 (d0=1300nm, 온도 고정)",
         "bars": ["단일 LM\n(1회 시도)", "Simulated\nAnnealing", "Basin-\nHopping"],
         "success_rate": "전역 최솟값 도달 성공률 (%)",
         "fig4": "그림4. 무작위 시작 {}회 성공률 비교",
-        "start": "시작 (d0=1300 → LM 수렴)", "last": "마지막 위치",
-        "fig5": "그림5. 지형 위에 겹친 basin-hopping 궤적",
+        "start": "시작 바닥 (d0=1300 → LM 수렴)", "last": "마지막 위치",
+        "acc": "수락된 시도가 있는 바닥", "rej": "시도가 모두 기각된 바닥",
+        "count": "{n}회 시도\n수락 {m}",
+        "count1": "{n}회 시도\n수락 {m}",
+        "fig5": "그림5. Basin-Hopping 25 hop의 시도 바닥 (T0=0.05)",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -62,12 +65,15 @@ LABELS = {
         "fig2": "Fig 2. SA search trajectories by temperature schedule (d0=1300nm)",
         "bh_low": r"$T_0$ very low (0.0005)", "bh_mid": r"$T_0$ moderate (0.05)",
         "bh_high": r"$T_0$ very high (5.0)",
-        "fig3": "Fig 3. Basin-hopping trajectories by temperature schedule (d0=1300nm)",
+        "fig3": "Fig 3. Basin-hopping trajectories by temperature (d0=1300nm, fixed temperature)",
         "bars": ["single LM\n(one attempt)", "Simulated\nAnnealing", "Basin-\nHopping"],
         "success_rate": "Rate of reaching the global minimum (%)",
         "fig4": "Fig 4. Success rate over {} random starts",
-        "start": "start (d0=1300, after LM)", "last": "final position",
-        "fig5": "Fig 5. A basin-hopping trajectory over the landscape",
+        "start": "starting floor (d0=1300, after LM)", "last": "final position",
+        "acc": "floor with accepted tries", "rej": "floor with all tries rejected",
+        "count": "{n} tries\n{m} accepted",
+        "count1": "{n} try\n{m} accepted",
+        "fig5": "Fig 5. Trial floors of 25 basin-hopping hops (T0=0.05)",
     },
 }
 
@@ -144,12 +150,27 @@ for seed in range(N_SEEDS):
 
 rates = [success_ms / N_SEEDS * 100, success_sa / N_SEEDS * 100, success_bh / N_SEEDS * 100]
 
-# 그림5: 지형 위에 basin-hopping 실제 궤적 오버레이 (d0=1300, T0=0.05).
-# 그림3의 T0=0.05 실행과 같은 seed 를 쓰므로 궤적이 같다.
-overlay_d, overlay_J, overlay_best_d, overlay_best_J, overlay_accept = basin_hopping(
+# 그림5: hop마다 LM이 내려간 시도 바닥을 지형 위에 찍는다 (d0=1300, T0=0.05).
+# 그림3의 T0=0.05 실행과 같은 seed 를 쓰므로 궤적이 같다. 시도 바닥은 탐색 구간
+# 1200~1800nm 밖에도 떨어지므로 지형을 1000~1900nm로 넓혀 그린다.
+overlay_d, overlay_J, overlay_best_d, overlay_best_J, overlay_accept, overlay_trials = basin_hopping(
     initial_guess_hard, wavelength_nm, R_measured, n_hops=BH_HOPS, T0=0.05,
     perturb_sigma=150.0, lm_kwargs=dict(tau=1e-3, n_iter=30),
-    rng=np.random.default_rng(1))
+    rng=np.random.default_rng(1), return_trials=True)
+ds_wide = np.linspace(1000, 1900, 9001)
+Js_wide = np.array([objective(d, wavelength_nm, R_measured) for d in ds_wide])
+# 같은 바닥(10nm 이내)에 내려앉은 시도끼리 묶어 횟수와 수락 수를 센다.
+# 1860nm 근처의 두 시도는 LM이 30회 안에 덜 수렴해 6nm 떨어져 멈췄지만 같은 분지다.
+trial_groups = []
+for d_t, J_t, acc in overlay_trials:
+    for g in trial_groups:
+        if abs(g["d"] - d_t) < 10.0:
+            g["n"] += 1
+            g["m"] += acc
+            break
+    else:
+        trial_groups.append({"d": d_t, "J": J_t, "n": 1, "m": int(acc)})
+trial_groups.sort(key=lambda g: g["d"])
 
 
 # ---------------------------------------------------------------------------
@@ -217,16 +238,27 @@ def render(L):
     plt.savefig(os.path.join(out, "fig4-success-rate-comparison.png"), dpi=150)
     plt.close()
 
-    # 그림5: 지형 위에 겹친 basin-hopping 궤적
-    plt.figure(figsize=(6, 4))
-    plt.plot(ds, Js, color="lightgray", linewidth=1.2, zorder=1)
-    plt.plot(overlay_d, overlay_J, "o-", color="C3", markersize=5, linewidth=1, zorder=2)
-    plt.plot(overlay_d[0], overlay_J[0], "s", color="C0", markersize=9, zorder=3, label=L["start"])
-    plt.plot(overlay_d[-1], overlay_J[-1], "*", color="C2", markersize=14, zorder=3, label=L["last"])
+    # 그림5: 지형 위에 찍은 시도 바닥 (수락은 채운 점, 기각은 빈 점)
+    plt.figure(figsize=(7, 4.4))
+    plt.plot(ds_wide, Js_wide, color="lightgray", linewidth=1.2, zorder=1)
+    plt.axvspan(1200, 1800, color="0.95", zorder=0)
+    plt.plot(overlay_d[0], overlay_J[0], "s", color="C0", markersize=11, zorder=2, label=L["start"])
+    plt.plot(overlay_d[-1], overlay_J[-1], "*", color="C2", markersize=16, zorder=2, label=L["last"])
+    acc_g = [(g["d"], g["J"]) for g in trial_groups if g["m"] > 0]
+    rej_g = [(g["d"], g["J"]) for g in trial_groups if g["m"] == 0]
+    plt.plot(*zip(*acc_g), "o", color="C2", markersize=5, zorder=3, label=L["acc"])
+    plt.plot(*zip(*rej_g), "o", markerfacecolor="white", markeredgecolor="C3",
+             markersize=7, zorder=3, label=L["rej"])
+    plt.annotate("", xy=(overlay_d[-1], overlay_J[-1] * 1.6), xytext=(overlay_d[0] + 15, overlay_J[0]),
+                 arrowprops=dict(arrowstyle="->", color="C0", linewidth=1), zorder=2)
+    for g in trial_groups:
+        plt.text(g["d"], g["J"] * 0.62, L["count1" if g["n"] == 1 else "count"].format(n=g["n"], m=g["m"]),
+                 ha="center", va="top", fontsize=7, **F)
     plt.yscale("log")
+    plt.ylim(5e-4, 20)
     plt.xlabel(L["thickness"], **F)
     plt.ylabel(L["J_log"], **F)
-    plt.legend(prop=LF, fontsize=8)
+    plt.legend(prop=LF, fontsize=7, loc="lower left")
     plt.title(L["fig5"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig5-trajectory-on-landscape.png"), dpi=150)
@@ -266,6 +298,8 @@ print(f"  SA: {success_sa}/{N_SEEDS} = {rates[1]:.0f}%, avg iters-to-hit={np.mea
 print(f"  basin-hopping: {success_bh}/{N_SEEDS} = {rates[2]:.0f}%, "
       f"avg hops-to-hit={np.mean(hops_bh):.1f}")
 print()
-print("=== 그림5: 오버레이 궤적 (T0=0.05) ===")
+print("=== 그림5: 시도 바닥 (T0=0.05) ===")
+for g in trial_groups:
+    print(f"  바닥 d={g['d']:.2f} J={g['J']:.4f} 시도 {g['n']}회 수락 {g['m']}회")
 print(f"  첫 바닥={overlay_d[0]:.2f}, 마지막={overlay_d[-1]:.2f}, "
       f"전역최솟값 도달 hop={next(i for i, d in enumerate(overlay_d) if abs(d - true_thickness) < 5)}")
