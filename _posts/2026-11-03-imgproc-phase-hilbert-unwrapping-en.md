@@ -38,7 +38,7 @@ The Hilbert transform does this. It is a linear operation that rotates the phase
 
 $$ z(x) = I_{ac}(x) + j\,\mathcal{H}[I_{ac}(x)] = b(x)\,e^{j\phi(x)} $$
 
-Its magnitude is the instantaneous amplitude and its argument the instantaneous phase. This is the transform mentioned only in passing in [Post 3](/en/posts/imgproc-frequency-domain-filtering/) as part of the dissertation's signal analysis.
+Its magnitude is the instantaneous amplitude and its argument the instantaneous phase. The dissertation analysed the channelled spectroscopic signal from section 5 of [Post 3](/en/posts/imgproc-frequency-domain-filtering/) with exactly this analytic signal (its section 3.2); Post 3 covered only the step of separating out the baseline.
 
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/en/fig2-analytic-signal.png" alt="Background-removed signal with its Hilbert transform, instantaneous amplitude, and phase error with and without the background" width="750">
 _Fig 2. The analytic signal gives amplitude as magnitude and phase as argument_
@@ -53,7 +53,7 @@ Second, the spectra of $b$ and $\cos\phi$ must not overlap. This is the Bedrosia
 
 ## 3. One frame or several
 
-The second single-frame route uses a tool from Post 3. Keeping only the $+1$ sideband in the spectrum and transforming back yields a complex signal whose argument is the phase. Takeda proposed it in 1982, on the same principle as the notch filter of Post 3.
+The second single-frame route uses a tool from Post 3. Keeping only the $+1$ sideband in the spectrum and transforming back yields a complex signal whose argument is the phase. Takeda proposed it in 1982. Like the notch filter of Post 3 it masks the spectrum, but where the notch erases points of noise, this keeps a single sideband.
 
 The multi-frame route is phase shifting. Since the shifts $\delta_k$ are known,
 
@@ -131,7 +131,7 @@ A phase map with residues can still be forced open with branch cuts or least-nor
 
 ## Summary — closing the series
 
-A single fringe frame carries three unknowns — background, modulation, phase — against one equation. Solving from one frame requires the spatial assumption that phase varies slowly, which leaves error even without noise while the accompanying bandpass rejects noise. Solving from several frames is exact without that assumption, but requires known shifts, and when those are wrong the choice of algorithm sets the order of the resulting error. In the recovery step $\pi$ per pixel is an absolute limit, and in two dimensions residues make the result path-dependent.
+A single fringe frame carries three unknowns — background, modulation, phase — against one equation. Solving from one frame requires the spatial assumption that phase varies slowly, which leaves error even without noise; in exchange, the Fourier method's bandpass rejects noise. Solving from several frames is exact without that assumption, but requires known shifts, and when those are wrong the choice of algorithm sets the order of the resulting error. In the recovery step $\pi$ per pixel is an absolute limit, and in two dimensions residues make the result path-dependent.
 
 One thread runs through all six posts. Every operation in image processing rests on an assumption, and the way that assumption breaks is the bias of the method. The sampling of Post 1, the smoothing width of Post 2, the periodic extension of Post 3, the grid-locked bias of Post 4, the algebraic distance of Post 5, and the spatial assumption and shift calibration of this post were all the same story. Choosing a method in metrology means choosing which assumption to live with.
 
