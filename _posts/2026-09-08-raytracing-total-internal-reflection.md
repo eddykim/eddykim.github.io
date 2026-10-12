@@ -8,7 +8,7 @@ description: 프리즘의 전반사(TIR) 판정 로직을 검증하고, 같은 �
 math: true
 ---
 
-[1편](/posts/raytracing-spherical-lens-refraction/)에서는 렌즈 굴절 함수를 구현한 내용을 기록했고, 구현의 한계로 이렇게 적었다. "이번에 검증한 렌즈 굴절 함수는 전반사(total internal reflection, TIR) 여부를 판정하지 않는다." Snell's law에서 $\sin\theta_2 = (n_1/n_2)\sin\theta_1$이 1을 넘으면 `arcsin`이 정의역을 벗어나는데, 렌즈 함수는 그 경우를 걸러내지 않고 `NaN`을 그대로 흘려보낸다. 반면 프리즘 함수(`CalculateRayPath_Prism`)는 애초에 이 경우를 처리하도록 짜여 있었다. 이번 편에서는 그 프리즘의 TIR 판정 로직을 먼저 검증하고, 같은 로직을 렌즈 함수의 출사면에도 옮겨 붙인다.
+[1편](/posts/raytracing-spherical-lens-refraction/)에서는 렌즈 굴절 함수를 구현한 내용을 기록했고, 구현의 한계로 이렇게 적었다. "이번에 검증한 `refract_through_lens`는 전반사(total internal reflection) 여부를 판정하지 않는다." Snell's law에서 $\sin\theta_2 = (n_1/n_2)\sin\theta_1$이 1을 넘으면 `arcsin`이 정의역을 벗어나는데, 렌즈 함수는 그 경우를 걸러내지 않고 `NaN`을 그대로 흘려보낸다. 반면 프리즘 함수(`CalculateRayPath_Prism`)는 애초에 이 경우를 처리하도록 짜여 있었다. 이번 편에서는 그 프리즘의 TIR 판정 로직을 먼저 검증하고, 같은 로직을 렌즈 함수의 출사면에도 옮겨 붙인다.
 
 ## 1. 프리즘의 전반사 판정 — 다각형 경계 위의 반사법칙
 
@@ -25,7 +25,7 @@ def trace_ray_through_prism(ray, prism, n_lens, n_air, max_bounces=20, verbose=F
     for _ in range(max_bounces):
         # ... (가장 가까운 경계 교차점 (xc, yc)를 찾는 부분, 생략) ...
 
-        # 면의 법선 -- 선분에 수직인 방향, 광선이 들어오는 쪽을 향하도록 부호를 맞춘다
+        # 면의 법선 -- 선분에 수직인 방향, 광선 진행 방향과 같은 쪽(v·n ≥ 0)을 향하도록 부호를 맞춘다
         nx, ny = -(y2 - y1), (x2 - x1)
         nnorm = np.hypot(nx, ny)
         nx, ny = nx / nnorm, ny / nnorm
@@ -75,7 +75,7 @@ $$ \theta_1' > A - \theta_c, \qquad \theta_1 > \arcsin\big(n \sin(A - \theta_c)\
 <img src="/assets/img/posts/raytracing-total-internal-reflection/fig2-prism-angle-sweep.png" alt="입사각 스윕에 따른 전반사/투과" width="600">
 _그림2. 입사각이 임계값(28.8°)을 넘으면 전반사 대신 투과한다_
 
-이는 낯선 현상이 아니다. 거울 코팅 없이 프리즘 내부의 전반사만으로 빛의 경로를 꺾는 포로 프리즘(porro prism, 쌍안경에 쓰이는 그 프리즘)이 정확히 이 원리로 동작한다. 입사면에 빛을 수직으로 넣으면 45°로 기울어진 두 면에 각각 45°의 내부입사각으로 부딪히는데, 45° > 41.4°(BK7 임계각)라 반드시 전반사하므로 코팅 없이도 반사면 역할을 한다.
+이는 낯선 현상이 아니다. 거울 코팅 없이 프리즘 내부의 전반사만으로 빛의 경로를 꺾는 포로 프리즘(porro prism, 쌍안경에 쓰이는 그 프리즘)이 정확히 이 원리로 동작한다. 입사면에 빛을 수직으로 넣으면 45°로 기울어진 두 면에 각각 45°의 내부입사각으로 부딪히는데, 45° > 41.4°(앞에서 구한 750 nm의 N-BK7 임계각. d선 587.6 nm에서는 41.2°)라 반드시 전반사하므로 코팅 없이도 반사면 역할을 한다.
 
 ## 2. 렌즈에도 같은 로직을 넣으면? — 출사면 전반사 처리
 

@@ -28,7 +28,7 @@ def trace_ray_through_prism(ray, prism, n_lens, n_air, max_bounces=20, verbose=F
     for _ in range(max_bounces):
         # ... (finding the nearest boundary intersection (xc, yc), omitted) ...
 
-        # surface normal -- perpendicular to the segment, signed to face the incoming ray
+        # surface normal -- perpendicular to the segment, signed to point along the ray (v·n >= 0)
         nx, ny = -(y2 - y1), (x2 - x1)
         nnorm = np.hypot(nx, ny)
         nx, ny = nx / nnorm, ny / nnorm
@@ -78,7 +78,7 @@ Substituting the values gives $\theta_1 > 28.8131°$. Sweeping the angle of inci
 <img src="/assets/img/posts/raytracing-total-internal-reflection/en/fig2-prism-angle-sweep.png" alt="Total internal reflection and transmission across an incidence-angle sweep" width="600">
 _Fig 2. Once the angle of incidence exceeds the threshold (28.8°), the ray transmits instead of reflecting_
 
-This is not an exotic effect. The Porro prism — the one in binoculars, which folds the light path by total internal reflection alone, with no mirror coating — works on exactly this principle. Light entering normal to the entrance face strikes the two faces inclined at 45° with an internal angle of 45° each, and since 45° > 41.4° (the critical angle of BK7) it must reflect totally, so those faces act as mirrors without any coating.
+This is not an exotic effect. The Porro prism — the one in binoculars, which folds the light path by total internal reflection alone, with no mirror coating — works on exactly this principle. Light entering normal to the entrance face strikes the two faces inclined at 45° with an internal angle of 45° each, and since 45° > 41.4° (the N-BK7 critical angle at 750 nm found above; 41.2° at the d line, 587.6 nm) it must reflect totally, so those faces act as mirrors without any coating.
 
 ## 2. The same logic in the lens — handling TIR at the exit surface
 
