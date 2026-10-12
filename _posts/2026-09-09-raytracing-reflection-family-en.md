@@ -73,7 +73,7 @@ _Fig 1. Ray paths for the four reflective components — one reflection formula,
 
 ## 3. Approximating local curvature at a polygon vertex, and its error
 
-`ArbitraryMirror` represents even a smooth curved mirror by subdividing it into a polygon. The awkward case is the vertex. The perpendicular normal differs from edge to edge, so at a vertex it is unclear which edge's normal applies. The routine therefore fits a circle through the three adjacent points — previous point, vertex, next point — and takes the direction from that circle's centre to the vertex as the normal. Three points determine a circle uniquely, so the local curvature is approximated without any extra parameter.
+`ArbitraryMirror` represents even a smooth curved mirror by subdividing it into a polygon. The awkward case is the vertex. The perpendicular normal differs from edge to edge, so at a vertex it is unclear which edge's normal applies. The routine therefore fits a circle through the three adjacent points — previous point, vertex, next point — and takes the radial direction joining the vertex and that circle's centre (the code points it from the vertex towards the centre) as the normal. Three points determine a circle uniquely, so the local curvature is approximated without any extra parameter.
 
 ```python
 def _vertex_normal(x0, y0, x1, y1, x2, y2, xc, yc, dup_point):
@@ -99,10 +99,10 @@ asymmetric vertex: n_dup=[-0.057, -0.998]  n_uniq=[0.310, -0.951]  diff=21.319de
 more asymmetric  : n_dup=[0.161, -0.987]  n_uniq=[0.685, -0.728]  diff=33.983deg  third point missed by 143.4mm
 ```
 
-The result runs opposite to expectation. The symmetric vertex looks like the case that should go furthest astray, yet it deviates least, and the discrepancy grows with asymmetry: 12° to 21° to 34°. The miss distance printed alongside explains why directly. The distance by which the corrupted circle misses the third point grows from 35 mm to 76 mm to 143 mm, and the angular error of the normal tracks that growth. A ray sent perpendicularly onto a symmetric vertex ought to retrace its own path (Fig. 2); computed with the normal from the reused third point, it leaves 12° off course instead — and at an asymmetric vertex the distortion is larger still.
+In these coordinates the discrepancy grows with asymmetry, 12° to 21° to 34°, and the distance by which the corrupted circle misses the third point grows alongside it, 35 mm to 76 mm to 143 mm. The ordering, however, is not set by the shape of the vertex. With the right-hand sides of the second and third equations now equal, subtracting them forces the centre $\vec c$ to satisfy $\vec c\cdot(\vec p_2-\vec p_1)=0$, which pins it to a line through the coordinate origin, so the same mirror gives a different error depending on where it sits in the coordinate system. Shifting the three vertices by 500 mm in $y$ reverses the trend: 17.5° to 13.6° to 9.1°. A ray sent perpendicularly onto a symmetric vertex ought to retrace its own path (Fig. 2); computed with the normal from the reused third point, it leaves 24° off course instead, twice the 12° error in the normal.
 
 <img src="/assets/img/posts/raytracing-reflection-family/en/fig2-vertex-normal-typo.png" alt="Effect of the vertex normal calculation" width="600">
-_Fig 2. Reusing the third point (red solid) turns the reflected ray by 12.1°; using all three points (blue dashed) retraces the incident path exactly_
+_Fig 2. Reusing the third point (red solid) tilts the normal by 12.1°, which turns the reflected ray by twice that, 24.2°; using all three points (blue dashed) retraces the incident path exactly_
 
 ## 4. Limitations and what remains
 

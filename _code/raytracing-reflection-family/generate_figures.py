@@ -45,10 +45,10 @@ LABELS = {
         "reflected": "반사", "transmitted": "투과",
         "fig1": "그림1. 네 반사 부품의 광선 경로 -- 반사 공식은 하나, 법선 찾는 법만 다르다",
         "incident": "입사광",
-        "n_dup": "세 번째 점을 재사용한 법선",
-        "n_uniq": "세 점을 모두 쓴 법선",
+        "n_dup": "세 번째 점을 재사용한 법선으로 반사",
+        "n_uniq": "세 점을 모두 쓴 법선으로 반사",
         "fig2": "그림2. 세 번째 점을 재사용하면 반사 방향이 {:.1f}° 달라진다",
-        "p_vertex": "대칭 꼭짓점: n_dup={}, n_uniq={}, 차이={:.3f}deg",
+        "p_vertex": "대칭 꼭짓점: n_dup={}, n_uniq={}, 법선 차이={:.3f}deg, 반사광 차이={:.3f}deg",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"),
@@ -57,10 +57,10 @@ LABELS = {
         "reflected": "reflected", "transmitted": "transmitted",
         "fig1": "Fig 1. Ray paths for the four reflective components -- one formula, four ways to find the normal",
         "incident": "incident ray",
-        "n_dup": "normal from the reused third point",
-        "n_uniq": "normal from all three points",
+        "n_dup": "reflected with the reused-third-point normal",
+        "n_uniq": "reflected with the three-point normal",
         "fig2": "Fig 2. Reusing the third point turns the reflected ray by {:.1f}°",
-        "p_vertex": "symmetric vertex: n_dup={}, n_uniq={}, diff={:.3f}deg",
+        "p_vertex": "symmetric vertex: n_dup={}, n_uniq={}, normal diff={:.3f}deg, reflected diff={:.3f}deg",
     },
 }
 
@@ -102,6 +102,8 @@ n_uniq = _vertex_normal(vx0, vy0, vx1, vy1_, vx2, vy2, vx1, vy1_, dup_point=Fals
 vertex_ang = np.rad2deg(np.arccos(np.clip(np.dot(n_dup, n_uniq), -1, 1)))
 v_dup = reflect_vector([0.0, -1.0], n_dup)
 v_uniq = reflect_vector([0.0, -1.0], n_uniq)
+# 입사광을 고정하면 법선이 δ 돌 때 반사광은 2δ 돈다. 그림2 제목에는 반사광 사이 각을 쓴다.
+refl_ang = np.rad2deg(np.arccos(np.clip(np.dot(v_dup, v_uniq), -1, 1)))
 
 
 # ---------------------------------------------------------------------------
@@ -155,7 +157,7 @@ def render(L):
     plt.close(fig)
 
     # 그림2: 다각형 꼭짓점 법선 -- 점을 재사용한 경우 vs 세 점을 모두 쓴 경우
-    print(L["p_vertex"].format(np.round(n_dup, 3), np.round(n_uniq, 3), vertex_ang))
+    print(L["p_vertex"].format(np.round(n_dup, 3), np.round(n_uniq, 3), vertex_ang, refl_ang))
 
     fig, ax = plt.subplots(figsize=(6, 5))
     poly = np.array([[vx0, vy0], [vx1, vy1_], [vx2, vy2]])
@@ -174,7 +176,7 @@ def render(L):
     ax.set_xlabel(L["xlabel"], **F)
     ax.set_ylabel(L["ylabel"], **F)
     ax.legend(prop=LF, fontsize=9, loc="lower right")
-    ax.set_title(L["fig2"].format(vertex_ang), **F)
+    ax.set_title(L["fig2"].format(refl_ang), **F)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(os.path.join(out_dir, "fig2-vertex-normal-typo.png"), dpi=150)
