@@ -11,7 +11,7 @@ description: Solving the same thin-film thickness fit with Newton's method and w
 math: true
 ---
 
-[Post 1](/en/posts/optimization-gradient-descent/) solved the problem of recovering the thickness of a single SiO2/Si film from its reflectance spectrum using gradient descent. With a well-chosen step size `alpha` (300, say) it converged without trouble, but only slightly larger (1500) and it bounced across the valley and diverged. This post starts with Newton's method, which promises to settle that step-size dilemma on its own, and goes on to Gauss-Newton, which is used far more widely in metrology.
+[Post 1](/en/posts/optimization-gradient-descent/) solved the problem of recovering the thickness of a single SiO2/Si film from its reflectance spectrum using gradient descent. With a well-chosen step size `alpha` (300, say) it converged without trouble, but at five times that (1500) it bounced across the valley and oscillated without converging. This post starts with Newton's method, which promises to settle that step-size dilemma on its own, and goes on to Gauss-Newton, which is used far more widely in metrology.
 
 To state the conclusion first: the expectation that "Newton's method uses second derivatives, so it is theoretically faster and therefore always better" breaks down on this problem. Examining why shows precisely why metrology software mostly standardizes on Gauss-Newton — or its variant, Levenberg-Marquardt — rather than Newton.
 
@@ -72,7 +72,7 @@ _Fig 3. Objective J vs iteration (d0=1540nm, log scale)_
 
 The outcome was not the expected one. Gradient descent (blue) converges smoothly, as in post 1. Newton (red), however, jumps to 1876 nm on the very first step and then wanders between 1824 and 1921 nm without ever settling. For all that quadratic convergence is meant to be faster, at this initial value Newton's method simply does not work.
 
-One caveat belongs here. The individual iterates along this diverging trajectory are not numbers worth quoting. The trajectory passes through regions where $J''$ is close to zero, which amplifies rounding error. Perturbing the initial value by as little as $10^{-12}$ nm moves the tenth iterate by hundreds of nanometres.
+One caveat belongs here. The individual iterates along this diverging trajectory are not numbers worth quoting. The trajectory passes through regions where $J''$ is close to zero, which strongly amplifies the rounding error of the central-difference $J''$ (about $10^{-9}$). Perturbing the initial value by as little as $10^{-12}$ nm changes that rounding pattern and moves the tenth iterate by more than 200 nm.
 
 ```text
 sensitivity of the diverging trajectory to the initial value (10th-step thickness):
@@ -85,7 +85,7 @@ What reproduces is the fact that the method fails to converge and wanders hundre
 
 ## 3. Why it failed — where the quadratic approximation collapses
 
-The objective $J(d)$ plotted in section 5 of post 1 (Fig. 2 there) makes the reason visible. The reflectance of a thin film oscillates with thickness as interference fringes, and $J(d)$ was correspondingly non-convex: a global minimum with a row of local minima around it. For the quadratic approximation Newton relies on to hold, the curvature at that point — $J''(d)$ — must be positive, since the parabola has to open upward for the step to point toward a minimum. Evaluating $J''(d)$ at two points gives:
+The objective $J(d)$ plotted in section 2 of post 1 (Fig. 2 there) makes the reason visible. The reflectance of a thin film oscillates with thickness as interference fringes, and $J(d)$ was correspondingly non-convex: a global minimum with a row of local minima around it. For the quadratic approximation Newton relies on to hold, the curvature at that point — $J''(d)$ — must be positive, since the parabola has to open upward for the step to point toward a minimum. Evaluating $J''(d)$ at two points gives:
 
 | Point | $J''(d)$ | Meaning |
 |---|---|---|
@@ -154,19 +154,21 @@ The whole difference comes from one fact: whatever the sign of the true curvatur
 
 ## 7. Gauss-Newton is not a cure-all either
 
-Gauss-Newton is not safe in every situation. The discarded term $\sum_i r_i r_i''$ is not always negligible. Two failure conditions are known.
+Gauss-Newton is not safe in every situation. The discarded term $\sum_i r_i r_i''$ is not always negligible. Three failure conditions are known.
 
 First, if the residuals themselves are large — the model fits the data poorly — the discarded term grows, and far from converging quadratically the method may manage only linear convergence, or diverge. On a zero-residual problem, where the residual vanishes at the solution, Gauss-Newton recovers the same quadratic convergence as Newton.
 
-Second, if the starting point lies in the basin of a different local minimum, Gauss-Newton converges to that minimum, as it must. Restarting from around 1300 nm and around 1690 nm gives 1293 nm and 1689 nm respectively — precisely the neighbouring local minima visible in Figure 2 of post 1. The stability of Gauss-Newton does not mean "it finds the global minimum"; it means something closer to "once it has a direction, it goes there without wandering."
+Second, if the Jacobian loses rank or comes close to singular — here, if $\sum_i r_i'^2$ approaches zero — the approximate Hessian $J^TJ$ nearly vanishes. The discarded term is then no longer negligible by comparison, and the solution of the normal equation, the step itself, becomes far too large.
+
+Third, if the starting point lies in the basin of a different local minimum, Gauss-Newton converges to that minimum, as it must. Restarting from around 1300 nm and around 1690 nm gives 1293 nm and 1689 nm respectively — precisely the neighbouring local minima visible in Figure 2 of post 1. The stability of Gauss-Newton does not mean "it finds the global minimum"; it means something closer to "once it has a direction, it goes there without wandering."
 
 ## Summary
 
 Newton's method promises the fastest convergence in theory, but the promise holds only where the objective is locally convex; on an objective folded by interference fringes, as here, it can fail outright depending on the initial value. Gauss-Newton exploits the structure of nonlinear least squares to approximate the Hessian by $J^TJ$, removing that failure mode altogether — at the price of slower convergence when the residuals are large.
 
-The next post covers Levenberg-Marquardt, which compensates for this weakness of Gauss-Newton — instability at large residuals — with a damping parameter. It is the de facto standard in metrology, and its structure moves smoothly between gradient descent and Gauss-Newton, taking the strengths of both.
+The next post covers Levenberg-Marquardt, which uses a damping parameter to tame the cases where the Gauss-Newton step grows too large or the Jacobian is nearly singular. Near the solution it uses the same approximate Hessian as Gauss-Newton, so it does not cure the slow convergence of large-residual problems. It is the de facto standard in metrology, and its structure moves smoothly between gradient descent and Gauss-Newton, taking the strengths of both.
 
 ## References
 
-- D. Bindel, "Nonlinear Least Squares (Newton and Gauss-Newton)," Numerical Analysis lecture notes, Cornell University, 2023. [cs.cornell.edu/courses/cs4220/2023sp/lec/2023-04-10.pdf](https://www.cs.cornell.edu/courses/cs4220/2023sp/lec/2023-04-10.pdf)
+- D. Bindel, "Gauss-Newton and nonlinear least squares" (lecture notes, 2023-04-10), CS 4220 Numerical Analysis, Cornell University, Spring 2023. [cs.cornell.edu/courses/cs4220/2023sp/lec/2023-04-10.pdf](https://www.cs.cornell.edu/courses/cs4220/2023sp/lec/2023-04-10.pdf)
 - K. Madsen, H.B. Nielsen, O. Tingleff, "Methods for Non-Linear Least Squares Problems," 2nd ed., IMM, Technical University of Denmark, 2004. [imm.dtu.dk](https://www2.imm.dtu.dk/pubdb/edoc/imm3215.pdf)
