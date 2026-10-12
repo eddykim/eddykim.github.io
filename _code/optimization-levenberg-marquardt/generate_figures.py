@@ -37,19 +37,21 @@ LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         "mu_small": r"$\mu_0$ 작게 ($\tau$=1e-6, GN에 가까움)",
-        "mu_large": r"$\mu_0$ 크게 ($\tau$=1e6, steepest descent에 가까움)",
+        "mu_large": r"$\mu_0$ 크게 ($\tau$=1e6, 최급강하법에 가까움)",
         "mu_small_short": r"$\mu_0$ 작게 ($\tau$=1e-6)",
         "mu_large_short": r"$\mu_0$ 크게 ($\tau$=1e6)",
         "true_thickness": "실제 두께", "thickness_est": "두께 추정값 (nm)",
+        "xlabel": "반복",
         "fig1": r"그림1. $\mu_0$ 크기에 따른 LM 수렴 궤적 (d0=1540nm)",
-        "damping": r"damping parameter $\mu$",
-        "fig2": r"그림2. gain ratio 기반 $\mu$ 자동조정 추이",
-        "gd": "Gradient Descent (alpha=300)", "newton": "Newton (발산)",
+        "damping": r"댐핑 계수 $\mu$",
+        "fig2": r"그림2. 이득비에 따른 $\mu$ 자동 조정",
+        "gd": r"경사 하강법 ($\alpha$=300)", "newton": "Newton (발산)",
         "gn": "Gauss-Newton", "lm": r"Levenberg-Marquardt ($\tau$=1e-6)",
         "fig3": "그림3. 네 방법 비교 (d0=1540nm)",
-        "gn_cycle": "Gauss-Newton (영원히 진동)", "lm_plain": "Levenberg-Marquardt",
+        "gn_cycle": "Gauss-Newton (세 값 순환)",
+        "lm_plain": r"Levenberg-Marquardt ($\tau$=1e-3)",
         "wrong_floor": "이 모델의 국소 최솟값 (1400–1700nm)",
-        "fig4": "그림4. 굴절률을 잘못 가정한 모델에서: GN 실패 vs LM 성공",
+        "fig4": "그림4. 굴절률을 잘못 가정한 모델에서: GN은 순환, LM은 수렴",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -58,15 +60,17 @@ LABELS = {
         "mu_small_short": r"small $\mu_0$ ($\tau$=1e-6)",
         "mu_large_short": r"large $\mu_0$ ($\tau$=1e6)",
         "true_thickness": "true thickness", "thickness_est": "Estimated thickness (nm)",
+        "xlabel": "iteration",
         "fig1": r"Fig 1. LM trajectories by size of $\mu_0$ (d0=1540nm)",
         "damping": r"damping parameter $\mu$",
         "fig2": r"Fig 2. Adaptation of $\mu$ driven by the gain ratio",
         "gd": "Gradient Descent (alpha=300)", "newton": "Newton (diverging)",
         "gn": "Gauss-Newton", "lm": r"Levenberg-Marquardt ($\tau$=1e-6)",
         "fig3": "Fig 3. The four methods compared (d0=1540nm)",
-        "gn_cycle": "Gauss-Newton (cycles forever)", "lm_plain": "Levenberg-Marquardt",
+        "gn_cycle": "Gauss-Newton (cycles among three values)",
+        "lm_plain": r"Levenberg-Marquardt ($\tau$=1e-3)",
         "wrong_floor": "local minimum of this model (1400–1700 nm)",
-        "fig4": "Fig 4. With a wrong refractive index: GN fails, LM rescues",
+        "fig4": "Fig 4. With a wrong refractive index: GN cycles, LM converges",
     },
 }
 
@@ -190,7 +194,7 @@ def render(L):
     plt.plot(d_small, "o-", color="C0", markersize=4, label=L["mu_small"])
     plt.plot(d_large, "o-", color="C3", markersize=4, label=L["mu_large"])
     plt.axhline(true_thickness, color="gray", linestyle="--", label=L["true_thickness"])
-    plt.xlabel("iteration")
+    plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["thickness_est"], **F)
     plt.legend(prop=LF, fontsize=8)
     plt.title(L["fig1"], **F)
@@ -204,7 +208,7 @@ def render(L):
              label=L["mu_small_short"])
     plt.plot(range(len(mu_large)), mu_large, "o-", color="C3", markersize=4,
              label=L["mu_large_short"])
-    plt.xlabel("iteration")
+    plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["damping"], **F)
     plt.yscale("log")
     plt.legend(prop=LF, fontsize=8)
@@ -220,7 +224,7 @@ def render(L):
     plt.plot(d_gn, "o-", color="C2", markersize=4, label=L["gn"])
     plt.plot(d_lm, "x--", color="C4", markersize=6, label=L["lm"])
     plt.axhline(true_thickness, color="gray", linestyle="--", label=L["true_thickness"])
-    plt.xlabel("iteration")
+    plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["thickness_est"], **F)
     plt.legend(prop=LF, fontsize=8)
     plt.title(L["fig3"], **F)
@@ -228,12 +232,12 @@ def render(L):
     plt.savefig(os.path.join(out, "fig3-four-methods-comparison.png"), dpi=150)
     plt.close()
 
-    # 그림4: GN 실패 vs LM 성공
+    # 그림4: GN 순환 vs LM 수렴
     plt.figure(figsize=(6, 4))
     plt.plot(d_gn_wrong, "o-", color="C3", markersize=4, label=L["gn_cycle"])
     plt.plot(d_lm_wrong, "o-", color="C4", markersize=4, label=L["lm_plain"])
     plt.axhline(wrong_floor_d, color="gray", linestyle="--", label=L["wrong_floor"])
-    plt.xlabel("iteration")
+    plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["thickness_est"], **F)
     plt.legend(prop=LF, fontsize=8)
     plt.title(L["fig4"], **F)
