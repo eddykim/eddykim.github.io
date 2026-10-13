@@ -331,7 +331,7 @@ def figure5(L):
 
 # ------------------------------------------------------------------ 그림 6: 커버글라스 두께 오차
 
-def coverslip_strehl(NA, dt_mm, n=1.523, lam_mm=0.55e-3, m=4001):
+def coverslip_strehl(NA, dt_mm, n=1.515, lam_mm=0.55e-3, m=4001):
     """두께 오차 dt 인 평판이 만드는 파면수차의 최선 초점 스트렐 비와 RMS (사인 조건을 만족하는 대물렌즈,
     동공 좌표 ρ = sinθ/NA 위에서 고른 세기). 초점 조절 항은 고NA 형태 δz·cosθ."""
     rho = np.linspace(0, 1, m)
@@ -550,10 +550,41 @@ def figure9(L):
 
 # ------------------------------------------------------------------ 그림 11: 왜곡
 
+def real_chief_height(lens, th, z_img):
+    """무한히 먼 물점(시야각 th)에서 실제 조리개 중심을 지나는 주광선이 상면 z_img 에 닿는 높이.
+    근축 입사동을 겨눈 광선은 조리개가 렌즈 뒤에 있으면 동공 수차 때문에 조리개 중심을 비켜 가므로,
+    출발 높이를 이분법으로 고쳐 조리개면에서 높이 0 이 되게 한다."""
+    i = next(k for k, s in enumerate(lens) if s.stop)
+    d = np.array([0.0, np.sin(th), np.cos(th)])
+    z_start = lens[0].z - 40.0
+    stop = lens[i]
+    head = lens[:i] + [type(stop)(stop.z, stop.R, stop.medium)]   # 조리개 구경으로 자르지 않는다
+
+    def at_stop(y0):
+        Q, _, _, _, ok = trace_real(head, np.array([[0.0, y0, z_start]]), d[None], WL)
+        return Q[0, 1] if ok[0] else np.nan
+
+    y_guess = -np.tan(th) * (stop.z - z_start)                  # 굴절이 없다고 볼 때의 출발 높이
+    ys = y_guess + np.linspace(-30.0, 30.0, 241)
+    fs = np.array([at_stop(y) for y in ys])
+    k = np.where(np.isfinite(fs[:-1]) & np.isfinite(fs[1:]) & (np.sign(fs[:-1]) != np.sign(fs[1:])))[0]
+    k = k[np.argmin(np.abs(ys[k] - y_guess))]
+    lo, hi, flo = ys[k], ys[k + 1], fs[k]
+    for _ in range(60):
+        mid = 0.5 * (lo + hi)
+        fm = at_stop(mid)
+        if np.sign(fm) == np.sign(flo):
+            lo, flo = mid, fm
+        else:
+            hi = mid
+    Q, D, _, _, _ = trace_real(lens, np.array([[0.0, 0.5 * (lo + hi), z_start]]), d[None], WL)
+    return to_plane(Q, D, z_img)[0, 1]
+
+
 def figure11(L):
     fig, axes = plt.subplots(1, 3, figsize=(12.5, 4.5))
     g = np.linspace(-1, 1, 9)
-    tmax = np.tan(np.radians(20.0))
+    tmax = np.tan(np.radians(20.0)) / np.sqrt(2.0)   # 바둑판 모서리가 시야 20°. 그 밖은 뒤 조리개에서 실제 주광선이 없다
     cases = [(-25.0, t(L, "(a) 조리개가 렌즈 25 mm 앞", "(a) Stop 25 mm in front")),
              (0.0, t(L, "(b) 조리개가 렌즈 한가운데", "(b) Stop at the lens")),
              (25.0, t(L, "(c) 조리개가 렌즈 25 mm 뒤", "(c) Stop 25 mm behind"))]
@@ -571,30 +602,29 @@ def figure11(L):
                     if th < 1e-12:
                         pts_real.append((0, 0)); pts_par.append((0, 0)); continue
                     st = setup(lens, WL, th)
-                    x, y, ok = spot(lens, WL, st, np.array([0.0]), np.array([0.0]), z_img)
                     yp = paraxial_image_height(lens, WL, st)
                     phi = np.arctan2(tx, ty)
-                    r_real, r_par = y[0], yp
+                    r_real, r_par = real_chief_height(lens, th, z_img), yp
                     pts_real.append((r_real * np.sin(phi), r_real * np.cos(phi)))
                     pts_par.append((r_par * np.sin(phi), r_par * np.cos(phi)))
                 pr, pp = np.array(pts_real), np.array(pts_par)
                 ax.plot(pp[:, 0], pp[:, 1], color=C_GREY, lw=0.7, ls="--")
                 ax.plot(pr[:, 0], pr[:, 1], color=C_RAY, lw=1.3)
         st = setup(lens, WL, np.radians(20.0))
-        x, y, ok = spot(lens, WL, st, np.array([0.0]), np.array([0.0]), z_img)
+        y = [real_chief_height(lens, np.radians(20.0), z_img)]
         yp = paraxial_image_height(lens, WL, st)
         ax.set_aspect("equal")
-        ax.set_xlim(-60, 60); ax.set_ylim(-60, 60)
+        ax.set_xlim(-45, 45); ax.set_ylim(-45, 45)
         dist = 100 * (y[0] - yp) / yp
         dist_s = "0.0" if abs(dist) < 0.05 else f"{dist:+.1f}"
-        ax.set_title(f"{title}\n" + t(L, f"20° 에서 {dist_s}%", f"{dist_s}% at 20°"),
+        ax.set_title(f"{title}\n" + t(L, f"모서리(20°)에서 {dist_s}%", f"{dist_s}% at the corner (20°)"),
                      fontsize=10.5, **font(L))
         ax.set_xlabel("x (mm)")
         print(f"    그림11: 조리개 {zs_:+.0f} mm → 20° 왜곡 {100 * (y[0] - yp) / yp:+.2f}%")
     axes[0].set_ylabel("y (mm)")
     fig.suptitle(t(L, "f = 100 mm 양볼록 렌즈로 본 바둑판 (파란 선: 실광선, 회색 점선: 근축 상)",
                    "A grid seen through an f = 100 mm biconvex lens (blue: real rays, grey dashed: paraxial)"), fontsize=11, **font(L))
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
     save(fig, L, "fig11-distortion.png")
 
 

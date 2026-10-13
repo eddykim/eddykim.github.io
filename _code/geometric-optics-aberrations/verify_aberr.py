@@ -345,7 +345,7 @@ def verify_paraboloid():
 def verify_coverslip():
     print("L. 커버글라스의 구면수차 ↔ 평판의 3차 식")
     from generate_figures import coverslip_strehl
-    n, dt, lam = 1.523, 0.010, 0.55e-3
+    n, dt, lam = 1.515, 0.010, 0.55e-3
     ok = True
     for NA in [0.1, 0.2]:
         sig, S = coverslip_strehl(NA, dt, n=n, lam_mm=lam)
