@@ -256,4 +256,4 @@ The next post follows from there. Going beyond using surplus measurements for in
 - H. Fujiwara, *Spectroscopic Ellipsometry: Principles and Applications*, Wiley, 2007, section 4.2.7 (configurations for Mueller matrix ellipsometry).
 - O. Arteaga, J. Freudenthal, B. Wang, B. Kahr, "Mueller matrix polarimetry with four photoelastic modulators: theory and calibration," *Applied Optics* **51**, 6805 (2012).
 - K. Meng, B. Jiang, C. D. Samolis, M. Alrished, K. Youcef-Toumi, "Unevenly spaced continuous measurement approach for dual rotating-retarder Mueller matrix ellipsometry," *Optics Express* **27**, 14736 (2019).
-- Youngjoon Kim, "Development of Snapshot Angle-Resolved Spectroscopic Ellipsometry Using a Line-Scan Spectrometer and Back Focal Plane Spectral Interference," PhD thesis, Seoul National University, 2025, section 1.2.
+- Youngjoon Kim, "Snapshot Angle-Resolved Spectroscopic Ellipsometry Using Line-Scan Spectrometer and Back Focal Plane Spectral Interference," PhD dissertation, Seoul National University, 2025, section 1.2.
