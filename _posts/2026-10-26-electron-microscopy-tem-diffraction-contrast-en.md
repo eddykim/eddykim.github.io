@@ -48,7 +48,7 @@ Where do the diffracted electrons converge? Consider what the objective lens doe
 
 Electrons leaving different points of the specimen in the same direction converge to one point of the back focal plane (BFP). Conversely, electrons leaving one point in many directions converge to one point of the image plane. Direction maps to position in the back focal plane; origin maps to position in the image plane.
 
-[Ellipsometry 3](/en/posts/ellipsometry-thin-film-multilayer-reflectance/) made the same statement about light: different angles of incidence separate by position in the objective's back focal plane. Light or electrons, a lens converts direction into position, and the back focal plane is where that happens.
+[Ellipsometry Foundations 3](/en/posts/ellipsometry-thin-film-multilayer-reflectance/) made the same statement about light: different angles of incidence separate by position in the objective's back focal plane. Light or electrons, a lens converts direction into position, and the back focal plane is where that happens.
 
 So the diffraction pattern forms in the back focal plane and the image forms in the image plane. Focusing the intermediate lens on the back focal plane puts a diffraction pattern on the screen; focusing it on the image plane puts an image there. That is the substance of switching between diffraction mode and imaging mode with one control.
 

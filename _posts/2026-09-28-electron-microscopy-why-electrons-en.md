@@ -11,7 +11,7 @@ description: An electron's wavelength is 2.5 pm, yet resolution stalls at 0.2 nm
 math: true
 ---
 
-Anyone who works with optical metrology long enough keeps running into the same wall: wavelength. Measuring a film far thinner than the wavelength is possible — [Ellipsometry 1](/en/posts/ellipsometry-electromagnetic-fresnel/) covered exactly that — but converting thickness into a phase and reading it back is not the same as seeing the layer. For resolution, the ability to tell two neighbouring structures apart as two, visible light stops near 200 nm.
+Anyone who works with optical metrology long enough keeps running into the same wall: wavelength. Measuring a film far thinner than the wavelength is possible — [Ellipsometry Foundations 1](/en/posts/ellipsometry-electromagnetic-fresnel/) covered exactly that — but converting thickness into a phase and reading it back is not the same as seeing the layer. For resolution, the ability to tell two neighbouring structures apart as two, visible light stops near 200 nm.
 
 So one looks for a shorter wavelength, and the electron presents itself. Treated as a wave, an electron has a wavelength five orders of magnitude shorter than visible light. On paper, atomic nuclei should be within reach. Yet a real transmission electron microscope (TEM) delivers about 0.2 nm, and even an aberration-corrected instrument reaches only 0.05 nm. That is dozens of times worse than the wavelength.
 
