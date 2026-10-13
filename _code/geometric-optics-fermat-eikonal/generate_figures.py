@@ -52,11 +52,11 @@ LABELS = {
         "f5ax": "경계면 위 통과점 x", "f5ay": "광로길이",
         "f5snell": "스넬 법칙이 주는 점",
         "f5b": "(b) 두 초점을 잇는 반사 경로",
-        "f5bx": "반사점의 가로 위치", "f5by": "광로길이 S→C→P",
+        "f5bx": "반사점의 가로 위치", "f5by": "광로길이 S→Q→P",
         "f5plane": "평면거울 (최소)", "f5ell": "타원거울 (일정)", "f5circ": "더 굽은 거울 (최대)",
         "f5geo": "(c) 세 거울의 배치",
         # 그림6
-        "f6a": "(a) 거울 위 각 점을 거쳐 오는 파의 위상 (실수부)",
+        "f6a": "(a) 거울 위 각 점을 거쳐 오는 파의 위상자 (실수부)",
         "f6ax": "거울 위 위치 x (mm)", "f6ay": "cos(k·광로길이)",
         "f6b": "(b) 위상자를 차례로 더한 궤적",
         "f6bx": "실수부", "f6by": "허수부",
@@ -86,11 +86,11 @@ LABELS = {
         "f5ax": "Crossing point x on the interface", "f5ay": "Optical path length",
         "f5snell": "Point given by Snell's law",
         "f5b": "(b) Reflected paths joining two foci",
-        "f5bx": "Horizontal position of the reflection point", "f5by": "Optical path S→C→P",
+        "f5bx": "Horizontal position of the reflection point", "f5by": "Optical path S→Q→P",
         "f5plane": "Plane mirror (minimum)", "f5ell": "Elliptical mirror (constant)",
         "f5circ": "More curved mirror (maximum)",
         "f5geo": "(c) The three mirrors",
-        "f6a": "(a) Phase of the wave arriving via each mirror point (real part)",
+        "f6a": "(a) Phasor of the wave arriving via each mirror point (real part)",
         "f6ax": "Position on the mirror x (mm)", "f6ay": "cos(k · optical path)",
         "f6b": "(b) Running sum of the phasors",
         "f6bx": "Real part", "f6by": "Imaginary part",
@@ -235,7 +235,7 @@ CIRC_R = 2.0                      # 꼭짓점 (0, 1) 에서 타원(곡률반경 
 
 
 def mirror_paths(u):
-    """반사점의 가로 위치 u 에 대해 세 거울의 반사점과 광로길이 S→C→P."""
+    """반사점의 가로 위치 u 에 대해 세 거울의 반사점과 광로길이 S→Q→P."""
     S, P = np.array([-FOCUS, 0.0]), np.array([FOCUS, 0.0])
     pts = {
         "plane": np.stack([u, np.full_like(u, ELL_B)], -1),
