@@ -26,7 +26,7 @@ BASE_DIR = os.path.join(
 LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
-        "linear": "선형편광", "circular": "원형편광", "elliptical": "타원편광",
+        "linear": "선형편광", "circular": "원편광", "elliptical": "타원편광",
         "fig1": "전기장 성분의 진폭비·위상차에 따른 편광 상태",
         "full": "완전편광", "partial": "부분편광", "unpol": "무편광",
         "dop": "{}\n(측정된 P={:.2f})",
@@ -39,9 +39,10 @@ LABELS = {
         "psg": "편광 생성단 (PSG)", "psa": "편광 분석단 (PSA)",
         "fig3": "PSG-시편-PSA 구조와 뮬러 행렬의 순차 곱 "
                 "$S_{out}=M_A M_C' M_{sample} M_C M_P S_{in}$",
-        "phi_label": r"위상 지연량 $\phi$ (rad)",
+        "phi_label": r"지연량 $\phi$ (rad)",
         "stokes_norm": "정규화된 스토크스 성분",
-        "fig4": "편광자(0°)+위상지연자(45°) 통과 후 출력 편광: 선형 → 타원 → 원형 → 타원 → 선형",
+        # AppleGothic 의 ° 글리프는 앞뒤에 빈칸이 붙어 보이므로 "도"로 쓴다.
+        "fig4": "편광자(0도)+위상지연자(45도) 통과 후 출력 편광: 선형 → 타원 → 원 → 타원 → 선형",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -137,7 +138,7 @@ CASES = [("linear", 1.0, 1.0, 0.0), ("circular", 1.0, 1.0, np.pi / 2),
 rng = np.random.default_rng(0)
 N = 2000
 
-Ax0, Ay0, dphi0 = 1.0, 0.65, np.pi / 4
+Ax0, Ay0, dphi0 = 1.0, 0.55, np.pi / 4   # 그림1 의 타원과 같은 진폭비·위상차
 S0_ref = Ax0 ** 2 + Ay0 ** 2
 s_signal = np.array([
     (Ax0 ** 2 - Ay0 ** 2) / S0_ref,
@@ -262,13 +263,17 @@ def render(L):
     fig.savefig(os.path.join(out, "fig3-psg-psa-diagram.png"), dpi=150)
     plt.close(fig)
 
-    # 그림 4. 위상지연량에 따른 출력 편광 변화
+    # 그림 4. 지연량에 따른 출력 편광 변화
     fig = plt.figure(figsize=(11, 6.5))
     for i, (phi, lab) in enumerate(zip(SNAP_PHIS, SNAP_LABELS)):
         ax = fig.add_subplot(2, 5, i + 1)
         S_out = mueller_retarder(omega_c, phi) @ mueller_polarizer(omega_p) @ S_in
         Ex, Ey = stokes_to_ellipse(S_out)
         ax.plot(Ex, Ey, color="tab:purple", lw=2)
+        if 0 < phi < np.pi:   # 선형이 아닌 상태에만 도는 방향(손잡이)을 화살표로 표시
+            idx = len(Ex) // 8
+            ax.annotate("", xy=(Ex[idx + 1], Ey[idx + 1]), xytext=(Ex[idx], Ey[idx]),
+                        arrowprops=dict(arrowstyle="-|>", color="tab:red", lw=1.8))
         ax.set_xlim(-0.8, 0.8)
         ax.set_ylim(-0.8, 0.8)
         ax.set_aspect("equal")
