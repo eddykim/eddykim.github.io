@@ -4,7 +4,8 @@
 출력: ../../assets/img/posts/electron-microscopy-sem-imaging/      (한국어)
       ../../assets/img/posts/electron-microscopy-sem-imaging/en/   (영문)
 
-그림1은 검출기 배치 개념도이고, 그림2와 그림3은 계산 결과다.
+fig1 은 검출기 배치 개념도이고, fig2 와 fig3 은 계산 결과다.
+본문에서는 웹 그림이 사이에 들어가 각각 그림1, 그림3, 그림6 이다.
 3편과 달리 몬테카를로가 필요 없다 — 이차전자 수율의 기울기 의존과 전체
 수율 곡선은 모두 해석식으로 충분하다.
 """
@@ -41,7 +42,8 @@ FEATURE_S = 45.0       # nm, 측벽이 서는 정도 (작을수록 가파르다)
 SEC_CAP = 6.0          # sec(theta) 를 자르는 상한. 실제 표면에서 발산하지 않는다.
 
 # ── 그림3: 전체 수율 곡선 ─────────────────────────────────
-# (이름, delta_max, E_max[keV], eta) — 교재에 실린 대표값 수준이다.
+# (이름, delta_max, E_max[keV], eta) — 예시용 매개변수다. 여기서 나오는 E2 는
+# 모형값이며 측정값(석영 약 3.0 kV, PMMA 약 1.6 kV)과 다르다(본문 6절).
 # 둘 다 절연체다. 도체는 전하가 빠져나가므로 수율과 무관하게 대전하지 않는다.
 YIELD_MATERIALS = [
     ("sio2", 2.4, 0.40, 0.15),
@@ -106,13 +108,13 @@ LABELS = {
         "f2edge": "측벽에서 신호가 솟는다\n— 기울기 대비",
         # 그림3
         "fig3": "전체 수율이 1을 지나는 곳에서 대전이 사라진다",
-        "f3x": "가속전압 (kV)", "f3y": "전체 수율 $\\sigma_T$ = δ + η",
+        "f3x": "가속전압 (kV)", "f3y": "전체 수율 $\\sigma_T = \\delta + \\eta$",
         "f3sio2": "SiO$_2$ (절연체)", "f3pmma": "PMMA (고분자, 절연체)",
-        "f3pos": "$\\sigma_T$ > 1: 나가는 전자가 더 많다 → 양(+)으로 대전",
-        "f3neg": "$\\sigma_T$ < 1: 들어오는 전자가 더 많다 → 음(-)으로 대전",
+        "f3pos": "$\\sigma_T > 1$: 나가는 전자가 더 많다 → 양(+)으로 대전",
+        "f3neg": "$\\sigma_T < 1$: 들어오는 전자가 더 많다 → 음(-)으로 대전",
         "f3e1": "$E_1$ = {:.0f} eV", "f3e2": "$E_2$ = {:.2f} kV",
         "f3op": "보통의 30 kV\n(강한 음 대전)",
-        "f3note": "저전압 SEM 은 $E_2$ 근처에서 찍어\n코팅 없이 절연체를 본다",
+        "f3note": "저전압 SEM은 $E_2$ 근처에서 찍어\n코팅 없이 절연체를 본다",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -132,10 +134,10 @@ LABELS = {
         "f2prof": "Surface profile", "f2sig": "SE signal",
         "f2edge": "Signal peaks on the sidewalls\n— tilt contrast",
         "fig3": "Charging vanishes where the total yield passes one",
-        "f3x": "Accelerating voltage (kV)", "f3y": "Total yield $\\sigma_T$ = δ + η",
+        "f3x": "Accelerating voltage (kV)", "f3y": "Total yield $\\sigma_T = \\delta + \\eta$",
         "f3sio2": "SiO$_2$ (insulator)", "f3pmma": "PMMA (polymer, insulator)",
-        "f3pos": "$\\sigma_T$ > 1: more electrons leave than arrive → charges positive",
-        "f3neg": "$\\sigma_T$ < 1: more electrons arrive than leave → charges negative",
+        "f3pos": "$\\sigma_T > 1$: more electrons leave than arrive → charges positive",
+        "f3neg": "$\\sigma_T < 1$: more electrons arrive than leave → charges negative",
         "f3e1": "$E_1$ = {:.0f} eV", "f3e2": "$E_2$ = {:.2f} kV",
         "f3op": "Typical 30 kV\n(strong negative charging)",
         "f3note": "Low-voltage SEM works near $E_2$,\nimaging insulators without a coating",
@@ -254,7 +256,9 @@ def fig2_edge_effect(L):
     for d in (0, 45, 60, 75):
         y = min(1 / np.cos(np.radians(d)), SEC_CAP)
         ax.plot([d], [y], "o", color=BLUE, ms=6, zorder=5)
-        ax.annotate(f"{d}° : {y:.2f}", xy=(d, y), xytext=(6, -12),
+        # 75° 주석은 오른쪽 축 테두리를 넘지 않게 점의 왼쪽 위에 둔다.
+        off, ha = ((-8, 4), "right") if d == 75 else ((6, -12), "left")
+        ax.annotate(f"{d}° : {y:.2f}", xy=(d, y), xytext=off, ha=ha,
                     textcoords="offset points", fontsize=8.5, color=DARK)
     ax.set_xlabel(L["f2ax"], **L["font"])
     ax.set_ylabel(L["f2ay"], **L["font"])
@@ -317,11 +321,21 @@ def fig3_charging(L):
 
     # 절연체(SiO2)의 두 교차점
     e1, e2 = crossings["sio2"][0], crossings["sio2"][-1]
-    for ev, key, fmt_val in [(e1, "f3e1", e1 * 1000), (e2, "f3e2", e2)]:
+    # 라벨이 PMMA 점선과 겹치지 않도록 E1 은 왼쪽 위, E2 는 오른쪽 위에 둔다.
+    for ev, key, fmt_val, off, ha in [(e1, "f3e1", e1 * 1000, (-9, 7), "right"),
+                                      (e2, "f3e2", e2, (9, 6), "left")]:
         ax.plot([ev], [1.0], "o", color=ACCENT, ms=8, zorder=6)
-        ax.annotate(L[key].format(fmt_val), xy=(ev, 1.0), xytext=(0, -26),
-                    textcoords="offset points", ha="center", fontsize=9.5,
+        ax.annotate(L[key].format(fmt_val), xy=(ev, 1.0), xytext=off,
+                    textcoords="offset points", ha=ha, va="bottom", fontsize=9.5,
                     color=ACCENT, **L["font"])
+
+    # PMMA 의 두 교차점은 속 빈 원으로 표시하고, 본문이 인용하는 E2 에만 라벨을 단다.
+    p1, p2 = crossings["pmma"][0], crossings["pmma"][-1]
+    for ev in (p1, p2):
+        ax.plot([ev], [1.0], "o", mfc="white", mec=BLUE, mew=1.8, ms=7, zorder=6)
+    ax.annotate(L["f3e2"].format(p2), xy=(p2, 1.0), xytext=(-9, -8),
+                textcoords="offset points", ha="right", va="top", fontsize=9.5,
+                color=BLUE, **L["font"])
 
     ax.axvspan(e1, e2, color=ORANGE, alpha=0.12, zorder=0)
     ax.text(np.sqrt(e1 * e2), 2.72, L["f3pos"], ha="center", fontsize=9,
@@ -336,7 +350,7 @@ def fig3_charging(L):
                 fontsize=9, color=DARK, **L["font"],
                 arrowprops=dict(arrowstyle="->", color=DARK))
 
-    ax.annotate(L["f3note"], xy=(e2, 1.0), xytext=(e2 * 2.1, 1.85),
+    ax.annotate(L["f3note"], xy=(e2, 1.0), xytext=(e2 * 0.93, 2.0),
                 fontsize=9, color=ACCENT, **L["font"],
                 arrowprops=dict(arrowstyle="->", color=ACCENT))
 
