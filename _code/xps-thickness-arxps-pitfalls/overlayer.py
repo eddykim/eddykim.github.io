@@ -69,10 +69,11 @@ def tpp2m(E, Nv, rho, M, Eg=0.0):
 
 def contamination_effect(t_c=1.0, d=2.0):
     """두께 t_c의 탄화수소층(폴리에틸렌 근사)이 있을 때 역산 두께가 얼마나 변하는가.
+    폴리에틸렌 상수(Nv 6, ρ 0.93 g/cm³, M 14.027, Eg 7 eV)는 Tanuma 등(1994) 표 5에 맞춘 2편 코드와 같다.
     Si 2p의 산화물·기판 성분은 운동에너지가 약 4 eV 다르다(Al Kα, 103.3 / 99.4 eV)."""
     hv = 1486.6
-    lam_ox = tpp2m(hv - 103.3, 6, 0.92, 14.027, 8.0)
-    lam_m = tpp2m(hv - 99.4, 6, 0.92, 14.027, 8.0)
+    lam_ox = tpp2m(hv - 103.3, 6, 0.93, 14.027, 7.0)
+    lam_m = tpp2m(hv - 99.4, 6, 0.93, 14.027, 7.0)
     i_o, i_m = signals(d, 1.0)
     R_c = (i_o * np.exp(-t_c / lam_ox)) / (i_m * np.exp(-t_c / lam_m))
     return lam_ox, lam_m, thickness(R_c) - d
