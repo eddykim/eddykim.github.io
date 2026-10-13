@@ -58,7 +58,7 @@ LABELS = {
         # 그림 1
         "fig1": "부품이 쓸 수 있는 파장 영역 — 대역이 부품을 고른다",
         "band": "분광 엘립소미터가 흔히 쓰는 대역",
-        "wl_um": "파장 (μm)",
+        "wl_um": "파장 ($\\mathrm{\\mu}$m)",  # AppleGothic 의 μ 글리프는 뒤에 공백이 끼어 수식 글꼴로 쓴다
         "items": [
             ("방해석 (글랜-테일러 편광자)", 0.21, 5.0, False),
             ("MgF$_2$ (로숑 편광자·보상자)", 0.12, 7.0, True),
@@ -89,8 +89,8 @@ LABELS = {
         "axis_swing": "축이 {:.0f}° 움직인다\n보정이 복잡해지는 이유",
         # 그림 4
         "fig4": "영차와 다중차 — 같은 $\\lambda/4$판인데 파장을 넓히면 다르다",
-        "zero": "영차 ($N=1/4$, 두께 {:.1f} μm)",
-        "multi": "다중차 ($N=2.25$, 두께 {:.1f} μm)",
+        "zero": "영차 ($N=1/4$, 두께 {:.1f} $\\mathrm{{\\mu}}$m)",
+        "multi": "다중차 ($N=2.25$, 두께 {:.1f} $\\mathrm{{\\mu}}$m)",
         "design": "설계 파장 550 nm",
         "fig4a": "(a) 지연량 자체 — 세로축이 로그다",
         "fig4b": "(b) 360°로 나눈 나머지 — 실제로 편광에 작용하는 값",
@@ -366,7 +366,9 @@ def figure5(L):
             hits = np.rad2deg(th[np.where(np.diff(np.sign(d - 22.5)))[0]])
             ax.plot(hits, np.full_like(hits, 22.5), "o", color=DANGER, ms=7, zorder=5)
             for h in hits:
-                ax.annotate(f"{h:.1f}°", xy=(h, 22.5), xytext=(h, 10.5),
+                # 임계각 쪽 라벨은 임계각 점선과 겹치지 않게 오른쪽으로 비켜 둔다
+                dx = 2.4 if h < 50 else 0.0
+                ax.annotate(f"{h:.1f}°", xy=(h, 22.5), xytext=(h + dx, 10.5),
                             fontsize=9, ha="center", color=DANGER,
                             arrowprops=dict(arrowstyle="->", color=DANGER, lw=1.0))
     ax.axhline(22.5, color=DANGER, lw=1.3, ls="--")
