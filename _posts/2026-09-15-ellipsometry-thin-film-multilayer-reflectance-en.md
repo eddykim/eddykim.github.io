@@ -1,5 +1,5 @@
 ---
-title: "Ellipsometry Foundations 3 — Multiple Reflection in Thin Films and Three Multilayer Methods"
+title: "Ellipsometry Foundations 3 — How Is Light Reflected Many Times Inside a Thin Film Added Up into One Value?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ellipsometry-thin-film-multilayer-reflectance/

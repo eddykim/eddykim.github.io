@@ -1,5 +1,5 @@
 ---
-title: 최적화 방법론 2편 — Newton법과 Gauss-Newton법
+title: "최적화 방법론 2편 — Newton법은 왜 빠르게 수렴하다가도 엉뚱한 곳으로 튀는가"
 date: 2026-09-10 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-newton-gauss-newton

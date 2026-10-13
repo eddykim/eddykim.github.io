@@ -1,5 +1,5 @@
 ---
-title: "최적화 방법론 5편 — 신경망 회귀: 반복 최적화를 학습으로 대체할 수 있는가"
+title: "최적화 방법론 5편 — 신경망이 반복 피팅을 대신할 수 있는가"
 date: 2026-09-16 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-nn-regression

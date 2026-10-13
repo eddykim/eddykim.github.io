@@ -1,5 +1,5 @@
 ---
-title: "Optimization 4 — Global Heuristics: Basin-Hopping and Simulated Annealing"
+title: "Optimization 4 — How Does a Fit Escape When It Is Trapped in the Wrong Answer?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-global-heuristics/

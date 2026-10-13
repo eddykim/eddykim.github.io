@@ -1,5 +1,5 @@
 ---
-title: "Optimization 1 — Least Squares and Gradient Descent"
+title: "Optimization 1 — When Thickness Cannot Be Solved Backwards from Reflectance, How Do We Search for It?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-gradient-descent/

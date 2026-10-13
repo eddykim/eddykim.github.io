@@ -1,5 +1,5 @@
 ---
-title: "Ellipsometry Foundations 2 — Polarization, Stokes Vectors and Mueller Matrices"
+title: "Ellipsometry Foundations 2 — How Many Numbers Does It Take to Describe the Polarization of Light?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ellipsometry-polarization-mueller-matrix/

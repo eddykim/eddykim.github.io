@@ -1,5 +1,5 @@
 ---
-title: 최적화 방법론 1편 — 최소자승과 경사 하강법
+title: "최적화 방법론 1편 — 반사율로 두께를 거꾸로 구할 수 없을 때 어떻게 찾아가는가"
 date: 2026-09-06 20:30:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-gradient-descent

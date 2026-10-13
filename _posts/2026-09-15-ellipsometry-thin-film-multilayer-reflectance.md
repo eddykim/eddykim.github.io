@@ -1,5 +1,5 @@
 ---
-title: 엘립소메트리 배경이론 3편 — 박막 다중반사와 다층 계산법 3가지
+title: "엘립소메트리 배경이론 3편 — 얇은 막에서 여러 번 반사된 빛은 어떻게 하나로 계산하는가"
 date: 2026-09-15 20:00:00 +0900
 categories: [광학, 박막모델링]
 page_id: ellipsometry-thin-film-multilayer-reflectance

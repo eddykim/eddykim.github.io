@@ -1,5 +1,5 @@
 ---
-title: "Optimization 3 — The Levenberg-Marquardt Method"
+title: "Optimization 3 — Why Does Most Metrology Software Use the Levenberg-Marquardt Method?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-levenberg-marquardt/

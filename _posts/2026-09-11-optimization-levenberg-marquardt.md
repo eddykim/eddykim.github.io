@@ -1,5 +1,5 @@
 ---
-title: 최적화 방법론 3편 — Levenberg-Marquardt법
+title: "최적화 방법론 3편 — 계측 소프트웨어는 왜 대부분 Levenberg-Marquardt법을 쓰는가"
 date: 2026-09-11 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-levenberg-marquardt

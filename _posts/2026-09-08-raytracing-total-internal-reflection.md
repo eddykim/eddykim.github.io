@@ -1,5 +1,5 @@
 ---
-title: 광선추적 2편 — 전반사 판정과 렌즈에 적용하기
+title: "광선추적 2편 — 렌즈 가장자리로 들어간 빛은 왜 밖으로 나오지 못하는가"
 date: 2026-09-08 20:00:00 +0900
 categories: [광학, 기하광학]
 page_id: raytracing-total-internal-reflection

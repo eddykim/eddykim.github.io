@@ -1,5 +1,5 @@
 ---
-title: "최적화 방법론 4편 — 전역 최적화 휴리스틱: Basin-Hopping과 담금질 기법"
+title: "최적화 방법론 4편 — 엉뚱한 답에 갇힌 피팅은 어떻게 빠져나오는가"
 date: 2026-09-12 20:00:00 +0900
 categories: [계산과 알고리즘, 최적화방법]
 page_id: optimization-global-heuristics

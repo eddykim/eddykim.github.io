@@ -1,5 +1,5 @@
 ---
-title: "Optimization 5 — Neural Network Regression: Can Learning Replace Iterative Optimization?"
+title: "Optimization 5 — Can a Neural Network Replace Iterative Fitting?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-nn-regression/

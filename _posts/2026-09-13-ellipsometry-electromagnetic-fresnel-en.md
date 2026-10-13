@@ -1,5 +1,5 @@
 ---
-title: "Ellipsometry Foundations 1 — From Electromagnetic Waves to the Fresnel Equations"
+title: "Ellipsometry Foundations 1 — If a Detector Measures Only Intensity, How Do We Learn the Phase of Light?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ellipsometry-electromagnetic-fresnel/

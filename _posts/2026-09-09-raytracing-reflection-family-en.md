@@ -1,5 +1,5 @@
 ---
-title: "Ray Tracing 3 — Why One Formula Is Enough for Reflection"
+title: "Ray Tracing 3 — Why Does One Formula Handle Reflection from Mirrors of Any Shape?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/raytracing-reflection-family/

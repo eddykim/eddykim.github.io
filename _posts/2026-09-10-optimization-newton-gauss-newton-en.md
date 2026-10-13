@@ -1,5 +1,5 @@
 ---
-title: "Optimization 2 — Newton's Method and Gauss-Newton"
+title: "Optimization 2 — Why Does Newton's Method Converge Fast Yet Sometimes Leap Somewhere Absurd?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/optimization-newton-gauss-newton/

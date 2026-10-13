@@ -1,5 +1,5 @@
 ---
-title: 광선추적 1편 — 옮긴 렌즈 굴절 계산이 맞는지 어떻게 확인하는가
+title: "광선추적 1편 — 직접 짠 렌즈 광선 계산이 맞는지 어떻게 확인하는가"
 date: 2026-09-07 20:00:00 +0900
 categories: [광학, 기하광학]
 page_id: raytracing-spherical-lens-refraction

@@ -1,5 +1,5 @@
 ---
-title: 엘립소메트리 배경이론 2편 — 편광, 스토크스 벡터, 뮬러 행렬
+title: "엘립소메트리 배경이론 2편 — 빛의 편광 상태는 숫자 몇 개로 나타낼 수 있는가"
 date: 2026-09-14 20:00:00 +0900
 categories: [광학, 편광]
 page_id: ellipsometry-polarization-mueller-matrix

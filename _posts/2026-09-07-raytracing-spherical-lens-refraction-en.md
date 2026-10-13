@@ -1,5 +1,5 @@
 ---
-title: "Ray Tracing 1 — How Do You Know a Ported Lens-Refraction Routine Is Right?"
+title: "Ray Tracing 1 — How Do You Check That Your Own Lens Ray Calculation Is Right?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/raytracing-spherical-lens-refraction/

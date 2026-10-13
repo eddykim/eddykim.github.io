@@ -1,5 +1,5 @@
 ---
-title: 엘립소메트리 배경이론 1편 — 전자기파에서 프레넬 방정식까지
+title: "엘립소메트리 배경이론 1편 — 검출기는 세기만 재는데 어떻게 빛의 위상을 알아내는가"
 date: 2026-09-13 20:00:00 +0900
 categories: [광학, 전자기학]
 page_id: ellipsometry-electromagnetic-fresnel

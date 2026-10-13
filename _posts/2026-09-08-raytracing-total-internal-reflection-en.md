@@ -1,5 +1,5 @@
 ---
-title: "Ray Tracing 2 — Detecting Total Internal Reflection and Applying It to a Lens"
+title: "Ray Tracing 2 — Why Can Light Entering the Edge of a Lens Fail to Get Out?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/raytracing-total-internal-reflection/
