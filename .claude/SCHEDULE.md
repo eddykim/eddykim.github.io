@@ -99,6 +99,7 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| raytracing-spherical-lens-refraction | 레이트레이싱 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| raytracing-total-internal-reflection | 레이트레이싱 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| raytracing-reflection-family | 레이트레이싱 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometry-electromagnetic-fresnel | 엘립소메트리 이론 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometry-polarization-mueller-matrix | 엘립소메트리 이론 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometry-thin-film-multilayer-reflectance | 엘립소메트리 이론 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| wave-optics-gaussian-beams | 파동광학 배경이론 5편 | 2026-10-13 | 코드·그림, 한국어 초안, 영문판 |
