@@ -48,10 +48,10 @@ def image_plane(elements):
 LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT,
-        "s_a": "(a) 조리개 조리개를 조이면", "s_b": "(b) 시야 조리개를 좁히면",
+        "s_a": "(a) 조리개를 조이면", "s_b": "(b) 시야 조리개를 좁히면",
         "s_x": "상면 위 높이 y (mm)", "s_y": "상면에 도착하는 각 u (mrad)",
         "s_open": "열었을 때", "s_close": "조였을 때",
-        "h_t": "Hecht 예제 5.6: 어느 구멍이 조리개인가",
+        "h_t": "헥트 예제 5.6: 어느 구멍이 조리개인가",
         "h_x": "광축 위치 z (mm)", "h_y": "높이 (mm)",
         "h_obj": "물점 S", "h_lens": "렌즈 (지름 140 mm)", "h_hole": "구멍 (지름 40 mm)",
         "h_img": "구멍의 상 = 입사동\n(지름 200 mm, 허상)",
@@ -135,7 +135,7 @@ def figure2(L):
     save(fig, L, "fig2-phase-space-stops.png")
 
 
-# ── 그림4: Hecht 예제 5.6 ──────────────────────────────────
+# ── 그림4: 헥트 예제 5.6 ──────────────────────────────────
 def figure4(L):
     els = [Element(0.0, "thin", (100.0,), 70.0), Element(80.0, "stop", (), 20.0)]
     z_s = -200.0
@@ -160,7 +160,9 @@ def figure4(L):
     ax.text(85, 100, L["h_hole"], fontsize=9, **L["font"])
     ax.text(ep.z - 5, ep.radius + 8, L["h_img"], ha="right", fontsize=9, color=C_KEY, **L["font"])
     ax.text(-150, 42, L["h_ang_l"], fontsize=9, color=C_GREY, **L["font"])
-    ax.text(-150, 12, L["h_ang_h"], fontsize=9, color=C_KEY, **L["font"])
+    # 입사동 각 라벨은 광선과 겹치지 않도록 아래쪽 원뿔 바깥에 두고 화살표로 가리킨다
+    ax.annotate(L["h_ang_h"], xy=(-110, -ep.radius * 90 / (ep.z - z_s)), xytext=(-150, -48),
+                fontsize=9, color=C_KEY, arrowprops=dict(arrowstyle="-", color=C_KEY, lw=0.6), **L["font"])
     ax.set_xlim(-220, 430); ax.set_ylim(-125, 135)
     ax.set_xlabel(L["h_x"], **L["font"]); ax.set_ylabel(L["h_y"], **L["font"])
     ax.set_title(L["h_t"], fontsize=10, **L["font"])
@@ -196,7 +198,9 @@ def figure5(L):
         z1, y1, u1 = pts[-1, :3]
         ax.plot([xp.z, z1], [y1 - (z1 - xp.z) * u1, y1], color=col, lw=0.8, ls=":")
     ax.plot([ep.z, ep.z], [-ep.radius, ep.radius], color=C_KEY, lw=2.5, alpha=0.8)
-    ax.text(ep.z + 2, -ep.radius - 4, L["r_ep"], color=C_KEY, fontsize=9, **L["font"])
+    # 입사동 라벨은 둘째 렌즈와 겹치지 않도록 렌즈 오른쪽에 두고 화살표로 가리킨다
+    ax.annotate(L["r_ep"], xy=(ep.z, -ep.radius + 0.5), xytext=(66, -14), color=C_KEY, fontsize=9,
+                arrowprops=dict(arrowstyle="-", color=C_KEY, lw=0.6), **L["font"])
     ax.plot([xp.z, xp.z], [-xp.radius, xp.radius], color=C_GRN, lw=2.5, alpha=0.8)
     ax.text(xp.z - 2, xp.radius + 2, L["r_xp"], color=C_GRN, fontsize=9, ha="right", **L["font"])
     ax.annotate("", xy=(Z_OBJ, Y_OBJ), xytext=(Z_OBJ, 0), arrowprops=dict(arrowstyle="->", lw=1.5))
