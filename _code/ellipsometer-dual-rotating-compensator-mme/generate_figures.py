@@ -82,7 +82,7 @@ LABELS = {
         "order": "고조파 차수 $n$ (주파수 $2nC$)", "mag": "정규화 계수 크기",
         "rce_t": "1편의 RCE — 보상자 하나",
         "mme_t": "DRC-MME — 보상자 둘 (5:3)",
-        "rce_note": "$2\\omega$ 와 $4\\omega$ 둘뿐",
+        "rce_note": "$6C$ 와 $12C$ 둘뿐",
         "mme_note": "$2C$ 부터 $32C$ 까지 12개",
         "dead": "$n$ = 9, 12, 14, 15 는 소멸한다",
         # 그림 3
@@ -117,7 +117,7 @@ LABELS = {
         "order": "harmonic order $n$ (frequency $2nC$)", "mag": "normalized coefficient",
         "rce_t": "RCE from post 1 — one compensator",
         "mme_t": "DRC-MME — two compensators (5:3)",
-        "rce_note": "only $2\\omega$ and $4\\omega$",
+        "rce_note": "only $6C$ and $12C$",
         "mme_note": "12 of them, $2C$ through $32C$",
         "dead": "$n$ = 9, 12, 14, 15 vanish",
         "fig3": "Which Mueller element rides on which harmonic",
