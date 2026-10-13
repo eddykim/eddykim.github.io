@@ -16,7 +16,7 @@ from skimage.data import camera
 from kernels import (CENTRAL_DIFF, SCHARR_SMOOTH, SOBEL_SMOOTH, box_kernel,
                      convolve1d_edge, frequency_response, gaussian_kernel,
                      noise_gain, separable_cost)
-from edge_experiment import make_edge, sweep
+from edge_experiment import estimate_edge, make_edge, sweep
 
 KFONT = {"fontfamily": "AppleGothic"}
 LFONT = {"family": "AppleGothic"}
@@ -27,32 +27,26 @@ BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..",
 LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
-        "tap": "커널 탭 위치 (픽셀)", "weight": "가중치",
+        "tap": "커널 탭 위치 (화소)", "weight": "가중치",
         "freq": "공간주파수 (나이키스트 = 1)", "resp": "응답 크기",
         "box": "박스 (폭 9)", "gauss": r"가우시안 ($\sigma$ = 2)",
         "shape": "커널 모양", "response": "주파수 응답",
-        "fig1": "그림2. 박스 커널은 고주파를 깔끔하게 자르지 못하고 부엽을 남긴다",
 
-        "sigma_ax": r"평활화 폭 $\sigma$ (픽셀)", "ratio": r"$\sigma_{out}/\sigma_{in}$",
+        "sigma_ax": r"평활화 폭 $\sigma$ (화소)", "ratio": r"$\sigma_{out}/\sigma_{in}$",
         "measured": "측정", "theory": r"이론: 1차원 커널의 $\sum w^2$",
-        "gauss_m": "가우시안 (측정)", "box_m": "같은 폭 박스 (측정)",
-        "fig2": "그림1. 평활화가 노이즈를 줄이는 정도는 커널 제곱합이 정한다",
+        "gauss_m": "가우시안 (측정)", "box_m": "분산을 맞춘 박스 (측정)",
 
         "ideal_d": "이상적 미분", "central": "중심차분", "sobel": "[1,2,1] 같은 축 결합 (Sobel 대각 단면)",
         "dog": r"DoG ($\sigma$ = 2)",
-        "fig3": "그림3. 미분 커널의 응답은 주파수와 함께 커진다 — 평활화와 묶어야 하는 이유",
 
-        "pos_std": "엣지 위치 표준편차 (픽셀)", "width_ax": "엣지 폭 10-90% (픽셀)",
-        "std_lab": "위치 산포", "width_lab": "엣지 폭", "opt": "산포 최솟값",
-        "fig4": "그림4. 평활화의 교환비 — 위치는 안정되고 엣지는 뭉개진다",
+        "pos_std": "엣지 위치 표준편차 (화소)", "width_ax": "엣지 폭 10-90% (화소)",
+        "std_lab": "위치 산포", "width_lab": "엣지 폭", "floor": "산포 바닥",
 
-        "pos": "위치 (픽셀)", "err": "참값과의 차이 (DN)",
+        "pos": "위치 (화소)", "err": "참값과의 차이 (DN)",
         "zero": "0으로 채움", "replicate": "끝값 반복", "reflect": "거울 반사",
-        "fig5": "그림5. 경계 처리 방식이 가장자리에 남기는 오차 (오른쪽은 세로축 확대)",
 
         "orig_sp": "스파이크 섞인 원본", "gauss_sp": r"가우시안 ($\sigma$ = 1.5)",
         "med_sp": "메디안 (3x3)",
-        "fig6": "그림6. 선형 필터는 스파이크를 지우지 못하고 번지게 한다",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": {}, "legend": {},
@@ -60,28 +54,22 @@ LABELS = {
         "freq": "Spatial frequency (Nyquist = 1)", "resp": "Response magnitude",
         "box": "Box (width 9)", "gauss": r"Gaussian ($\sigma$ = 2)",
         "shape": "Kernel shape", "response": "Frequency response",
-        "fig1": "Fig 2. A box kernel cuts high frequencies poorly, leaving sidelobes",
 
         "sigma_ax": r"Smoothing width $\sigma$ (pixel)", "ratio": r"$\sigma_{out}/\sigma_{in}$",
         "measured": "Measured", "theory": r"Theory: $\sum w^2$ of 1-D kernel",
-        "gauss_m": "Gaussian (measured)", "box_m": "Box of equal width (measured)",
-        "fig2": "Fig 1. Noise reduction is set by the sum of squared kernel weights",
+        "gauss_m": "Gaussian (measured)", "box_m": "Box of matched variance (measured)",
 
         "ideal_d": "Ideal derivative", "central": "Central difference",
         "sobel": "[1,2,1] along same axis (Sobel diagonal)", "dog": r"DoG ($\sigma$ = 2)",
-        "fig3": "Fig 3. Derivative response grows with frequency — hence the pairing with smoothing",
 
         "pos_std": "Std of edge position (pixel)", "width_ax": "Edge width 10-90% (pixel)",
-        "std_lab": "Position scatter", "width_lab": "Edge width", "opt": "Scatter minimum",
-        "fig4": "Fig 4. The smoothing trade — position stabilizes, the edge blurs",
+        "std_lab": "Position scatter", "width_lab": "Edge width", "floor": "Scatter floor",
 
         "pos": "Position (pixel)", "err": "Deviation from truth (DN)",
         "zero": "Zero padding", "replicate": "Replicate", "reflect": "Reflect",
-        "fig5": "Fig 5. Error left at the borders by each padding mode (right panel rescaled)",
 
         "orig_sp": "Original with spikes", "gauss_sp": r"Gaussian ($\sigma$ = 1.5)",
         "med_sp": "Median (3x3)",
-        "fig6": "Fig 6. A linear filter smears a spike instead of removing it",
     },
 }
 
@@ -122,7 +110,10 @@ _, H_dog = frequency_response(w_dog)
 sweep_sigmas = np.array([0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5,
                          3.0, 4.0, 5.0, 6.0, 8.0, 10.0])
 sw_bias, sw_std, sw_width = sweep(sweep_sigmas, 400, np.random.default_rng(0))
-opt_i = int(np.argmin(sw_std))
+# 산포가 바닥을 이루는 평활화 폭 구간(본문 5절). 400회 표본으로는 이 안의 최솟값 위치를
+# 가를 수 없으므로(표준오차 약 0.0013 px) 점이 아니라 띠로 표시한다.
+FLOOR = (2.0, 4.0)
+floor_mask = (sweep_sigmas >= FLOOR[0]) & (sweep_sigmas <= FLOOR[1])
 
 # 그림5: 경계 처리. 밝은 평지 위의 완만한 경사 — 가장자리 오차가 드러난다.
 # 신호는 배열 바깥으로도 실제로 이어진다. 긴 신호를 먼저 만들고 가운데 창만
@@ -137,7 +128,7 @@ w5 = gaussian_kernel(3.0)
 edge_modes = {m: convolve1d_edge(base, w5, m) for m in ("zero", "replicate", "reflect")}
 truth = np.convolve(base_long, w5[::-1], mode="same")[PAD5:PAD5 + n5]
 
-# 그림6: 스파이크 픽셀
+# 그림7: 스파이크 화소 (본문 번호. 그림6은 웹 이미지다)
 img = camera().astype(float)[120:280, 200:360]
 spiky = img.copy()
 ys, xs = rng.integers(0, img.shape[0], 260), rng.integers(0, img.shape[1], 260)
@@ -159,15 +150,15 @@ def draw(L):
     ax[0].stem(xg, w_gauss, linefmt="C3-", markerfmt="C3s", basefmt=" ", label=L["gauss"])
     ax[0].set_xlabel(L["tap"], **F); ax[0].set_ylabel(L["weight"], **F)
     ax[0].set_title(L["shape"], fontsize=10, **F)
-    ax[0].legend(prop=LG, fontsize=8.5); ax[0].grid(alpha=0.3)
+    ax[0].set_ylim(-0.01, 0.28)           # 범례가 막대를 가리지 않도록 위쪽에 자리를 둔다
+    ax[0].legend(prop=LG, fontsize=8.5, loc="upper left", ncol=2); ax[0].grid(alpha=0.3)
     ax[1].plot(f_ax, np.abs(H_box), "C0-", lw=1.6, label=L["box"])
     ax[1].plot(f_ax, np.abs(H_gauss), "C3-", lw=1.6, label=L["gauss"])
     ax[1].axhline(0, color="k", lw=0.6)
     ax[1].set_xlabel(L["freq"], **F); ax[1].set_ylabel(L["resp"], **F)
     ax[1].set_title(L["response"], fontsize=10, **F)
     ax[1].legend(prop=LG, fontsize=8.5); ax[1].grid(alpha=0.3)
-    fig.text(0.5, 0.015, L["fig1"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig2-kernel-shape-response.png"), dpi=150)
     plt.close(fig)
 
@@ -177,9 +168,12 @@ def draw(L):
     ax.plot(sig_list, meas_g, "o", ms=5, color="#2b5c9b", label=L["gauss_m"])
     ax.plot(sig_list[box_mask], meas_b, "s", ms=5, color="#1e8449", label=L["box_m"])
     ax.set_xlabel(L["sigma_ax"], **F); ax.set_ylabel(L["ratio"], **F)
-    ax.set_yscale("log"); ax.legend(prop=LG, fontsize=9); ax.grid(alpha=0.3, which="both")
-    fig.text(0.5, 0.015, L["fig2"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    ax.set_yscale("log")
+    ax.set_yticks([0.05, 0.1, 0.2, 0.5])
+    ax.set_yticklabels(["0.05", "0.1", "0.2", "0.5"])
+    ax.yaxis.set_minor_formatter(plt.NullFormatter())
+    ax.legend(prop=LG, fontsize=9); ax.grid(alpha=0.3, which="both")
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig1-noise-gain.png"), dpi=150)
     plt.close(fig)
 
@@ -191,19 +185,16 @@ def draw(L):
     ax.plot(f3, np.abs(H_dog), "-", lw=1.5, color="#2b5c9b", label=L["dog"])
     ax.set_xlabel(L["freq"], **F); ax.set_ylabel(L["resp"], **F)
     ax.legend(prop=LG, fontsize=9); ax.grid(alpha=0.3)
-    fig.text(0.5, 0.015, L["fig3"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig3-derivative-kernels.png"), dpi=150)
     plt.close(fig)
 
     # 그림4
     fig, ax = plt.subplots(figsize=(6.6, 4.2))
     ax.plot(sweep_sigmas, sw_std, "o-", ms=4, color="#c0392b", label=L["std_lab"])
-    ax.plot(sweep_sigmas[opt_i], sw_std[opt_i], "*", ms=15, color="#c0392b")
-    ax.annotate(L["opt"], xy=(sweep_sigmas[opt_i], sw_std[opt_i]),
-                xytext=(sweep_sigmas[opt_i] + 0.9, sw_std[opt_i] - 0.0035),
-                fontsize=8.5, color="#c0392b", va="top",
-                arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1.0), **F)
+    ax.axvspan(FLOOR[0], FLOOR[1], color="#c0392b", alpha=0.10, lw=0)
+    ax.text(np.mean(FLOOR), sw_std.min() - 0.0040, L["floor"], ha="center", va="top",
+            fontsize=8.5, color="#c0392b", **F)
     ax.set_ylim(sw_std.min() - 0.008, sw_std.max() * 1.06)
     ax.set_xlabel(L["sigma_ax"], **F)
     ax.set_ylabel(L["pos_std"], color="#c0392b", **F)
@@ -215,8 +206,7 @@ def draw(L):
     ax2.tick_params(axis="y", colors="#2b5c9b")
     h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
     ax.legend(h1 + h2, l1 + l2, prop=LG, fontsize=9, loc="upper right")
-    fig.text(0.5, 0.015, L["fig4"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig4-edge-tradeoff.png"), dpi=150)
     plt.close(fig)
 
@@ -231,9 +221,7 @@ def draw(L):
         a.axhline(0, color="k", lw=0.6)
         a.set_xlabel(L["pos"], **F); a.set_ylabel(L["err"], **F)
         a.legend(prop=LG, fontsize=9); a.grid(alpha=0.3)
-    ax = axp[0]
-    fig.text(0.5, 0.015, L["fig5"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig5-boundary-modes.png"), dpi=150)
     plt.close(fig)
 
@@ -243,9 +231,9 @@ def draw(L):
                                  (sp_med, L["med_sp"])]):
         a.imshow(im, cmap="gray", vmin=0, vmax=255, interpolation="nearest")
         a.set_title(t, fontsize=9.5, **F); a.set_xticks([]); a.set_yticks([])
-    fig.text(0.5, 0.015, L["fig6"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
-    fig.savefig(os.path.join(out, "fig6-median-vs-gaussian.png"), dpi=150)
+    fig.tight_layout()
+    fig.savefig(os.path.join(out, "fig6-median-vs-gaussian.png"), dpi=150,
+                bbox_inches="tight", pad_inches=0.08)
     plt.close(fig)
 
 
@@ -274,9 +262,14 @@ print()
 print("=== 그림4: 교환비 ===")
 for s, b, sd, w in zip(sweep_sigmas, sw_bias, sw_std, sw_width):
     print(f"  sigma={s:5.2f}: 편향 {b:+.4f}  산포 {sd:.4f}  엣지폭 {w:6.2f}")
-print(f"  산포 최솟값: sigma={sweep_sigmas[opt_i]:.2f}, {sw_std[opt_i]:.4f} px, "
-      f"엣지폭 {sw_width[opt_i]:.2f} px (평활화 없을 때 {sw_std[0]:.4f} px)")
-print(f"  개선 배수 = {sw_std[0]/sw_std[opt_i]:.2f}")
+print(f"  산포 바닥 sigma={FLOOR[0]:.0f}~{FLOOR[1]:.0f}: {sw_std[floor_mask].min():.4f}~"
+      f"{sw_std[floor_mask].max():.4f} px (평활화 없을 때 {sw_std[0]:.4f} px)")
+print(f"  sigma=2 개선 배수 = {sw_std[0] / sw_std[sweep_sigmas == 2.0][0]:.2f}")
+# 노이즈 없는 엣지로 같은 추정을 하면 포물선 보간 자체의 편향만 남는다.
+clean_edge = make_edge(128, 63.37, 1.2, 1200.0, 100.0)
+print("  노이즈 없는 엣지의 추정 편향:")
+for s in (0.0, 2.0, 4.0):
+    print(f"    sigma={s:4.1f}: {estimate_edge(clean_edge, s) - 63.37:+.4f} px")
 print()
 print("=== 그림5: 경계 ===")
 for m in ("zero", "replicate", "reflect"):
@@ -285,10 +278,18 @@ for m in ("zero", "replicate", "reflect"):
           f"가장자리 5화소 RMS {np.sqrt((e[:5]**2).mean()):6.2f} DN")
 print()
 print("=== 그림6: 스파이크 ===")
-print(f"  스파이크 화소 비율 = {260/img.size*100:.2f} %")
+# 위치 260개 가운데 겹친 것이 있으므로 실제로 바뀐 화소를 센다.
+n_spike = int((spiky != img).sum())
+print(f"  스파이크 화소 비율 = {n_spike / img.size * 100:.2f} % ({n_spike}개)")
 for name, out in (("스파이크 원본", spiky), ("가우시안", sp_gauss), ("메디안", sp_med)):
     print(f"  {name:12s}: 원본 대비 RMS {np.sqrt(((out-img)**2).mean()):6.2f} DN, "
           f"최대 편차 {np.abs(out-img).max():6.1f} DN")
+# 총 오차를 세부 손실과 스파이크 몫으로 나눈다. 스파이크 없는 원본에 같은 필터를 건 결과와 비교한다.
+g_clean, m_clean = gaussian_filter(img, 1.5), median_filter(img, size=3)
+print(f"  스파이크 없는 원본에 건 경우: 가우시안 {np.sqrt(((g_clean-img)**2).mean()):6.2f} DN, "
+      f"메디안 {np.sqrt(((m_clean-img)**2).mean()):6.2f} DN")
+print(f"  스파이크 몫: 가우시안 {np.sqrt(((sp_gauss-g_clean)**2).mean()):6.2f} DN, "
+      f"메디안 {np.sqrt(((sp_med-m_clean)**2).mean()):6.2f} DN")
 print()
 print("=== 분리가능성 비용 ===")
 for k in (5, 9, 15, 25):
