@@ -102,8 +102,7 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| xps-photoemission-binding-energy | XPS 기초 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| xps-surface-sensitivity-imfp | XPS 기초 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| xps-spectrum-structure-satellites | XPS 기초 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| xps-quantification-peak-fitting | XPS 기초 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| xps-thickness-arxps-pitfalls | XPS 기초 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| geometric-optics-fermat-eikonal | 기하광학 배경이론 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| geometric-optics-paraxial-abcd | 기하광학 배경이론 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| geometric-optics-stops-pupils-etendue | 기하광학 배경이론 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| geometric-optics-aberrations | 기하광학 배경이론 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
