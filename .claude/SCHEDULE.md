@@ -99,9 +99,11 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| ellipsometer-oblique-rotating-element | 타원계측기 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometer-components | 타원계측기 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometer-dual-rotating-compensator-mme | 타원계측기 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometer-calibration | 타원계측기 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometer-channeled-spectroscopic | 타원계측기 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometer-back-focal-plane-micro | 타원계측기 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-why-electrons | 전자현미경 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-electron-optics | 전자현미경 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-beam-specimen-interaction | 전자현미경 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-sem-imaging | 전자현미경 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| electron-microscopy-stem-analytical | 전자현미경 7편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| wave-optics-high-na-vector-focusing | 파동광학 배경이론 6편 | 2026-10-13 | 코드·그림, 한국어 초안, 영문판 |
