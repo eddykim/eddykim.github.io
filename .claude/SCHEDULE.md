@@ -102,7 +102,4 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| geometric-optics-fermat-eikonal | 기하광학 배경이론 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| geometric-optics-paraxial-abcd | 기하광학 배경이론 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| geometric-optics-stops-pupils-etendue | 기하광학 배경이론 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| geometric-optics-aberrations | 기하광학 배경이론 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ptycho-autodiff-multislice | 계산 이미징과 타이코그래피 9편 | 2026-10-13 | 한국어 초안 검토, 영문판 |
