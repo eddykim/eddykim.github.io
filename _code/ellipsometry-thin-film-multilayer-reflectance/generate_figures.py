@@ -31,7 +31,7 @@ LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         "ref_path": "기준 경로\n" + r"($\overline{OB}\sin\theta_0$)",
-        "real_path": "실제 경로 O→A→B\n(박막 내부, 길이 $\\propto N_1$)",
+        "real_path": "실제 경로 O→A→B\n(박막 내부, 광경로 $\\propto N_1$)",
         "phase_diff": r"위상차 $2\beta_{phase}$",
         "fig1": "단층 박막에서의 다중반사와 광경로차",
         "rouard_bottom": r"$\rho_{M+1}=r_{M,M+1}$" + "\n(기판 경계)",
@@ -44,19 +44,19 @@ LABELS = {
         "smm_sub": "계면(빨강)과 층(초록)이\n독립된 행렬로 분리됨",
         "wavelength": "파장 (nm)", "reflectance": "반사율 R", "angle": "입사각 (deg)",
         "fig3": "SiO$_2$/Si 박막의 TMM 반사율 스펙트럼 (수직입사)",
-        "fig4": "SiO$_2$({:.0f}nm)/Si — 입사각×파장에 대한 " + r"$\Psi, \Delta$" + " (SMM)",
-        "model_a": "모델 A: d={:.0f}nm, n={:.3f}",
-        "model_b": "모델 B: d={:.0f}nm, n={:.3f}",
-        "max_gap": "최대 차이 {:.2f}°",
-        "max_gap_at": "최대 차이 {:.2f}° @ {:.1f}°",
-        "panel_a": "(a) 단일 입사각 {:.0f}° · 파장 스캔",
+        "fig4": "SiO$_2$({:.0f}nm)/Si 구조의 입사각·파장별 " + r"$\Psi, \Delta$" + " (SMM)",
+        "model_a": "모델 A: d={:.0f}nm, $N_1$={:.3f}",
+        "model_b": "모델 B: d={:.0f}nm, $N_1$={:.3f}",
+        "max_gap": "최대 차이 {:.2f}" + r"$^\circ$",
+        "max_gap_at": "최대 차이 {:.2f}" + r"$^\circ$" + " @ {:.1f}" + r"$^\circ$",
+        "panel_a": "(a) 단일 입사각 {:.0f}" + r"$^\circ$" + " · 파장 스캔",
         "panel_b": "(b) 단일 파장 {:.0f}nm · 입사각 스캔",
-        "fig5": "좁은 파장 대역에서 서로 구별되지 않는 두 (d, n) 조합",
+        "fig5": "좁은 파장 대역에서 서로 구별되지 않는 두 " + r"$(d, N_1)$" + " 조합",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
         "ref_path": "reference path\n" + r"($\overline{OB}\sin\theta_0$)",
-        "real_path": "actual path O→A→B\n(inside the film, length $\\propto N_1$)",
+        "real_path": "actual path O→A→B\n(inside the film,\noptical path $\\propto N_1$)",
         "phase_diff": r"phase difference $2\beta_{phase}$",
         "fig1": "Multiple reflection and optical path difference in a single film",
         "rouard_bottom": r"$\rho_{M+1}=r_{M,M+1}$" + "\n(substrate interface)",
@@ -70,14 +70,14 @@ LABELS = {
         "wavelength": "Wavelength (nm)", "reflectance": "Reflectance R",
         "angle": "Angle of incidence (deg)",
         "fig3": "TMM reflectance spectra of SiO$_2$/Si films (normal incidence)",
-        "fig4": "SiO$_2$({:.0f}nm)/Si — " + r"$\Psi, \Delta$" + " over angle x wavelength (SMM)",
-        "model_a": "Model A: d={:.0f}nm, n={:.3f}",
-        "model_b": "Model B: d={:.0f}nm, n={:.3f}",
+        "fig4": r"$\Psi, \Delta$" + " of SiO$_2$({:.0f}nm)/Si over angle and wavelength (SMM)",
+        "model_a": "Model A: d={:.0f}nm, $N_1$={:.3f}",
+        "model_b": "Model B: d={:.0f}nm, $N_1$={:.3f}",
         "max_gap": "max difference {:.2f}°",
         "max_gap_at": "max difference {:.2f}° @ {:.1f}°",
         "panel_a": "(a) single angle {:.0f}° - wavelength scan",
         "panel_b": "(b) single wavelength {:.0f}nm - angle scan",
-        "fig5": "Two (d, n) pairs indistinguishable over a narrow band",
+        "fig5": "Two " + r"$(d, N_1)$" + " pairs indistinguishable over a narrow band",
     },
 }
 
@@ -86,7 +86,7 @@ LABELS = {
 # ---------------------------------------------------------------------------
 # 계산에 쓰는 공통 상수와 헬퍼 (그림과 진단 출력이 함께 쓴다)
 # ---------------------------------------------------------------------------
-n_air, n_sio2, n_si = 1.0, 1.46, 3.88 - 0.02j  # 상수 근사(비분산), 400-1000nm 대역 대략값
+n_air, n_sio2, n_si = 1.0, 1.46, 3.88 - 0.02j  # 상수 근사(비분산), 633nm 부근 값
 
 MODEL_A = (300.00, 1.460)   # 기준
 MODEL_B = (311.12, 1.428)   # 65도 좁은 대역에서 A와 거의 구별되지 않는 조합
@@ -204,9 +204,10 @@ def render(L):
             ha="left", va="center", **L["font"])
     ax.scatter(*P, s=14, color="gray", zorder=5)
     ax.text(P[0] + 0.07, P[1] + 0.02, "P", fontsize=10, color="gray", ha="left", zorder=6)
-    ax.text((O[0] + A[0] + B[0]) / 3, -d * 0.62,
+    # 라벨이 초록 광선과 겹치지 않도록 O→A 광선 왼쪽 박막 안에 오른쪽 정렬로 둔다.
+    ax.text(O[0] + 0.62 * d * np.tan(theta1) - 0.10, -d * 0.62,
             L["real_path"], color="tab:green",
-            fontsize=8.5, ha="center", **L["font"])
+            fontsize=8.5, ha="right", va="center", **L["font"])
     ax.annotate(L["phase_diff"], xy=(B[0] + 0.15, 0.42),
                 fontsize=10.5, color="black", **L["font"])
 
@@ -296,7 +297,7 @@ def render(L):
 
 
     # ────────────────────────────────────────────────────────────
-    # 그림 3. TMM으로 계산한 두께별 반사율 스펙트럼 (간섭 프린지 비교)
+    # 그림 3. TMM으로 계산한 두께별 반사율 스펙트럼 (간섭 무늬 비교)
     # ────────────────────────────────────────────────────────────
     wavelengths = np.linspace(400, 1000, 500)
     thicknesses_nm = [100, 300, 600, 1000]
@@ -373,7 +374,9 @@ def render(L):
         ax.plot(wl_narrow, yB, color=cB, lw=1.4, ls="--", label=labB)
         ax.set_ylabel(name + " (deg)", fontsize=11)
         gap = np.abs(yA - yB).max()
-        ax.text(0.03, 0.10, L["max_gap"].format(gap), transform=ax.transAxes,
+        # Delta 곡선은 왼쪽 아래에서 올라가므로 주석을 왼쪽 위에 둔다.
+        y_txt = 0.85 if name == r"$\Delta$" else 0.10
+        ax.text(0.03, y_txt, L["max_gap"].format(gap), transform=ax.transAxes,
                 fontsize=10, color="#333", **L["font"])
     axes5[1, 0].set_xlabel(L["wavelength"], fontsize=11, **L["font"])
     axes5[0, 0].set_title(L["panel_a"].format(ang_fixed), fontsize=12, **L["font"])
