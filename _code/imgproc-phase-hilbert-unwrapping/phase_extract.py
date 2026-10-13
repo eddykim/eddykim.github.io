@@ -1,8 +1,9 @@
 """위상을 꺼내는 세 가지 길 — 이미지처리 6편.
 
   힐베르트 변환   한 장으로 푼다. 배경을 먼저 빼고 해석 신호를 만들어 편각을 읽는다.
-  푸리에 변환법   한 장으로 푼다. 스펙트럼에서 +1 차 측대역만 골라 원점으로 옮긴다.
-                  Takeda 가 1982 년에 제안했고, 3편의 노치 필터와 같은 도구다.
+  푸리에 변환법   한 장으로 푼다. 스펙트럼에서 +1 차 측대역만 남기고 역변환한다.
+                  Takeda 가 1982 년에 제안했다. 3편의 노치 필터처럼 스펙트럼에 마스크를
+                  씌우지만, 노치는 잡음 점을 지우고 이쪽은 한쪽 측대역만 남긴다.
   위상천이        여러 장으로 푼다. 위상을 아는 만큼 옮겨가며 찍어 미지수를 줄인다.
 
 앞의 둘은 위상이 반송파를 타고 천천히 변한다는 공간적 가정을 얹는다. 위상천이는
@@ -13,7 +14,7 @@ from scipy.signal import hilbert
 
 
 def wrap(p):
-    """위상을 (-pi, pi] 로 접는다."""
+    """위상을 [-pi, pi) 로 접는다. (-pi, pi] 를 내는 np.angle 과 경계 한 점만 다르다."""
     return (p + np.pi) % (2.0 * np.pi) - np.pi
 
 
@@ -26,8 +27,9 @@ def phase_hilbert(I, detrend_sigma=None):
 
         z(x) = I_ac(x) + j H[I_ac(x)] = b(x) exp(j phi(x))
 
-    전제가 둘 있다. 배경 a 가 먼저 빠져 있어야 하고(그렇지 않으면 편각이 배경 쪽으로
-    끌린다), b 와 cos(phi) 의 스펙트럼이 겹치지 않아야 한다(Bedrosian 조건).
+    등호는 근사다. 전제가 셋 있다. 배경 a 가 먼저 빠져 있어야 하고(그렇지 않으면
+    편각이 배경 쪽으로 끌린다), b 와 cos(phi) 의 스펙트럼이 겹치지 않아야 하며
+    (Bedrosian 조건), 위상이 한 방향으로 증가해야 한다(감소하면 편각이 -phi 가 된다).
     """
     from scipy.ndimage import gaussian_filter1d
     ac = I - (gaussian_filter1d(I, detrend_sigma) if detrend_sigma else I.mean())
@@ -36,7 +38,8 @@ def phase_hilbert(I, detrend_sigma=None):
 
 
 def phase_fourier(I, band=None):
-    """스펙트럼에서 +1 차 측대역만 골라 원점으로 옮긴 뒤 역변환한다."""
+    """스펙트럼에서 +1 차 측대역만 남기고 역변환한다. 측대역을 원점으로 옮기지 않으므로
+    편각에는 반송파가 그대로 남는다."""
     n = len(I)
     F = np.fft.fft(I - I.mean())
     freq = np.fft.fftfreq(n)
@@ -75,8 +78,9 @@ def phase_shift_5_hariharan(frames):
         phi = atan2( 2(I4 - I2), I1 - 2 I3 + I5 )
 
     천이량이 pi/2 에서 벗어나도 오차의 1 차항이 상쇄되도록 계수를 고른 것이다.
-    부호를 이렇게 잡아야 결과가 phi 그대로 나온다. 흔히 보이는
-    atan2(2(I2-I4), 2 I3 - I5 - I1) 형태는 같은 값에 pi 가 더해진 것이다.
+    I = a + b cos(phi + d) 규약에서 천이량을 0, pi/2, pi, 3pi/2, 2pi 로 두면 결과가
+    phi 그대로 나온다. Hariharan(1987)은 대칭 천이 -pi..pi 에
+    atan2(2(I2-I4), 2 I3 - I5 - I1) 을 썼다. 그 꼴을 0..2pi 천이에 쓰면 pi 가 더해진다.
     """
     I1, I2, I3, I4, I5 = frames
     return np.arctan2(2.0 * (I4 - I2), I1 - 2.0 * I3 + I5)

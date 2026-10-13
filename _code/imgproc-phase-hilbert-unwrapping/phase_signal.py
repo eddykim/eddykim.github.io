@@ -60,7 +60,7 @@ def fringe_2d(shape_xy=(200, 200), carrier=0.35, amp=14.0, noise=0.0, seed=0,
     ny, nx = shape_xy
     yy, xx = np.mgrid[0:ny, 0:nx].astype(float)
     sx, sy = xx / nx, yy / ny
-    # amp 가 커지면 봉우리 기울기가 화소당 pi 를 넘어 언샘플링이 일어난다.
+    # amp 가 커지면 봉우리 기울기가 화소당 pi 를 넘어 언더샘플링이 일어난다.
     phi = carrier * xx + amp * (
         np.exp(-0.5 * (((sx - 0.35) / 0.10) ** 2 + ((sy - 0.40) / 0.10) ** 2))
         - 0.7 * np.exp(-0.5 * (((sx - 0.70) / 0.09) ** 2 + ((sy - 0.68) / 0.09) ** 2)))

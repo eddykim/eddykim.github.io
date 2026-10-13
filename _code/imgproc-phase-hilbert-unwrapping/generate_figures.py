@@ -19,54 +19,46 @@ LABELS = {
     "ko": {"dir": BASE, "font": KFONT, "legend": LFONT,
         "pos": "위치 (화소)", "inten": "세기", "shift": "천이량 $\\delta$ (rad)",
         "fringe": "간섭 무늬 $I(x)$", "bg": "배경 $a(x)$", "env": "포락선 $a \\pm b$",
-        "onepix": "한 화소에서 천이량에 따른 세기", "fitted": "맞춘 정현파",
-        "phi_here": "이 정현파의 위상이 $\\phi$",
-        "fig1": "그림1. 한 장에는 미지수 셋이 겹쳐 있고 식은 하나뿐이다",
+        "onepix": "300번 화소에서 천이량에 따른 세기", "fitted": "모델 정현파",
+        "samples": "4단계 천이에서 찍은 값", "pixmark": "오른쪽에서 본 화소",
+        "phi_here": "세기 최대: $\\delta = -\\phi$",
         "ac": "배경을 뺀 신호", "hil": "힐베르트 변환", "amp": "순간 진폭 $b(x)$",
         "true_amp": "참 변조 $b(x)$", "witherr": "배경을 두고 계산한 위상 오차",
         "clean": "배경을 빼고 계산한 위상 오차", "perr": "위상 오차 (rad)",
-        "fig2": "그림2. 해석 신호의 크기가 진폭, 편각이 위상이다",
         "noise_ax": "프레임 노이즈", "rms": "위상 오차 RMS (rad)",
         "m_h": "힐베르트 (1장)", "m_f": "푸리에 (1장)", "m_p4": "위상천이 (4장)",
         "band_ax": "측대역 폭 ($f_0$ 단위)", "e_noise": "노이즈 하 오차 (노이즈 0.05)",
-        "e_shape": "무잡음, 형상이 급한 구간의 오차",
-        "fig3": "그림3. 푸리에법의 노이즈 내성은 대역통과에서 오고, 그 폭이 또 하나의 교환이다",
+        "e_shape": "노이즈 없음, 형상이 급한 구간의 오차",
         "eps": "천이량 오차 $\\varepsilon$", "s3": "3단계", "s4": "4단계",
         "s5": "5단계 최소자승", "sh": "Hariharan 5단계",
         "slope1": "1차 기울기", "slope2": "2차 기울기",
-        "fig4": "그림4. Hariharan 5단계만 천이량 오차에 2차로 반응한다",
         "carrier_ax": "화소당 위상 증가 (rad)", "uerr": "언래핑 최대 오차 (rad)",
         "limit": "화소당 $\\pi$", "jump": "$2\\pi$ 도약 발생률 (%)",
-        "fig5": "그림5. 위상차가 $\\pi$ 를 넘는 순간 오차가 $10^{-13}$ 에서 수백 rad 으로 뛴다",
-        "wrapped": "래핑된 위상", "res_u": "잔여점 — 언샘플링 기인",
-        "res_n": "잔여점 — 노이즈 기인", "pathA": "경로 A", "pathB": "경로 B",
-        "fig6": "그림6. 잔여점이 있으면 언래핑 결과가 경로에 따라 달라진다",
+        "wrapped": "접힌 위상", "res_u": "언더샘플링으로 생긴 잔여점",
+        "res_n": "노이즈로 생긴 잔여점", "pathA": "경로 A", "pathB": "경로 B",
+        "res_p": "잔여점 $+1$", "res_m": "잔여점 $-1$",
     },
     "en": {"dir": os.path.join(BASE, "en"), "font": {}, "legend": {},
         "pos": "Position (pixel)", "inten": "Intensity", "shift": "Shift $\\delta$ (rad)",
         "fringe": "Fringe $I(x)$", "bg": "Background $a(x)$", "env": "Envelope $a \\pm b$",
-        "onepix": "Intensity vs shift at one pixel", "fitted": "Fitted sinusoid",
-        "phi_here": "its phase is $\\phi$",
-        "fig1": "Fig 1. One frame holds three unknowns and offers one equation",
+        "onepix": "Intensity vs shift at pixel 300", "fitted": "Model sinusoid",
+        "samples": "4-step samples", "pixmark": "Pixel shown at right",
+        "phi_here": "Peak: $\\delta = -\\phi$",
         "ac": "Background removed", "hil": "Hilbert transform", "amp": "Instantaneous amplitude",
         "true_amp": "True modulation $b(x)$", "witherr": "Phase error, background left in",
         "clean": "Phase error, background removed", "perr": "Phase error (rad)",
-        "fig2": "Fig 2. The analytic signal gives amplitude as magnitude and phase as argument",
         "noise_ax": "Frame noise", "rms": "Phase error RMS (rad)",
         "m_h": "Hilbert (1 frame)", "m_f": "Fourier (1 frame)", "m_p4": "Phase shifting (4 frames)",
         "band_ax": "Sideband width (units of $f_0$)", "e_noise": "Error under noise 0.05",
         "e_shape": "Error on steep shape, noiseless",
-        "fig3": "Fig 3. The Fourier method's noise immunity comes from its bandpass, whose width is another trade",
         "eps": "Shift error $\\varepsilon$", "s3": "3-step", "s4": "4-step",
         "s5": "5-step least squares", "sh": "Hariharan 5-step",
         "slope1": "first order", "slope2": "second order",
-        "fig4": "Fig 4. Only the Hariharan 5-step responds quadratically to shift error",
         "carrier_ax": "Phase increment per pixel (rad)", "uerr": "Max unwrap error (rad)",
         "limit": "$\\pi$ per pixel", "jump": "$2\\pi$ jump rate (%)",
-        "fig5": "Fig 5. Past $\\pi$ the error jumps from $10^{-13}$ to hundreds of radians",
         "wrapped": "Wrapped phase", "res_u": "Residues from undersampling",
         "res_n": "Residues from noise", "pathA": "Path A", "pathB": "Path B",
-        "fig6": "Fig 6. With residues present, unwrapping depends on the path",
+        "res_p": "Residue $+1$", "res_m": "Residue $-1$",
     },
 }
 
@@ -205,9 +197,9 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     F, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.06, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **F)
-        fig.tight_layout(rect=rect)
+    def cap(fig):
+        # 그림 번호와 캡션은 본문에 둔다. 이미지에 박으면 번호가 밀릴 때 어긋난다.
+        fig.tight_layout()
 
     # 그림1
     fig, ax = plt.subplots(1, 2, figsize=(10.0, 3.9))
@@ -216,16 +208,16 @@ def draw(L):
     ax[0].plot(X[sl], A0[sl], "--", lw=1.3, color="#2b5c9b", label=L["bg"])
     ax[0].plot(X[sl], (A0 + B0)[sl], ":", lw=1.2, color="#c0392b", label=L["env"])
     ax[0].plot(X[sl], (A0 - B0)[sl], ":", lw=1.2, color="#c0392b")
-    ax[0].axvline(PIX, color="k", lw=0.8, ls="-.")
+    ax[0].axvline(PIX, color="k", lw=0.8, ls="-.", label=L["pixmark"])
     ax[0].set_xlabel(L["pos"], **F); ax[0].set_ylabel(L["inten"], **F)
     ax[0].legend(prop=LG, fontsize=8); ax[0].grid(alpha=0.3)
     ax[1].plot(dfine, Ipix, "-", lw=1.5, color="#1e8449", label=L["fitted"])
-    ax[1].plot(SH4, Ipix4, "o", ms=7, color="#c0392b")
-    ax[1].axvline((-PHI[PIX]) % (2 * np.pi), ls=":", lw=1.2, color="k")
+    ax[1].plot(SH4, Ipix4, "o", ms=7, color="#c0392b", label=L["samples"])
+    ax[1].axvline((-PHI[PIX]) % (2 * np.pi), ls=":", lw=1.2, color="k", label=L["phi_here"])
     ax[1].set_xlabel(L["shift"], **F); ax[1].set_ylabel(L["inten"], **F)
     ax[1].set_title(L["onepix"], fontsize=9.5, **F)
     ax[1].legend(prop=LG, fontsize=8.5); ax[1].grid(alpha=0.3)
-    cap(fig, "fig1", rect=(0, 0.07, 1, 1))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig1-where-is-phase.png"), dpi=150)
     plt.close(fig)
 
@@ -242,7 +234,7 @@ def draw(L):
     ax[2].axhline(0, color="k", lw=0.6)
     ax[2].set_xlabel(L["pos"], **F); ax[2].set_ylabel(L["perr"], **F)
     ax[2].legend(prop=LG, fontsize=8); ax[2].grid(alpha=0.3)
-    cap(fig, "fig2", rect=(0, 0.07, 1, 1))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig2-analytic-signal.png"), dpi=150)
     plt.close(fig)
 
@@ -256,7 +248,7 @@ def draw(L):
     ax[1].semilogy(BANDS, band_shape, "s-", ms=4, color="#1e8449", label=L["e_shape"])
     ax[1].set_xlabel(L["band_ax"], **F); ax[1].set_ylabel(L["rms"], **F)
     ax[1].legend(prop=LG, fontsize=8.5); ax[1].grid(alpha=0.3, which="both")
-    cap(fig, "fig3", rect=(0, 0.07, 1, 1))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig3-three-methods.png"), dpi=150)
     plt.close(fig)
 
@@ -271,13 +263,14 @@ def draw(L):
     ax.loglog(EPS, ref2, "--", lw=1.1, color="#888", label=L["slope2"])
     ax.set_xlabel(L["eps"], **F); ax.set_ylabel(L["rms"], **F)
     ax.legend(prop=LG, fontsize=8.5, ncol=2); ax.grid(alpha=0.3, which="both")
-    cap(fig, "fig4")
+    cap(fig)
     fig.savefig(os.path.join(out, "fig4-detuning.png"), dpi=150)
     plt.close(fig)
 
     # 그림5
     fig, ax = plt.subplots(1, 2, figsize=(10.0, 3.9))
-    ax[0].semilogy(step_max, np.maximum(uerr, 1e-12), "o-", ms=4, color="#2b5c9b")
+    # 0 이 섞여 있어 로그 축에 그리려면 바닥이 필요하다. 1e-13 보다 작은 값은 1e-13 에 그린다.
+    ax[0].semilogy(step_max, np.maximum(uerr, 1e-13), "o-", ms=4, color="#2b5c9b")
     ax[0].axvline(np.pi, ls="--", lw=1.3, color="#c0392b")
     ax[0].text(np.pi * 0.99, uerr.max() * 0.02, L["limit"], fontsize=9,
                color="#c0392b", ha="right", **F)
@@ -286,7 +279,7 @@ def draw(L):
     ax[1].plot(NZ5, jump, "s-", ms=5, color="#c0392b")
     ax[1].set_xlabel(L["noise_ax"], **F); ax[1].set_ylabel(L["jump"], **F)
     ax[1].grid(alpha=0.3)
-    cap(fig, "fig5", rect=(0, 0.07, 1, 1))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig5-unwrap-limit.png"), dpi=150)
     plt.close(fig)
 
@@ -296,16 +289,19 @@ def draw(L):
     for a, (W, R, t) in zip(ax[1:], [(W_under, R_under, L["res_u"]),
                                      (W_noisy, R_noisy, L["res_n"])]):
         a.imshow(W, cmap="twilight")
-        yy, xx = np.nonzero(R > 0); a.plot(xx, yy, ".", ms=2.5, color="#e8f000")
-        yy, xx = np.nonzero(R < 0); a.plot(xx, yy, ".", ms=2.5, color="#00e5ff")
+        first = a is ax[1]
+        yy, xx = np.nonzero(R > 0); a.plot(xx, yy, ".", ms=2.5, color="#e8f000",
+                                           label=L["res_p"] if first else None)
+        yy, xx = np.nonzero(R < 0); a.plot(xx, yy, ".", ms=2.5, color="#00e5ff",
+                                           label=L["res_m"] if first else None)
         a.set_title(f"{t} ({np.abs(R).sum()})", fontsize=9.5, **F)
     pa = np.array(pathA); pb = np.array(pathB)
     ax[1].plot(pa[:, 1], pa[:, 0], "-", lw=1.4, color="#ff2d55", label=L["pathA"])
     ax[1].plot(pb[:, 1], pb[:, 0], "-", lw=1.4, color="#ffffff", label=L["pathB"])
-    ax[1].legend(prop=LG, fontsize=7.5, loc="lower left")
+    ax[1].legend(prop=LG, fontsize=7.5, loc="lower left", markerscale=3)
     for a in ax:
         a.set_xticks([]); a.set_yticks([])
-    cap(fig, "fig6", rect=(0, 0.06, 1, 0.94))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig6-residues-2d.png"), dpi=110)
     plt.close(fig)
 
@@ -346,8 +342,10 @@ print("  노이즈별 2pi 도약률: " + ", ".join(f"{n:.2f}->{j:.0f}%" for n, j
 print()
 print("=== 그림6: 2D 잔여점 ===")
 print(f"  정상(amp=14, 무잡음): {np.abs(residues(W_ok)).sum()}개")
-print(f"  언샘플링(amp=140, 무잡음): {np.abs(R_under).sum()}개, "
+print(f"  언더샘플링(amp=140, 무잡음): {np.abs(R_under).sum()}개, "
       f"최대 기울기 {max(np.abs(np.diff(fringe_2d(amp=140)[3],axis=1)).max(), np.abs(np.diff(fringe_2d(amp=140)[3],axis=0)).max()):.2f} rad/화소")
-print(f"  노이즈(amp=14, 0.35): {np.abs(R_noisy).sum()}개, 최대 기울기 0.77 rad/화소")
+_p14 = fringe_2d(amp=14)[3]
+print(f"  노이즈(amp=14, 0.35): {np.abs(R_noisy).sum()}개, "
+      f"최대 기울기 {max(np.abs(np.diff(_p14,axis=1)).max(), np.abs(np.diff(_p14,axis=0)).max()):.2f} rad/화소")
 print(f"  잔여점 하나를 감싼 두 경로의 적분 차이: {endB-endA:+.3f} rad "
       f"({(endB-endA)/2/np.pi:+.2f} x 2pi)")
