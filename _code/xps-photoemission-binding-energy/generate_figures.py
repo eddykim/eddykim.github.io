@@ -1,4 +1,4 @@
-"""XPS 기초 1편 그림 3개 생성 (한국어판·영문판).
+"""XPS 기초 1편 생성 그림 3개 (한국어판·영문판). 본문 그림1·3은 웹 이미지(ext-*)다.
 
 실행: python generate_figures.py
 출력: ../../assets/img/posts/xps-photoemission-binding-energy/      (한국어)
@@ -28,18 +28,18 @@ BASE_DIR = os.path.join(
 LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
-        "sample": "시료 (도체)", "spectrometer": "분광기",
+        "sample": "시편 (도체)", "spectrometer": "분광기",
         "core": "코어 준위", "valence": "가전자대",
         "fermi": r"페르미 준위 $E_F$ (공통)",
-        "vac_s": r"진공 준위 (시료)", "vac_sp": r"진공 준위 (분광기)",
+        "vac_s": r"진공 준위 (시편)", "vac_sp": r"진공 준위 (분광기)",
         "contact": "전기적 접촉\n→ $E_F$ 정렬",
         "fig1": "광전 방출의 에너지 준위와 페르미 준위 정렬",
         "xlabel_be": "결합에너지 (eV)", "ylabel": "계수율 (임의 단위)",
-        "fig2": "합성 서베이 스펙트럼 (가상 SiO$_2$/Si 시료, Al K$\\alpha$)",
+        "fig2": "합성 서베이 스펙트럼 (가상 SiO$_2$/Si 시편, Al K$\\alpha$)",
         "auger": "오제",
         "fig3": "화학이동: 에틸 트리플루오로아세테이트형 C 1s (모사)",
         "xlabel_rel": r"상대 결합에너지 (CH$_3$ 기준, eV)",
-        "observed": "관측 스펙트럼", "envelope": "성분 합",
+        "observed": "모사 데이터(잡음 포함)", "envelope": "성분 합",
         "more_neg": "주변 원자의 전기음성도 ↑  →  결합에너지 ↑",
     },
     "en": {
@@ -55,8 +55,8 @@ LABELS = {
         "auger": "Auger",
         "fig3": "Chemical shift: ethyl-trifluoroacetate-like C 1s (simulated)",
         "xlabel_rel": r"Relative binding energy (vs. CH$_3$, eV)",
-        "observed": "observed", "envelope": "sum of components",
-        "more_neg": "more electronegative neighbors  →  higher binding energy",
+        "observed": "simulated data (with noise)", "envelope": "sum of components",
+        "more_neg": "more electronegative neighbours  →  higher binding energy",
     },
 }
 
@@ -85,7 +85,7 @@ def peak_with_step(be, center, fwhm, area, step_frac):
 # ---------------------------------------------------------------------------
 rng = np.random.default_rng(0)
 
-# 그림2: 가상 SiO2(얇은 산화막)/Si 시료 + 표면 오염 탄소. 위치는 대략값이다.
+# fig2-survey-schematic.png (본문 그림5): 가상 SiO2(얇은 산화막)/Si 시편 + 표면 오염 탄소. 위치는 대략값이다.
 be = np.linspace(0, 1350, 6750)
 survey_peaks = [
     # (라벨, BE, FWHM, 면적, 계단 비율, 종류)
@@ -103,7 +103,7 @@ for _, c, w, a, s, _k in survey_peaks:
     survey += peak_with_step(be, c, w, a, s)
 survey_noisy = rng.poisson(survey * 20) / 20
 
-# 그림3: C 1s 네 성분. Travnikova 2012 측정값(CH3 기준 1.72, 4.33, 7.46 eV)에
+# fig3-chemical-shift.png (본문 그림4): C 1s 네 성분. Travnikova 2012 측정값(CH3 기준 1.72, 4.33, 7.46 eV)에
 # 맞춘 모사값이다.
 rel = np.linspace(-3, 11, 1400)
 c1s_components = [
@@ -124,12 +124,12 @@ def render(L_):
     out, F, LF = L_["dir"], L_["font"], L_["legend"]
     os.makedirs(out, exist_ok=True)
 
-    # 그림 1. 에너지 준위도: 시료와 분광기가 페르미 준위를 공유한다
+    # fig1-energy-diagram.png (본문 그림2). 에너지 준위도: 시편과 분광기가 페르미 준위를 공유한다
     fig, ax = plt.subplots(figsize=(7.6, 5.8))
     y_core, y_vb_top, y_f = 0.0, 5.6, 6.0
-    phi_s, phi_sp = 2.0, 1.3               # 도식용 크기 (시료 일함수 > 분광기 일함수)
+    phi_s, phi_sp = 2.0, 1.3               # 도식용 크기 (시편 일함수 > 분광기 일함수)
     y_vs, y_vsp = y_f + phi_s, y_f + phi_sp
-    sx, px = (0.0, 3.0), (5.0, 8.0)        # 시료·분광기 기둥의 x 범위
+    sx, px = (0.0, 3.0), (5.0, 8.0)        # 시편·분광기 기둥의 x 범위
 
     ax.fill_between(sx, 4.4, y_vb_top, color="tab:gray", alpha=0.25)
     ax.text(sx[0] + 0.6, 4.95, L_["valence"], fontsize=9, **F)
@@ -174,7 +174,7 @@ def render(L_):
     fig.savefig(os.path.join(out, "fig1-energy-diagram.png"), dpi=150)
     plt.close(fig)
 
-    # 그림 2. survey 스펙트럼 (결합에너지 축을 오른쪽→왼쪽으로 증가)
+    # fig2-survey-schematic.png (본문 그림5). 서베이 스펙트럼 (결합에너지 축을 오른쪽→왼쪽으로 증가)
     fig2, ax2 = plt.subplots(figsize=(8.0, 4.4))
     ax2.plot(be, survey_noisy, color="black", lw=0.7)
     for label, c, _w, _a, _s, kind in survey_peaks:
@@ -195,7 +195,7 @@ def render(L_):
     fig2.savefig(os.path.join(out, "fig2-survey-schematic.png"), dpi=150)
     plt.close(fig2)
 
-    # 그림 3. C 1s 화학이동 성분 분해
+    # fig3-chemical-shift.png (본문 그림4). C 1s 화학이동 성분 분해
     fig3, ax3 = plt.subplots(figsize=(7.4, 4.6))
     colors = ["tab:green", "tab:orange", "tab:purple", "tab:red"]
     ax3.plot(rel, c1s_obs, "o", ms=2, color="gray", alpha=0.6, label=L_["observed"])
