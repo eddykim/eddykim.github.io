@@ -87,10 +87,13 @@
 | 2026-12-09 | 수 | wave-optics-fourier-imaging | 파동광학 배경이론 4편 | 한·영 | 푸시됨 |
 | 2026-12-11 | 금 | ptycho-fourier-ptychography | 계산 이미징과 타이코그래피 8편 | 한·영 | 푸시됨 |
 | 2026-12-13 | 일 | wave-optics-gaussian-beams | 파동광학 배경이론 5편 | 한·영 | 푸시됨 |
-| 2026-12-15 | 화 | | | | |
+| 2026-12-15 | 화 | wave-optics-high-na-vector-focusing | 파동광학 배경이론 6편(완결) | 한·영 | 미커밋 |
 | 2026-12-17 | 목 | | | | |
 | 2026-12-19 | 토 | | | | |
 | 2026-12-21 | 월 | | | | |
+| 2026-12-23 | 수 | | | | |
+| 2026-12-25 | 금 | | | | |
+| 2026-12-27 | 일 | | | | |
 
 ## 작성 중
 
@@ -99,11 +102,9 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| electron-microscopy-why-electrons | 전자현미경 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| electron-microscopy-electron-optics | 전자현미경 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| electron-microscopy-beam-specimen-interaction | 전자현미경 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| electron-microscopy-sem-imaging | 전자현미경 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| electron-microscopy-tem-diffraction-contrast | 전자현미경 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| electron-microscopy-tem-phase-contrast-ctf | 전자현미경 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| electron-microscopy-stem-analytical | 전자현미경 7편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| wave-optics-high-na-vector-focusing | 파동광학 배경이론 6편 | 2026-10-13 | 코드·그림, 한국어 초안, 영문판 |
+| imgproc-sampling-noise-model | 계측 영상처리 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| imgproc-convolution-kernels | 계측 영상처리 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| imgproc-frequency-domain-filtering | 계측 영상처리 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| imgproc-edge-subpixel | 계측 영상처리 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| imgproc-geometric-fitting | 계측 영상처리 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| imgproc-phase-hilbert-unwrapping | 계측 영상처리 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
