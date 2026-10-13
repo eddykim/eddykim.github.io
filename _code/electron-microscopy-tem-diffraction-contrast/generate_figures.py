@@ -6,6 +6,7 @@
 
 역공간 길이는 nm^-1, 실공간 길이는 nm 로 계산한다.
 그림1은 Ewald 작도, 그림2는 BF/DF 광선도(개념도), 그림3은 두빔 근사 계산이다.
+(파일 번호 기준이다. 본문 캡션에서는 웹 그림 두 장이 끼어 각각 그림1, 그림3, 그림4가 된다.)
 """
 import os
 
@@ -89,19 +90,19 @@ LABELS = {
         "f1bragg": "브래그 각 $θ_B$ = {:.2f}°",
         "f1hit": "구 위에 놓인 반사", "f1none": "정확히 놓이는 반사가 없다",
         "fig2": "대물 조리개를 어디에 두느냐가 명암을 뒤집는다",
-        "f2bf": "명시야 (BF) — 투과파만 통과", "f2df": "암시야 (DF) — 회절파만 통과",
+        "f2bf": "명시야(BF): 투과파만 통과", "f2df": "암시야(DF): 회절파만 통과",
         "f2spec": "시편", "f2lens": "대물렌즈", "f2bfp": "후초점면",
         "f2ap": "대물 조리개", "f2img": "상면",
         "f2t": "투과파 000", "f2g": "회절파 g",
         "f2imgbf": "회절이 센 곳이 어둡다", "f2imgdf": "회절이 센 곳이 밝다",
-        "fig3": "편위 파라미터가 두께 프린지와 회절 대비를 만든다",
+        "fig3": "편위 파라미터가 두께 무늬와 회절 대비를 만든다",
         "f3a": "두께에 따른 회절파 세기", "f3ax": "시편 두께 t (nm)", "f3ay": "회절파 세기",
         "f3b": "편위 파라미터에 따른 세기 (t = {:.0f} nm)",
         "f3bx": "편위 파라미터 s (nm$^{-1}$)", "f3by": "회절파 세기",
         "f3s0": "s = 0 (브래그 정확히 맞춤)", "f3s1": "s = 0.01 nm$^{-1}$",
         "f3s2": "s = 0.02 nm$^{-1}$",
         "f3xi": "주기 = 소광거리 $ξ_g$ = {:.0f} nm",
-        "f3peak": "s 가 조금만 틀어져도\n세기가 급격히 떨어진다",
+        "f3peak": "s가 조금만 커져도\n세기가 급격히 떨어진다",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -114,8 +115,8 @@ LABELS = {
         "f1bragg": "Bragg angle $θ_B$ = {:.2f}°",
         "f1hit": "Reflections on the sphere", "f1none": "No reflection lies on it",
         "fig2": "Where the objective aperture sits inverts the contrast",
-        "f2bf": "Bright field (BF) — transmitted beam only",
-        "f2df": "Dark field (DF) — diffracted beam only",
+        "f2bf": "Bright field (BF): transmitted beam only",
+        "f2df": "Dark field (DF): diffracted beam only",
         "f2spec": "Specimen", "f2lens": "Objective lens", "f2bfp": "Back focal plane",
         "f2ap": "Objective aperture", "f2img": "Image plane",
         "f2t": "Transmitted 000", "f2g": "Diffracted g",
@@ -218,8 +219,13 @@ def _bf_df_panel(ax, L, title, aperture_on_g, img_key):
     for xl, xb, col, key in beams:
         ax.plot([0, xl], [Y_SPEC, Y_LENS], color=col, lw=1.6)      # 시편 → 렌즈
         ax.plot([xl, xb], [Y_LENS, Y_BFP], color=col, lw=1.6)      # 렌즈 → 후초점면
-        ax.text(xb + 0.12, Y_BFP - 0.42, L[key], fontsize=8.5, color=col,
-                ha="left", **L["font"])
+        # 투과파 라벨은 축 왼쪽, 회절파 라벨은 오른쪽에 두어 서로 겹치지 않게 한다.
+        if key == "f2t":
+            ax.text(-0.12, Y_BFP - 0.42, L[key], fontsize=8.5, color=col,
+                    ha="right", **L["font"])
+        else:
+            ax.text(xb + 0.12, Y_BFP - 0.42, L[key], fontsize=8.5, color=col,
+                    ha="left", **L["font"])
         if abs(xb - blocked_x) > 1e-9:
             ax.plot([xb, 0], [Y_BFP, Y_IMG], color=col, lw=1.6)    # 조리개 통과
         else:
@@ -264,7 +270,7 @@ def fig3_excitation_error(L):
     # s=0 일 때 주기가 소광거리와 같다는 것을 화살표로 표시한다.
     ax.annotate("", xy=(XI_G / 2, 1.08), xytext=(XI_G * 1.5, 1.08),
                 arrowprops=dict(arrowstyle="<->", color=ACCENT, lw=1.4))
-    ax.text(XI_G, 1.13, L["f3xi"].format(XI_G), ha="center", fontsize=9,
+    ax.text(5, 1.13, L["f3xi"].format(XI_G), ha="left", fontsize=9,
             color=ACCENT, **L["font"])
     ax.set_ylim(0, 1.55)
 
@@ -276,7 +282,7 @@ def fig3_excitation_error(L):
     ax2.grid(alpha=0.3)
     peak = two_beam_intensity(THICKNESS, 0.0)
     ax2.annotate(L["f3peak"], xy=(0.008, two_beam_intensity(THICKNESS, 0.008)),
-                 xytext=(0.030, peak * 0.86), fontsize=9, color=DARK, **L["font"],
+                 xytext=(0.022, peak * 0.86), fontsize=9, color=DARK, **L["font"],
                  arrowprops=dict(arrowstyle="->", color=DARK))
 
     fig.suptitle(L["fig3"], fontsize=13, **L["font"])
