@@ -31,8 +31,8 @@ LABELS = {
         "incident": r"입사광 ($\theta_i$)", "reflected": r"반사광 ($\theta_r$)",
         "transmitted": r"굴절광 ($\theta_t$)",
         "medium1": r"매질 1 ($N_1$)", "medium2": r"매질 2 ($N_2$)",
-        "s_pol": "s-편광\n(지면에 수직)", "p_pol": "p-편광\n(입사면 내)",
-        "fig1": "입사면 위의 s/p 편광과 반사·굴절 벡터 정의",
+        "s_pol": "s편광\n(지면에 수직)", "p_pol": "p편광\n(입사면 내)",
+        "fig1": "입사면 위의 s/p 편광과 입사·반사·굴절 광선",
         "brewster": "브루스터각\n{:.1f}°",
         "xlabel": "입사각 " + r"$\theta_i$ (deg)", "ylabel": "반사율 R",
         "fig2": "프레넬 반사율 ($N_1$={}, $N_2$={})",
@@ -43,8 +43,8 @@ LABELS = {
         "incident": r"incident ($\theta_i$)", "reflected": r"reflected ($\theta_r$)",
         "transmitted": r"refracted ($\theta_t$)",
         "medium1": r"medium 1 ($N_1$)", "medium2": r"medium 2 ($N_2$)",
-        "s_pol": "s-polarized\n(normal to the page)", "p_pol": "p-polarized\n(in the plane of incidence)",
-        "fig1": "s/p polarization and the reflected and refracted vectors on the plane of incidence",
+        "s_pol": "s-polarized\n(out of the page)", "p_pol": "p-polarized\n(in the plane)",
+        "fig1": "s/p polarization and the rays on the plane of incidence",
         "brewster": "Brewster angle\n{:.1f}°",
         "xlabel": r"Angle of incidence $\theta_i$ (deg)", "ylabel": "Reflectance R",
         "fig2": "Fresnel reflectance ($N_1$={}, $N_2$={})",
@@ -139,14 +139,18 @@ def render(L_):
     s_pt = mid_inc - 0.16 * perp_inc  # 지면에서 튀어나오는 방향 (동그라미+점)
     ax.scatter(*s_pt, s=90, facecolors="none", edgecolors="black", zorder=5)
     ax.scatter(*s_pt, s=8, color="black", zorder=5)
-    ax.text(*(s_pt + np.array([-0.10, 0.0])), L_["s_pol"], fontsize=8.5,
-            ha="right", va="center", **F)
+    # 라벨은 광선과 겹치지 않도록 기호의 오른쪽(광선 반대편)에 둔다
+    # 법선(점선)이 글자를 가로지르지 않도록 흰 바탕을 깐다
+    ax.text(*(s_pt + np.array([0.08, 0.0])), L_["s_pol"], fontsize=8.5,
+            ha="left", va="center", zorder=6,
+            bbox=dict(facecolor="white", edgecolor="none", pad=1.0), **F)
 
     p_base = mid_inc + 0.16 * perp_inc  # 광선에 수직하고 지면 내에 있는 양방향 화살표
     ax.annotate("", xy=p_base + 0.14 * perp_inc, xytext=p_base - 0.14 * perp_inc,
                 arrowprops=dict(arrowstyle="<->", color="black", lw=1.4))
-    ax.text(*(p_base + 0.24 * perp_inc), L_["p_pol"], fontsize=8.5,
-            ha="left", va="center", **F)
+    # 라벨은 화살표 끝의 왼쪽 아래에 오른쪽 정렬로 두어 theta_i 라벨과 떼어 놓는다
+    ax.text(*(p_base + 0.22 * perp_inc), L_["p_pol"], fontsize=8.5,
+            ha="right", va="center", **F)
 
     ax.set_xlim(-1.7, 1.7)
     ax.set_ylim(-1.5, 1.5)
@@ -164,7 +168,7 @@ def render(L_):
     ax2.axvline(theta_brewster_deg, color="gray", lw=1, ls="--")
     ax2.annotate(
         L_["brewster"].format(theta_brewster_deg),
-        xy=(theta_brewster_deg, 0.0), xytext=(theta_brewster_deg + 6, 0.18),
+        xy=(theta_brewster_deg, 0.0), xytext=(theta_brewster_deg - 20, 0.26),
         fontsize=9, color="gray", **F,
         arrowprops=dict(arrowstyle="->", color="gray", lw=1),
     )
