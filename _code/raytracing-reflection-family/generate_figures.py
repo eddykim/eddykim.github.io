@@ -1,4 +1,6 @@
-"""기하광학 3편 그림 2개 생성 (한국어판·영문판).
+"""광선추적 3편 그림 2개 생성 (한국어판·영문판).
+
+그림 번호는 캡션만 가진다. 이미지 안 제목에는 번호를 넣지 않는다.
 
 실행: python generate_figures.py
 출력: ../../assets/img/posts/raytracing-reflection-family/      (한국어)
@@ -43,11 +45,11 @@ LABELS = {
         "font": KFONT, "legend": LFONT,
         "xlabel": "x (mm)", "ylabel": "y (mm)",
         "reflected": "반사", "transmitted": "투과",
-        "fig1": "그림1. 네 반사 부품의 광선 경로 -- 반사 공식은 하나, 법선 찾는 법만 다르다",
+        "fig1": "반사 공식은 하나, 법선을 찾는 법만 다르다",
         "incident": "입사광",
         "n_dup": "세 번째 점을 재사용한 법선으로 반사",
         "n_uniq": "세 점을 모두 쓴 법선으로 반사",
-        "fig2": "그림2. 세 번째 점을 재사용하면 반사 방향이 {:.1f}° 달라진다",
+        "fig2": "세 번째 점을 재사용하면 반사 방향이 {:.1f}도 달라진다",
         "p_vertex": "대칭 꼭짓점: n_dup={}, n_uniq={}, 법선 차이={:.3f}deg, 반사광 차이={:.3f}deg",
     },
     "en": {
@@ -55,11 +57,11 @@ LABELS = {
         "font": EFONT, "legend": ELFONT,
         "xlabel": "x (mm)", "ylabel": "y (mm)",
         "reflected": "reflected", "transmitted": "transmitted",
-        "fig1": "Fig 1. Ray paths for the four reflective components -- one formula, four ways to find the normal",
+        "fig1": "One reflection formula, four ways to find the normal",
         "incident": "incident ray",
         "n_dup": "reflected with the reused-third-point normal",
         "n_uniq": "reflected with the three-point normal",
-        "fig2": "Fig 2. Reusing the third point turns the reflected ray by {:.1f}°",
+        "fig2": "Reusing the third point turns the reflected ray by {:.1f}°",
         "p_vertex": "symmetric vertex: n_dup={}, n_uniq={}, normal diff={:.3f}deg, reflected diff={:.3f}deg",
     },
 }
