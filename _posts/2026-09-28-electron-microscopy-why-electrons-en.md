@@ -95,7 +95,7 @@ $$ d_d = 0.61\,\frac{\lambda}{\alpha} $$
 
 Substituting $\lambda = 2.51$ pm and $\alpha = 10$ mrad returns $d_d \approx 0.15$ nm, the same order as the 0.2 nm that HRTEM actually delivers. The eighty-fold gap therefore does not arise because diffraction grew with wavelength. It arises because the aperture angle is stuck at one hundredth of an optical lens.
 
-Why not simply open the aperture? Here electron optics parts ways with the optics of light. [Geometrical Optics 1](/en/posts/raytracing-spherical-lens-refraction/) traced spherical aberration in a spherical lens, where rays further from the axis cross the axis earlier. Light optics cancels that aberration by combining elements of differing index and curvature — a concave element undoing what a convex one introduced.
+Why not simply open the aperture? Here electron optics parts ways with the optics of light. [Ray Tracing 1](/en/posts/raytracing-spherical-lens-refraction/) traced spherical aberration in a spherical lens, where rays further from the axis cross the axis earlier. Light optics cancels that aberration by combining elements of differing index and curvature — a concave element undoing what a convex one introduced.
 
 Electron optics has no such concave element. Scherzer proved in 1936 that any electron lens that is rotationally symmetric, static and free of space charge has a strictly positive spherical aberration coefficient $C_s$. Opening the aperture therefore inflates the aberration disc $C_s\alpha^3$ as the cube of the angle, consuming whatever diffraction gave back. The value of 10 mrad marks where diffraction and spherical aberration balance; it is not a number instrument builders settled for out of laziness.
 

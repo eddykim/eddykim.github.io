@@ -13,7 +13,7 @@ math: true
 
 [Post 1](/en/posts/electron-microscopy-why-electrons/) ended by naming a suspect. The wavelength of a 200 kV electron is 2.51 pm, yet resolution stalls at 0.2 nm, and the reason is not the wavelength but the aperture angle. Electron microscopes work at 10 mrad, one hundredth of an optical objective, and what prevents that value from growing is spherical aberration.
 
-But glass lenses suffer spherical aberration too. [Geometrical Optics 1](/en/posts/raytracing-spherical-lens-refraction/) traced rays through a spherical surface and found exactly this: the further a ray sits from the axis, the earlier it crosses. Optical designers cancel it with a concave element. Why can an electron lens not do the same? This post answers that. It builds up how a magnetic field acts as a lens, arrives at Scherzer's conclusion that the very structure of such a lens forbids the concave counterpart, and derives the optimum aperture angle and resolution limit from there.
+But glass lenses suffer spherical aberration too. [Ray Tracing 1](/en/posts/raytracing-spherical-lens-refraction/) traced rays through a spherical surface and found exactly this: the further a ray sits from the axis, the earlier it crosses. Optical designers cancel it with a concave element. Why can an electron lens not do the same? This post answers that. It builds up how a magnetic field acts as a lens, arrives at Scherzer's conclusion that the very structure of such a lens forbids the concave counterpart, and derives the optimum aperture angle and resolution limit from there.
 
 ## 1. How a magnetic field becomes a lens
 
