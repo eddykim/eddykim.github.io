@@ -150,18 +150,23 @@ def figure2(L):
     ax1.axvline(ps_d, color=C_PS, lw=1.2, ls="--")
     ax1.axhline(r_min, color=C_ETA, lw=1.2, ls="--")
     ax1.plot([ps_d], [r_min], "*", color=C_FIT, ms=14, zorder=6)
-    ax1.annotate(L["a_ps"].format(ps_d), xy=(ps_d, r["R"].max() * 0.86),
-                 xytext=(ps_d - 5.0, r["R"].max() * 0.99), fontsize=9.2,
-                 color=C_PS, ha="left", **L["font"],
+    # 주석은 포물선 안쪽 빈 곳에 두고, 범례는 r_min 선 아래로 내려 겹치지 않게 한다
+    ax1.annotate(L["a_ps"].format(ps_d), xy=(ps_d, r["R"].max() * 0.62),
+                 xytext=(ps_d, r["R"].max() * 0.86), fontsize=9.2,
+                 color=C_PS, ha="center", va="bottom", **L["font"],
+                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9),
                  arrowprops=dict(arrowstyle="->", color=C_PS, lw=1.0))
-    ax1.annotate(L["a_eta"].format(r["eta"]), xy=(Pd[-1], r_min),
-                 xytext=(Pd[-1] - 4.2, r_min + 0.012 * r["R"].max() / 0.06),
-                 fontsize=9.2, color=C_ETA, **L["font"],
+    ax1.annotate(L["a_eta"].format(r["eta"]), xy=(ps_d + 1.0, r_min),
+                 xytext=(ps_d + 0.4, r["R"].max() * 0.47),
+                 fontsize=9.2, color=C_ETA, ha="center", va="bottom", **L["font"],
+                 linespacing=1.3,
+                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9),
                  arrowprops=dict(arrowstyle="->", color=C_ETA, lw=1.0))
+    ax1.set_ylim(0.0, r["R"].max() * 1.06)
     ax1.set_xlabel(L["pol_ax"], fontsize=10.5, **L["font"])
     ax1.set_ylabel(L["res_ax"], fontsize=10.5, **L["font"])
     ax1.set_title(L["fig2a"], fontsize=11.5, pad=8, **L["font"])
-    ax1.legend(fontsize=9.0, prop=L["legend"], loc="lower right", framealpha=0.9)
+    ax1.legend(fontsize=9.0, prop=L["legend"], loc="lower left", framealpha=0.9)
     ax1.grid(alpha=0.25)
 
     # (b) 포물선 근사가 남기는 eta 오차
@@ -228,9 +233,9 @@ def figure3(L):
                      color=cmap(i / (len(curves) - 1)),
                      label=f"$\\Delta$ = {d_deg:g}°")
     ax1.axhspan(1e-9, sigma_R, color=C_BAD, alpha=0.13)
-    ax1.text(0.5, 0.035, L["noise_band"].format(sigma_R),
-             transform=ax1.transAxes, fontsize=8.4, ha="center", va="bottom",
-             color=C_BAD, **L["font"])
+    ax1.text(0.02, 0.03, L["noise_band"].format(sigma_R),
+             transform=ax1.transAxes, fontsize=8.4, ha="left", va="bottom",
+             color=C_BAD, linespacing=1.3, **L["font"])
     ax1.set_xlabel(L["pol_ax"], fontsize=10.5, **L["font"])
     ax1.set_ylabel(L["depth_ax"], fontsize=10.5, **L["font"])
     ax1.set_title(L["fig3a"], fontsize=11.5, pad=8, **L["font"])
@@ -251,6 +256,7 @@ def figure3(L):
     ax2.set_xlabel(L["delta_ax"], fontsize=10.5, **L["font"])
     ax2.set_ylabel(L["ps_err_ax"], fontsize=10.5, **L["font"])
     ax2.set_title(L["fig3b"], fontsize=11.5, pad=8, **L["font"])
+    ax2.set_ylim(None, 8.0)          # 실패 횟수 주석이 위 테두리에 걸리지 않게
     ax2.invert_xaxis()
     ax2.set_xticks(list(DELTAS))
     ax2.set_xticklabels([f"{d:g}" for d in DELTAS])
@@ -348,7 +354,7 @@ def figure5(L):
 
     ax1.plot(PDS_SWEEP, eta, "-", color=C_ETA, lw=1.9, label=L["eta_fit"])
     ax1.axhline(1.0, color=C_IDEAL, lw=1.1, ls="--")
-    ax1.text(0.42, 0.012, L["eta_true"], transform=ax1.transAxes, fontsize=9.0,
+    ax1.text(0.15, 1.0015, L["eta_true"], fontsize=9.0,
              ha="center", va="bottom", color=C_IDEAL, **L["font"])
     axr = ax1.twinx()
     axr.plot(PDS_SWEEP, psi - np.rad2deg(PSI0), "--", color=C_BAD, lw=1.7,
@@ -372,8 +378,8 @@ def figure5(L):
     i = int(np.argmin(np.abs(PDS_SWEEP - 0.25)))
     ax2.plot([PDS_SWEEP[i]], [mse[i]], "o", color=C_FIT, ms=7, zorder=5)
     ax2.annotate(L["a_mse"].format(PDS_SWEEP[i], mse[i]), xy=(PDS_SWEEP[i], mse[i]),
-                 xytext=(-16, -40), textcoords="offset points", fontsize=9.0,
-                 ha="right", **L["font"],
+                 xytext=(-5, -75), textcoords="offset points", fontsize=9.0,
+                 ha="right", va="center", **L["font"],
                  arrowprops=dict(arrowstyle="->", color=C_FIT, lw=1.0))
     ax2.text(0.97, 0.06, L["zero_mse"].format(mse[0]), transform=ax2.transAxes,
              fontsize=9.0, ha="right", va="bottom", color=C_IDEAL, **L["font"])
@@ -415,14 +421,14 @@ LABELS = {
         "fig1note": "$P_s$ 는 점을 타원 위에서 밀고,  $A_s$ 는 타원을 돌리고,\n"
                     "$\\eta$ 는 타원을 줄인다 — 셋은 서로 다른 일을 한다",
         # 그림 2
-        "fig2": "잔차 보정 — 최소점의 위치와 깊이에서 세 값을 읽는다",
+        "fig2": "잔차 보정은 최소점의 위치와 깊이에서 세 값을 읽는다",
         "fig2a": "(a) 잔차 $R(P)$ 와 포물선 맞춤",
         "fig2b": "(b) 포물선 근사가 남기는 $\\eta$ 오차",
         "res_ax": "잔차 $R = 1 - (\\alpha'^2 + \\beta'^2)$",
         "r_meas": "합성한 측정값",
         "r_fit": "2차 맞춤",
         "a_ps": "최소점의 위치 → $P_s$ = {:.2f}°",
-        "a_eta": "최솟값의 깊이 → $\\eta$ = {:.4f}  (참값 0.9687)",
+        "a_eta": "최솟값의 깊이 → $\\eta$ = {:.4f}\n(참값 0.9687)",
         "half_ax": "훑는 범위 (± deg, 오른쪽으로 갈수록 좁다)",
         "eta_err_ax": "$\\eta$ 회수 오차",
         "fig2note": "범위를 좁히면 오차가 함께 줄어든다.\n원인은 잡음이 아니라 포물선 근사다.",
@@ -432,7 +438,7 @@ LABELS = {
         "fig3b": "(b) 잡음이 있을 때 $P_s$ 회수 오차",
         "depth_ax": "최소점으로부터의 깊이",
         "ps_err_ax": "$P_s$ 회수 오차 중앙값 (deg)",
-        "noise_band": "잡음이 $R$ 에 남기는 흔들림 ({:.1e})",
+        "noise_band": "잡음이 $R$ 에 남기는\n흔들림 ({:.1e})",
         "fail": "{}/{} 회 맞춤 실패",
         "target": "목표 0.01°",
         # 그림 4
@@ -484,16 +490,16 @@ LABELS = {
         "r_meas": "synthesized data",
         "r_fit": "quadratic fit",
         "a_ps": "position of minimum $\\rightarrow$ $P_s$ = {:.2f}°",
-        "a_eta": "depth of minimum $\\rightarrow$ $\\eta$ = {:.4f}  (true 0.9687)",
+        "a_eta": "depth of minimum $\\rightarrow$ $\\eta$ = {:.4f}\n(true 0.9687)",
         "half_ax": "scan range (± deg, narrowing to the right)",
         "eta_err_ax": "error in recovered $\\eta$",
-        "fig2note": "Narrowing the scan shrinks the error \u2014 the\ncause is the approximation, not noise.",
+        "fig2note": "Narrowing the scan shrinks the error.\nThe cause is the approximation, not noise.",
         "fig3": "Near $\\Delta$ = 0° or 180°, residual calibration loses its minimum",
         "fig3a": "(a) depth of the minimum, $R(P) - R_{\\min}$",
         "fig3b": "(b) error in recovered $P_s$ with noise present",
         "depth_ax": "depth above the minimum",
         "ps_err_ax": "median error in $P_s$ (deg)",
-        "noise_band": "scatter noise leaves in $R$ ({:.1e})",
+        "noise_band": "scatter noise leaves\nin $R$ ({:.1e})",
         "fail": "{}/{} fits failed",
         "target": "target 0.01°",
         "fig4": "Uncalibrated readings fed straight into the ideal formulas: each error goes its own way",
@@ -504,8 +510,8 @@ LABELS = {
         "e_eta4": "$\\eta$ = 0.999 alone",
         "fig4note": "An error in $\\eta$ propagates far more strongly\nas $\\Delta$ approaches 0° or 180°",
         "zero_note": "$P_s$ does not propagate into $\\Delta$ at all (exactly zero)",
-        "fig5": "An unmodeled effect hides in $\\eta$, and the MSE reports it",
-        "fig5a": "(a) values pushed by a polarization-dependent sensitivity left out of the model",
+        "fig5": "An unmodelled effect hides in $\\eta$, and the MSE reports it",
+        "fig5a": "(a) fitted values when the sensitivity is left out",
         "fig5b": "(b) MSE of the same fits",
         "pds_ax": "magnitude of the polarization-dependent sensitivity present",
         "eta_fit_ax": "fitted $\\eta$",
