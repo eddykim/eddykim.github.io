@@ -143,29 +143,29 @@ LABELS = {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         "fig1": "자기렌즈 안에서 전자가 지나가는 길",
         "f1a": "축상 자기장 $B_z(z)$", "f1ax": "광축 위치 z (mm)", "f1ay": "$B_z$ (T)",
-        "f1b": "근축 광선의 궤적 (회전 좌표계)",
+        "f1b": "근축 광선의 궤적 (라머 좌표계)",
         "f1bx": "광축 위치 z (mm)", "f1by": "광축에서의 거리 r (mm)",
         "f1c": "광축에 수직인 면으로 본 같은 궤적",
         "f1cx": "x (mm)", "f1cy": "y (mm)",
         "f1focus": "초점 f = {:.1f} mm", "f1lens": "렌즈 자기장 영역",
         "f1rot": "상 회전 {:.0f}°", "f1in": "입사", "f1out": "초점",
         "fig2": "조리개각이 만드는 세 가지 흐림과 그 합",
-        "f2x": "조리개 반각 α (mrad)", "f2y": "흐림의 크기 (nm)",
+        "f2x": r"조리개 반각 $\alpha$ (mrad)", "f2y": "흐림의 크기 (nm)",
         "f2diff": "회절 $0.61λ/α$", "f2sph": "구면수차 $C_sα^3$",
         "f2chr": "색수차 $C_cα\\,ΔE/E$", "f2tot": "합 (제곱합)",
-        "f2opt": "최적 α = {:.1f} mrad\n분해능 {:.2f} nm",
+        "f2opt": "최적 $\\alpha$ = {:.1f} mrad\n분해능 {:.2f} nm",
         "f2a": "수차보정 전 ($C_s$ = 0.5 mm)", "f2b": r"수차보정 후 ($C_s$ = 1 $\mu$m)",
         "fig3": "구면수차 계수가 분해능을 어떻게 끌어내리는가",
-        "f3x": "구면수차 계수 $C_s$ (mm)", "f3y": "Scherzer 점분해능 (nm)",
-        "f3_200": "200 kV (λ = 2.51 pm)", "f3_300": "300 kV (λ = 1.97 pm)",
+        "f3x": "구면수차 계수 $C_s$ (mm)", "f3y": "셰르처 점분해능 (nm)",
+        "f3_200": r"200 kV ($\lambda$ = 2.51 pm)", "f3_300": r"300 kV ($\lambda$ = 1.97 pm)",
         "f3unc": "보정 전\n$C_s$ ≈ 0.5 mm", "f3cor": "보정 후\n" r"$C_s$ ≈ 1 $\mu$m",
-        "f3slope": "기울기 1/4\n$C_s$ 를 1000배 줄여야\n분해능이 5.6배 좋아진다",
+        "f3slope": "기울기 1/4\n$C_s$를 500배 줄여도\n분해능은 4.7배 좋아진다",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
         "fig1": "The path an electron takes through a magnetic lens",
         "f1a": "Axial field $B_z(z)$", "f1ax": "Axial position z (mm)", "f1ay": "$B_z$ (T)",
-        "f1b": "Paraxial ray trajectory (rotating frame)",
+        "f1b": "Paraxial ray trajectory (Larmor frame)",
         "f1bx": "Axial position z (mm)", "f1by": "Distance from axis r (mm)",
         "f1c": "The same trajectory seen along the axis",
         "f1cx": "x (mm)", "f1cy": "y (mm)",
@@ -182,7 +182,7 @@ LABELS = {
         "f3y": "Scherzer point resolution (nm)",
         "f3_200": "200 kV (λ = 2.51 pm)", "f3_300": "300 kV (λ = 1.97 pm)",
         "f3unc": "Uncorrected\n$C_s$ ≈ 0.5 mm", "f3cor": "Corrected\n" r"$C_s$ ≈ 1 $\mu$m",
-        "f3slope": "Slope 1/4\na 1000x smaller $C_s$\nbuys only 5.6x resolution",
+        "f3slope": "Slope 1/4\na 500x smaller $C_s$\nbuys only 4.7x resolution",
     },
 }
 
@@ -279,8 +279,11 @@ def _tradeoff_panel(ax, L, lam, cs, cc, de_over_e, title):
 
     i = int(np.argmin(dt))
     ax.plot([amr[i]], [dt[i]], "o", color="#2c3e50", ms=7, zorder=6)
+    # 주석은 곡선이 지나지 않는 왼쪽 아래 빈 자리에 두고 화살표로 잇는다.
     ax.annotate(L["f2opt"].format(amr[i], dt[i]), xy=(amr[i], dt[i]),
-                xytext=(amr[i] * 1.9, dt[i] * 2.6), fontsize=9, color="#2c3e50",
+                xytext=(0.04, 0.07), textcoords="axes fraction",
+                ha="left", va="bottom", fontsize=9, color="#2c3e50",
+                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="none", alpha=0.9),
                 arrowprops=dict(arrowstyle="->", color="#2c3e50"), **L["font"])
 
     ax.set_xscale("log")
@@ -288,7 +291,7 @@ def _tradeoff_panel(ax, L, lam, cs, cc, de_over_e, title):
     ax.set_xlabel(L["f2x"], **L["font"])
     ax.set_ylabel(L["f2y"], **L["font"])
     ax.set_title(title, **L["font"])
-    ax.set_ylim(5e-3, 20)
+    ax.set_ylim(5e-3, 200)   # 위쪽 여백을 두어 범례가 합 곡선을 가리지 않게 한다
     ax.grid(alpha=0.3, which="both")
     ax.legend(prop=L["legend"] or None, fontsize=8.5, loc="upper left")
     return amr[i], dt[i]
