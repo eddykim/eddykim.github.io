@@ -34,7 +34,7 @@ N_ETA = 3000       # eta 통계용 표본 (궤적은 그리지 않는다)
 
 # 그림2: 깊이별 분포를 볼 조건
 FIG2_MAT, FIG2_E0, FIG2_N = mc.SI, 15.0, 1200
-SI_K_EDGE = 1.839            # keV, Si K 각질 이온화 에너지
+SI_K_EDGE = 1.839            # keV, Si K 껍질 이온화 에너지
 SE_ESCAPE_NM = 5.0           # nm, 이차전자 탈출 깊이의 대표값
 
 # 그림3: 후방산란계수를 잴 원소
@@ -53,22 +53,22 @@ LABELS = {
         "fig1": "가속전압과 원자번호가 바꾸는 상호작용 부피",
         "f1title": "{} · {:.0f} kV",
         "f1x": "가로 위치 ({})", "f1y": "깊이 ({})",
-        "f1abs": "흡수", "f1bse": "후방산란", "f1ko": "K-O 침투깊이 {:.3g} {}",
+        "f1abs": "흡수", "f1bse": "후방산란", "f1ko": "K-O 침투 깊이 {:.3g} {}",
         "f1eta": "후방산란계수 η = {:.2f}",
-        "f1note": "네 패널의 축 눈금이 서로 다르다 — 각 패널 안의 숫자로 크기를 비교할 것",
+        "f1note": "네 패널의 축 눈금이 서로 다르다. 크기는 각 패널 안의 숫자로 비교한다.",
         "fig2": "같은 빔이 만드는 신호들이 서로 다른 깊이에서 나온다",
         "f2a": "깊이별 에너지 침착과 신호 발생",
         "f2b": "표면 20 nm 확대 — 이차전자가 빠져나오는 층",
         "f2x": "깊이 ($\\mu$m)", "f2x2": "깊이 (nm)", "f2y": "상대 빈도",
         "f2dep": "에너지 침착 (이차전자 생성에 비례)",
-        "f2xray": "특성 X선 발생 (E > 1.84 keV)",
-        "f2bse": "후방산란 전자가 도달했던 최대 깊이",
+        "f2xray": "특성 X선 발생 ($E > 1.84$ keV)",
+        "f2bse": "후방산란전자가 도달했던 최대 깊이",
         "f2se": "이차전자 탈출 깊이 ~5 nm",
-        "f2ratio": "K-O 침투깊이 {rng:.2f} $\\mu$m 의 {pct:.3f} %",
+        "f2ratio": "K-O 침투 깊이 {rng:.2f} $\\mu$m의 약 {pct:.1f} %",
         "fig3": "후방산란계수는 원자번호를 따라간다",
         "f3x": "원자번호 Z", "f3y": "후방산란계수 η",
         "f3mc": "몬테카를로 ({:.0f} kV, 전자 {:,}개)", "f3reuter": "Reuter 경험식",
-        "f3note": "고Z 에서 몬테카를로가 계통적으로 높다 —\n차폐 러더퍼드 단면적의 한계다",
+        "f3note": "고Z에서 몬테카를로가 계통적으로 높다.\n통계 요동은 아니며, 단면적 근사의 한계로 보인다",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -86,11 +86,11 @@ LABELS = {
         "f2xray": "Characteristic X-ray generation (E > 1.84 keV)",
         "f2bse": "Maximum depth reached by backscattered electrons",
         "f2se": "SE escape depth ~5 nm",
-        "f2ratio": "{pct:.3f} % of the {rng:.2f} $\\mu$m K-O range",
+        "f2ratio": "about {pct:.1f} % of the {rng:.2f} $\\mu$m K-O range",
         "fig3": "The backscatter coefficient tracks atomic number",
         "f3x": "Atomic number Z", "f3y": "Backscatter coefficient η",
         "f3mc": "Monte Carlo ({:.0f} kV, {:,} electrons)", "f3reuter": "Reuter empirical fit",
-        "f3note": "Monte Carlo runs systematically high at high Z —\na limit of the screened Rutherford cross section",
+        "f3note": "Monte Carlo runs systematically high at high Z:\nnot statistical noise, probably the cross-section approximation",
     },
 }
 

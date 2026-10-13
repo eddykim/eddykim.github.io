@@ -46,8 +46,8 @@ def screening(mat, e_kev):
 def cross_section(mat, e_kev):
     """차폐 러더퍼드 탄성산란 단면적 [cm^2/atom].
 
-    Z^2 에 비례하고 E^2 에 반비례한다 — 무거운 원소일수록, 느린 전자일수록
-    더 자주 크게 휜다는 3편의 논지가 이 한 줄에서 나온다.
+    앞 인자 Z^2/E^2 는 큰 각 산란을 따른다. 차폐 상수 a 에도 Z^0.67/E 가
+    들어 있어, a << 1 인 SEM 에너지에서 총단면적은 대략 Z^(4/3)/E 로 변한다.
     마지막 괄호는 상대론 보정이다.
     """
     a = screening(mat, e_kev)
@@ -61,14 +61,14 @@ def mean_free_path(mat, e_kev):
 
 
 def mean_ionization_potential(mat):
-    """평균 이온화 퍼텐셜 J [keV] (Berger-Seltzer)."""
+    """평균 이온화 퍼텐셜 J [keV]. SEM 문헌(Joy 1991)이 쓰는 Berger-Seltzer 꼴이다."""
     return (9.76 * mat.Z + 58.5 * mat.Z**-0.19) * 1e-3
 
 
 def stopping_power(mat, e_kev):
     """Bethe 저지능 dE/ds [keV/cm]. 음수로 돌려준다.
 
-    저에너지에서 발산하지 않도록 Joy-Luo 의 수정항(0.85 J)을 넣었다.
+    저에너지에서 로그의 부호가 뒤집히지 않도록 Joy-Luo 의 수정항(0.85 J)을 넣었다.
     """
     j = mean_ionization_potential(mat)
     return -78500.0 * mat.rho * (mat.Z / (mat.A * e_kev)) * np.log(
