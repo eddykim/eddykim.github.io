@@ -57,8 +57,8 @@ def figure1(L):
     for n, name, c in ((N_FUSED_SILICA, L["fused"], C_BR), (N_SI, L["si"], C_BAD)):
         tb = np.rad2deg(brewster_angle(n))
         ax1.axhline(tb, color=c, lw=1.2, ls="--")
-        ax1.text(0.985, tb + 1.4, L["brew"].format(name, tb, np.sin(D(tb))),
-                 fontsize=8.6, color=c, ha="right", **L["font"])
+        ax1.text(0.015, tb + 1.4, L["brew"].format(name, tb, np.sin(D(tb))),
+                 fontsize=8.6, color=c, ha="left", **L["font"])
     ax1.set_xlabel(L["r_norm"], fontsize=10.5, **L["font"])
     ax1.set_ylabel(L["aoi"], fontsize=10.5, **L["font"])
     ax1.set_title(L["f1a"], fontsize=11.5, pad=8, **L["font"])
@@ -118,7 +118,8 @@ def figure2(L):
               head_length=0.09, color="k", length_includes_head=True)
     ax1.text(-0.55, -1.28, L["f2_pol"], fontsize=9.2, va="center", **L["font"])
     ax1.text(0, 1.14, L["f2_p"], fontsize=9.4, color=C_P, ha="center", **L["font"])
-    ax1.text(0, -1.10, L["f2_s"], fontsize=9.4, color=C_S, ha="center", **L["font"])
+    ax1.text(0, -1.06, L["f2_s"], fontsize=9.4, color=C_S, ha="center", va="top",
+             **L["font"])
     ax1.set_xlim(-1.3, 1.3)
     ax1.set_ylim(-1.45, 1.3)
     ax1.set_aspect("equal")
@@ -179,9 +180,10 @@ def figure3(L):
                       fontsize=11.0, pad=8, **L["font"])
     axes[1].set_xlim(0, 360)
     axes[1].set_xticks(range(0, 361, 90))
-    axes[1].set_ylim(-0.12, 3.35)
-    axes[1].legend(fontsize=8.2, prop=L["legend"], loc="upper center", ncol=3,
-                   framealpha=0.92, columnspacing=0.8, handlelength=1.8)
+    axes[1].set_ylim(-0.12, 4.4)
+    axes[1].set_yticks(np.arange(0.0, 3.01, 0.5))
+    axes[1].legend(fontsize=8.2, prop=L["legend"], loc="upper center", ncol=1,
+                   framealpha=0.92, handlelength=1.8)
     axes[1].grid(alpha=0.25)
 
     rs = np.linspace(0.12, 1.0, 45)
@@ -202,9 +204,10 @@ def figure3(L):
     axes[2].set_xlabel(L["aoi"], fontsize=10.5, **L["font"])
     axes[2].set_ylabel(L["f3_deg"], fontsize=10.5, **L["font"])
     axes[2].set_title(L["f3c"], fontsize=11.0, pad=8, **L["font"])
-    axes[2].legend(fontsize=9.0, loc="center left", framealpha=0.92)
-    axes[2].text(0.5, 0.03, L["f3note"], transform=axes[2].transAxes,
-                 fontsize=8.8, ha="center", va="bottom", **L["font"],
+    axes[2].legend(fontsize=9.0, loc="lower left", bbox_to_anchor=(0.0, 0.55),
+                   framealpha=0.92)
+    axes[2].text(0.5, 0.40, L["f3note"], transform=axes[2].transAxes,
+                 fontsize=8.8, ha="center", va="center", **L["font"],
                  bbox=dict(boxstyle="round,pad=0.3", fc="#fffbe6", ec="#d9c77a",
                            lw=0.8))
     axes[2].grid(alpha=0.25)
@@ -254,8 +257,8 @@ def figure4(L):
     i = int(np.argmin(np.abs(HALF - 5.0)))
     ax2.plot([HALF[i]], [res[i, 2]], "o", color=C_M, ms=7)
     ax2.annotate(L["f4_ann"].format(HALF[i], res[i, 2]),
-                 xy=(HALF[i], res[i, 2]), xytext=(-12, 30),
-                 textcoords="offset points", fontsize=9.0, ha="right", **L["font"],
+                 xy=(HALF[i], res[i, 2]), xytext=(18, -48),
+                 textcoords="offset points", fontsize=9.0, ha="left", **L["font"],
                  arrowprops=dict(arrowstyle="->", color=C_M, lw=1.0))
     ax2.grid(alpha=0.25, which="both")
     fig.suptitle(L["fig4"], fontsize=13.0, y=0.985, **L["font"])
@@ -322,7 +325,7 @@ LABELS = {
         "r_norm": "정규화 반경 $r$", "aoi": "입사각 (deg)",
         "azim": "방위각 $\\phi$ (deg)",
         "fused": "용융 실리카", "si": "실리콘",
-        "brew": "{} 브루스터각 {:.1f}° (NA {:.2f} 필요)",
+        "brew": "{} 브루스터각 {:.1f}° (NA {:.3f} 필요)",
         # 그림 1
         "fig1": "후초점면의 반경이 입사각이다",
         "f1a": "(a) 아베 사인조건 $\\theta = \\sin^{-1}(r\\,\\mathrm{NA})$",
@@ -372,7 +375,7 @@ LABELS = {
         "r_norm": "normalized radius $r$", "aoi": "angle of incidence (deg)",
         "azim": "azimuth $\\phi$ (deg)",
         "fused": "fused silica", "si": "silicon",
-        "brew": "{} Brewster {:.1f}° (needs NA {:.2f})",
+        "brew": "{} Brewster {:.1f}° (needs NA {:.3f})",
         "fig1": "Radius in the back focal plane is angle of incidence",
         "f1a": "(a) Abbe sine condition $\\theta = \\sin^{-1}(r\\,\\mathrm{NA})$",
         "f1b": "(b) iso-angle rings in the back focal plane",
