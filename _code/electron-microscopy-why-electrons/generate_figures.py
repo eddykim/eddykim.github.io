@@ -91,6 +91,10 @@ MILESTONES = [
     ("corrected",  0.05,  "tem"),
     ("ptycho",     0.02,  "tem"),
 ]
+# 1차 문헌으로 수치를 확인하지 못하고 흔히 인용되는 값만 있는 막대.
+# 사실 검증(2026-10-04): 1933년 장치의 50 nm 는 1차 문헌에 없고, 1970년대 0.3 nm 는 확인 불가.
+# 그림에서는 빗금으로 구분한다.
+ESTIMATES = {"ruska", "tem1970"}
 
 LABELS = {
     "ko": {
@@ -113,10 +117,11 @@ LABELS = {
         "corrected": "수차보정 STEM",
         "ptycho": "전자 타이코그래피",
         "f2gap": "약 80배",
+        "f2est": "흔히 인용되는 어림값",
         # 그림3
-        "fig3": "전자총 4종의 밝기·에너지폭·소스 크기",
+        "fig3": "전자총 4종의 밝기·에너지 폭·소스 크기",
         "f3a": "밝기", "f3ay": "밝기 (A/cm²·sr)",
-        "f3b": "에너지폭", "f3by": "에너지폭 ΔE (eV)",
+        "f3b": "에너지 폭", "f3by": "에너지 폭 ΔE (eV)",
         "f3c": "소스 크기", "f3cy": "소스 지름 (m)",
         "w": "텅스텐\n열전자", "lab6": "LaB$_6$\n열전자",
         "schottky": "쇼트키\n전계방출", "cfe": "냉전계방출",
@@ -125,7 +130,7 @@ LABELS = {
         "f4gas": "기체 분자 (공기)", "f4e": "200 keV 전자",
         "f4x": "압력 (Pa)", "f4y": "평균자유행로 (m)",
         "f4col": "경통 길이 ~1 m",
-        "f4atm": "대기압", "f4hv": "고진공\n(열전자총)", "f4uhv": "초고진공\n(전계방출총)",
+        "f4atm": "대기압", "f4hv": "고진공\n(경통)", "f4uhv": "초고진공\n(전계방출총)",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -145,6 +150,7 @@ LABELS = {
         "corrected": "Aberration-\ncorrected STEM",
         "ptycho": "Electron\nptychography",
         "f2gap": "~80x",
+        "f2est": "Commonly quoted estimate",
         "fig3": "Brightness, energy spread and source size of four electron guns",
         "f3a": "Brightness", "f3ay": "Brightness (A/cm²·sr)",
         "f3b": "Energy spread", "f3by": "Energy spread ΔE (eV)",
@@ -155,7 +161,7 @@ LABELS = {
         "f4gas": "Gas molecules (air)", "f4e": "200 keV electrons",
         "f4x": "Pressure (Pa)", "f4y": "Mean free path (m)",
         "f4col": "Column length ~1 m",
-        "f4atm": "Atmosphere", "f4hv": "High vacuum\n(thermionic gun)",
+        "f4atm": "Atmosphere", "f4hv": "High vacuum\n(column)",
         "f4uhv": "Ultra-high vacuum\n(field-emission gun)",
     },
 }
@@ -177,6 +183,10 @@ def fig1_wavelength(L):
     ax.plot(kv, lam_rel, color=BLUE, lw=2.0, label=L["f1rel"])
     ax.plot(kv, lam_nr, color=ACCENT, lw=1.6, ls="--", label=L["f1nr"])
     ax.set_yscale("log")
+    ticks = [2, 5, 10, 20, 50]
+    ax.set_yticks(ticks)
+    ax.set_yticklabels([str(t) for t in ticks])
+    ax.set_yticks([], minor=True)
     ax.set_xlabel(L["f1x"], **L["font"])
     ax.set_ylabel(L["f1y"], **L["font"])
     ax.grid(alpha=0.3, which="both")
@@ -212,7 +222,14 @@ def fig2_resolution_gap(L):
 
     fig, ax = plt.subplots(figsize=(10.5, 5.0))
     x = np.arange(len(keys))
-    ax.bar(x, vals, color=[colors[g] for g in groups], width=0.55, zorder=3)
+    bars = ax.bar(x, vals, color=[colors[g] for g in groups], width=0.55, zorder=3)
+    est_handle = None
+    for k, b in zip(keys, bars):
+        if k in ESTIMATES:
+            b.set_hatch("///")
+            b.set_edgecolor("white")
+            b.set_facecolor("#e6a39b")
+            est_handle = b
     ax.set_yscale("log")
     ax.set_ylim(1e-3, 2e3)
     ax.set_ylabel(L["f2y"], **L["font"])
@@ -224,9 +241,10 @@ def fig2_resolution_gap(L):
         ax.text(xi, v * 1.35, f"{v:g} nm", ha="center", fontsize=9, color="#2c3e50")
 
     # 전자의 파장은 막대가 아니라 기준선으로 둔다. 어떤 막대도 여기까지 내려오지 못한다.
-    ax.axhline(WAVELENGTH_200KV, color=BLUE, ls="--", lw=1.8, zorder=4,
-               label=L["wavelength"])
-    ax.legend(loc="upper right", prop=L["legend"] or None, framealpha=0.95)
+    line = ax.axhline(WAVELENGTH_200KV, color=BLUE, ls="--", lw=1.8, zorder=4,
+                      label=L["wavelength"])
+    ax.legend([line, est_handle], [L["wavelength"], L["f2est"]],
+              loc="upper right", prop=L["legend"] or None, framealpha=0.95)
 
     # 오른쪽에 빈 칸을 만들어, 막대와 겹치지 않는 자리에 간극을 표시한다.
     xa = len(keys) + 0.35
@@ -254,7 +272,7 @@ def fig3_guns(L):
     x = np.arange(len(keys))
     bar_colors = [GRAY, GRAY, BLUE, ACCENT]
     panels = [
-        (brightness, L["f3a"], L["f3ay"], True, "{:.0e}"),
+        (brightness, L["f3a"], L["f3ay"], True, "pow10"),
         (spread, L["f3b"], L["f3by"], False, "{:.1f} eV"),
         (size, L["f3c"], L["f3cy"], True, None),
     ]
@@ -270,6 +288,11 @@ def fig3_guns(L):
         for xi, v in zip(x, vals):
             if fmt is None:
                 txt = f"{v * 1e6:.0f} µm" if v > 1e-6 else f"{v * 1e9:.0f} nm"
+            elif fmt == "pow10":
+                e = int(np.floor(np.log10(v)))
+                m = v / 10.0**e
+                txt = (f"$10^{{{e}}}$" if abs(m - 1) < 1e-9
+                       else f"${m:g}\\times10^{{{e}}}$")
             else:
                 txt = fmt.format(v)
             off = v * 1.5 if logy else v + 0.12
