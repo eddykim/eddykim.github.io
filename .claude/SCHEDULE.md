@@ -88,7 +88,7 @@
 | 2026-12-11 | 금 | ptycho-fourier-ptychography | 계산 이미징과 타이코그래피 8편 | 한·영 | 푸시됨 |
 | 2026-12-13 | 일 | wave-optics-gaussian-beams | 파동광학 배경이론 5편 | 한·영 | 푸시됨 |
 | 2026-12-15 | 화 | wave-optics-high-na-vector-focusing | 파동광학 배경이론 6편(완결) | 한·영 | 푸시됨 |
-| 2026-12-17 | 목 | | | | |
+| 2026-12-17 | 목 | ptycho-autodiff-multislice | 계산 이미징과 타이코그래피 9편 | 한·영 | 푸시됨 |
 | 2026-12-19 | 토 | | | | |
 | 2026-12-21 | 월 | | | | |
 | 2026-12-23 | 수 | | | | |
@@ -110,4 +110,3 @@
 | ptycho-noise-maximum-likelihood | 타이코그래피 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
 | ptycho-position-correction-mixed-states | 타이코그래피 7편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
 | ptycho-fourier-ptychography | 타이코그래피 8편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-autodiff-multislice | 계산 이미징과 타이코그래피 9편 | 2026-10-13 | 한국어 초안 검토, 영문판 |
