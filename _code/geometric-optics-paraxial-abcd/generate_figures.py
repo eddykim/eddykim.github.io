@@ -19,6 +19,10 @@ from abcd import (cardinal_points, grin, iterate, periodic_cell, prop, stability
 from rays import Singlet, hit_sphere, n2_parabolic, refract, sample, trace_ray
 
 KFONT = {"fontfamily": "AppleGothic"}
+# AppleGothic 은 ′ 와 ° 의 폭을 넓게 잡아 "90°   돈다"처럼 벌어진다. 라틴 문자·기호는 DejaVu Sans 로
+# 그리고 한글만 AppleGothic 으로 넘긴다(matplotlib ≥ 3.6 의 글꼴 대체). ′·° 가 들어간 그림 2·3·4·6 에만 쓴다.
+# mathtext($...$) 안에서는 대체가 되지 않아 한글이 깨지므로, 한글과 섞인 라벨은 유니코드 기호로 쓴다.
+KFONT_FB = {"fontfamily": ["DejaVu Sans", "AppleGothic"]}
 EFONT: dict = {}
 plt.rcParams["axes.unicode_minus"] = False
 
@@ -29,15 +33,16 @@ C_RAY, C_PAR, C_KEY, C_GREY = "#1f77b4", "#d62728", "#ff7f0e", "#7f7f7f"
 
 LABELS = {
     "ko": {
-        "dir": BASE_DIR, "font": KFONT,
+        "dir": BASE_DIR, "font": KFONT, "font_fix": KFONT_FB,
         "f2t": "근축 근사의 상대오차",
-        "f2x": r"각도 ($^\circ$)", "f2y": "상대오차 (%)",
+        "f2x": "각도 (°)", "f2y": "상대오차 (%)",
         "f2sin": r"$\sin\theta \approx \theta$", "f2snell": "굴절각 (공기→유리, n = 1.5)",
         "f2mar": "1편 렌즈의\n가장자리 광선 5.7°",
         "p_a": "(a) 50 mm 진행: 가로로 밀린다", "p_b": "(b) 초점거리 50 mm 렌즈: 세로로 밀린다",
         "p_c": "(c) 앞 초점면 → 뒤 초점면: 90° 돈다",
         "p_x": "높이 y (mm)", "p_y": "각 u (mrad)", "p_area": "넓이",
         "p_before": "들어가기 전", "p_after": "나온 뒤",
+        "p_c_note": "윤곽은 그대로, 점이 90° 옮겨 간다",
         "f3a": "(a) 1편 렌즈의 주요점 (가로 축척 압축)",
         "f3b": "(b) 실제 광선이 꺾이는 것처럼 보이는 위치",
         "f3x": "광축 위치 z (mm)", "f3y": "높이 y (mm)",
@@ -46,8 +51,8 @@ LABELS = {
         "f5a": "(a) 한 점에서 나온 광선 (실선: 광선 방정식, 점선: 근축 행렬)",
         "f5b": "(b) 광축으로 돌아오는 거리",
         "f5x": "진행 거리 z", "f5y": "높이 y", "f5by": "첫 교차 거리",
-        "f5bx": r"출발각 ($^\circ$)", "f5exact": "광선 방정식 적분", "f5cos": r"$(\pi/\alpha)\cos\theta_0$",
-        "f5par": r"근축 행렬 $\pi/\alpha$",
+        "f5bx": "출발각 (°)", "f5exact": "광선 방정식 적분", "f5cos": r"$(\pi/\alpha)\cos\theta_0$",
+        "f5par": "근축 행렬 π/α",
         "f6a": "(a) 안정 조건", "f6ax": "렌즈 간격 d / 초점거리 f", "f6ay": "b = (A + D)/2",
         "f6stable": "안정 |b| ≤ 1",
         "f6b": "(b) 단마다 본 광선 높이", "f6bx": "단 번호 m", "f6by": r"높이 $y_m$",
@@ -64,6 +69,7 @@ LABELS = {
         "p_c": "(c) Front to back focal plane: a quarter turn",
         "p_x": "Height y (mm)", "p_y": "Angle u (mrad)", "p_area": "area",
         "p_before": "before", "p_after": "after",
+        "p_c_note": "same outline; each corner moves a quarter turn",
         "f3a": "(a) Cardinal points of the Part 1 lens (axial scale compressed)",
         "f3b": "(b) Where real rays appear to bend",
         "f3x": "Axial position z (mm)", "f3y": "Height y (mm)",
@@ -88,6 +94,11 @@ def legend(ax, L, **kw):
                     "size": kw.pop("size", 8.5)}, **kw)
 
 
+def fixed_font(L):
+    """′·° 간격을 바로잡은 글꼴을 쓰는 사본(한국어판만 다르다)."""
+    return dict(L, font=L.get("font_fix", L["font"]))
+
+
 def save(fig, L, name):
     os.makedirs(L["dir"], exist_ok=True)
     fig.savefig(os.path.join(L["dir"], name), dpi=150, facecolor="white")
@@ -96,6 +107,7 @@ def save(fig, L, name):
 
 # ── 그림2: 근축 근사의 오차 ─────────────────────────────────
 def figure2(L):
+    L = fixed_font(L)
     t = np.deg2rad(np.linspace(0.5, 60, 400))
     err_sin = (t - np.sin(t)) / np.sin(t) * 100
     exact = np.arcsin(np.sin(t) / 1.5)
@@ -123,6 +135,7 @@ def polygon_area(pts):
 
 
 def figure3(L):
+    L = fixed_font(L)
     f = 50.0
     cases = (("p_a", prop(50.0)), ("p_b", thin_lens(1.0 / f)),
              ("p_c", system(prop(f), thin_lens(1.0 / f), prop(f))))
@@ -139,9 +152,18 @@ def figure3(L):
         mk = marks @ m.T
         ax.fill(box[:, 0], box[:, 1] * 1e3, color="#dddddd", label=L["p_before"])
         ax.fill(out[:, 0], out[:, 1] * 1e3, color=C_RAY, alpha=0.35, label=L["p_after"])
+        quarter = key == "p_c"
         for (a, b), (c, d), col in zip(marks, mk, cols):
-            ax.plot(a, b * 1e3, "o", color=col, ms=5, mfc="white")
-            ax.plot(c, d * 1e3, "o", color=col, ms=5)
+            if quarter:
+                # (c) 는 앞뒤 윤곽이 겹치므로, 빈 점을 크게·채운 점을 작게 그리고 화살표로 잇는다
+                ax.annotate("", xy=(c, d * 1e3), xytext=(a, b * 1e3),
+                            arrowprops=dict(arrowstyle="->", color=col, lw=1.0,
+                                            shrinkA=6, shrinkB=5, connectionstyle="arc3,rad=-0.25"))
+            ax.plot(a, b * 1e3, "o", color=col, ms=8 if quarter else 5, mfc="white")
+            ax.plot(c, d * 1e3, "o", color=col, ms=4 if quarter else 5)
+        if quarter:
+            ax.text(0.5, 0.92, L["p_c_note"], transform=ax.transAxes, ha="center",
+                    fontsize=8.5, **L["font"])
         a0, a1 = polygon_area(box) * 1e3, polygon_area(out) * 1e3
         ax.text(0.03, 0.04, f"{L['p_area']} {a0:.1f} → {a1:.1f} mm·mrad", transform=ax.transAxes,
                 fontsize=8.5, **L["font"])
@@ -180,6 +202,7 @@ def lens_outline(lens, h=100.0):
 
 
 def figure4(L):
+    L = fixed_font(L)
     lens = Singlet()
     c = cardinal_points(lens_matrix(lens), lens.n_air, lens.n_air)
     zF, zH = c.z_front_focus, c.z_front_principal
@@ -226,6 +249,7 @@ N0, ALPHA = 1.5, 0.5
 
 
 def figure6(L):
+    L = fixed_font(L)
     medium = n2_parabolic(N0, ALPHA)
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.0, 4.0), gridspec_kw={"width_ratios": [1.6, 1]})
     z_end = 2 * np.pi / ALPHA
@@ -238,7 +262,7 @@ def figure6(L):
         a1.plot(x, y, color=col, lw=1.4, label=f"{deg}°")
         par = np.array([grin(N0, ALPHA, z) @ np.array([0.0, N0 * th]) for z in zz])
         a1.plot(zz, par[:, 0], color=col, lw=1.0, ls="--")
-    a1.axvline(np.pi / ALPHA, color=C_GREY, lw=0.6, ls=":")
+    a1.axvline(np.pi / ALPHA, color=C_GREY, lw=0.6, ls=":")   # 근축 반주기 π/α (캡션에 설명)
     a1.set_xlabel(L["f5x"], **L["font"]); a1.set_ylabel(L["f5y"], **L["font"])
     a1.set_title(L["f5a"], fontsize=10, **L["font"])
     legend(a1, L, loc="upper right", size=8)
