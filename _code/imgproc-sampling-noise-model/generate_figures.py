@@ -1,4 +1,4 @@
-"""이미지처리 1편 그림 6개 생성 (한국어판·영문판).
+"""계측 영상처리 1편 그림 6개 생성 (한국어판·영문판).
 
 실행: python generate_figures.py
 출력: ../../assets/img/posts/imgproc-sampling-noise-model/      (한국어)
@@ -36,15 +36,13 @@ LABELS = {
         "noise_read": "읽기 노이즈\n(신호와 무관)",
         "noise_quant": "양자화\n노이즈",
         "gain_span": "시스템 이득 $K$ (DN/e$^-$) = 전자→DN 전체",
-        "fig1": "그림1. 광자에서 픽셀 값까지의 사슬과 각 단계에서 끼어드는 노이즈",
         # 그림2
         "mean_dn": "평균 신호 $\\mu_y - \\mu_{y.dark}$ (DN)",
         "var_dn": "분산 $\\sigma_y^2$ (DN$^2$)",
         "ptc_data": "측정 (두 장 차이로 구한 분산)",
-        "ptc_fit": "선형 구간 직선 맞춤",
+        "ptc_fit": "선형 구간 직선 피팅",
         "ptc_sat": "포화 시작",
-        "ptc_zoom": "저신호 구간 확대 — 절편이 분해되는 영역",
-        "fig2": "그림2. 광전달곡선 — 기울기가 이득 $K$, 절편이 어두운 영역 노이즈를 알려준다",
+        "ptc_zoom": "저신호 구간 확대",
         # 그림3
         "bit_depth": "비트 심도 (bit)",
         "noise_e": "노이즈 (e$^-$ rms)",
@@ -52,28 +50,24 @@ LABELS = {
         "read_noise": "읽기 노이즈 (3 e$^-$)",
         "total_noise": "합성 노이즈",
         "bit_cross": "여기서부터\n양자화가 묻힌다",
-        "fig3": "그림3. 비트 심도를 늘려도 읽기 노이즈 아래로는 내려가지 않는다",
         # 그림4
         "n_frames": "평균한 프레임 수 $N$",
         "resid_dn": "남은 공간적 산포 (DN)",
         "with_fpn": "고정패턴 있음",
-        "without_fpn": "고정패턴 보정 후",
+        "without_fpn": "고정패턴 없음 (완전 보정)",
         "sqrt_law": r"$1/\sqrt{N}$ 기준선",
         "fpn_floor": "고정패턴 바닥",
-        "fig4": "그림4. 프레임 평균은 고정패턴 노이즈 앞에서 멈춘다",
         # 그림5
         "zp": "존 플레이트", "cam": "실제 영상",
         "orig": "원본 (고해상)",
-        "naive": "4배 나이브 샘플링",
+        "naive": "필터 없이 4배 성기게 샘플링",
         "prefilt": "저역통과 후 4배 샘플링",
-        "fig5": "그림6. 나이키스트를 넘는 성분은 사라지지 않고 낮은 주파수로 접혀 들어온다",
         # 그림6
         "f_true": "실제 공간주파수 (나이키스트 단위)",
         "f_apparent": "보이는 공간주파수 (나이키스트 단위)",
         "ideal": "접힘이 없다면",
         "folded": "실제로 보이는 주파수",
         "nyq": "나이키스트",
-        "fig6": "그림5. 겉보기 주파수의 접힘 — 계측에서 위험한 이유",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": {}, "legend": {},
@@ -84,39 +78,33 @@ LABELS = {
         "noise_read": "Read noise\n(signal independent)",
         "noise_quant": "Quantization\nnoise",
         "gain_span": "System gain $K$ (DN/e$^-$): electrons → DN",
-        "fig1": "Fig 1. From photons to pixel values, and where each noise source enters",
         "mean_dn": "Mean signal $\\mu_y - \\mu_{y.dark}$ (DN)",
         "var_dn": "Variance $\\sigma_y^2$ (DN$^2$)",
         "ptc_data": "Measured (variance from frame difference)",
         "ptc_fit": "Linear-range fit",
         "ptc_sat": "Saturation onset",
-        "ptc_zoom": "Low-signal zoom — where the intercept resolves",
-        "fig2": "Fig 2. Photon transfer curve — slope gives gain $K$, intercept gives dark noise",
+        "ptc_zoom": "Low-signal zoom",
         "bit_depth": "Bit depth (bit)",
         "noise_e": "Noise (e$^-$ rms)",
         "quant_noise": "Quantization noise $\\Delta/\\sqrt{12}$",
         "read_noise": "Read noise (3 e$^-$)",
         "total_noise": "Combined noise",
         "bit_cross": "quantization is\nburied past here",
-        "fig3": "Fig 3. More bits never take you below the read noise",
         "n_frames": "Number of averaged frames $N$",
         "resid_dn": "Residual spatial spread (DN)",
         "with_fpn": "With fixed pattern",
-        "without_fpn": "After fixed-pattern correction",
+        "without_fpn": "No fixed pattern (ideal correction)",
         "sqrt_law": r"$1/\sqrt{N}$ reference",
         "fpn_floor": "Fixed-pattern floor",
-        "fig4": "Fig 4. Frame averaging stops at the fixed-pattern floor",
         "zp": "Zone plate", "cam": "Natural image",
         "orig": "Original (high resolution)",
-        "naive": "Naive 4x sampling",
+        "naive": "4x subsampling, no filter",
         "prefilt": "Low-pass filtered, then 4x",
-        "fig5": "Fig 6. Content above Nyquist does not vanish — it folds down in frequency",
         "f_true": "True spatial frequency (Nyquist units)",
         "f_apparent": "Apparent spatial frequency (Nyquist units)",
         "ideal": "If there were no folding",
         "folded": "What is actually seen",
         "nyq": "Nyquist",
-        "fig6": "Fig 5. Frequency folding — why aliasing is dangerous in metrology",
     },
 }
 
@@ -202,9 +190,6 @@ def draw(labels):
     os.makedirs(out, exist_ok=True)
     F, L = labels["font"], labels["legend"]
 
-    def caption(ax_or_plt, text):
-        ax_or_plt.suptitle("") if False else None
-
     # ── 그림1: 사슬 개념도
     fig, ax = plt.subplots(figsize=(8.5, 3.6))
     ax.set_xlim(0, 10.6); ax.set_ylim(0, 4.2); ax.axis("off")
@@ -237,8 +222,7 @@ def draw(labels):
     ax.plot([gx0, gx0, gx1, gx1], [gy - 0.12, gy, gy, gy - 0.12], color="#2b5c9b", lw=1.0)
     ax.text((gx0 + gx1) / 2, gy + 0.06, labels["gain_span"], ha="center", va="bottom",
             fontsize=8.5, color="#2b5c9b", **F)
-    fig.text(0.5, 0.015, labels["fig1"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig1-photon-to-dn-chain.png"), dpi=150)
     plt.close(fig)
 
@@ -256,7 +240,7 @@ def draw(labels):
     ax.legend(prop=L, fontsize=9, loc="upper left")
     ax.grid(alpha=0.3)
     # 절편은 기울기 항보다 세 자릿수 작다. 확대해야 비로소 보인다.
-    axi = ax.inset_axes([0.55, 0.13, 0.42, 0.34])
+    axi = ax.inset_axes([0.49, 0.13, 0.39, 0.34])  # 포화 점선(오른쪽 끝)과 겹치지 않게
     mz = ptc_signal <= 260
     axi.plot(ptc_signal[mz], ptc_var[mz], "o", ms=3, color="#2b5c9b")
     xz = np.linspace(0, 260, 30)
@@ -265,8 +249,7 @@ def draw(labels):
     axi.set_title(labels["ptc_zoom"], fontsize=8, **F)
     axi.tick_params(labelsize=7)
     axi.grid(alpha=0.3)
-    fig.text(0.5, 0.015, labels["fig2"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig2-photon-transfer-curve.png"), dpi=150)
     plt.close(fig)
 
@@ -285,8 +268,7 @@ def draw(labels):
     ax.set_ylabel(labels["noise_e"], **F)
     ax.legend(prop=L, fontsize=9)
     ax.grid(alpha=0.3, which="both")
-    fig.text(0.5, 0.015, labels["fig3"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig3-bit-depth-vs-noise.png"), dpi=150)
     plt.close(fig)
 
@@ -303,8 +285,7 @@ def draw(labels):
     ax.set_ylabel(labels["resid_dn"], **F)
     ax.legend(prop=L, fontsize=9)
     ax.grid(alpha=0.3, which="both")
-    fig.text(0.5, 0.015, labels["fig4"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig4-frame-averaging-fpn-floor.png"), dpi=150)
     plt.close(fig)
 
@@ -324,8 +305,7 @@ def draw(labels):
         ax.set_xticks([]); ax.set_yticks([])
         if rowlab:
             ax.set_ylabel(rowlab, fontsize=10, **F)
-    fig.text(0.5, 0.015, labels["fig5"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.045, 1, 1), h_pad=2.2)
+    fig.tight_layout(h_pad=2.2)
     fig.savefig(os.path.join(out, "fig6-aliasing.png"), dpi=150)
     plt.close(fig)
 
@@ -340,8 +320,7 @@ def draw(labels):
     ax.set_ylim(0, 4.1)
     ax.legend(prop=L, fontsize=9, loc="upper right")
     ax.grid(alpha=0.3)
-    fig.text(0.5, 0.015, labels["fig6"], ha="center", fontsize=9, **F)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
+    fig.tight_layout()
     fig.savefig(os.path.join(out, "fig5-frequency-folding.png"), dpi=150)
     plt.close(fig)
 
@@ -381,4 +360,4 @@ print(f"  고정패턴 바닥 = {fpn_floor:.3f} DN "
 print()
 print("=== 그림5: 에일리어싱 ===")
 print(f"  존 플레이트 {N_HI}x{N_HI} -> {zp_naive.shape[0]}x{zp_naive.shape[1]} ({FACTOR}배)")
-print(f"  저역통과 가우시안 sigma = {0.5*FACTOR:.1f} 픽셀")
+print(f"  저역통과 가우시안 sigma = {0.5*FACTOR:.1f} 화소")
