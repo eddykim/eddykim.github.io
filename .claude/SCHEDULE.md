@@ -99,6 +99,9 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| ellipsometry-electromagnetic-fresnel | 엘립소메트리 이론 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometry-polarization-mueller-matrix | 엘립소메트리 이론 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ellipsometry-thin-film-multilayer-reflectance | 엘립소메트리 이론 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometer-oblique-rotating-element | 타원계측기 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometer-components | 타원계측기 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometer-dual-rotating-compensator-mme | 타원계측기 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometer-calibration | 타원계측기 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometer-channeled-spectroscopic | 타원계측기 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| ellipsometer-back-focal-plane-micro | 타원계측기 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
