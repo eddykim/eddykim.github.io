@@ -102,9 +102,8 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| imgproc-sampling-noise-model | 계측 영상처리 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| imgproc-convolution-kernels | 계측 영상처리 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| imgproc-frequency-domain-filtering | 계측 영상처리 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| imgproc-edge-subpixel | 계측 영상처리 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| imgproc-geometric-fitting | 계측 영상처리 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| imgproc-phase-hilbert-unwrapping | 계측 영상처리 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| xps-photoemission-binding-energy | XPS 기초 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| xps-surface-sensitivity-imfp | XPS 기초 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| xps-spectrum-structure-satellites | XPS 기초 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| xps-quantification-peak-fitting | XPS 기초 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
+| xps-thickness-arxps-pitfalls | XPS 기초 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
