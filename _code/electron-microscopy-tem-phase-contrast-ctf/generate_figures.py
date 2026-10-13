@@ -62,23 +62,23 @@ def chi(k, df, cs=CS, lam=LAM):
 
 
 def scherzer_defocus(cs=CS, lam=LAM):
-    """확장 Scherzer 디포커스 -1.2 sqrt(Cs lambda) [nm]."""
+    """확장 셰르처 디포커스 -1.2 sqrt(Cs lambda) [nm]."""
     return -1.2 * np.sqrt(cs * lam)
 
 
 def scherzer_resolution(cs=CS, lam=LAM):
-    """Scherzer 점분해능 0.66 (Cs lambda^3)^(1/4) [nm]. 2편과 같은 식이다."""
+    """셰르처 점분해능 0.66 (Cs lambda^3)^(1/4) [nm]. 2편과 같은 식이다."""
     return 0.66 * (cs * lam**3) ** 0.25
 
 
 def envelope_temporal(k, spread=FOCUS_SPREAD, lam=LAM):
-    """시간 코히런스 감쇠 포락선. 초점이 퍼진 만큼 고주파가 죽는다."""
+    """시간 결맞음 감쇠 포락선. 초점이 퍼진 만큼 고주파가 죽는다."""
     k = np.asarray(k, dtype=float)
     return np.exp(-0.5 * (np.pi * lam * spread) ** 2 * k**4)
 
 
 def envelope_spatial(k, df, alpha=CONVERGENCE, cs=CS, lam=LAM):
-    """공간 코히런스 감쇠 포락선. 빔이 완전한 평면파가 아니어서 생긴다."""
+    """공간 결맞음 감쇠 포락선. 빔이 완전한 평면파가 아니어서 생긴다."""
     k = np.asarray(k, dtype=float)
     return np.exp(-((np.pi * alpha) ** 2) * (cs * lam**2 * k**3 + df * k) ** 2)
 
@@ -92,7 +92,7 @@ def ctf(k, df, damped=True):
 
 
 def first_zero(df, kmax=20.0):
-    """Scherzer 통과대역이 끝나는 첫 영점 [nm^-1]. 원점 근처의 영점은 건너뛴다."""
+    """셰르처 통과대역이 끝나는 첫 영점 [nm^-1]. 원점 근처의 영점은 건너뛴다."""
     k = np.linspace(0.05, kmax, 200000)
     v = np.sin(chi(k, df))
     sign_change = np.where(np.diff(np.sign(v)))[0]
@@ -100,7 +100,7 @@ def first_zero(df, kmax=20.0):
 
 
 def information_limit(threshold=np.exp(-2.0), kmax=20.0):
-    """포락선이 1/e^2 로 떨어지는 공간주파수 [nm^-1]."""
+    """시간 결맞음 포락선이 1/e^2 로 떨어지는 공간주파수 [nm^-1]."""
     k = np.linspace(0.05, kmax, 200000)
     e = envelope_temporal(k)
     below = np.where(e < threshold)[0]
@@ -146,17 +146,17 @@ LABELS = {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         "fig1": "디포커스가 통과시킬 공간주파수를 고른다",
         "f1x": "공간주파수 k (nm$^{-1}$)", "f1y": "$\\sin χ(k)$",
-        "f1sch": "Scherzer 디포커스 ({:.1f} nm)", "f1u": "{:.0f} nm (언더포커스)",
+        "f1sch": "셰르처 디포커스 ({:.1f} nm)", "f1u": "{:.0f} nm (언더포커스)",
         "f1o": "{:.0f} nm (오버포커스)",
-        "f1band": "Scherzer 통과대역",
+        "f1band": "셰르처 통과대역",
         "f1zero": "첫 영점 {:.2f} nm$^{{-1}}$\n= 점분해능 {:.3f} nm",
         "f1note": "$\\sin χ$ 가 음수인 구간과 양수인 구간에서\n같은 구조가 반대 명암으로 나온다",
         "fig2": "감쇠 포락선이 정보한계를 정한다",
         "f2x": "공간주파수 k (nm$^{-1}$)", "f2y": "전달 함수",
-        "f2ctf": "$\\sin χ$ (감쇠 없음)", "f2et": "시간 코히런스 포락선",
-        "f2es": "공간 코히런스 포락선", "f2prod": "실제 전달 함수",
+        "f2ctf": "$\\sin χ$ (감쇠 없음)", "f2et": "시간 결맞음 포락선",
+        "f2es": "공간 결맞음 포락선", "f2prod": "실제 전달 함수",
         "f2point": "점분해능\n{:.3f} nm", "f2info": "정보한계\n{:.3f} nm",
-        "f2gap": "이 사이의 정보는 전달되지만\n부호가 뒤집혀 그대로 읽을 수 없다",
+        "f2gap": "이 사이의 정보는 전달되지만\n부호가 번갈아 바뀌어 그대로 읽을 수 없다",
         "fig3": "같은 시편, 디포커스만 바꾼 상",
         "f3obj": "실제 원자 위치\n(투영 퍼텐셜)",
         "f3panel": "Δf = {:.1f} nm\n$\\sin χ$({:.0f} nm$^{{-1}}$) = {:+.2f}",
@@ -177,7 +177,7 @@ LABELS = {
         "f2ctf": "$\\sin χ$ (undamped)", "f2et": "Temporal coherence envelope",
         "f2es": "Spatial coherence envelope", "f2prod": "Effective transfer function",
         "f2point": "Point resolution\n{:.3f} nm", "f2info": "Information limit\n{:.3f} nm",
-        "f2gap": "Information here is transmitted but\nsign-reversed, so it cannot be read directly",
+        "f2gap": "Information here is transmitted, but its sign\nalternates, so it cannot be read directly",
         "fig3": "Same specimen, defocus alone changed",
         "f3obj": "True atom positions\n(projected potential)",
         "f3panel": "Δf = {:.1f} nm\n$\\sin χ$({:.0f} nm$^{{-1}}$) = {:+.2f}",
@@ -235,7 +235,8 @@ def fig2_envelopes(L):
 
     kz, ki = first_zero(df_s), information_limit()
     for kv, key, col in [(kz, "f2point", DARK), (ki, "f2info", ORANGE)]:
-        ax.axvline(kv, color=col, ls="-.", lw=1.3)
+        # 세로선은 위쪽 주석 아래에서 멈춰 글자를 가로지르지 않게 한다.
+        ax.axvline(kv, ymax=0.84, color=col, ls="-.", lw=1.3)
         # sin(chi) 진동 위에 얹히므로 흰 배경을 깔아 읽히게 한다.
         ax.text(kv + 0.12, 0.88, L[key].format(1.0 / kv), fontsize=9, color=col,
                 **L["font"],
@@ -256,6 +257,11 @@ def fig2_envelopes(L):
     return fig
 
 
+def field_half(field=4.0):
+    """그림3 시야(4 nm)의 절반 [nm]."""
+    return field / 2
+
+
 def fig3_lattice_images(L):
     k_lat = 1.0 / LATTICE
     cases = [(scherzer_defocus(), "f3dark"), (-50.1, "f3none"), (-62.5, "f3bright")]
@@ -272,8 +278,16 @@ def fig3_lattice_images(L):
     lo = min(im.min() for im in imgs)
     hi = max(im.max() for im in imgs)
 
+    # 정사각 격자에서는 단위격자 중심도 같은 격자를 이루므로, 표식이 없으면
+    # 어두운 점과 밝은 점 중 어느 쪽이 원자 자리인지 그림만으로 알 수 없다.
+    sites = np.arange(-field_half(), field_half() - 1e-9, LATTICE)  # 격자점 = 원자 자리
+    sx, sy = np.meshgrid(sites, sites)
+
     for ax, (df, key), img in zip(axes[1:], cases, imgs):
         ax.imshow(img, cmap="gray", extent=ext, origin="lower", vmin=lo, vmax=hi)
+        ax.scatter(sx.ravel(), sy.ravel(), s=22, facecolors="none",
+                   edgecolors=ACCENT, linewidths=0.7, alpha=0.85)
+        ax.set_xlim(ext[0], ext[1]); ax.set_ylim(ext[2], ext[3])
         ax.set_title(L["f3panel"].format(df, k_lat, np.sin(chi(k_lat, df))),
                      fontsize=9.5, **L["font"])
         ax.set_xlabel(L[key], fontsize=9, **L["font"])
@@ -302,9 +316,9 @@ def main():
     kz, ki = first_zero(df_s), information_limit()
     print()
     print(f"lambda = {LAM*1000:.3f} pm, Cs = {CS/1e6:.1f} mm")
-    print(f"Scherzer 디포커스 = {df_s:.2f} nm")
+    print(f"셰르처 디포커스 = {df_s:.2f} nm")
     print(f"첫 영점 k = {kz:.3f} nm^-1 -> 점분해능 {1/kz:.4f} nm")
-    print(f"Scherzer 점분해능 공식값       = {scherzer_resolution():.4f} nm")
+    print(f"셰르처 점분해능 공식값         = {scherzer_resolution():.4f} nm")
     print(f"정보한계 k = {ki:.3f} nm^-1 -> {1/ki:.4f} nm")
     print(f"\n격자 {LATTICE} nm (k = {1/LATTICE:.0f} nm^-1) 에서 sin(chi):")
     for df in (df_s, -50.1, -62.5):
