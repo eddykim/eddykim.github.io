@@ -18,50 +18,37 @@ LFONT = {"family": "AppleGothic"}
 BASE = os.path.join(os.path.dirname(__file__), "..", "..",
                     "assets", "img", "posts", "imgproc-geometric-fitting")
 
-NK = {"kasa": "Kasa (대수적)", "pratt": "Pratt", "taubin": "Taubin", "geometric": "기하학적 (LM)"}
-NE = {"kasa": "Kasa (algebraic)", "pratt": "Pratt", "taubin": "Taubin", "geometric": "Geometric (LM)"}
+NK = {"kasa": "Kåsa (대수적)", "pratt": "Pratt", "taubin": "Taubin", "geometric": "기하학적 (LM)"}
+NE = {"kasa": "Kåsa (algebraic)", "pratt": "Pratt", "taubin": "Taubin", "geometric": "Geometric (LM)"}
 COL = {"kasa": "#c0392b", "pratt": "#e67e22", "taubin": "#1e8449", "geometric": "#2b5c9b"}
 MK = {"kasa": "o", "pratt": "v", "taubin": "s", "geometric": "^"}
 
 LABELS = {
     "ko": {"dir": BASE, "font": KFONT, "legend": LFONT, "names": NK,
-        "radius": "반경 $R$", "cost": "정규화한 목적함수", "alg": "대수적 거리", "geo": "기하학적 거리",
-        "truth": "참 반경", "pts": "엣지 점", "fitted": "맞춘 원",
-        "fig1": "그림1. 대수적 목적함수의 최솟값은 참 반경보다 작은 쪽에 있다",
-        "span": "원호 각도 (도)", "bias": "반경 편향", "scatter": "반경 산포",
-        "fig2": "그림2. 짧은 원호에서 Kasa 법은 반경을 체계적으로 작게 잡는다",
-        "rmse": "반경 총 오차 RMSE", "unusable": "어느 방법도\n쓸 수 없는 구간",
-        "fig3": "그림3. 20도 아래에서는 편향이 작은 방법이 오히려 더 크게 틀린다",
+        "radius": "반지름 $R$", "cost": "목적함수 (최솟값 = 1)", "alg": "대수적 거리", "geo": "기하학적 거리",
+        "truth": "참 반지름", "pts": "엣지 점",
+        "span": "원호 각도 (도)", "bias": "반지름 편향", "scatter": "반지름 산포",
+        "rmse": "반지름 총 오차 RMSE", "unusable": "노이즈가 반지름의 1%일 때\n어느 방법도\n쓸 수 없는 구간",
         "noise_ax": "점의 노이즈", "ellipse_rate": "타원이 나온 비율 (%)",
         "constrained": "Fitzgibbon (제약 있음)", "unconstrained": "제약 없음",
         "example": "제약 없는 피팅이 쌍곡선을 낸 예",
-        "fig4": "그림4. 제약이 없으면 이차곡선 피팅은 타원을 보장하지 않는다",
-        "outlier": "이상치 비율 (%)", "rerr": "반경 오차",
+        "outlier": "이상치 비율 (%)", "rerr": "반지름 오차",
         "ls": "최소자승 (전체 점)", "rn": "RANSAC + 기하학적",
         "inlier": "정상치", "outl": "이상치", "scene": "이상치가 섞인 점 집합",
-        "fig5": "그림5. 이상치가 섞이면 최소자승은 끌려가고 RANSAC 은 버틴다",
         "coin_all": "전체 윤곽 226점", "coin_arc": "45도 호 32점만 남겼을 때",
-        "fig6": "그림6. 실제 영상에서도 같은 편향이 나타난다",
     },
     "en": {"dir": os.path.join(BASE, "en"), "font": {}, "legend": {}, "names": NE,
-        "radius": "Radius $R$", "cost": "Normalized objective", "alg": "Algebraic distance",
+        "radius": "Radius $R$", "cost": "Objective (minimum = 1)", "alg": "Algebraic distance",
         "geo": "Geometric distance", "truth": "True radius", "pts": "Edge points",
-        "fitted": "Fitted circle",
-        "fig1": "Fig 1. The algebraic objective has its minimum below the true radius",
         "span": "Arc span (degrees)", "bias": "Radius bias", "scatter": "Radius scatter",
-        "fig2": "Fig 2. On short arcs the Kasa method systematically underestimates the radius",
-        "rmse": "Total radius error RMSE", "unusable": "no method\nis usable here",
-        "fig3": "Fig 3. Below 20 degrees the unbiased methods are the ones that fail",
+        "rmse": "Total radius error RMSE", "unusable": "with noise at 1%\nof the radius,\nno method is usable",
         "noise_ax": "Point noise", "ellipse_rate": "Fraction returning an ellipse (%)",
         "constrained": "Fitzgibbon (constrained)", "unconstrained": "Unconstrained",
         "example": "An unconstrained fit returning a hyperbola",
-        "fig4": "Fig 4. Without the constraint a conic fit does not guarantee an ellipse",
         "outlier": "Outlier fraction (%)", "rerr": "Radius error",
         "ls": "Least squares (all points)", "rn": "RANSAC + geometric",
         "inlier": "Inliers", "outl": "Outliers", "scene": "Point set with outliers",
-        "fig6": "Fig 6. The same bias appears on a real image",
         "coin_all": "Full contour, 226 points", "coin_arc": "Only a 45-degree arc, 32 points",
-        "fig5": "Fig 5. Outliers drag the least-squares fit while RANSAC holds",
     },
 }
 
@@ -69,14 +56,14 @@ LABELS = {
 R_TRUE, CX, CY = 40.0, 50.0, 30.0
 N_PTS, NOISE, TRIALS = 120, 0.4, 400
 
-# 그림1: 두 목적함수를 반경의 함수로. 중심은 각 R 마다 다시 최적화한다.
+# 그림1: 두 목적함수를 반지름의 함수로. 중심은 각 R 마다 다시 최적화한다.
 rng1 = np.random.default_rng(11)
 x1, y1 = arc_points(60, CX, CY, R_TRUE, 60.0, noise=NOISE * 2, rng=rng1)
 R_scan = np.linspace(20.0, 70.0, 260)
 
 
 def _cost(R, mode):
-    """반경을 R 로 고정하고 중심만 최적화했을 때의 목적함수 값."""
+    """반지름을 R 로 고정하고 중심만 최적화했을 때의 목적함수 값."""
     def obj(c):
         d = np.hypot(x1 - c[0], y1 - c[1])
         return np.sum((d ** 2 - R ** 2) ** 2) if mode == "alg" else np.sum((d - R) ** 2)
@@ -185,8 +172,8 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     F, LG, NM = L["font"], L["legend"], L["names"]
 
-    def cap(fig, key, rect=(0, 0.06, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **F)
+    def cap(fig, rect=(0, 0, 1, 1)):
+        # 그림 번호와 캡션은 본문이 단다. 이미지에는 넣지 않는다.
         fig.tight_layout(rect=rect)
 
     # 그림1
@@ -209,7 +196,7 @@ def draw(L):
     ax[1].text(R_TRUE + 0.8, cost_alg.max() * 0.8, L["truth"], fontsize=8.5, **F)
     ax[1].set_xlabel(L["radius"], **F); ax[1].set_ylabel(L["cost"], **F)
     ax[1].set_yscale("log"); ax[1].legend(prop=LG, fontsize=9); ax[1].grid(alpha=0.3)
-    cap(fig, "fig1", rect=(0, 0.07, 1, 1))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig1-algebraic-vs-geometric.png"), dpi=150)
     plt.close(fig)
 
@@ -221,10 +208,11 @@ def draw(L):
                      color=COL[k], label=NM[k])
     ax[0].axhline(0, color="k", lw=0.6)
     ax[0].set_xlabel(L["span"], **F); ax[0].set_ylabel(L["bias"], **F)
-    ax[0].set_xscale("log"); ax[0].legend(prop=LG, fontsize=8.5); ax[0].grid(alpha=0.3, which="both")
+    ax[0].set_xscale("log"); ax[0].set_yscale("symlog", linthresh=1.0)  # 음수 편향과 큰 양수 편향을 함께 보인다
+    ax[0].legend(prop=LG, fontsize=8.5); ax[0].grid(alpha=0.3, which="both")
     ax[1].set_xlabel(L["span"], **F); ax[1].set_ylabel(L["scatter"], **F)
     ax[1].legend(prop=LG, fontsize=8.5); ax[1].grid(alpha=0.3, which="both")
-    cap(fig, "fig2", rect=(0, 0.07, 1, 1))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig2-arc-span-bias.png"), dpi=150)
     plt.close(fig)
 
@@ -233,11 +221,11 @@ def draw(L):
     for k in FITTERS:
         ax.loglog(SPANS, rmse[k], MK[k] + "-", ms=4, color=COL[k], label=NM[k])
     ax.axvspan(SPANS.min(), 20, color="#c0392b", alpha=0.08)
-    ax.text(12, rmse["geometric"].max() * 0.05, L["unusable"], fontsize=8.5,
-            color="#c0392b", ha="center", **F)
+    ax.text(14, 0.12, L["unusable"], fontsize=8,
+            color="#c0392b", ha="center", va="bottom", **F)  # 곡선이 지나지 않는 띠 아래쪽
     ax.set_xlabel(L["span"], **F); ax.set_ylabel(L["rmse"], **F)
     ax.legend(prop=LG, fontsize=9); ax.grid(alpha=0.3, which="both")
-    cap(fig, "fig3")
+    cap(fig)
     fig.savefig(os.path.join(out, "fig3-total-error.png"), dpi=150)
     plt.close(fig)
 
@@ -263,45 +251,48 @@ def draw(L):
         ax[1].plot([], [], "-", color="#c0392b", label=L["unconstrained"])
         ax[1].set_title(L["example"], fontsize=9.5, **F)
         ax[1].set_aspect("equal"); ax[1].legend(prop=LG, fontsize=8); ax[1].grid(alpha=0.3)
-    cap(fig, "fig4", rect=(0, 0.07, 1, 0.95))
+    cap(fig)
     fig.savefig(os.path.join(out, "fig4-ellipse-constraint.png"), dpi=150)
     plt.close(fig)
 
     # 그림5
-    fig, ax = plt.subplots(1, 2, figsize=(10.2, 4.0))
+    fig, ax = plt.subplots(1, 2, figsize=(10.2, 4.6))
     ax[0].plot(sx[s_inl], sy[s_inl], ".", ms=5, color="#2b5c9b", label=L["inlier"])
     ax[0].plot(sx[~s_inl], sy[~s_inl], "x", ms=5, color="#c0392b", label=L["outl"])
     a, b = circ(*s_ls); ax[0].plot(a, b, "-", lw=1.5, color="#c0392b", label=L["ls"])
     a, b = circ(s_cx, s_cy, s_R); ax[0].plot(a, b, "-", lw=1.5, color="#1e8449", label=L["rn"])
     ax[0].set_aspect("equal"); ax[0].set_title(L["scene"], fontsize=9.5, **F)
-    ax[0].legend(prop=LG, fontsize=8); ax[0].grid(alpha=0.3)
+    ax[0].legend(prop=LG, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.06),
+                 ncol=2, frameon=False)  # 원과 점을 가리지 않게 축 밖에 둔다
+    ax[0].grid(alpha=0.3)
     ax[1].plot(FRACS * 100, err_ls, "o-", ms=5, color="#c0392b", label=L["ls"])
     ax[1].plot(FRACS * 100, err_rn, "s-", ms=5, color="#1e8449", label=L["rn"])
     ax[1].axhline(0, color="k", lw=0.6)
     ax[1].set_xlabel(L["outlier"], **F); ax[1].set_ylabel(L["rerr"], **F)
     ax[1].legend(prop=LG, fontsize=9); ax[1].grid(alpha=0.3)
-    cap(fig, "fig5", rect=(0, 0.07, 1, 1))
+    cap(fig, rect=(0, 0.11, 1, 0.96))
     fig.savefig(os.path.join(out, "fig5-ransac.png"), dpi=150)
     plt.close(fig)
 
     # 그림6
-    fig, ax = plt.subplots(1, 2, figsize=(9.4, 4.3))
+    fig, ax = plt.subplots(1, 2, figsize=(9.4, 4.0))
     for a in ax:
         a.imshow(img, cmap="gray")
         a.set_xlim(306, 384); a.set_ylim(224, 150)
         a.set_xticks([]); a.set_yticks([])
     ax[0].plot(cx_pts, cy_pts, ".", ms=2.5, color="#2b5c9b")
-    a, b = circ(*full); ax[0].plot(a, b, "-", lw=1.4, color="#1e8449")
+    a, b = circ(*full); ax[0].plot(a, b, "-", lw=1.4, color="#f1c40f")
     ax[0].set_title(f"{L['coin_all']}  R={full[2]:.2f}", fontsize=9.5, **F)
     ax[1].plot(cx_pts[arc_m], cy_pts[arc_m], ".", ms=3.5, color="#2b5c9b")
-    for k in ("kasa", "taubin", "geometric"):
+    for k, ls, lw in (("kasa", "-", 1.3), ("geometric", "-", 1.3), ("taubin", "--", 1.6)):
+        # Taubin 과 기하학적 원은 거의 겹치므로 Taubin 을 점선으로 위에 그린다
         a, b = circ(*coin_fits[k])
-        ax[1].plot(a, b, "-", lw=1.3, color=COL[k],
+        ax[1].plot(a, b, ls, lw=lw, color=COL[k],
                    label=f"{NM[k]} R={coin_fits[k][2]:.2f}")
     ax[1].set_title(L["coin_arc"], fontsize=9.5, **F)
     ax[1].legend(prop=LG, fontsize=7.5, loc="upper center",
                  bbox_to_anchor=(0.5, -0.02), ncol=3, frameon=False)
-    cap(fig, "fig6", rect=(0, 0.13, 1, 1))
+    cap(fig, rect=(0, 0.05, 1, 1))
     fig.savefig(os.path.join(out, "fig6-real-image.png"), dpi=150)
     plt.close(fig)
 
@@ -314,7 +305,7 @@ print()
 print("=== 그림1 ===")
 print(f"  호 60도, 노이즈 {NOISE*2}. 대수적 목적함수 최소 R={R_alg:.2f}, "
       f"기하학적 최소 R={R_geo:.2f}, 참값 {R_TRUE}")
-print(f"  Kasa R={kasa(x1,y1)[2]:.2f}, 기하학적 R={geometric(x1,y1)[2]:.2f}")
+print(f"  Kåsa R={kasa(x1,y1)[2]:.2f}, 기하학적 R={geometric(x1,y1)[2]:.2f}")
 print()
 print("=== 그림2~3: 원호 각도 스윕 ===")
 print(f"{'호(도)':>7s} " + " ".join(f"{k:>22s}" for k in FITTERS))
@@ -323,7 +314,7 @@ for i, sp in enumerate(SPANS):
                                  for k in FITTERS))
 print("  (편향/산포/RMSE)")
 cross = [sp for i, sp in enumerate(SPANS) if rmse["kasa"][i] < rmse["taubin"][i]]
-print(f"  Kasa 의 총 오차가 더 작아지는 구간: {cross} 도")
+print(f"  Kåsa 의 총 오차가 더 작아지는 구간: {cross} 도")
 print()
 print("=== 그림4: 타원 제약 ===")
 for nz, c, u in zip(E_NOISE, rate_c, rate_u):
