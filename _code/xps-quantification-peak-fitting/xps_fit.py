@@ -270,6 +270,24 @@ def main():
               f"가짜 중간산화물 {100 * np.mean(d['fake']):.1f} ± {100 * np.std(d['fake']):.1f}%, "
               f"Si4+ {100 * np.mean(d['ox']):.1f} ± {100 * np.std(d['ox']):.1f}%, "
               f"보고되는 화학종 {np.mean(d['species']):.1f}개")
+    paired_comparison(out, con, n=3)
+
+
+def paired_comparison(out, con, n=3):
+    """7.4절: 같은 잡음 실현끼리 짝지어 단일선 n개 모델과 제약 모델을 비교한다.
+    BIC = χ² + k ln N (k: 파라미터 수, N: 데이터점 수)."""
+    N = E.size
+    k_free, k_con = 3 * n, 6
+    chi_free = np.array(out[n]["chi2"])
+    chi_con = np.array(con["chi2"])
+    d_chi2 = chi_free - chi_con
+    d_red = np.array(out[n]["chi2r"]) - np.array(con["chi2r"])
+    d_bic = (chi_free + k_free * np.log(N)) - (chi_con + k_con * np.log(N))
+    print(f"\n=== 7.4절: 짝 비교 (단일선 {n}개 − 제약 모델, 잡음 실현 {chi_con.size}회, 데이터점 {N}개)")
+    print(f"  χ² 차이 평균 {np.mean(d_chi2):.1f} (표준편차 {np.std(d_chi2):.1f}), "
+          f"단일선 모델의 χ²가 더 작은 실현 {np.sum(d_chi2 < 0)}/{chi_con.size}")
+    print(f"  χ²_red 차이 {np.mean(d_red):.3f} ± {np.std(d_red):.3f}")
+    print(f"  BIC 차이 평균 {np.mean(d_bic):.1f}, 단일선 모델을 고르는 실현 {np.sum(d_bic < 0)}/{chi_con.size}")
 
 
 if __name__ == "__main__":
