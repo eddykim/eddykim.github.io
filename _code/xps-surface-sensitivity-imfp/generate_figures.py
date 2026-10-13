@@ -6,7 +6,8 @@
 
 IMFP는 TPP-2M 예측식으로 계산한다. 계수는 C. J. Powell, J. Vac. Sci. Technol. A 38,
 023209 (2020) 식 (1)–(2)를 따랐고, 유효 범위는 50 eV 이상이다. 50 eV 아래는
-Seah–Dench(1979) 유니버설 커브로 모양만 보인다.
+Seah–Dench(1979) 유니버설 커브로 모양만 보인다. Powell 식 (1a)의 상대론 인자
+α(E)는 뺐다. Al Kα 영역(1.5 keV 이하)에서 IMFP를 0.4% 미만 바꾼다.
 """
 import os
 
@@ -38,7 +39,7 @@ LABELS = {
         "fig2": r"깊이별 신호 기여 (Si 2p, $\lambda$ = {:.2f} nm)",
         "bin": "1 nm 구간별 몫",
         "surface": "표면", "normal": "법선", "analyzer": "분석기 방향",
-        "sample": "시료", "path": r"탈출 경로 $z/\cos\theta$",
+        "sample": "시편", "path": r"탈출 경로 $z/\cos\theta$",
         "fig3a": "(a) 검출 각도와 탈출 경로", "fig3b": r"(b) 각도별 누적 기여 ($\lambda$ = {:.2f} nm)",
         "info95": r"95% 깊이 $3\lambda\cos\theta$",
     },
@@ -150,11 +151,16 @@ def render(L_):
 
     # 그림 2. 깊이별 기여와 누적 기여
     fig2, (a1, a2) = plt.subplots(1, 2, figsize=(10.0, 4.2))
-    a1.bar(slices + 0.5, slice_share / slice_share.max(), width=0.9, color="tab:blue",
+    # 막대 높이는 그 1 nm 구간에서 곡선의 평균값(= λ × 구간 몫)이다. 그래야 곡선과
+    # 같은 축(단위 깊이당 상대 기여)에 놓이고, 막대 넓이 비가 곧 구간 몫의 비가 된다.
+    bin_mean = LAM * slice_share
+    a1.bar(slices + 0.5, bin_mean, width=0.9, color="tab:blue",
            alpha=0.25, label=L_["bin"])
     for i in range(4):
-        a1.text(i + 0.5, slice_share[i] / slice_share.max() + 0.03,
-                f"{100 * slice_share[i]:.0f}%", ha="center", fontsize=8.5, color="tab:blue")
+        # 곡선이 막대 윗변 왼쪽을 지나므로 몫 라벨은 막대 안쪽 가운데에 쓴다.
+        a1.text(i + 0.5, bin_mean[i] / 2,
+                f"{100 * slice_share[i]:.0f}%", ha="center", va="center", fontsize=8.5,
+                color="#1f4e79")
     a1.plot(z, weight, color="tab:blue", lw=2)
     a1.set_xlim(0, 12)
     a1.set_ylim(0, 1.15)
@@ -260,7 +266,17 @@ for label, ke, lam, _ in peak_pts:
     mat = next(m for lb, _, m in PEAKS if lb == label)
     print(f"{label}: X선 감쇠길이/IMFP = {XRAY_ATT_UM[mat] * 1000 / lam:.0f}")
 
-# 흡착 탄소층: 폴리에틸렌 (CH2)n 으로 근사 (Nv=6, rho=0.92, M=14.027, Eg≈8 eV 가정)
-lam_ch2 = float(tpp2m(HV_AL - 99.4, 6, 0.92, 14.027, 8.0))
+# 흡착 탄소층: 폴리에틸렌 (CH2)n 으로 근사. Tanuma, Powell, Penn (1994) 표 5의
+# 폴리에틸렌 값(Nv=6, rho=0.93, M=14.027, Eg=7 eV)을 쓴다.
+lam_ch2 = float(tpp2m(HV_AL - 99.4, 6, 0.93, 14.027, 7.0))
 print(f"Si 2p 광전자의 탄화수소층 속 λ = {lam_ch2:.2f} nm; 남는 하부 신호:",
       " ".join(f"{t} nm→{100 * np.exp(-t / lam_ch2):.0f}%" for t in (1.0, 1.5, 2.0)))
+
+# SiO₂ 속 Si 2p 광전자 (결합에너지 103.5 eV, 산화물 성분). 본문 3절과 5편이 인용한다.
+lam_si_ox = float(tpp2m(HV_AL - 103.5, *MATERIALS["SiO$_2$"][:4]))
+print(f"Si 2p(SiO₂, BE 103.5 eV): KE {HV_AL - 103.5:.1f} eV, λ = {lam_si_ox:.2f} nm")
+
+# 1절의 대비: 10 nm 깊이에서 X선은 거의 그대로인데 광전자는 대부분 에너지를 잃는다.
+print(f"Si 속 10 nm 깊이의 X선 세기 감소: {100 * (1 - np.exp(-10e-3 / XRAY_ATT_UM['Si'])):.2f}%")
+print("Si 2p 광전자의 무손실 탈출 확률:",
+      " ".join(f"{d} nm→{100 * np.exp(-d / LAM):.1f}%" for d in (1, 3, 5, 10)))
