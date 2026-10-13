@@ -5,11 +5,13 @@
       ../../assets/img/posts/electron-microscopy-stem-analytical/en/   (영문)
 
 그림2 의 Z 지수는 3편에서 쓴 차폐 러더퍼드 단면적을 환형 검출기 범위로
-적분해서 얻는다. 새 가정을 넣지 않고 3편의 차폐 상수를 그대로 쓴다.
+적분해서 얻는다. 3편의 차폐 상수를 그대로 쓰며, 고립 원자의 탄성 산란만
+보는 모형이다(열확산산란·채널링은 넣지 않았다).
 """
 import os
 
 import matplotlib
+import matplotlib.ticker
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -132,7 +134,7 @@ LABELS = {
         "f3bf": "Sum the centre\n→ bright field",
         "f3adf": "Sum the ring\n→ annular dark field",
         "f3dpc": "Centre-of-mass shift\n→ field map",
-        "f3ptycho": "Invert phase from the pattern\n→ ptychography",
+        "f3ptycho": "Phase retrieval\n→ ptychography",
         "f3note": "All of these come out of one and the same measurement",
     },
 }
@@ -159,8 +161,11 @@ def _reciprocity_panel(ax, L, reverse):
     # 상반성의 요점은 두 광선도의 경로가 **같다**는 것이다. 기하를 바꾸면
     # 오히려 대응이 보이지 않으므로, 광선은 한 벌만 그리고 광원과 검출기의
     # 자리만 맞바꾼다. 그래서 STEM 은 관례대로 뒤집어 그린다.
+    # 광선은 시편의 한 점에서 만난다. STEM 으로 읽으면 아래 렌즈가 넓은 빔을
+    # 시편 위 한 점으로 모으는 집속 프로브가 되고, TEM 으로 읽으면 시편의 한
+    # 점에서 나온 산란파를 대물렌즈가 받는 그림이 된다.
     for off in (-1.0, -0.4, 0.4, 1.0):
-        pts = [(off * 0.12, Y_TOP), (off * 0.12, Y_LENS1), (off * 0.5, Y_SPEC),
+        pts = [(off * 0.12, Y_TOP), (off * 0.12, Y_LENS1), (0.0, Y_SPEC),
                (off, Y_LENS2), (off, Y_BOT)]
         for (x0, y0), (x1, y1) in zip(pts[:-1], pts[1:]):
             ax.plot([x0, x1], [y0, y1], color=ACCENT, lw=1.3, alpha=0.85)
@@ -195,13 +200,18 @@ def fig2_z_exponent(L):
     n = np.array([z_exponent(t * 1e-3) for t in t1])
     for lo, hi, color, key in DETECTOR_BANDS:
         ax.axvspan(lo, min(hi, 180), color=color, alpha=0.12, zorder=0)
-        ax.text((lo + min(hi, 180)) / 2, 2.02, L[key], ha="center", fontsize=9,
+        # ADF 라벨은 Au 차폐각 점선(36 mrad)을 피해 왼쪽으로 옮긴다.
+        x_lab = 28.0 if key == "f2adf" else (lo + min(hi, 180)) / 2
+        ax.text(x_lab, 2.02, L[key], ha="center", fontsize=9,
                 color=color, **L["font"])
     ax.plot(t1, n, color=DARK, lw=2.4, zorder=3)
 
     th_si, th_au = screening_angle_mrad(14), screening_angle_mrad(79)
     ax.axvline(th_si, color=GRAY, ls=":", lw=1.2)
     ax.axvline(th_au, color=GRAY, ls=":", lw=1.2)
+    # 점선마다 원소 이름을 달아 Si 점선과 ABF/ADF 경계를 구분한다.
+    for th, name in [(th_si, "Si"), (th_au, "Au")]:
+        ax.text(th + 0.8, 1.32, name, fontsize=8, color=GRAY, va="bottom")
     ax.text(th_au + 3, 1.42, L["f2scr"].format(th_si, th_au), fontsize=8.5,
             color=GRAY, **L["font"])
 
@@ -231,6 +241,13 @@ def fig2_z_exponent(L):
         dx, dy = offsets.get(name, (0, 9))
         ax2.annotate(name, xy=(z, s), xytext=(dx, dy), textcoords="offset points",
                      ha="center", fontsize=9, color=DARK)
+    # 로그축 눈금이 10 하나뿐이면 원자번호를 읽을 수 없으므로 직접 정한다.
+    ax2.set_xticks([6, 10, 20, 30, 50, 80])
+    ax2.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+    ax2.get_xaxis().set_minor_formatter(matplotlib.ticker.NullFormatter())
+    ax2.set_xlim(5, 100)
+    lo_y, hi_y = ax2.get_ylim()
+    ax2.set_ylim(lo_y, hi_y * 2.0)   # 맨 위 Au 라벨이 축 밖으로 잘리지 않게
     ax2.set_xlabel(L["f2bx"], **L["font"])
     ax2.set_ylabel(L["f2by"], **L["font"])
     ax2.set_title(L["f2b"], **L["font"])
@@ -278,10 +295,11 @@ def fig3_4dstem(L):
     outs = [(1.5, "f3bf", BLUE), (4.3, "f3adf", ORANGE),
             (7.1, "f3dpc", GREEN), (9.9, "f3ptycho", PURPLE)]
     for x, key, color in outs:
-        ax.add_patch(FancyArrowPatch((cx, cy - r - 0.75), (x + 0.75, 2.05),
+        # 화살표 끝을 상자 윗변에 맞추고 상자보다 위에 그려 머리가 가리지 않게 한다.
+        ax.add_patch(FancyArrowPatch((cx, cy - r - 0.75), (x + 0.75, 2.17),
                                      arrowstyle="-|>", mutation_scale=12,
-                                     color=color, lw=1.4, alpha=0.8,
-                                     connectionstyle="arc3,rad=0.12"))
+                                     color=color, lw=1.4, alpha=0.8, zorder=5,
+                                     connectionstyle=f"arc3,rad={0.12 if x + 0.75 < cx else -0.12}"))
         ax.add_patch(Rectangle((x - 0.15, 1.15), 1.8, 1.0, facecolor="white",
                                edgecolor=color, lw=1.5))
         ax.text(x + 0.75, 1.65, L[key], ha="center", va="center", fontsize=8.5,
