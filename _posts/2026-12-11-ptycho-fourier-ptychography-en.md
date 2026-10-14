@@ -1,5 +1,5 @@
 ---
-title: "Computational Imaging and Ptychography 8 — Can We See More Sharply Than the Lens? Fourier Ptychography"
+title: "Computational Imaging and Ptychography 8 — Can We See More Sharply Without Changing the Lens?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ptycho-fourier-ptychography/
@@ -15,7 +15,7 @@ Choosing a microscope objective always means giving something up. A lens with a 
 
 This method is called Fourier ptychography. As the name suggests, it uses the same mathematics as the ptychography of the previous posts. This post asks three questions. Why does changing the illumination angle bring in information the lens missed? How can the algorithms so far be reused as they are? And how do the lessons of the earlier posts, overlap, probe recovery and noise models, reappear here? The calculations use a 256×256 high-resolution specimen recorded by a camera with a coarser 64×64 grid.
 
-## 1. Tilted Illumination Shifts the Spectrum
+## 1. Does Tilting the Illumination Bring In What the Lens Missed?
 
 Consider what a lens does in Fourier space. Splitting the light that has passed through the specimen by angle gives the specimen's spatial-frequency spectrum. An objective collects only light leaving at angles smaller than its numerical aperture, so it passes only a circle of the spectrum whose radius is proportional to the NA. This circle is the pupil. Higher spatial frequencies outside the circle, the fine structure, do not reach the image.
 
@@ -30,9 +30,9 @@ _Fig 1. For each illumination angle the lens pupil (white circle) passes a diffe
 
 Fig 1 shows images for three illuminations. Under normal and slightly oblique illumination, the centre of the spectrum, the light that passed straight through the specimen, stays inside the pupil and the image is brightfield with a bright background. When the illumination tilts more than the pupil allows, the centre leaves the circle, only light scattered by the specimen gets in, and the image is darkfield with a dark background. A darkfield image carries high frequencies the lens could not see on its own, but by itself it is not higher in resolution, because a single circle is still the same size.
 
-## 2. The Same Mathematics as Ptychography
+## 2. How Is This the Same Problem as Ptychography?
 
-Now the circles need to be stitched together. The camera records only intensity, though, so each circle loses its phase. This is the phase problem of Post 2 onwards. And if the illumination angles are chosen so that neighbouring circles overlap, the same thing happens as when overlapping positions solved the phase problem in Post 3. Placing the formulas side by side makes the correspondence clear.
+A single circle does not raise the resolution, so the circles need to be stitched together. The camera records only intensity, though, so each circle loses its phase. This is the phase problem of Post 2 onwards. And if the illumination angles are chosen so that neighbouring circles overlap, the same thing happens as when overlapping positions solved the phase problem in Post 3. Placing the formulas side by side makes the correspondence clear.
 
 | Ptychography | Fourier ptychography |
 |---|---|
@@ -44,7 +44,7 @@ Now the circles need to be stitched together. The camera records only intensity,
 
 It is the same problem with the roles of real space and Fourier space exchanged. The authors of PtyLab stress that this reciprocity lets both methods be solved with the same code. In fact the rPIE of Post 3 can be used almost unchanged: put the spectrum in place of the specimen and the pupil in place of the probe, and replace the Fourier transform by its inverse. The inverse transform is the forward transform of the conjugate, so the two are mathematically the same update. Comparing one update computed both ways, they agree to $10^{-16}$.
 
-## 3. Synthetic Aperture
+## 3. How Far Does Stitching the Circles Widen the Aperture?
 
 The pupil radius was set to 12 (Fourier pixels), and the LEDs were placed on a 17×17 square grid with spacing 10. The outermost LED shifts the spectrum by 80, so the highest frequency that can be captured along an axis is $80 + 12 = 92$, about 7.7 times what the lens alone reaches. This enlarged aperture is called a synthetic aperture. rPIE was run for 50 iterations, starting from the normally illuminated image.
 
@@ -53,7 +53,7 @@ _Fig 2. High-resolution specimen recovered from 289 low-resolution images. The h
 
 One camera image (top middle) has 64×64 pixels and is as blurred as the lens's aperture allows. Even if that image had recorded phase, it could hold no more than the bottom middle. The reconstruction (right) is close to the true specimen in both amplitude and phase. Compared within the part of the spectrum covered by the LED circles, the error is 0.0046. Against the whole true specimen it is 0.043; the difference is the highest frequencies the circles did not cover. Fourier ptychography recovers exactly as much as the circles cover, and within that it is nearly exact. Note also that it recovered the phase, which the camera never recorded.
 
-## 4. How Much Overlap?
+## 4. How Much Must the Pupil Circles Overlap?
 
 In Post 3, positions in real space had to overlap enough. How much must the circles in Fourier space overlap? The LED spacing was varied to reduce the overlap area of neighbouring pupil circles from 79 % to 0 %. The shift produced by the outermost LED was kept similar, between 72 and 84.
 
@@ -62,7 +62,7 @@ _Fig 3. Image error versus the overlap area of neighbouring LED pupils. Below ab
 
 The result comes down to a single threshold. With an overlap of 39 % or more the reconstruction succeeds. Processing the LEDs from the centre outwards gives errors all below 0.005; with a random order the error at 39 % rises slightly to 0.01–0.02. At 79 % it is $10^{-8}$. At 35 % it starts to break down, 0.16–0.41, and at 30 % or less it fails, 0.54–0.70. Changing the order in which the LEDs were processed did not move the threshold. The LEDs should be placed so that around 40 % of the circle area overlaps. The overlapping part of neighbouring circles is the link that ties two images to the same phase; if that link is too narrow, the phases of the circles cannot be brought into agreement.
 
-## 5. Recovering the Lens Aberration Too
+## 5. Can the Lens Aberration Be Recovered Too?
 
 Real lenses, especially inexpensive wide-field low-magnification ones, have aberrations: a phase on the pupil. What happens when the aberration is ignored and a perfect pupil is assumed? With a mix of defocus and astigmatism at two strengths (0.63 and 1.27 rad rms), the reconstruction error was 0.49–0.96: every case failed.
 
@@ -77,21 +77,23 @@ _Fig 4. For a strongly aberrated lens (1.27 rad rms), recovering the pupil too r
 | 69 % | 0.88 → 0.28 (pupil 0.30 rad) | 0.63 → 0.48 (pupil 0.20 rad) |
 | 79 % | 0.96 → 0.052 (pupil 0.049 rad) | 0.86 → 0.083 (pupil 0.075 rad) |
 
+In Fig 4, the phase reconstructed with the pupil unknown (third panel) has lost its structure, while recovering the pupil too (last panel) gives a sharp specimen. The recovered pupil phase (second panel) has the same shape as the true one (first panel).
+
 The table gives the image error with the pupil unknown → recovered, and in parentheses the phase error left in the recovered pupil. A phase tilt of the pupil produces the same images as a shift of the specimen and cannot be fixed by the data, so it was removed before measuring. It is the same as the shift ambiguity of Post 4.
 
 <img src="/assets/img/posts/ptycho-fourier-ptychography/en/fig5-pupil-vs-overlap.png" alt="Image error with the pupil unknown and with the pupil recovered, versus overlap of the pupil circles" width="750">
 _Fig 5. Image error with the pupil unknown or recovered, versus overlap. Recovering the pupil needs much more overlap_
 
-Pupil recovery depends strongly on overlap. With the pupil known, 39 % was enough, but recovering the pupil as well needed 79 %. At 49 % the pupil was hardly recovered. This is the lesson of Post 3 again: there, too, 56 % overlap was enough with the probe known, while ePIE, which also recovers the probe, needed 72 % or more. With more unknowns, neighbouring measurements have to tie each other together more tightly. The review by Konda and colleagues also points out that EPRY easily falls into local minima when the aberrations are large.
+In Fig 5, the blue lines (pupil recovered too) drop sharply only at 79 % overlap. Pupil recovery depends strongly on overlap. With the pupil known, 39 % was enough, but recovering the pupil as well needed 79 %. At 49 % the pupil was hardly recovered. This is the lesson of Post 3 again: there, too, 56 % overlap was enough with the probe known, while ePIE, which also recovers the probe, needed 72 % or more. With more unknowns, neighbouring measurements have to tie each other together more tightly. The review by Konda and colleagues also points out that EPRY easily falls into local minima when the aberrations are large.
 
-## 6. Brightfield and Darkfield
+## 6. Which Cost Function Is Better When Bright and Dim Images Are Mixed?
 
 Fourier ptychography data have one feature of their own: the brightness of brightfield and darkfield images differs enormously. In a setting where the brightest image receives $10^5$ photons, brightfield images average $9.4\times10^4$ photons while darkfield images average 179. That is more than a factor of 500. Almost all of the high-frequency information lies in these dim darkfield images.
 
 In [Post 6](/en/posts/ptycho-noise-maximum-likelihood/), the cost function decided the outcome for such data. Yeh and colleagues compared several Fourier ptychography algorithms on experimental data and reported that amplitude-based costs are more robust to noise and model mismatch than intensity-based costs, because the large fluctuations of bright brightfield images dominate an intensity cost and bury the darkfield signal. The same comparison was run here.
 
 <img src="/assets/img/posts/ptycho-fourier-ptychography/en/fig6-noise-costs.png" alt="Image error of rPIE and ML with amplitude, Poisson and intensity costs versus dose" width="750">
-_Fig 6. Image error by cost function under noise (3 noise draws). Amplitude and Poisson ML are lowest; the intensity cost and rPIE are 1.2–1.6× higher_
+_Fig 6. Image error by cost function under noise (3 noise draws). Amplitude and Poisson ML are lowest; the intensity cost and rPIE are 1.2–1.7× higher_
 
 | Photons in the brightest image | rPIE | ML (amplitude) | ML (Poisson) | ML (intensity) |
 |---|---|---|---|---|
@@ -99,7 +101,7 @@ _Fig 6. Image error by cost function under noise (3 noise draws). Amplitude and 
 | $10^6$ | 0.107 | 0.084 | 0.086 | 0.101 |
 | $10^7$ | 0.046 | 0.037 | 0.034 | 0.057 |
 
-Amplitude and Poisson ML are lowest, and the intensity cost and rPIE are 1.2–1.6 times higher. The ranking matches Post 6, but the gaps are smaller than in the ptychography of Post 6. There, intensity least squares did not converge at all; here it converges but is less accurate.
+Amplitude and Poisson ML are lowest, and the intensity cost and rPIE are 1.2–1.7 times higher. The ranking matches Post 6, but the gaps are smaller than in the ptychography of Post 6. There, intensity least squares did not converge at all; here it converges but is less accurate.
 
 Another source of error Yeh and colleagues identified is wrong LED positions. If the LED matrix is slightly rotated or at the wrong height, the illumination angles $\mathbf{k}$ are off. This is the same problem as the scan-position errors of [Post 7](/en/posts/ptycho-position-correction-mixed-states/), and the angles are found from the data in the same way.
 

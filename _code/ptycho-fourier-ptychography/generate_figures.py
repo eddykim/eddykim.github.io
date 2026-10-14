@@ -1,6 +1,5 @@
 """계산 이미징과 타이코그래피 8편 그림 6개 생성 (한국어판·영문판). 수치는 studies8.py 의 캐시를 읽는다."""
 import os
-import textwrap
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -62,14 +61,9 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.07, 1, 1)):
-        t = fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
-        fig.canvas.draw()
-        if t.get_window_extent().width > 0.98 * fig.bbox.width:  # 영문 캡션이 폭을 넘으면 줄바꿈
-            text = textwrap.fill(L[key], width=int(len(L[key]) * 0.95 * fig.bbox.width / t.get_window_extent().width))
-            t.set_text(text); t.set_va("bottom"); t.set_y(0.012)
-            rect = (rect[0], rect[1] + 0.03 * text.count("\n"), rect[2], rect[3])
-        fig.tight_layout(rect=rect)
+    def cap(fig, key, rect=(0, 0, 1, 1)):
+        # 캡션은 본문에 둔다. 이미지에는 넣지 않는다.
+        fig.tight_layout(rect=(0, 0, 1, rect[3]))
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)
