@@ -1,5 +1,5 @@
 ---
-title: "Computational Imaging and Ptychography 6 — What Should We Trust When Photons Are Scarce? Noise Models and Maximum Likelihood"
+title: "Computational Imaging and Ptychography 6 — What Should We Trust When Photons Are Scarce?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ptycho-noise-maximum-likelihood/
@@ -15,7 +15,7 @@ The data in the previous five posts had no noise. A real detector counts photons
 
 There are three questions. What happens to the algorithms so far when photons are scarce? What cost function reflects the noise properly, and how much better does it do? And what noise were the Fourier projections used so far assuming? The answer to the last question turns out to be the centre of this post. All calculations use the pinhole probe and the 144-position Fermat spiral used since Post 3, each repeated with three noise draws.
 
-## 1. What It Means to Count Photons
+## 1. How Much Does a Photon Count Fluctuate?
 
 When a detector pixel receives $I$ photons on average, the number actually counted, $n$, differs every time. This fluctuation follows a Poisson distribution.
 
@@ -28,7 +28,7 @@ _Fig 1. The same diffraction pattern drawn at three doses (log colour). At low d
 
 Diffraction patterns span a very wide range of brightness. Fig 1 shows the pattern at the central position drawn at three doses. In this post the dose is defined as the number of photons in the brightest single pattern. At $10^8$ photons the centre receives close to a million, and only 0.4 % of pixels hold 0–1 photons. At $10^6$ that fraction is 25 %; at $10^4$ it is 94 %. The fine structure of the specimen lives at high spatial frequencies, in the outer part of the pattern, and that information arrives as one or two photons.
 
-## 2. Three Cost Functions
+## 2. Which Cost Function Matches Photon Noise?
 
 With noise, no specimen fits the measurement exactly. What should be minimised then? Maximum likelihood (ML) picks the specimen and probe that make the measured data most probable. Taking the logarithm of the Poisson distribution and changing its sign gives the cost to minimise.
 
@@ -51,9 +51,9 @@ Fig 2 checks this by Monte Carlo. The variance of $\sqrt{n}$ is 0.253 at a mean 
 
 One point deserves attention here. The Fourier projection used since Post 3 replaced only the amplitude with the measured value and kept the phase. Differentiating the amplitude cost with respect to the conjugate exit wave gives $\left(1 - \sqrt{n}/\lvert\Psi\rvert\right)\Psi$, and the correction the Fourier projection adds to the exit wave is exactly this with a minus sign. Computed both ways, they agree to $10^{-15}$. Every algorithm in Posts 1–5 has been walking down the gradient of the amplitude cost, and so has been using a noise model close to Poisson from the start. Thibault and colleagues noted that this connection may partly explain why phase-retrieval algorithms are fairly robust to noise.
 
-## 3. Same Data, Different Costs
+## 3. How Much Does the Cost Function Change the Reconstruction of the Same Data?
 
-Does the theory hold up in calculation? To isolate the effect of noise, the probe was given. The three costs were minimised the same way, by gradient descent: the gradient is divided by the illumination each pixel received, $\sum \lvert P \rvert^2$, to set the direction, and a line search picks a step that actually lowers the cost. rPIE from Post 3 and DM from Post 5 are included alongside.
+Does the theory hold up in calculation? To isolate the effect of noise, the probe was given. The three costs were minimised the same way, by gradient descent: the gradient is divided by the illumination each pixel received, $\sum \lvert P \rvert^2$, to set the direction, and a line search picks a step that actually lowers the cost. rPIE from Post 3 and the difference map (DM) from Post 5 are included alongside.
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig3-error-vs-dose.png" alt="Final error versus dose with the probe known, for rPIE, rPIE with a decaying step, DM, amplitude ML, Poisson ML and intensity least squares" width="750">
 _Fig 3. Final error versus dose with the probe known (300 iterations, median and range of 3 noise draws). Amplitude and Poisson ML are lowest_
@@ -72,11 +72,11 @@ Amplitude ML and Poisson ML are practically the same at every dose. The largest 
 Why is intensity least squares so poor? The cause can be split in two. Starting from the true specimen, each method stays near the minimum of its own cost, and that error measures the quality of the estimator itself. At $10^6$ photons, amplitude ML stays at 0.0172, Poisson ML at 0.0165, and intensity least squares at 0.038. Its minimum alone is more than twice as bad, because it trusts the large fluctuations of bright pixels as much as the dark ones. Starting from a blank specimen, it is still at 0.31 after 1000 iterations. The intensity enters its gradient once more, so the bright central pixels dominate the step size and the structure carried by the dark pixels barely moves. The large wrong patches in the rightmost reconstruction of Fig 4 are the trace of this.
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig4-reconstructions.png" alt="True specimen phase and phases reconstructed by rPIE, Poisson ML and intensity least squares at 10 to the 5th photons per pattern" width="950">
-_Fig 4. Reconstructed phase at $10^5$ photons per pattern with the probe known. Same data; only the cost and update differ_
+_Fig 4. Reconstructed phase at $10^5$ photons per pattern with the probe known. Same data; only the cost and update differ, and only intensity least squares gets large patches wrong_
 
 ## 4. Same Cost, So Why Does rPIE Lag?
 
-The table has one odd feature. As Section 2 showed, rPIE follows the amplitude cost, yet at every dose it is 1.6–1.8 times worse than amplitude ML. The cost is the same, so why is the answer different?
+The table has one odd feature. As Section 2 showed, rPIE follows the amplitude cost, yet at every dose it is 1.5–1.8 times worse than amplitude ML. The cost is the same, so why is the answer different?
 
 The update scheme is different. ML looks at all 144 positions at once and only moves in directions that lower the total cost. rPIE goes through the positions one at a time and corrects the specimen to fit that position's pattern almost completely. Without noise this is fine, because every pattern points to the same answer. With noise each pattern points to a slightly different answer, and rPIE is pulled toward whichever pattern it just saw. Near the minimum it keeps fluctuating by the noise of the last few patterns. [Post 3](/en/posts/ptycho-overlap-pie-epie/) read ePIE as stochastic gradient descent, and stochastic gradient descent with a fixed step wanders within a range proportional to the step size near the minimum. Starting from the true specimen still lands at 0.031, so the gap is not a matter of incomplete convergence.
 
@@ -84,7 +84,7 @@ Then reducing the step should help. With a step of 1 for the first 30 iterations
 
 Projections that fit the measurement exactly are tools for noise-free data. With noise, the right move is not to fit each pattern completely but to step gradually in the direction that lowers the total cost.
 
-## 5. The Low-Dose Trap
+## 5. What Happens at Low Dose When the Probe Is Unknown?
 
 So far the probe was given. What happens when it is unknown? Following the conclusion of Post 5, rPIE with a small step for the first 10 iterations was run for 50 iterations to get a starting point, then either continued as rPIE for 400 more iterations or refined with ML.
 
@@ -97,7 +97,7 @@ One way to understand this is as follows. rPIE's per-position updates are not st
 
 ML has no such drift. The line search accepts only steps that actually lower the total cost, and the gradient along the scale direction is zero, so it does not move that way. Refining the rPIE result at iteration 50 with ML brings the error to 0.054–0.056 at $10^5$ photons and 0.017–0.020 at $10^6$, where it stays. These are almost the same as with the probe given in Section 3. With the right noise model, not knowing the probe costs essentially nothing in this problem. Thibault and colleagues proposed ML as a refinement step for a DM result, which is the same order.
 
-## 6. How to Split the Photons
+## 6. Should the Photons Be Spread Over Many Positions or Concentrated in Few?
 
 Given a fixed dose, is it better to place positions densely and use few photons per pattern, or to use fewer positions with more photons each? Rodenburg and Maiden note in their handbook chapter that what matters is not the noise in any single pattern but the total number of photons the reconstruction gathers.
 
@@ -110,7 +110,7 @@ The spacing of a Fermat spiral covering the same area was varied to use 47 to 36
 
 The noise of photon counting follows a Poisson distribution, whose variance equals its mean. The Poisson cost, which uses this directly, and the amplitude cost, which evens out the variance with a square root, gave almost the same answer in these calculations. The Fourier projection used since Post 3 is one gradient step on the amplitude cost, so the algorithms so far were already using a sensible noise model. Intensity least squares, which fits the intensities directly, had an estimator twice as bad and failed to converge. That is the one to avoid.
 
-Even with the same cost, the update scheme changes the result. rPIE, which fits each position's measurement almost completely, fluctuated with the noise and was 1.6–1.8 times worse than ML; at low dose with the probe unknown it drifted along the scale direction and collapsed. DM oscillated with noise. ML refinement, which accepts only steps that lower the total cost, has no such drift and reaches the same error as with the probe known. The error is inversely proportional to the square root of the total photon count, and how those photons are split among positions matters little.
+Even with the same cost, the update scheme changes the result. rPIE, which fits each position's measurement almost completely, fluctuated with the noise and was 1.5–1.8 times worse than ML; at low dose with the probe unknown it drifted along the scale direction and collapsed. DM oscillated with noise. ML refinement, which accepts only steps that lower the total cost, has no such drift and reaches the same error as with the probe known. The error is inversely proportional to the square root of the total photon count, and how those photons are split among positions matters little.
 
 In practice: start quickly with rPIE or DM as before. When photons are scarce, use that result as the starting point and finish with ML on the amplitude or Poisson cost. Do not use a cost that fits the intensities directly.
 
