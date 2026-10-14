@@ -14,8 +14,8 @@ math: true
 
 When a drop of oil lands on wet asphalt after rain, rainbow-coloured bands appear (Figure 1). The oil is transparent and the asphalt is black; nothing here has a colour of its own, yet colours appear. Stranger still, the film looks black at its edge, where it becomes very thin. Light reflected from the top and from the bottom of the film both reach the eye, and yet two beams added together are darker than one.
 
-<img src="/assets/img/posts/wave-optics-interference/ext-oil-film.jpg" alt="Rainbow interference bands from an oil film on a wet road" width="600">
-_Figure 1. A film of diesel spread on a wet road. The film thickness varies from place to place, and depending on the thickness different colours are strengthened or weakened. (Source: John (ex-user Guinnog), [Dieselrainbow](https://commons.wikimedia.org/wiki/File:Dieselrainbow.jpg), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5))_
+<img src="/assets/img/posts/wave-optics-interference/ext-oil-film.jpg" alt="Rainbow interference bands from an oil film on a road" width="600">
+_Figure 1. A film of diesel spread on a road. The film thickness varies from place to place, and depending on the thickness different colours are strengthened or weakened. (Source: John (ex-user Guinnog), [Dieselrainbow](https://commons.wikimedia.org/wiki/File:Dieselrainbow.jpg), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5))_
 
 In the [geometrical optics foundations](/en/posts/geometric-optics-fermat-eikonal/), rays were lines carrying energy, and where two bundles of rays overlapped their brightnesses added. That picture cannot explain Figure 1. We need the fact that light is a wave, that a wave has crests and troughs, and that a crest meeting a trough cancels it. This is interference. At the end of [Geometrical Optics Foundations 4](/en/posts/geometric-optics-aberrations/), once aberrations shrank to the size of a wavelength, the ray picture gave way to diffraction. This series starts from there and takes in turn interference, coherence, diffraction, Fourier imaging, Gaussian beams and high-NA focusing. The first part is interference, the basis of all wave optics.
 
@@ -32,7 +32,7 @@ $$ I = I_1 + I_2 + 2\sqrt{I_1 I_2}\,\cos\delta $$
 Phasors make this intuitive. Draw each wave as an arrow whose length is the amplitude and whose direction is the phase, and place the arrows head to tail. The squared length of the resulting arrow is the intensity (Figure 2(a)). Arrows pointing the same way add their lengths; arrows pointing opposite ways subtract.
 
 <img src="/assets/img/posts/wave-optics-interference/en/fig2-two-wave-superposition.png" alt="Phasor sum of two waves, intensity versus phase difference, and visibility versus intensity ratio" width="780">
-_Figure 2. (a) Phasor sum of two waves of amplitude 1 and 0.7. At zero phase difference the arrows line up and lengthen; at $\pi$ they cut into each other. (b) Intensity versus phase difference. Averaged evenly over phase, it is always $I_1 + I_2$. (c) Fringe visibility versus the ratio of the two intensities._
+_Figure 2. (a) Phasor sum of two waves of amplitude 1 and 0.7. At zero phase difference the arrows line up and lengthen; at $\pi$ they cut into each other. (b) Intensity versus phase difference. Averaged evenly over phase, it is always $$I_1 + I_2$$. (c) Fringe visibility versus the ratio of the two intensities._
 
 Where did the energy go? The energy missing from the dark places has not vanished; it has moved to the bright ones. Averaging over a full cycle of phase in Figure 2(b), the cosine in the interference term averages to zero, so the mean intensity is always $I_1 + I_2$ [1, 3]. Interference neither creates nor destroys light; it only moves it around.
 
@@ -54,7 +54,7 @@ There are two ways to split light in two [2]. Division of wavefront takes differ
 
 ## 3. How can two holes measure the wavelength of light?
 
-In 1665 Grimaldi let sunlight through two pinholes to see whether the region where the two discs of light overlapped would darken [1]. A hundred and forty years later the physician Thomas Young repeated the experiment, and the key was a third pinhole placed before the two [1]. The same wavefront spreading from the first hole illuminated both of the others, so the light leaving them formed phase-locked twins. Young published the result in 1804, and it became the experiment that established the wave theory of light against Newton's widely accepted corpuscular theory [1].
+In 1665 Grimaldi let sunlight through two pinholes to see whether the region where the two discs of light overlapped would darken [1]. A hundred and forty years later the physician Thomas Young repeated the experiment, and the key was a third pinhole placed before the two [1]. The same wavefront spreading from the first hole illuminated both of the others, so the light leaving them formed phase-locked twins. According to Hecht, Young published the result in 1804, and it became the experiment that established the wave theory of light against Newton's widely accepted corpuscular theory [1].
 
 Treat the two holes as two point sources. The phase difference at a point in space is set by the difference in its distances from the two sources. Points where that difference is a whole number of wavelengths are bright, and points where it is a half-integer number are dark. Surfaces of constant distance difference from two points are hyperboloids with the points as foci [1]. Figure 3(a) shows the intensity around two point sources six wavelengths apart: bright and dark bands fan out along hyperbolas.
 
@@ -67,7 +67,7 @@ $$ \Delta x = \frac{\lambda L}{d} $$
 
 [1, 3]. In other words, the closer the holes, the farther the screen and the longer the wavelength, the wider the fringes. Two holes 0.5 mm apart lit with 550 nm light give fringes 1.1 mm apart on a screen 1 m away (Figure 3(b)). The wavelength is less than a micrometre, yet the fringes are millimetres wide; the distance $L$ magnifies the wavelength. Measuring the fringe spacing and the two distances gives the wavelength in return.
 
-A more general form hides in this formula. Seen from afar, the light from the two holes is two plane waves meeting at an angle $\theta \approx d/L$. Two plane waves meeting at an angle $\theta$ produce sinusoidal fringes of period $\lambda/\sin\theta$ [3]. At 30° the period is twice the wavelength. This is how fine diffraction gratings are written with light, and holography, which records the fringes between a reference beam and the light from an object, starts from the same idea [3].
+A more general form hides in this formula. Seen from afar, the light from the two holes is two plane waves meeting at an angle $\theta \approx d/L$. Two plane waves meeting at an angle $\theta$ produce sinusoidal fringes. Seen in a plane perpendicular to the direction of one beam, the period is $\lambda/\sin\theta$ [3], which is twice the wavelength at 30°. Measured perpendicular to the fringe planes, the period is $\lambda/(2\sin(\theta/2))$, or 1.93 wavelengths at 30°; for small angles the two agree. This is how fine diffraction gratings are written with light, and holography, which records the fringes between a reference beam and the light from an object, starts from the same idea [3].
 
 <img src="/assets/img/posts/wave-optics-interference/ext-double-slit-sunlight.jpg" alt="Coloured interference fringes from sunlight through two slits" width="480">
 _Figure 4. Interference fringes from sunlight passing through two slits about 0.5 mm apart. The central fringe is white because every colour is bright there; further out the spacing $\lambda L/d$ differs from colour to colour and the fringes split into rainbows. (Source: Aleksandr Berdnikov, [Double slit interference](https://commons.wikimedia.org/wiki/File:Double_slit_interference.png), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
@@ -98,7 +98,7 @@ $$ r_m = \sqrt{m\lambda R} $$
 [1]. In other words, the ring radius grows as $\sqrt{m}$, so the rings crowd together towards the edge. The centre, where the thickness is zero, is dark. A lens with a 1 m radius of curvature seen in sodium light (589 nm) has its first dark ring at a radius of 0.77 mm. Measuring the ring radii gives the curvature of the lens, and distorted rings mean the surface is uneven [1]. This is the check done in lens shops when a lens surface is laid against a reference.
 
 <img src="/assets/img/posts/wave-optics-interference/ext-newton-rings.jpg" alt="Newton's rings in sodium light" width="560">
-_Figure 6. Newton's rings formed in sodium light by the air gap between a 20 cm focal-length convex lens and a flat, seen through a microscope. (Source: Warrencarpani, [20cm Air 1](https://commons.wikimedia.org/wiki/File:20cm_Air_1.jpg), [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en))_
+_Figure 6. Newton's rings formed in sodium light by the air gap between a 20 cm convex lens and a flat, seen through a microscope. (Source: Warrencarpani, [20cm Air 1](https://commons.wikimedia.org/wiki/File:20cm_Air_1.jpg), [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en))_
 
 The rings bear Newton's name, but Hooke and Newton each studied the colours of such thin films in detail, from soap bubbles to the air between lenses [1].
 
@@ -120,7 +120,7 @@ _Figure 7. A laboratory Michelson interferometer. Light from the source on the l
 <img src="/assets/img/posts/wave-optics-interference/en/fig8-michelson.png" alt="The two outputs of a Michelson interferometer and circular fringes" width="760">
 _Figure 8. (a) Intensities of the two outputs of a Michelson interferometer as a mirror moves (lossless 50:50 beamsplitter, 633 nm). When one brightens the other darkens, and their sum always equals the input. (b) Circular fringes when the arms differ in length by 1 mm, as a function of the viewing angle across an extended source._
 
-Figure 8(a) shows two outputs. The recombined light leaves both towards the viewing port and back towards the source. When one is bright the other is dark, and their sum always equals the incoming light, as energy conservation requires. Energy conservation alone shows that this complementarity needs a $\pi/2$ phase difference between the light reflected and transmitted at the beamsplitter [3]. In one output each beam has been reflected once and transmitted once, so the two are in phase; in the other, one beam has been reflected twice and the other transmitted twice, putting them $\pi$ apart [3].
+Figure 8(a) shows two outputs. The recombined light leaves both towards the viewing port and back towards the source. When one is bright the other is dark, and their sum always equals the incoming light, as energy conservation requires. Energy conservation together with the path symmetry of the two outputs shows that this complementarity needs a $\pi/2$ phase difference between the light reflected and transmitted at the beamsplitter [3]. In one output each beam has been reflected once and transmitted once, so the two are in phase; in the other, one beam has been reflected twice and the other transmitted twice, putting them $\pi$ apart [3].
 
 With an extended source, concentric fringes appear as in Figure 8(b). Light entering at an angle from different points of the source has a path difference between the arms that depends on its tilt, and light with the same tilt forms the same ring. These are fringes of equal inclination [1, 2]. If the fringes of equal thickness in Section 4 are a map of thickness, these are a map of angle.
 
@@ -137,7 +137,7 @@ Figure 9 computes how the aberrations of Geometrical Optics Foundations 4 look i
 
 ### How can a length smaller than a proton be measured?
 
-The most extreme use of the Michelson interferometer is the detection of gravitational waves. LIGO in the United States is a Michelson interferometer with 4 km arms (Figure 10). A passing gravitational wave stretches space in one direction and squeezes it in the perpendicular one, changing the difference between the arm lengths. The first gravitational wave detected, in 2015, changed the arm length by about $5\times10^{-22}$ of itself, roughly 2 am (attometres, $10^{-18}$ m) — some 400 times smaller than the radius of a proton [3].
+The most extreme use of the Michelson interferometer is the detection of gravitational waves. LIGO in the United States is a Michelson interferometer with 4 km arms (Figure 10). A passing gravitational wave stretches space in one direction and squeezes it in the perpendicular one, changing the difference between the arm lengths. The first gravitational wave detected, in 2015, changed the length of each arm by about $5\times10^{-22}$ of itself, roughly 2 am (attometres, $10^{-18}$ m) — some 400 times smaller than the radius of a proton. With a peak strain of $10^{-21}$, the difference between the two arms was 4 am [3].
 
 <img src="/assets/img/posts/wave-optics-interference/ext-ligo-hanford.jpg" alt="Aerial view of the LIGO Hanford Observatory" width="680">
 _Figure 10. The LIGO Hanford Observatory in Washington State. A 4 km arm runs across the desert from the building at lower right; the other arm runs at right angles to it. (Source: LIGO Laboratory, [LIGO Hanford aerial 05](https://commons.wikimedia.org/wiki/File:LIGO_Hanford_aerial_05.jpg), public domain)_
@@ -151,7 +151,7 @@ So far only two beams have overlapped. Two-beam fringes have a $\cos^2$ shape, w
 <img src="/assets/img/posts/wave-optics-interference/en/fig11-fabry-perot.png" alt="Interference peaks for different numbers of beams and the transmittance of a Fabry–Pérot interferometer" width="780">
 _Figure 11. (a) Intensity from adding 2, 5 and 20 equal beams with the same phase step between neighbours (normalized to the peak). (b) Transmittance of light bouncing between two mirrors of reflectance $R$. Light passes only when the round-trip phase is a multiple of $2\pi$, and the higher the reflectance, the narrower the peaks._
 
-Trapping light between two parallel mirrors produces such multiple beams naturally. On each round trip a little light leaks out; the leaked beams differ in phase by the round-trip path $2nd$ and weaken by a factor $R$ each time. Adding them all gives the transmittance
+Trapping light between two parallel mirrors produces such multiple beams naturally. On each round trip a little light leaks out; the leaked beams differ in phase by the round-trip path $2nd$ and weaken in amplitude by a factor $R$ each time. Adding them all gives the transmittance
 
 $$ T = \frac{(1-R)^2}{1 + R^2 - 2R\cos\phi} = \frac{1}{1 + \frac{4R}{(1-R)^2}\sin^2(\phi/2)}, \qquad \phi = \frac{4\pi n d}{\lambda} $$
 
