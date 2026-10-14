@@ -13,7 +13,7 @@ math: true
 
 The data in the previous five posts had no noise. A real detector counts photons one by one. When the specimen is easily damaged, as with X-rays or electrons, photons have to be rationed, and the outer pixels of a diffraction pattern often receive only one or two. [Post 1](/en/posts/ptycho-computational-imaging-inverse-problem/) said that the noise model of photon-counting measurements would return in Post 6. This is that post.
 
-There are three questions. What happens to the algorithms so far when photons are scarce? What cost function reflects the noise properly, and how much better does it do? And what noise were the Fourier projections used so far assuming? The answer to the last question turns out to be the centre of this post. All calculations use the pinhole probe and the 144-position Fermat spiral used since Post 3, each repeated with three noise draws.
+There are three questions. What happens to the algorithms so far when photons are scarce? What cost function reflects the noise properly, and how much better does it do? And what noise were the Fourier projections used so far assuming? The answer to the last question turns out to be the centre of this post. All calculations use the pinhole probe and the 144-position Fermat spiral of Post 4, each repeated with three noise draws.
 
 ## 1. How Much Does a Photon Count Fluctuate?
 
@@ -21,7 +21,7 @@ When a detector pixel receives $I$ photons on average, the number actually count
 
 $$ p(n \mid I) = \frac{I^{\,n}\, e^{-I}}{n!} $$
 
-Here $I$ is the expected value set by the specimen and probe, the intensity written so far as $\lvert \mathcal{F}\{\psi_j\} \rvert^2$, and $n$ is the measured photon count. The variance of this distribution equals its mean. Where 100 photons are expected, the count varies by about ±10; where 1 is expected, 0 or 2 are common. The relative error is $1/\sqrt{I}$, so brighter pixels are more trustworthy.
+Here $I$ is the expected value set by the specimen and probe, the intensity written so far as $$\lvert \mathcal{F}\{\psi_j\} \rvert^2$$, and $n$ is the measured photon count. The variance of this distribution equals its mean. Where 100 photons are expected, the count varies by about ±10; where 1 is expected, 0 or 2 are common. The relative error is $1/\sqrt{I}$, so brighter pixels are more trustworthy.
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig1-photon-patterns.png" alt="The same diffraction pattern drawn with 10 to the 4th, 6th and 8th photons per pattern" width="900">
 _Fig 1. The same diffraction pattern drawn at three doses (log colour). At low dose most outer pixels hold 0 or 1 photon_
@@ -42,18 +42,18 @@ It is the obvious choice, but it ignores the fact that the variance equals the m
 
 $$ L_{\text{amplitude}} = \sum_{j,q} \left( \sqrt{I_{jq}} - \sqrt{n_{jq}} \right)^2 $$
 
-Which of the three suits the noise? In a 2012 paper, Thibault and Guizar-Sicairos showed that expanding the Poisson cost around $\sqrt{n}$ gives the amplitude cost. The reason is that the square root evens out the variance. The variance of the count $n$ grows with its mean, but the variance of $\sqrt{n}$ settles at about 1/4 regardless of the mean. This is called variance stabilization.
+Which of the three suits the noise? In a 2012 paper, Thibault and Guizar-Sicairos showed that expanding the Poisson cost around $\sqrt{n}$ gives the amplitude cost. The reason is that the square root evens out the variance. The variance of the count $n$ grows with its mean, but the variance of $\sqrt{n}$ settles at about 1/4 regardless of the mean once the mean is reasonably large. This is called variance stabilization.
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig2-variance-stabilization.png" alt="Variance of n and of the square root of n under a Poisson distribution, as a function of the mean photon count" width="650">
 _Fig 2. The variance of the photon count n equals its mean, but the variance of √n settles near 1/4 once the mean exceeds a few_
 
 Fig 2 checks this by Monte Carlo. The variance of $\sqrt{n}$ is 0.253 at a mean of 30 and 0.251 at 300, close to 1/4. At a mean of 5 it is 0.285 and at 1 it is 0.40, above 1/4, and at even lower means it drops below. The amplitude cost is a Gaussian assumption that every pixel fluctuates by the same amount, and for pixels with more than a few photons that assumption is nearly the same as Poisson. It breaks down for pixels holding 0–1 photons.
 
-One point deserves attention here. The Fourier projection used since Post 3 replaced only the amplitude with the measured value and kept the phase. Differentiating the amplitude cost with respect to the conjugate exit wave gives $\left(1 - \sqrt{n}/\lvert\Psi\rvert\right)\Psi$, and the correction the Fourier projection adds to the exit wave is exactly this with a minus sign. Computed both ways, they agree to $10^{-15}$. Every algorithm in Posts 1–5 has been walking down the gradient of the amplitude cost, and so has been using a noise model close to Poisson from the start. Thibault and colleagues noted that this connection may partly explain why phase-retrieval algorithms are fairly robust to noise.
+One point deserves attention here. The Fourier projection used since Post 2 replaced only the amplitude with the measured value and kept the phase. Differentiating the amplitude cost with respect to the conjugate exit wave gives $\left(1 - \sqrt{n}/\lvert\Psi\rvert\right)\Psi$, and the correction the Fourier projection adds to the exit wave is exactly this with a minus sign. Computed both ways, they agree to $10^{-15}$. Every algorithm in Posts 1–5 uses the same Fourier projection onto the measured amplitude, and that one step is one gradient step on the amplitude cost. ER and the PIE family, ePIE and rPIE, follow that step directly. The reflection-type algorithms, HIO, RAAR and DM, only combine the same projection in a different way. So an amplitude constraint close to Poisson has been in use from the start. Thibault and colleagues noted that this connection may partly explain why phase-retrieval algorithms are fairly robust to noise.
 
 ## 3. How Much Does the Cost Function Change the Reconstruction of the Same Data?
 
-Does the theory hold up in calculation? To isolate the effect of noise, the probe was given. The three costs were minimised the same way, by gradient descent: the gradient is divided by the illumination each pixel received, $\sum \lvert P \rvert^2$, to set the direction, and a line search picks a step that actually lowers the cost. rPIE from Post 3 and the difference map (DM) from Post 5 are included alongside.
+Does the theory hold up in calculation? To isolate the effect of noise, the probe was given. The three costs were minimised the same way, by gradient descent: the gradient is divided by the illumination each pixel received, $\sum \lvert P \rvert^2$, to set the direction, and a line search picks a step that actually lowers the cost. rPIE from Post 4 and the difference map (DM) from Post 5 are included alongside.
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig3-error-vs-dose.png" alt="Final error versus dose with the probe known, for rPIE, rPIE with a decaying step, DM, amplitude ML, Poisson ML and intensity least squares" width="750">
 _Fig 3. Final error versus dose with the probe known (300 iterations, median and range of 3 noise draws). Amplitude and Poisson ML are lowest_
@@ -65,7 +65,7 @@ _Fig 3. Final error versus dose with the probe known (300 iterations, median and
 | $10^6$ | 0.031 | 0.085 | 0.017 | 0.0165 | 0.44 |
 | $10^7$ | 0.0094 | 0.059 | 0.0053 | 0.0052 | 0.42 |
 
-First, above $10^5$ photons the ML error falls by about $\sqrt{10} \approx 3.2$ for every tenfold increase in dose (2.6 between $10^4$ and $10^5$). The error is inversely proportional to the square root of the photon count, as expected for a measurement whose relative noise is $1/\sqrt{N}$. Reaching a given error takes photons in proportion to the square of the improvement: halving the error costs four times the dose.
+First, above $10^5$ photons the ML error falls by about $\sqrt{10} \approx 3.2$ for every tenfold increase in dose (2.6–2.8 between $10^4$ and $10^5$). The error is inversely proportional to the square root of the photon count, as expected for a measurement whose relative noise is $1/\sqrt{N}$. Reaching a given error takes photons in proportion to the square of the improvement: halving the error costs four times the dose.
 
 Amplitude ML and Poisson ML are practically the same at every dose. The largest difference is 7 %, and even at $10^4$, where 94 % of pixels hold 0–1 photons, they give 0.143 and 0.148. The variance stabilization of Section 2 holds well enough for this problem. Intensity least squares, by contrast, stays near 0.4 however high the dose.
 
@@ -99,7 +99,7 @@ ML has no such drift. The line search accepts only steps that actually lower the
 
 ## 6. Should the Photons Be Spread Over Many Positions or Concentrated in Few?
 
-Given a fixed dose, is it better to place positions densely and use few photons per pattern, or to use fewer positions with more photons each? Rodenburg and Maiden note in their handbook chapter that what matters is not the noise in any single pattern but the total number of photons the reconstruction gathers.
+Given a fixed dose, is it better to place positions densely and use few photons per pattern, or to use fewer positions with more photons each? Rodenburg and Maiden note in their handbook chapter that what matters is not the noise in any single pattern but the total number of photons the reconstruction gathers (when the detector counts photons nearly perfectly and has no read noise).
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig6-dose-fractionation.png" alt="Specimen error as the number of positions changes from 47 to 369 with the total photon count fixed" width="650">
 _Fig 6. Total photons fixed at $1.44\times10^8$ while the number of positions changes. The total, not the number of positions, sets the error_
@@ -108,7 +108,7 @@ The spacing of a Fermat spiral covering the same area was varied to use 47 to 36
 
 ## Summary
 
-The noise of photon counting follows a Poisson distribution, whose variance equals its mean. The Poisson cost, which uses this directly, and the amplitude cost, which evens out the variance with a square root, gave almost the same answer in these calculations. The Fourier projection used since Post 3 is one gradient step on the amplitude cost, so the algorithms so far were already using a sensible noise model. Intensity least squares, which fits the intensities directly, had an estimator twice as bad and failed to converge. That is the one to avoid.
+The noise of photon counting follows a Poisson distribution, whose variance equals its mean. The Poisson cost, which uses this directly, and the amplitude cost, which evens out the variance with a square root, gave almost the same answer in these calculations. The Fourier projection used since Post 3 is one gradient step on the amplitude cost, so the Fourier projection was already using a sensible noise model. Intensity least squares, which fits the intensities directly, had an estimator twice as bad and failed to converge. That is the one to avoid.
 
 Even with the same cost, the update scheme changes the result. rPIE, which fits each position's measurement almost completely, fluctuated with the noise and was 1.5–1.8 times worse than ML; at low dose with the probe unknown it drifted along the scale direction and collapsed. DM oscillated with noise. ML refinement, which accepts only steps that lower the total cost, has no such drift and reaches the same error as with the probe known. The error is inversely proportional to the square root of the total photon count, and how those photons are split among positions matters little.
 
