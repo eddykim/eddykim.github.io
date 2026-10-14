@@ -1,4 +1,4 @@
-"""계산 이미징과 타이코그래피 4편 그림 6개 생성 (한국어판·영문판)."""
+"""계산 이미징과 타이코그래피 4편 그림 5개 생성 (한국어판·영문판)."""
 import os
 
 import matplotlib.pyplot as plt
@@ -18,39 +18,29 @@ LABELS = {
         "v_true": "원래 (O, P)", "v_scale": "척도 교환 (cO, P/c)", "v_ramp": "위상 기울기",
         "v_lat": "격자 주기 함수 f (규칙 격자에서만)",
         "o_ph": "시편 위상", "p_amp": "프로브 진폭", "p_ph": "프로브 위상",
-        "fig1": "그림1. 넷 다 모든 회절 패턴이 똑같다. 마지막 것은 주사가 규칙 격자일 때만 그렇다",
         "regular": "규칙 격자", "jitter": "±1화소 흔든 격자", "fermat": "페르마 나선",
         "rec": "복원 진폭", "errmap": "오차 |O - O_true|", "spec": "오차 스펙트럼 (로그)",
-        "fig2": "그림2. 규칙 격자에서만 오차가 격자 모양으로 남고, 그 스펙트럼은 격자 주파수에 몰린다",
         "pn": "프로브 세기 |P| / |P|max", "w": "시편에 반영하는 비율 w",
         "l_epie": "ePIE (rPIE $\\alpha = 1$)", "l_pie": "PIE ($\\alpha = 10^{-4}$)",
         "l_r25": "rPIE $\\alpha = 0.25$", "l_r05": "rPIE $\\alpha = 0.05$",
-        "fig3": "그림3. ePIE는 밝은 곳 말고는 거의 고치지 않는다. rPIE는 α로 그 곡선을 끌어올린다",
         "iters": "반복 횟수", "err": "상대 오차",
         "pinhole": "핀홀 프로브", "defocus": "초점이 어긋난 집속 프로브", "diffuser": "확산판 프로브",
-        "fig4": "그림4. rPIE는 ePIE보다 열 배 이상 빨리 수렴한다. 확산판 프로브는 둘 다 풀지 못한다",
         "t_p": "참 프로브", "init": "초기 추정 (초점에 맞춤)", "e_found": "ePIE 200회", "r_found": "rPIE 200회",
         "amp": "진폭", "phase": "위상",
-        "fig5": "그림5. 초점에 맞춘 추정에서 출발해 ePIE와 rPIE 모두 휜 파면을 찾는다. rPIE가 훨씬 빠르다",
     },
     "en": {"dir": os.path.join(BASE, "en"), "font": {}, "legend": {},
         "v_true": "Original (O, P)", "v_scale": "Scale exchange (cO, P/c)", "v_ramp": "Phase ramp",
         "v_lat": "Lattice-periodic f (regular grid only)",
-        "o_ph": "object phase", "p_amp": "probe amplitude", "p_ph": "probe phase",
-        "fig1": "Fig 1. All four give identical diffraction patterns; the last only on a regular grid",
+        "o_ph": "specimen phase", "p_amp": "probe amplitude", "p_ph": "probe phase",
         "regular": "Regular grid", "jitter": "Grid jittered by ±1 px", "fermat": "Fermat spiral",
         "rec": "Reconstructed amplitude", "errmap": "Error |O - O_true|", "spec": "Error spectrum (log)",
-        "fig2": "Fig 2. Only on the regular grid does the error form a grid pattern, concentrated at grid frequencies",
-        "pn": "Probe brightness |P| / |P|max", "w": "Fraction applied to the object, w",
+        "pn": "Probe brightness |P| / |P|max", "w": "Fraction applied to the specimen, w",
         "l_epie": "ePIE (rPIE $\\alpha = 1$)", "l_pie": "PIE ($\\alpha = 10^{-4}$)",
         "l_r25": "rPIE $\\alpha = 0.25$", "l_r05": "rPIE $\\alpha = 0.05$",
-        "fig3": "Fig 3. ePIE barely corrects anything but the bright region; rPIE lifts the curve through α",
         "iters": "Iterations", "err": "Relative error",
         "pinhole": "Pinhole probe", "defocus": "Defocused focused probe", "diffuser": "Diffuser probe",
-        "fig4": "Fig 4. rPIE converges more than ten times faster than ePIE; neither solves the diffuser probe",
-        "t_p": "True probe", "init": "Initial guess (in focus)", "e_found": "ePIE, 200 it.", "r_found": "rPIE, 200 it.",
+        "t_p": "True probe", "init": "Initial guess (in focus)", "e_found": "ePIE, 200 iterations", "r_found": "rPIE, 200 iterations",
         "amp": "amplitude", "phase": "phase",
-        "fig5": "Fig 5. From an in-focus guess, both ePIE and rPIE recover the curved wavefront; rPIE is far faster",
     },
 }
 
@@ -92,9 +82,9 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.06, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
-        fig.tight_layout(rect=rect)
+    def cap(fig, key, rect=(0, 0, 1, 1)):
+        # 캡션은 본문에 둔다. 이미지 안에는 그림 번호와 설명을 넣지 않는다.
+        fig.tight_layout(rect=(0, 0, 1, 1))
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)

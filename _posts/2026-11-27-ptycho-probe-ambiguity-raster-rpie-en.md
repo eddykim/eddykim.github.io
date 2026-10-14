@@ -1,5 +1,5 @@
 ---
-title: "Computational Imaging and Ptychography 4 — Why Does a Regular Scan Leave a Pattern? Probe Retrieval and Its Pitfalls"
+title: "Computational Imaging and Ptychography 4 — Why Does a Regular Scan Leave a Grid Pattern in the Reconstructed Image?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ptycho-probe-ambiguity-raster-rpie/
@@ -11,37 +11,37 @@ description: "When the ambiguities of an unknown probe imprint a pattern on the 
 math: true
 ---
 
-ePIE in [Post 3](/en/posts/ptycho-overlap-pie-epie/) recovered the probe along with the specimen. The price was a new set of solutions that the measurement cannot tell apart. Multiplying the specimen by a constant and dividing the probe by the same constant left every diffraction pattern unchanged. So did giving the specimen and the probe opposite phase ramps. Post 3 simply aligned these away when measuring the error.
+ePIE (extended ptychographical iterative engine) in [Post 3](/en/posts/ptycho-overlap-pie-epie/) recovered the probe along with the specimen. The price was a new set of solutions that the measurement cannot tell apart. Multiplying the specimen by a constant and dividing the probe by the same constant left every diffraction pattern unchanged. So did giving the specimen and the probe opposite phase ramps. Post 3 simply aligned these away when measuring the error.
 
 Is that really safe? This post looks at these ambiguities more closely. Most of them are indeed harmless. On a regular scan grid, however, the number of ambiguities becomes infinite, and they are imprinted on the reconstruction as a grid-shaped pattern. After that, the post returns to ePIE, which Post 3 found to need many iterations once the probe is unknown. rPIE changes a single weight in the update and solves the same problem more than ten times faster.
 
-## 1. What the Measurement Cannot Distinguish
+## 1. Which Solutions Can the Measurement Not Tell Apart?
 
 Restating the measurement from Post 3: at position $j$ the exit wave is $\psi_j(r) = P(r - R_j)\,O(r)$, and the detector records $\lvert \mathcal{F}\{\psi_j\} \rvert^2$. In what ways can $O$ and $P$ be changed without changing this measurement?
 
 The first is a scale exchange. Multiply $O$ by a complex number $c$ and divide $P$ by $c$; the product is unchanged. The second is a phase ramp. Multiply the specimen by $e^{i g \cdot r}$ and the probe by $e^{-i g \cdot r}$, and the exit wave picks up only a constant phase $e^{i g \cdot R_j}$. The constant differs from one position to the next, but within each pattern it is a constant, so the intensity does not change. The third is to shift the specimen and the probe together in the same direction. The scan positions fix only their relative position, so the measurement is the same. When Maiden and Rodenburg introduced ePIE, they listed the scale exchange and the shift among these as ambiguities of the solution.
 
 <img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/en/fig1-ambiguities.png" alt="Specimen phase and probe amplitude and phase for the original pair and for pairs transformed by a scale exchange, a phase ramp, and a lattice-periodic function" width="850">
-_Fig 1. All four give identical diffraction patterns; the last only on a regular grid_
+_Fig 1. The original pair and the three transformed pairs (scale exchange, phase ramp, lattice-periodic function) give identical diffraction patterns at all 144 positions. The rows show the specimen phase, the probe amplitude and the probe phase; the transformation in the last column preserves the patterns only when the scan is a regular grid._
 
 The first three columns of Fig 1 are the original pair and the two transformations above. The specimen and probe phases look clearly different, yet when all 144 diffraction patterns are computed and compared, the largest relative difference is of order $10^{-16}$, which is rounding error.
 
 These three are effectively harmless. Each acts on the whole specimen at once, so it does not destroy any information in the image. They amount to a choice of brightness reference, a tilt of the phase baseline, and a choice of coordinate origin. In a real measurement one takes empty space without specimen as the reference, or aligns them when measuring the error. The fourth column of Fig 1 is a different matter.
 
-## 2. The Trap of the Regular Grid
+## 2. Why Is a Regular Grid a Problem?
 
-Suppose the scan positions lie on a square grid of spacing $a$, so every $R_j$ is an integer multiple of $a$. Now pick any complex function $f(r)$ that is periodic with period $a$ in both directions, multiply the specimen by it and divide the probe by it.
+What new freedom appears on a regular grid? Suppose the scan positions lie on a square grid of spacing $a$, so every $R_j$ is an integer multiple of $a$. Now pick any complex function $f(r)$ that is periodic with period $a$ in both directions, multiply the specimen by it and divide the probe by it.
 
 $$ \frac{P(r - R_j)}{f(r - R_j)}\, O(r)\, f(r) = P(r - R_j)\, O(r)\, \frac{f(r)}{f(r - R_j)} = \psi_j(r) $$
 
-Since $f$ has period $a$ and $R_j$ is a multiple of $a$, $f(r - R_j) = f(r)$. The exit wave does not change at all. The three ambiguities above were fixed by a few numbers, a constant $c$ or a ramp $g$. Here a whole periodic function is free. It can take any shape within one grid cell, so there are as many degrees of freedom as there are pixels in a cell. The fourth column of Fig 1 is such a pair on a grid of 8-pixel spacing. The specimen has stripes and the probe is distorted, yet the diffraction patterns agree to within rounding error. On a jittered grid or a Fermat spiral, the same transformation changes the intensities by up to 20 %.
+Here $f$ has period $a$ and $R_j$ is a multiple of $a$, so $f(r - R_j) = f(r)$. That is, the exit wave does not change at all. The three ambiguities above were fixed by a few numbers, a constant $c$ or a ramp $g$. Here a whole periodic function is free. It can take any shape within one grid cell, so there are as many degrees of freedom as there are pixels in a cell. The fourth column of Fig 1 is such a pair on a grid of 8-pixel spacing. The specimen has stripes and the probe is distorted, yet the diffraction patterns agree to within rounding error. On a jittered grid or a Fermat spiral, the same transformation changes the intensities by up to 20 %.
 
-This is the raster grid pathology. Thibault and colleagues pointed it out in 2009, and tools such as PtyLab have since taken it as a basic premise that ptychography needs a non-periodic scan to avoid ambiguities. The equation also shows that the problem exists only when the probe is unknown. If the probe is known exactly, $P/f$ is not allowed.
+This is the raster grid pathology. Thibault and colleagues pointed it out in 2009, and tools such as PtyLab have since taken it as a basic premise that a non-periodic scan is needed to avoid ambiguities. The equation also shows that the problem exists only when the probe is unknown. If the probe is known exactly, $P/f$ is not allowed.
 
 Does a pattern really remain in the reconstruction? The same 144 positions were arranged in three ways and reconstructed without knowledge of the probe (rPIE from the next section, 300 iterations). Each case was run with three different orders of processing the patterns, and the table and figure show the run with the middle error.
 
 <img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/en/fig2-raster-grid.png" alt="Scan positions, reconstructed amplitude, error image, and error spectrum for a regular grid, a jittered grid, and a Fermat spiral" width="900">
-_Fig 2. Only on the regular grid does the error form a grid pattern, concentrated at grid frequencies_
+_Fig 2. From the top, the regular grid, the grid jittered by ±1 pixel and the Fermat spiral; the columns are the scan positions, the reconstructed amplitude (specimen error in brackets), the error image (same colour scale in all three rows) and the error spectrum (the percentage is the share at grid frequencies). The error forms a grid pattern only on the regular grid, and its spectrum is concentrated at the grid frequencies._
 
 | Scan | Specimen error | Probe error | Data residual | Probe known | Error share at grid frequencies |
 |---|---|---|---|---|---|
@@ -57,7 +57,7 @@ How much, then, does the grid need to be jittered? The jitter amplitude was set 
 
 The equation makes this unsurprising. In the derivation above, $f$ had to stay the same when shifted by every $R_j$. On a regular grid every $R_j$ is a multiple of 8 pixels, so any function with an 8-pixel period satisfies the condition. Once each position carries an offset of a pixel or so, the differences between positions generate shifts of one pixel horizontally and vertically. Then $f$ must be unchanged by a one-pixel shift, and on a pixel grid the only such function is a constant. What remains is the scale exchange of Section 1, which is harmless.
 
-The jittered grid did show a different kind of failure, though. In about four of every nine runs the reconstruction stopped near an error of 0.018 or 0.034. These runs have residuals of $3\times10^{-2}$ or more, so they do not explain the data, and running them to 2000 iterations did not get them out. Looking closer, the centre of mass of the probe is off by 1–2 pixels from the true probe. The probe appears to have slid along the shift direction of Section 1, while the specimen, whose region outside the illumination still holds its initial value, could not follow as a whole, leaving the two locked in a misaligned state. This kind of stagnation differs in nature from an ambiguity. The residual is large, so the data does report the failure. In these calculations, rerunning with a different order got out of it. The Fermat spiral never stagnated over twelve orders, but these calculations do not explain why stagnation is frequent on the jittered grid alone.
+The jittered grid did show a different kind of failure, though. In about four of every nine runs the reconstruction stopped near an error of 0.018 or 0.034. These runs have residuals of $2.8\times10^{-2}$ or more, so they do not explain the data, and running them to 2000 iterations did not get them out. Looking closer, the centre of mass of the probe is off by 1–2 pixels from the true probe. The probe appears to have slid along the shift direction of Section 1. The specimen, whose region outside the illumination still holds its initial value, could not follow as a whole, which left the two locked in a misaligned state. This kind of stagnation differs in nature from an ambiguity. The residual is large, so the data does report the failure. In these calculations, rerunning with a different order got out of it. The Fermat spiral never stagnated over twelve orders, but these calculations do not explain why stagnation is frequent on the jittered grid alone.
 
 In practice the Fermat spiral is the common choice. Odstrčil and colleagues and PtyLab use it, citing Huang and colleagues. The points on the spiral have nearly uniform spacing to their neighbours, yet do not repeat in any direction. It removes periodicity while keeping the overlap as even as a grid. Kandel and colleagues showed an example where, with few photons, the pattern from a regular grid spoiled the reconstruction.
 
@@ -67,28 +67,30 @@ In Post 3, ePIE needed far more iterations than PIE with a known probe. What mak
 
 $$ o' = o + \frac{P^*}{\lvert P \rvert_{\max}^2} (\psi' - \psi) $$
 
+Here $o$ and $o'$ are the specimen estimate before and after the update, $P^*$ is the complex conjugate of the probe, and $\psi$ and $\psi'$ are the exit wave before and after it is made to fit the measurement. That is, the change in the exit wave is carried back to the specimen through the conjugate probe, with the step divided by the square of the probe's maximum intensity. This update can be read in three ways.
+
 First, it can be read as a weighted average. The exit wave corrected to the measurement, divided by the probe, $\psi'/P$, is a new estimate, and it is mixed with the old estimate $o$ in the ratio $w = \lvert P \rvert^2 / \lvert P \rvert_{\max}^2$. Where the probe is bright the new value is trusted; where it is dark the old value is kept. Second, it can be read as gradient descent. As shown in Post 3, one ePIE step moves along the gradient of the per-position error with a step proportional to $1/\lvert P \rvert_{\max}^2$. That step comes from the Lipschitz constant of the error gradient, the same kind of step used by the Landweber iteration of [Post 1](/en/posts/ptycho-computational-imaging-inverse-problem/). It is stable but conservative. Third, it can be read as a regularized cost. Minimising the exit-wave error plus a penalty saying "do not change the specimen much" gives the ePIE update. The strength of that penalty, however, differs from pixel to pixel. It is as if the $\lambda$ of the Tikhonov regularization in Post 1 varied with position.
 
 All three views point to the same problem. The weight $w = \lvert P \rvert^2 / \lvert P \rvert_{\max}^2$ falls off too quickly. Where the probe is half as bright as its maximum, ePIE applies only 25 % of the correction, and where it is 0.2 only 4 %. In effect it corrects little apart from the probe centre.
 
 <img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/en/fig3-update-weights.png" alt="Fraction of the correction applied to the specimen by ePIE, PIE and rPIE as a function of probe brightness" width="650">
-_Fig 3. ePIE barely corrects anything but the bright region; rPIE lifts the curve through α_
+_Fig 3. The horizontal axis is probe brightness and the vertical axis is the fraction of the correction applied to the specimen. ePIE barely corrects anything but the bright region, and rPIE lifts the curve as α is reduced._
 
 So Maiden and colleagues proposed rPIE (regularized PIE), which changes only the denominator.
 
 $$ o' = o + \frac{P^*}{(1 - \alpha)\lvert P \rvert^2 + \alpha \lvert P \rvert_{\max}^2} (\psi' - \psi) $$
 
-With $\alpha = 1$ it is ePIE. As $\alpha$ approaches 0 the denominator becomes $\lvert P \rvert^2$, and the update simply divides the exit wave by the probe. In between, it is close to division like the PIE of Post 3, while a floor of $\alpha\lvert P \rvert_{\max}^2$ keeps it from blowing up where the probe vanishes. As Fig 3 shows, with $\alpha = 0.05$ the update applies 87 % of the correction even where the probe is half as bright. The probe update is the same formula with the roles of specimen and probe exchanged, and Maiden and colleagues recommended keeping it at $\beta = 1$, the same form as ePIE. The reason is that the specimen usually has a fairly uniform, high transmission, so the weight in the probe update does not vary much. This post also uses $\alpha = 0.05$ and $\beta = 1$.
+Here $\alpha$ is a constant between 0 and 1. With $\alpha = 1$ it is ePIE. As $\alpha$ approaches 0 the denominator becomes $\lvert P \rvert^2$, and the update simply divides the exit wave by the probe. In between, it is close to division like the PIE of Post 3, while a floor of $\alpha\lvert P \rvert_{\max}^2$ keeps it from blowing up where the probe vanishes. As Fig 3 shows, with $\alpha = 0.05$ the update applies 87 % of the correction even where the probe is half as bright. The probe update is the same formula with the roles of specimen and probe exchanged, and Maiden and colleagues recommended keeping it at $\beta = 1$, the same form as ePIE. The reason is that the specimen usually has a fairly uniform, high transmission, so the weight in the probe update does not vary much. This post also uses $\alpha = 0.05$ and $\beta = 1$.
 
 <img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/en/fig4-convergence.png" alt="Convergence of ePIE and rPIE for a pinhole probe, a defocused focused probe, and a diffuser probe" width="900">
-_Fig 4. rPIE converges more than ten times faster than ePIE; neither solves the diffuser probe_
+_Fig 4. Relative error of reconstructions from a Fermat spiral scan; the line is the median over three pattern orders and the band is their range. rPIE converges more than ten times faster than ePIE, and neither solves the diffuser probe._
 
 Fig 4 shows reconstructions from a Fermat spiral scan, repeated with three pattern orders. The line is the median and the band is the range of the three. With the same pinhole probe as Post 3, rPIE reaches an error of 0.014 within 20 iterations, better than the 0.024 that ePIE reaches after 200. At 200 iterations rPIE is at 0.0012, a twentieth of ePIE. rPIE traces almost the same curve whatever the order, while for ePIE the iteration at which a given error is reached varies by tens depending on the order.
 
-The second panel is the case Maiden and colleagues gave as one where ePIE struggles. When a beam focused by a lens is used as the probe, it is hard to know exactly how far the specimen is from focus. The curvature of the probe wavefront is therefore estimated wrongly. Here the true probe is 100 µm out of focus, and the initial guess was a probe exactly in focus. rPIE goes down to 0.0005 in 200 iterations, while ePIE stays between 0.008 and 0.07 depending on the order.
+The second panel is the case Maiden and colleagues gave as one where ePIE struggles. When a beam focused by a lens is used as the probe, it is hard to know exactly how far the specimen is from focus. The curvature of the probe wavefront is therefore easily estimated wrongly. Here the true probe is 100 µm out of focus. The initial guess was a probe exactly in focus. rPIE goes down to 0.0005 in 200 iterations, while ePIE stays between 0.008 and 0.07 depending on the order.
 
 <img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/en/fig5-defocus-probe.png" alt="Amplitude and phase of the defocused true probe, the in-focus initial guess, and the probes found by ePIE and rPIE after 200 iterations" width="800">
-_Fig 5. From an in-focus guess, both ePIE and rPIE recover the curved wavefront; rPIE is far faster_
+_Fig 5. The top row is amplitude and the bottom row is phase. Starting from the in-focus initial guess, both ePIE and rPIE recover the curved wavefront within 200 iterations, but the probe error of rPIE is far smaller._
 
 In the phase of Fig 5, the initial guess is in focus and its phase is nearly flat, whereas the true probe is out of focus and its phase is curved into concentric rings. Both algorithms found that curved wavefront within 200 iterations, with probe errors of 0.0003–0.0006 for rPIE and 0.009–0.023 for ePIE.
 
@@ -102,7 +104,7 @@ ePIE is slow because its weight barely corrects anything outside the bright part
 
 ## Next
 
-rPIE could not solve the diffuser probe either. Post 5 starts from there. The momentum that Maiden and colleagues added to rPIE (mPIE) solves this problem, but brings a new risk with it. The scale exchange, called harmless in this post, runs away once it meets momentum. Post 5 then compares how the method that applies the difference map of Post 2 to ptychography (DM) handles all of these cases.
+rPIE could not solve the diffuser probe either. Post 5 starts from there. The momentum that Maiden and colleagues added to rPIE (mPIE) solves this problem, but a new risk comes with it. The scale exchange, called harmless in this post, grows out of control once it meets momentum. Post 5 then compares how the method that applies the difference map of Post 2 to ptychography (DM) handles all of these cases.
 
 ## References
 
