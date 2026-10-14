@@ -11,7 +11,7 @@ description: "Revisiting the diffuser probe that rPIE could not solve with momen
 math: true
 ---
 
-[Post 4](/en/posts/ptycho-probe-ambiguity-raster-rpie/) left one problem open. With a diffuser probe, a pinhole carrying a random phase plate, neither ePIE nor rPIE moved from an error of 0.99. Maiden, Johnson and Li, who proposed rPIE, offered a remedy in the same paper: mPIE, which adds momentum to rPIE. In their simulations mPIE solved difficult data such as a diffuser probe far faster and more reliably than rPIE.
+[Post 4](/en/posts/ptycho-probe-ambiguity-raster-rpie/) left one problem open. With a diffuser probe, a pinhole carrying a random phase plate, neither ePIE nor rPIE moved from an error of 0.99. Maiden, Johnson and Li, who proposed rPIE, offered a remedy in the same paper: mPIE, which adds momentum to rPIE. In their simulations mPIE halved rPIE's convergence time and was less sensitive to the pattern order.
 
 This post checks that remedy directly, with three questions. Does mPIE really solve the diffuser? If so, what does the work? And how does the method that applies the difference map (DM) of Post 2 to ptychography handle the same problem? To give the answer up front: what solved the diffuser was not momentum but the small step that came with it. Momentum sped things up for some probes and made the reconstruction diverge for others. All calculations use the same specimen and 144-position Fermat spiral as Post 4, repeated with three to five pattern orders.
 
@@ -23,7 +23,7 @@ Momentum is usually pictured as a ball rolling downhill. The ball does not look 
 
 $$ v \leftarrow \eta\, v + \left(O - O_{\text{prev}}\right), \qquad O \leftarrow O + \eta\, v $$
 
-Here $O_{\text{prev}}$ is the specimen $T$ updates ago, that is, right after the previous momentum step, and $v$ is the velocity. The value $\eta$, between 0 and 1, sets how much velocity to keep in the first equation (friction) and how much of it to add in the second (feedback). In short, it pushes the specimen once more in the direction the last $T$ updates moved it. With $\eta = 0$ it is rPIE. The probe has its own velocity, updated the same way. Maiden and colleagues recommended $T = 30$ and $\eta = 0.9$, and, since momentum enlarges the effective step, a reduced specimen step $\gamma_{\text{obj}}$ of 0.1–0.5. They used 0.2.
+Here $O_{\text{prev}}$ is the specimen $T$ updates ago, that is, right after the previous momentum step, and $v$ is the velocity. The value $\eta$, between 0 and 1, sets how much velocity to keep in the first equation (friction) and how much of it to add in the second (feedback). In short, it pushes the specimen once more in the direction the last $T$ updates moved it. With $\eta = 0$ it is rPIE. The probe has its own velocity, updated the same way. Maiden and colleagues used $T = 30$ and $\eta = 0.9$ and, in Table 3 of their paper, suggested a specimen step $\gamma_{\text{obj}}$ of 0.1–0.5. Since momentum enlarges the effective step, this can be read as a reduction. They used 0.2.
 
 <img src="/assets/img/posts/ptycho-momentum-difference-map/en/fig1-momentum-valley.png" alt="Trajectories and distance to the minimum for gradient descent, moderate momentum, and excessive momentum on a narrow quadratic valley" width="900">
 _Fig 1. On a narrow valley with the same step, trajectories (left) and distance to the minimum (right) for gradient descent, moderate momentum ($\eta$ = 0.6) and excessive momentum ($\eta$ = 0.9). Gradient descent bounces between the walls, moderate momentum builds speed along the floor, and too much overshoots the minimum._
@@ -76,11 +76,11 @@ Splitting where the momentum is applied narrows the cause down. With momentum on
 Then would a smaller $\eta$ help? Fig 4 shows five values each of $\eta$ and $\gamma_{\text{obj}}$ on all three probes.
 
 <img src="/assets/img/posts/ptycho-momentum-difference-map/en/fig4-parameter-map.png" alt="Maps of the final error over momentum and specimen step for the pinhole, defocused focused, and diffuser probes" width="950">
-_Fig 4. Final error (300 iterations, median of 3 orders) on three probes as momentum $\eta$ and specimen step $\gamma_{obj}$ vary. The number in each cell counts runs below 0.05 and the red cell marks the values used by Maiden and colleagues. The pinhole fails at large momentum, and the diffuser fails at large steps._
+_Fig 4. Final error (300 iterations, median of 3 orders) on three probes as momentum $\eta$ and specimen step $$\gamma_{obj}$$ vary. The number in each cell counts runs below 0.05 and the red cell marks the values used by Maiden and colleagues. The pinhole fails at large momentum, and the diffuser fails at large steps._
 
 The three maps look different. For the pinhole, seven of the ten cells with $\eta$ of 0.8 or more never succeed. For the defocused probe from Post 4, every cell has a median below 0.003, and the error falls as momentum grows, below $10^{-4}$ at $\eta = 0.9$ (though two cells at $\eta = 0.9$ still fail in one run of three). For the diffuser, specimen steps above 0.35 fail regardless of momentum, and even within that range the successful cells are scattered. The $\eta = 0.7$ row fails in all five cells, while the $\eta = 0.8$ and 0.9 rows have successful cells. Maiden's values (red cell) succeed on the defocused and diffuser probes but fail on the pinhole.
 
-The open-source toolbox PtyLab uses friction 0.7, feedback 0.3, and a step of 0.25 as its mPIE defaults. These do the opposite: they work on the pinhole (0.0026) and the defocused probe (0.0006) and fail on the diffuser in all five runs. Only three cells, in the lower-left corner, succeed in all three runs on all three probes: no momentum with steps of 0.1 and 0.2, and momentum 0.5 with a step of 0.1. Momentum is a knob that has to be retuned for each probe. Maiden and colleagues themselves name the large set of parameters as mPIE's weakness in their conclusion.
+The open-source toolbox PtyLab uses friction 0.7, feedback 0.3, and a step of 0.25 as its mPIE defaults. PtyLab, however, applies momentum per position with 5 % probability, whereas here it was applied every 20 iterations. These do the opposite: they work on the pinhole (0.0026) and the defocused probe (0.0006) and fail on the diffuser in all five runs. Only three cells, in the lower-left corner, succeed in all three runs on all three probes: no momentum with steps of 0.1 and 0.2, and momentum 0.5 with a step of 0.1. Momentum is a knob that has to be retuned for each probe. Maiden and colleagues themselves name the large set of parameters as mPIE's weakness in their conclusion.
 
 ## 4. How Is the Difference Map (DM) Different?
 
@@ -96,10 +96,10 @@ $$ \Psi \leftarrow \Psi + P_F\!\left(2P_O\Psi - \Psi\right) - P_O\Psi $$
 
 In terms of reflections $R = 2P - I$, this equals $\tfrac{1}{2}(R_F R_O + I)\Psi$; computing one step both ways agrees to $10^{-16}$. It has the same form as RAAR with $\beta = 1$, written $\tfrac{1}{2}(R_s R_m + I)$ in Post 2, except that the order of the two sets is swapped, so the measurement (Fourier) reflection comes last. DM is Post 2's HIO-family algorithm applied to the two sets of ptychography.
 
-A few things follow from this structure. There is nothing to tune: no step size, no momentum, and no position order, so the same input always gives the same answer. The price is holding the whole bundle of exit waves. In these calculations the specimen is 0.5 MB while the exit-wave bundle is 9.4 MB. With 10,000 positions and 256×256-pixel patterns, the bundle alone is 5.2 GB in complex64 and 10.5 GB in complex128. In real measurements that becomes a large share of memory. Time per iteration was similar to rPIE.
+A few things follow from this structure. There is no step size, no momentum (with $\beta$ fixed at 1), and no position order, so the same input always gives the same answer. The price is holding the whole bundle of exit waves. In these calculations the specimen is 0.5 MB while the exit-wave bundle is 9.4 MB. With 10,000 positions and 256×256-pixel patterns, the bundle alone is 5.2 GB in complex64 and 10.5 GB in complex128. In real measurements that becomes a large share of memory. Time per iteration was similar to rPIE.
 
 <img src="/assets/img/posts/ptycho-momentum-difference-map/en/fig5-three-probes.png" alt="Convergence of rPIE, rPIE with a small-step start, two mPIE settings, and DM for the pinhole, defocused focused, and diffuser probes" width="950">
-_Fig 5. Convergence of five methods on three probes (lines: median of 5 orders, bands: range; DM has no order). On the pinhole DM is lowest at 300 iterations (4×10⁻⁵); on the diffuser rPIE and mPIE (PtyLab defaults) fail and DM oscillates._
+_Fig 5. Convergence of five methods on three probes (lines: median of 5 orders, bands: range; DM has no order). On the pinhole DM is lowest at 300 iterations (4×10⁻⁵); on the diffuser rPIE and mPIE (PtyLab settings) fail and DM oscillates._
 
 In Fig 5, DM (grey) is slow at first. On the pinhole its error at 30 iterations is 0.075, larger than rPIE's 0.009. Once it settles, however, it falls quickly and reaches $4 \times 10^{-5}$ at 300 iterations, the lowest of the five methods. On the defocused probe it reaches 0.00026, the same as rPIE. On the diffuser it drops to 0.04 around 50 iterations, then rises again and oscillates near 0.12 at 300. Post 2 noted that HIO-family trajectories are sensitive to small perturbations, and that property seems to show up on a problem with a complicated probe like the diffuser. These calculations alone, however, do not establish the cause.
 
@@ -114,13 +114,13 @@ Looking at the recovered probe, its shape is almost the same as the true probe, 
 
 ## Summary
 
-| Probe | rPIE | rPIE, small step for first 10 | mPIE (Maiden values) | mPIE (PtyLab defaults) | DM |
+| Probe | rPIE | rPIE, small step for first 10 | mPIE (Maiden values) | mPIE (PtyLab settings) | DM |
 |---|---|---|---|---|---|
 | Pinhole | 0.00065 | 0.00065 | 4 of 5 fail | 0.0026 | 0.00004 |
 | Defocused focused | 0.00025 | 0.00024 | 0.00015 | 0.00061 | 0.00026 |
 | Diffuser | fails (1.0) | 0.022 | 0.021 | fails (1.0) | 0.12 (oscillating) |
 
-The values are specimen errors after 300 iterations, medians over five orders. What solved the diffuser probe was a small specimen step, not momentum, and it only needed to be small for the first three iterations. The key is to keep the specimen from setting too quickly while the probe is still wrong. Momentum lowers the error further and speeds up the start on problems that already go well, such as the defocused probe, but it drifts along the scale exchange. Even with the probe power held fixed, the drift from specimen momentum can pile up in weakly illuminated pixels and ruin the reconstruction, and the suitable values differ from probe to probe. DM has no parameters and goes deepest on the pinhole, but on the diffuser it oscillated and did not settle.
+The values are specimen errors after 300 iterations, medians over five orders. What solved the diffuser probe was a small specimen step, not momentum, and it only needed to be small for the first three iterations. The key is to keep the specimen from setting too quickly while the probe is still wrong. Momentum lowers the error further and speeds up the start on problems that already go well, such as the defocused probe, but it drifts along the scale exchange. Even with the probe power held fixed, the drift from specimen momentum can pile up in weakly illuminated pixels and ruin the reconstruction, and the suitable values differ from probe to probe. DM has no step size or momentum and goes deepest on the pinhole, but on the diffuser it oscillated and did not settle.
 
 In practice this suggests an order. Start with rPIE and a reduced specimen step for the first few iterations. Watch the data residual alongside to confirm convergence. If a faster or deeper answer is needed, add momentum or DM at that point, with the probe power fixed. Whatever the method, trust a result only after running it with several orders.
 
