@@ -15,7 +15,7 @@ COL = {"rPIE": "#c8553d", "rPIE_warm": "#2f6690", "mPIE": "#6a994e", "mPIE_ptyla
 LABELS = {
     "ko": {"dir": BASE, "font": KFONT, "legend": LFONT,
         "gd": "경사하강", "mom6": r"모멘텀 $\eta$ = 0.6", "mom9": r"모멘텀 $\eta$ = 0.9", "step": "걸음 수", "dist": "최솟값까지 거리", "x": "x (완만한 방향)", "y": "y (가파른 방향)",
-        "rPIE": r"rPIE ($\gamma$ = 1)", "rPIE_warm": r"rPIE, 처음 10회만 $\gamma$ = 0.25", "mPIE": "mPIE (Maiden 값)",
+        "rPIE": r"rPIE ($\gamma_{obj}$ = 1)", "rPIE_warm": r"rPIE, 처음 10회만 $\gamma_{obj}$ = 0.25", "mPIE": "mPIE (Maiden 값)",
         "mPIE_ptylab": "mPIE (PtyLab 기본값)", "DM": "DM",
         "iters": "반복 횟수", "err": "시편 오차", "resid": "데이터 잔차",
         "pinhole": "핀홀 프로브", "defocus": "초점이 어긋난 집속 프로브", "diffuser": "확산판 프로브",
@@ -24,17 +24,11 @@ LABELS = {
         "d_mom_prb": "모멘텀을 프로브에만", "d_rPIE": "rPIE (모멘텀 없음)",
         "eta": r"모멘텀 $\eta$ (마찰 = 피드백)", "gamma": r"시편 걸음 $\gamma_{obj}$",
         "t_p": "참 프로브", "found": "복원한 프로브", "err_plain": "시편 오차 (프로브 복원)", "err_known": "시편 오차 (프로브를 앎)",
-        "fig1": "그림1. 좁은 골짜기: 경사하강은 벽 사이를 오가며 느리게 가고, 알맞은 모멘텀은 바닥을 따라 속도를 붙이며, 지나친 모멘텀은 지나쳐 출렁인다",
-        "fig2": "그림2. 확산판 프로브: 처음 몇 회만 걸음을 줄여도 rPIE가 풀린다. 모멘텀은 초반만 조금 빠르다",
-        "fig3": "그림3. 핀홀 프로브: 세기 제어가 없으면 프로브 세기가 떠내려가고(왼쪽), 있으면 같은 표류가 시편 쪽에 쌓인다(오른쪽). 시편 모멘텀이 원인이다",
-        "fig4": "그림4. 최종 오차(300회, 순서 3가지의 중앙값). 칸 안의 숫자는 오차 0.05 아래로 내려간 횟수다",
-        "fig5": "그림5. 세 프로브에서 다섯 방법의 수렴 (선은 순서 5가지의 중앙값, 띠는 범위. DM은 순서가 없다)",
-        "fig6": "그림6. 확산판에서 멈춘 복원: 프로브 모양은 맞지만 2~4화소 밀려 있다. 프로브를 알면 오차가 열 배 넘게 작다",
     },
     "en": {"dir": os.path.join(BASE, "en"), "font": {}, "legend": {},
         "gd": "Gradient descent", "mom6": r"Momentum $\eta$ = 0.6", "mom9": r"Momentum $\eta$ = 0.9", "step": "Step", "dist": "Distance to minimum",
         "x": "x (shallow direction)", "y": "y (steep direction)",
-        "rPIE": r"rPIE ($\gamma$ = 1)", "rPIE_warm": r"rPIE, $\gamma$ = 0.25 for the first 10", "mPIE": "mPIE (Maiden values)",
+        "rPIE": r"rPIE ($\gamma_{obj}$ = 1)", "rPIE_warm": r"rPIE, $\gamma_{obj}$ = 0.25 for the first 10", "mPIE": "mPIE (Maiden values)",
         "mPIE_ptylab": "mPIE (PtyLab defaults)", "DM": "DM",
         "iters": "Iterations", "err": "Specimen error", "resid": "Data residual",
         "pinhole": "Pinhole probe", "defocus": "Defocused focused probe", "diffuser": "Diffuser probe",
@@ -44,12 +38,6 @@ LABELS = {
         "eta": r"Momentum $\eta$ (friction = feedback)", "gamma": r"Specimen step $\gamma_{obj}$",
         "t_p": "True probe", "found": "Recovered probe", "err_plain": "Specimen error (probe recovered)",
         "err_known": "Specimen error (probe known)",
-        "fig1": "Fig 1. A narrow valley: gradient descent bounces between the walls, moderate momentum speeds along the floor, too much overshoots",
-        "fig2": "Fig 2. Diffuser probe: shrinking the step for just the first few iterations lets rPIE succeed; momentum is only a little faster early",
-        "fig3": "Fig 3. Pinhole probe: without power control the probe power drifts (left); with it the same drift piles up in the specimen (right). Specimen momentum is the cause",
-        "fig4": "Fig 4. Final error (300 iterations, median of 3 orders). The number in each cell counts runs below 0.05",
-        "fig5": "Fig 5. Convergence of five methods on three probes (line: median of 5 orders, band: range; DM has no order)",
-        "fig6": "Fig 6. The stalled diffuser reconstruction: the probe has the right shape but is shifted by 2–4 pixels. A known probe gives a far smaller error",
     },
 }
 
@@ -74,8 +62,7 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.07, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
+    def cap(fig, key, rect=(0, 0, 1, 1)):
         fig.tight_layout(rect=rect)
 
     def save(fig, name, dpi=150):
@@ -139,9 +126,8 @@ def draw(L):
         a.set_xticks(range(len(gammas)), [str(g) for g in gammas]); a.set_yticks(range(len(etas)), [str(e) for e in etas])
         a.set_title(L[case], fontsize=10, **Fk); a.set_xlabel(L["gamma"], **Fk)
     ax[0].set_ylabel(L["eta"], **Fk)
-    fig.text(0.5, 0.015, L["fig4"], ha="center", fontsize=9, **Fk)
-    fig.subplots_adjust(left=0.05, right=0.9, bottom=0.2, top=0.9, wspace=0.08)
-    cb = fig.colorbar(im, cax=fig.add_axes([0.915, 0.2, 0.012, 0.7])); cb.set_label("log10 " + L["err"], **Fk)
+    fig.subplots_adjust(left=0.05, right=0.9, bottom=0.16, top=0.9, wspace=0.08)
+    cb = fig.colorbar(im, cax=fig.add_axes([0.915, 0.16, 0.012, 0.74])); cb.set_label("log10 " + L["err"], **Fk)
     save(fig, "fig4-parameter-map.png")
 
     # 그림5: 세 프로브, 다섯 방법
@@ -171,7 +157,7 @@ def draw(L):
     for a, r, key in ((ax[2], plain, "err_plain"), (ax[3], known, "err_known")):
         a.imshow(np.where(m, np.abs(r["rec"] - r["obj"]), np.nan)[bb], cmap="magma", vmin=0, vmax=0.1)
         a.set_title(f"{L[key]}: {r['err']:.2g}", fontsize=9.5, **Fk); a.set_axis_off()
-    cap(fig, "fig6", rect=(0, 0.06, 1, 0.95)); save(fig, "fig6-diffuser-stall.png")
+    cap(fig, "fig6", rect=(0, 0, 1, 0.97)); save(fig, "fig6-diffuser-stall.png")
 
 
 if __name__ == "__main__":
