@@ -11,21 +11,21 @@ description: Levenberg-Marquardt moves between Gauss-Newton and steepest descent
 math: true
 ---
 
-[Post 2](/en/posts/optimization-newton-gauss-newton/) applied Newton's method and Gauss-Newton (GN) to the same thickness-fitting problem. Newton diverged outright from the initial value $d_0=1540$ nm, where the sign of the curvature is inverted ($J''(d)<0$); Gauss-Newton, approximating the Hessian by $J^TJ$, avoided that failure and converged in three steps. The $J$ in $J^TJ$ is the Jacobian of the residuals, a different symbol from the objective $J(d)$. The end of that post noted that Gauss-Newton has a theoretical limit of its own: if the discarded term $\sum_i r_i r_i''$ is not negligible — large residuals, or a Jacobian close to singular — convergence slows or fails altogether.
+[Post 2](/en/posts/optimization-newton-gauss-newton/) applied Newton's method and Gauss-Newton (GN) to the same thickness-fitting problem. Newton diverged outright from the initial value $d_0=1540$ nm, where the sign of the curvature is inverted ($$J''(d)<0$$); Gauss-Newton, approximating the Hessian by $J^TJ$, avoided that failure and converged in three steps. The $J$ in $J^TJ$ is the Jacobian of the residuals, a different symbol from the objective $J(d)$. The end of that post noted that Gauss-Newton has a theoretical limit of its own: if the discarded term $$\sum_i r_i r_i''$$ is not negligible — large residuals, or a Jacobian close to singular — convergence slows or fails altogether.
 
 This post covers Levenberg-Marquardt (LM), which uses a damping parameter $\mu$ to prevent the failure in which the Gauss-Newton step grows too large and diverges. The cause may be large residuals, as in section 7 of post 2, or a Jacobian close to zero, as reproduced later in this post with a wrong refractive index. Near the solution, however, LM uses the same approximate Hessian as Gauss-Newton, so it does not cure the slow convergence of large-residual problems. LM is the method most metrology software actually standardizes on. The experiments here construct a situation in which Gauss-Newton genuinely fails, to see how LM rescues it.
 
 ## 1. How can the Gauss-Newton step be tamed?
 
-In post 2 the Gauss-Newton step came from solving the normal equation $(J^TJ)\,\Delta d = -J^Tr$ — here a scalar, with $J^TJ = \sum_i r_i'^2$ and $J^Tr=\sum_i r_i' r_i$. The trouble starts when the denominator $J^TJ$ approaches zero. The step is $-J^Tr$ divided by $J^TJ$, so as the denominator shrinks the step grows without bound. How can it be held in check? LM's answer is to add a positive $\mu$ to the diagonal of the normal equation.
+In post 2 the Gauss-Newton step came from solving the normal equation $(J^TJ)\,\Delta d = -J^Tr$ — here a scalar, with $$J^TJ = \sum_i r_i'^2$$ and $$J^Tr=\sum_i r_i' r_i$$. The trouble starts when the denominator $J^TJ$ approaches zero. The step is $-J^Tr$ divided by $J^TJ$, so as the denominator shrinks the step grows without bound. How can it be held in check? LM's answer is to add a positive $\mu$ to the diagonal of the normal equation.
 
 $$ (J^TJ + \mu I)\, h_{lm} = -J^Tr $$
 
-With thickness as the only parameter, $J^TJ$ is the scalar $A=\sum_i r_i'^2$ and the step reduces to:
+With thickness as the only parameter, $J^TJ$ is the scalar $$A=\sum_i r_i'^2$$ and the step reduces to:
 
 $$ h_{lm} = -\frac{g}{A+\mu}, \qquad g = \sum_i r_i' r_i $$
 
-Here $g$ is the gradient of the objective, $J'(d)$, and $\mu$ is the damping parameter. Its role is clearest at the extremes. As $\mu \to 0$, $h_{lm}$ becomes exactly the Gauss-Newton step. As $\mu \to \infty$, $A$ becomes negligible and $h_{lm} \approx -g/\mu$ — steepest descent, a step of $1/\mu$ times the gradient in the opposite direction. This is post 1's gradient descent with learning rate $\alpha=1/\mu$. A single parameter serves as the handle that slides between "safe but slow" and "fast but vulnerable to curvature" — a bridge between the two methods.
+Here $g$ is the gradient of the objective, $$J'(d)$$, and $\mu$ is the damping parameter. Its role is clearest at the extremes. As $\mu \to 0$, $h_{lm}$ becomes exactly the Gauss-Newton step. As $\mu \to \infty$, $A$ becomes negligible and $h_{lm} \approx -g/\mu$ — steepest descent, a step of $1/\mu$ times the gradient in the opposite direction. This is post 1's gradient descent with learning rate $\alpha=1/\mu$. A single parameter serves as the handle that slides between "safe but slow" and "fast but vulnerable to curvature" — a bridge between the two methods.
 
 The form of the step has a practical consequence. Its size, $\lvert h_{lm}\rvert = \lvert g\rvert/(A+\mu)$, never exceeds either the Gauss-Newton step $\lvert g\rvert/A$ or the steepest-descent step $\lvert g\rvert/\mu$. Even if $A$ collapses to zero, the step stops at $\lvert g\rvert/\mu$. The two behaviours part ways at $\mu\approx A$: well below it LM acts like Gauss-Newton, well above it like steepest descent.
 
@@ -74,7 +74,7 @@ $$ \rho = \frac{F(d) - F(d+h_{lm})}{L(0) - L(h_{lm})}, \qquad L(0)-L(h_{lm}) = \
 
 Here $F(d)=\frac{1}{2}\sum_i r_i^2$ is the objective $J(d)$, and $L(h)=F(d)+gh+\frac{1}{2}Ah^2$ is the local quadratic model obtained by linearizing the residuals. The denominator is the reduction predicted by the local quadratic model; the numerator is the reduction actually achieved. In other words, $\rho$ scores the forecast against the outcome. Where the weather forecast has been reliable, you trust it and travel far; when it misses, you stay close.
 
-If $\rho>0$ — the objective actually decreased — the step is accepted and $\mu \leftarrow \mu \cdot \max\{1/3,\ 1-(2\rho-1)^3\}$. If $\rho \le 0$, the step is rejected, $\mu \leftarrow \nu\mu$ enlarges the damping, and $\nu$ is doubled, so consecutive rejections grow $\mu$ by 2, 4, 8 times.
+If $\rho>0$ — the objective actually decreased — the step is accepted and $$\mu \leftarrow \mu \cdot \max\{1/3,\ 1-(2\rho-1)^3\}$$. If $\rho \le 0$, the step is rejected, $\mu \leftarrow \nu\mu$ enlarges the damping, and $\nu$ is doubled, so consecutive rejections grow $\mu$ by 2, 4, 8 times.
 
 Reading the factor makes the rule plain. For $\rho$ above about 0.94 the factor sits at its floor of 1/3; at $\rho=0.5$ it is 1 and $\mu$ is unchanged; as $\rho$ approaches 0 it approaches 2. A good forecast cuts $\mu$ to a third and lengthens the stride; a poor one raises $\mu$ even when the step is accepted. Marquardt's original rule simply multiplied and divided $\mu$ by fixed factors, which made $\mu$ flutter up and down; the rule used here, due to Nielsen, damps that oscillation.
 
@@ -99,7 +99,7 @@ In Fig 3 the green Gauss-Newton line and the purple dashed LM line overlap from 
 | Gauss-Newton | 1490.12 nm, converged in 3 steps |
 | Levenberg-Marquardt ($\tau=10^{-6}$) | 1490.12 nm, converged in 3 steps (effectively identical to GN) |
 
-No specific thickness is given for the Newton row, for the reason established in post 2: the diverging trajectory passes through regions where $J''$ is near zero, amplifying rounding error, so the individual iterates are not reproducible.
+No specific thickness is given for the Newton row, for the reason established in post 2: the diverging trajectory passes through regions where $$J''$$ is near zero, amplifying rounding error, so the individual iterates are not reproducible.
 
 With $\tau$ small enough, LM traces a trajectory indistinguishable from Gauss-Newton's. That is as it must be: $\mu_0$ several orders of magnitude below $A$ leaves the normal equation essentially unchanged. The damping does its real work in the wrong-refractive-index demonstration.
 
@@ -116,9 +116,9 @@ By rejecting large steps, damping usually keeps the fit within one basin and car
 
 ## 6. What happens when the refractive index is wrong?
 
-Let us build both failure conditions from post 2 at once: large residuals and a near-singular Jacobian. This section is a demonstration constructed on synthetic data, not a measurement. The data are those of posts 1 and 2 (true thickness 1490 nm, SiO2 index 1.46); only the fitting model is given the wrong SiO2 index, 1.02. Being so close to air (1.0), that value all but removes the reflection at the air/SiO2 interface (reflectance 0.035 → about $10^{-4}$), and with it the thin-film interference contrast. Evaluating $\sum_i r_i'^2$ at $d=1490$ nm gives $4.34\times10^{-6}$ against $2.58\times10^{-3}$ for the correct model — smaller by a factor of about 595. The Jacobian has collapsed toward zero.
+Let us build both failure conditions from post 2 at once: large residuals and a near-singular Jacobian. This section is a demonstration constructed on synthetic data, not a measurement. The data are those of posts 1 and 2 (true thickness 1490 nm, SiO2 index 1.46); only the fitting model is given the wrong SiO2 index, 1.02. Being so close to air (1.0), that value all but removes the reflection at the air/SiO2 interface (reflectance 0.035 → about $10^{-4}$), and with it the thin-film interference contrast. Evaluating $$\sum_i r_i'^2$$ at $d=1490$ nm gives $4.34\times10^{-6}$ against $2.58\times10^{-3}$ for the correct model — smaller by a factor of about 595. The Jacobian has collapsed toward zero.
 
-Running Gauss-Newton from $d_0=1540$ nm in this state, the estimate simply cycles among 1665.5 nm, 1543.4 nm and 1416.8 nm, showing no convergence at all over twenty steps. The denominator of the normal equation, $\sum_i r_i'^2$, is tiny while the residuals stay large. The discarded term $\sum_i r_i r_i''$ is therefore about three times the denominator at this model's minimum, it dominates the approximate Hessian, and every step overshoots badly. Near the minimum Gauss-Newton multiplies the error by about −3 at every step: each miss throws the estimate three times as far to the other side. LM ($\tau=10^{-3}$) under identical conditions converges steadily to the local minimum of this (wrong) model nearest the start, $d\approx1486.6$ nm (the lowest point between 1400 and 1700 nm).
+Running Gauss-Newton from $d_0=1540$ nm in this state, the estimate simply cycles among 1665.5 nm, 1543.4 nm and 1416.8 nm, showing no convergence at all over twenty steps. The denominator of the normal equation, $$\sum_i r_i'^2$$, is tiny while the residuals stay large. The discarded term $$\sum_i r_i r_i''$$ is therefore about three times the denominator at this model's minimum, it dominates the approximate Hessian, and every step overshoots badly. Near the minimum Gauss-Newton multiplies the error by about −3 at every step: each miss throws the estimate three times as far to the other side. LM ($\tau=10^{-3}$) under identical conditions converges steadily to the local minimum of this (wrong) model nearest the start, $d\approx1486.6$ nm (the lowest point between 1400 and 1700 nm).
 
 <img src="/assets/img/posts/optimization-levenberg-marquardt/en/fig4-gn-failure-lm-rescue.png" alt="GN cycles, LM converges" width="600">
 _Fig 4. Thickness estimates with the SiO2 index wrongly set to 1.02 (synthetic data, d0=1540nm). GN (red) cycles among three values; LM (purple, τ=10⁻³) rejects its first four steps and then converges to this model's local minimum at 1486.6nm (dashed)._
@@ -135,8 +135,8 @@ From post 1 (gradient descent) through this one, four methods have been applied 
 
 | Method | Step | Strength | Weakness |
 |---|---|---|---|
-| Gradient Descent | $-\alpha J'(d)$ | simplest to implement | the step size must be chosen by hand |
-| Newton | $-J'(d)/J''(d)$ | quadratic convergence near the solution | diverges where the curvature sign flips in a non-convex region |
+| Gradient Descent | $$-\alpha J'(d)$$ | simplest to implement | the step size must be chosen by hand |
+| Newton | $$-J'(d)/J''(d)$$ | quadratic convergence near the solution | diverges where the curvature sign flips in a non-convex region |
 | Gauss-Newton | $-g/A$ (the $J^TJ$ approximation) | $J^TJ$ is always semidefinite, so the curvature problem disappears | slow or failing convergence with large residuals; overly long steps with a near-singular Jacobian |
 | Levenberg-Marquardt | $-g/(A+\mu)$ | $\mu$ interpolates GN and steepest descent, preventing divergence from overly long steps, whether caused by large residuals or a near-zero Jacobian | convergence stays slow with large residuals; the basin problem remains; $\tau$ must be chosen |
 

@@ -119,7 +119,7 @@ The third route is to make the retardance adjustable rather than fixed. The Babi
 
 The Berek compensator works differently. In an ordinary wave plate the optic axis lies in the plane of the crystal face; in a Berek compensator it is perpendicular to that face. Untilted, both polarizations see the same index and no phase shift occurs; tilt it and one component becomes partly extraordinary, producing a phase difference. Tilting the crystal tunes the retardance continuously.
 
-Its use connects directly back to post 1. The literature states its purpose plainly: in rotating-analyzer instruments it shifts the operating point so that $\Delta$ does not sit near 0° or 180°. Section 4 of post 1 described measuring at several values of $\delta$ and stitching together only the stretches where $\Delta' \sim \pm 90°$. This is the hardware that carries out that strategy.
+Its use connects directly back to post 1. The literature states its purpose plainly: in rotating-analyzer instruments it shifts the operating point so that $\Delta$ does not sit near 0° or 180°. Section 4 of post 1 described measuring at several values of $\delta$ and stitching together only the stretches where $$\Delta' \sim \pm 90°$$. This is the hardware that carries out that strategy.
 
 Choosing by material goes like this. Calcite, the workhorse of polarizers, is rarely used for compensators: its birefringence is so large that the required thickness becomes impractically small. A compensator that has to work in the ultraviolet is made of MgF$_2$ (transmitting above 0.12 μm); if nothing shorter than 0.29 μm is needed, mica will do. MgF$_2$ dominates now because of its ultraviolet transmission. For polarizers and for compensators alike, the answer converges on MgF$_2$.
 
@@ -205,7 +205,7 @@ The component azimuths are not arbitrary either. There is an orientation that mi
 
 $$\alpha' = \cos 2\Psi, \qquad \beta' = \sin\Delta \sin 2\Psi$$
 
-Here $\alpha'$ and $\beta'$ are the coefficients of the $\cos\delta$ and $\sin\delta$ terms, in the retardance $\delta$ of the multi-order retarder, left after the spectral interference signal is divided by its DC part. The angles are measured from that setup's reference axis. In this arrangement $\alpha'$ carries $\Psi$ alone, and $\Delta$ appears only in $\beta'$.
+Here $$\alpha'$$ and $$\beta'$$ are the coefficients of the $\cos\delta$ and $\sin\delta$ terms, in the retardance $\delta$ of the multi-order retarder, left after the spectral interference signal is divided by its DC part. The angles are measured from that setup's reference axis. In this arrangement $$\alpha'$$ carries $\Psi$ alone, and $\Delta$ appears only in $$\beta'$$.
 
 Buying the component is not the end of it. Choosing it, orienting it, and measuring what it actually does before putting it in the model all belong together. That last step is calibration, and post 4 takes it up properly.
 

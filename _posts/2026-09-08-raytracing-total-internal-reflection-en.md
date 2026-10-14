@@ -58,7 +58,7 @@ The domain is checked first with `abs(sin_out) <= 1`; outside it, the ray is ref
 
 $$ \vec v' = \vec v - 2(\vec v \cdot \hat n)\hat n $$
 
-Here $\vec v$ is the incident direction, $\vec v'$ the reflected direction and $\hat n$ the unit normal of the face. The formula flips the component along the normal and leaves the component along the face untouched. Replacing $\hat n$ with $-\hat n$ changes nothing, because the normal appears twice, so for reflection it does not matter which way the normal points ([post 3](/en/posts/raytracing-reflection-family/) returns to this).
+Here $\vec v$ is the incident direction, $$\vec v'$$ the reflected direction and $\hat n$ the unit normal of the face. The formula flips the component along the normal and leaves the component along the face untouched. Replacing $\hat n$ with $-\hat n$ changes nothing, because the normal appears twice, so for reflection it does not matter which way the normal points ([post 3](/en/posts/raytracing-reflection-family/) returns to this).
 
 The code was run on an equilateral N-BK7 prism with 600 mm sides and a ray at normal incidence.
 
@@ -82,11 +82,11 @@ _Fig 2. Rays leaving a denser medium (below, n1) for a less dense one (above, n2
 
 The higher the index, the smaller the critical angle. At 589 nm it is 48.6° for water (n = 1.333), 43.3° for fused quartz (1.4584), 41.2° for N-BK7 (1.5168 at the d line) and 24.4° for diamond (2.417), using the indices in Hecht's Table 4.1 and the SCHOTT datasheet.
 
-How, then, can light get through this prism without total internal reflection? By entering at a large enough angle of incidence. With $\theta_1$ the angle of incidence, $\theta_1'$ the refraction angle at the first face, $\theta_2'$ the internal angle at the second face and $A$ the apex angle, the relation $\theta_1' + \theta_2' = A$ holds. Staying below the critical angle at the second face therefore requires
+How, then, can light get through this prism without total internal reflection? By entering at a large enough angle of incidence. With $\theta_1$ the angle of incidence, $$\theta_1'$$ the refraction angle at the first face, $$\theta_2'$$ the internal angle at the second face and $A$ the apex angle, the relation $$\theta_1' + \theta_2' = A$$ holds. Staying below the critical angle at the second face therefore requires
 
 $$ \theta_1' > A - \theta_c, \qquad \theta_1 > \arcsin\big(n \sin(A - \theta_c)\big) $$
 
-The ray must be bent far enough at the first face for its angle at the second face to drop below the critical angle. This holds for rays arriving on the side of the first-face normal away from the apex (from below, as in Fig 3). A ray arriving from the apex side has $\theta_2' = A + \theta_1'$ and is totally reflected whatever its angle of incidence. Substituting the values gives $\theta_1 > 28.8131°$. Bisecting over the angle of incidence from 0° to find the TIR-to-transmission boundary the code actually produces (`verify_tir.py`) returns 28.813100°, within $7.6\times10^{-10}$° of the theoretical value.
+The ray must be bent far enough at the first face for its angle at the second face to drop below the critical angle. This holds for rays arriving on the side of the first-face normal away from the apex (from below, as in Fig 3). A ray arriving from the apex side has $$\theta_2' = A + \theta_1'$$ and is totally reflected whatever its angle of incidence. Substituting the values gives $\theta_1 > 28.8131°$. Bisecting over the angle of incidence from 0° to find the TIR-to-transmission boundary the code actually produces (`verify_tir.py`) returns 28.813100°, within $7.6\times10^{-10}$° of the theoretical value.
 
 <img src="/assets/img/posts/raytracing-total-internal-reflection/en/fig2-prism-angle-sweep.png" alt="Total internal reflection and transmission across a sweep of incidence angles" width="600">
 _Fig 3. Six rays entering the same prism at angles of incidence from 0° to 45°. Up to 28.813°, just below the threshold of 28.8131°, they are totally reflected at the second face; at 35° and 45° they pass through it._
@@ -161,7 +161,7 @@ Unlike the prism routine, the corrected lens function still handles exactly one 
 
 ## Summary
 
-Detecting total internal reflection comes down to one test: whether the value passed to `arcsin` exceeds 1. If it does, the ray is reflected with $\vec v' = \vec v - 2(\vec v\cdot\hat n)\hat n$ instead of refracted. An equilateral N-BK7 prism at 750 nm always reflects totally at its second face for angles of incidence below 28.8°. A plano-convex lens taking collimated light on its flat side shows exit-surface TIR beyond a height of $\lvert R_2\rvert/n$, 33.07 mm for the lens here, and that light leaves towards the source or through the rim instead of reaching the focus.
+Detecting total internal reflection comes down to one test: whether the value passed to `arcsin` exceeds 1. If it does, the ray is reflected with $$\vec v' = \vec v - 2(\vec v\cdot\hat n)\hat n$$ instead of refracted. An equilateral N-BK7 prism at 750 nm always reflects totally at its second face for angles of incidence below 28.8°. A plano-convex lens taking collimated light on its flat side shows exit-surface TIR beyond a height of $\lvert R_2\rvert/n$, 33.07 mm for the lens here, and that light leaves towards the source or through the rim instead of reaching the focus.
 
 The formula used twice in this post for reflection, once for the prism's internal reflection and once for the lens TIR, appears in exactly this form six times across the library: in `FlatMirror`, `SphericalMirror`, `ArbitraryMirror`, `BeamSplitter` (the reflected component), and now in the TIR branches of `Prism` and `SphericalLens`. All that differs between them is how the intersection and the normal are found (plane algebra, candidate roots on a circle, or local curvature along a polygon) and whether the routine reflects once and stops or loops until the ray escapes. Refraction needed a different angle expression every time; reflection, whether at a mirror, a prism or a lens, reduces to this one vector formula. [Post 3](/en/posts/raytracing-reflection-family/) checks whether the formula really is implemented consistently across the code, verifying `FlatMirror`, `SphericalMirror`, `ArbitraryMirror` and `BeamSplitter` together.
 

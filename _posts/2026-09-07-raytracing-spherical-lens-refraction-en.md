@@ -181,7 +181,7 @@ Rays entering within 20 mm of the axis, 8% of the 250 mm lens radius, agree with
 How does the shift depend on ray height? Tracing rays at heights $y_0$ in 5 mm steps gives Figure 5.
 
 <img src="/assets/img/posts/raytracing-spherical-lens-refraction/en/fig3-focus-vs-theory.png" alt="Focus shift versus ray height" width="600">
-_Fig 5. Shift of the focus toward the lens, measured from the paraxial theoretical focus, as a function of ray height $y_0$ (red dots: ray trace). The blue line is $k y_0^2$ with the coefficient $k$ taken from the $y_0=1$ mm ray. The points follow the parabola; even at $y_0=100$ mm they depart from it by only 1.4%._
+_Fig 5. Shift of the focus toward the lens, measured from the paraxial theoretical focus, as a function of ray height $$y_0$$ (red dots: ray trace). The blue line is $$k y_0^2$$ with the coefficient $k$ taken from the $$y_0=1$$ mm ray. The points follow the parabola; even at $$y_0=100$$ mm they depart from it by only 1.4%._
 
 The points follow a parabola: the shift grows as the square of the ray height. Dividing the shift by $y_0^2$ gives about $1.563 \times 10^{-3}$ mm$^{-1}$ over $y_0$ = 5–100 mm, with a spread under 1.4%. The 0.625 mm at $y_0=20$ mm thus becomes about 25 times larger, 15.8 mm, at $y_0=100$ mm. The 0.625 mm by which the paraxial focus lay toward the lens earlier is the same law at a height of 20 mm. As a working rule, halving the beam diameter cuts the spherical aberration to a quarter.
 

@@ -38,7 +38,7 @@ How large is the effect? Take 2 nm of SiO$_2$ on Si and ask how much $\Delta$ ch
 That does not mean one should insist on the pseudo-Brewster angle itself. On bare Si, $\Psi$ falls to 0.15° at 75.55°. With $\Psi$ that close to zero, almost no p-polarized light is reflected and $\Delta$ becomes hard to read. The thickness sensitivity above also changes sign, from $-13.1°$/nm at 75° to $+11.7°$/nm at 76°. Right next to the angle of greatest sensitivity, a small angle error moves the result a lot.
 
 <img src="/assets/img/posts/ellipsometer-oblique-rotating-element/en/fig1-oblique-configuration.png" alt="Oblique-incidence geometry and the PSG-sample-PSA chain" width="720">
-_Figure 1. Oblique-incidence geometry. A known polarization state goes in on the left; on the right a single intensity comes out. The sample Mueller matrix $M_{sample}$ computed in Ellipsometry Foundations post 3 is the middle factor of this chain._
+_Figure 1. Oblique-incidence geometry. A known polarization state goes in on the left; on the right a single intensity comes out. The sample Mueller matrix $$M_{sample}$$ computed in Ellipsometry Foundations post 3 is the middle factor of this chain._
 
 The instrument splits into three blocks: the polarization state generator (PSG) on the source side, the sample, and the polarization state analyzer (PSA) on the detector side. The PSG turns unpolarized light from the source into a known polarization state and sends it to the sample. The PSA converts the polarization state of the reflected beam into an intensity the detector can read. The sample Mueller matrix $M_{sample}(\Psi, \Delta)$ is one factor in the middle of this chain. The detected intensity comes from the product
 
@@ -116,7 +116,7 @@ Suppose a measurement returns $\cos\Delta = 0.707$. Is $\Delta = +45°$ or $-45�
 The root cause lies in the definitions of section 2. The sign of $\Delta$ is held by $S_3 = -\sin 2\Psi \sin\Delta$, and only $S_1$ and $S_2$ appear in the RAE intensity. Failing to measure $S_3$, which carries the handedness of circular polarization, is what erases the sign of the phase. This is the statement "an intensity measurement loses phase information" from Ellipsometry Foundations post 1, repeating itself at the level of the instrument.
 
 <img src="/assets/img/posts/ellipsometer-oblique-rotating-element/en/fig3-rae-delta-ambiguity.png" alt="Sign ambiguity of Delta in RAE" width="760">
-_Figure 5. The reference sample (SiO$_2$ 100 nm / Si, $75°$ incidence, $\Psi = 41.2°$, $\Delta = +60.4°$) and a sample with only the sign of $\Delta$ reversed. (a) In RAE the two waveforms differ by exactly zero. (b) In RCE the $2\omega$ component flips sign and separates them immediately._
+_Figure 5. The reference sample (SiO$$_2$$ 100 nm / Si, $75°$ incidence, $\Psi = 41.2°$, $\Delta = +60.4°$) and a sample with only the sign of $\Delta$ reversed. (a) In RAE the two waveforms differ by exactly zero. (b) In RCE the $2\omega$ component flips sign and separates them immediately._
 
 The left panel of figure 5 confirms the ambiguity numerically. The RAE waveforms were computed for $\Delta = +60.4°$ and $\Delta = -60.4°$, and the maximum difference between the two curves is $0.0$. They are identical at the level of floating-point representation, not merely to within rounding. No detector and no amount of averaging will separate these two samples with RAE.
 
@@ -129,13 +129,13 @@ _Figure 6. (a) Without a compensator, the RAE error amplification diverges at $\
 
 ### What Changes When a Compensator Is Added?
 
-A compensator leaves the amplitude ratio alone and shifts only the p–s phase difference, by $\delta$. So $\Psi$ is untouched and $\Delta$ merely moves to $\Delta' = \Delta - \delta$. The intensity becomes
+A compensator leaves the amplitude ratio alone and shifts only the p–s phase difference, by $\delta$. So $\Psi$ is untouched and $\Delta$ merely moves to $$\Delta' = \Delta - \delta$$. The intensity becomes
 
 $$I = I_0 \left[ 1 + S_1 \cos 2A + \left( S_2 \cos\delta - S_3 \sin\delta \right) \sin 2A \right]$$
 
 $S_3$ has finally appeared. It is bundled together with $S_2$, however, so a single measurement cannot separate them. At least two measurements at different retardances are needed, for example $\delta = 0°$ for $S_2$ and $\delta = 90°$ for $S_3$. This is why the measurement takes longer than plain RAE.
 
-But the ability to move $\Delta$ is useful in its own right. RAE is accurate near $\Delta \cong 90°$ and poor at $0°$ and $180°$. If the operating point can be shifted, one can measure at several values of $\delta$ and stitch together only the portions where $\Delta' \sim \pm 90°$. The right panel of figure 6 shows this computed. Four measurements at $\delta = 0°, 45°, 90°, 135°$ each have their own divergence, but taking the best measurement at every point keeps the amplification at most 1.08 ($= 1/\cos 22.5°$) across the whole range. One extra component changes the measurement strategy itself.
+But the ability to move $\Delta$ is useful in its own right. RAE is accurate near $\Delta \cong 90°$ and poor at $0°$ and $180°$. If the operating point can be shifted, one can measure at several values of $\delta$ and stitch together only the portions where $$\Delta' \sim \pm 90°$$. The right panel of figure 6 shows this computed. Four measurements at $\delta = 0°, 45°, 90°, 135°$ each have their own divergence, but taking the best measurement at every point keeps the amplification at most 1.08 ($= 1/\cos 22.5°$) across the whole range. One extra component changes the measurement strategy itself.
 
 ## 5. RCE (Rotating-Compensator Ellipsometry)
 
@@ -143,7 +143,7 @@ What happens if the analyzer is held fixed and the compensator turns instead? Th
 
 $$I = I_0 \left[ (2 + S_1) - 2 S_3 \sin 2C + S_1 \cos 4C + S_2 \sin 4C \right]$$
 
-Here $C$ is the azimuth of the compensator's fast axis. The $\Delta' = \Delta - \delta$ of section 4 assumes the slow axis lies along p at $C = 0°$, so the two sections' $C$ differ by $90°$ (Fujiwara, end of 4.2.3). Mixing the conventions flips the sign of the $\sin 2C$ term and with it the sign of $\Delta$.
+Here $C$ is the azimuth of the compensator's fast axis. The $$\Delta' = \Delta - \delta$$ of section 4 assumes the slow axis lies along p at $C = 0°$, so the two sections' $C$ differ by $90°$ (Fujiwara, end of 4.2.3). Mixing the conventions flips the sign of the $\sin 2C$ term and with it the sign of $\Delta$.
 
 Terms in $2C$ and $4C$ appear together. More importantly, $S_3$ rides on the $2C$ term while $S_1$ and $S_2$ ride on $4C$. Because the frequencies split, extracting the Fourier coefficients separates all three Stokes parameters at once. No second measurement at a different retardance is needed.
 
@@ -178,7 +178,7 @@ Having no moving parts is PME's decisive advantage. The modulation rate of a rot
 Taken separately the three methods look like different instruments, but set their equations side by side and the structure is one. All three modulate something periodically to make the detected intensity oscillate, then read $\Psi$ and $\Delta$ out of the Fourier coefficients of that waveform. The only difference is where the modulation frequency lands.
 
 <img src="/assets/img/posts/ellipsometer-oblique-rotating-element/en/fig5-waveform-comparison.png" alt="Detected intensity and harmonic content for three methods" width="780">
-_Figure 7. One sample (SiO$_2$ 100 nm / Si at $75°$ incidence) measured three ways. Left, the detected intensity over one modulation cycle; right, the normalized Fourier coefficient magnitudes of that waveform. RAE shows a bar at $2\omega$ only and RCE at $2\omega$ and $4\omega$, while PME shows $\omega$ and $2\omega$ plus a residual $3\omega$ component._
+_Figure 7. One sample (SiO$$_2$$ 100 nm / Si at $75°$ incidence) measured three ways. Left, the detected intensity over one modulation cycle; right, the normalized Fourier coefficient magnitudes of that waveform. RAE shows a bar at $2\omega$ only and RCE at $2\omega$ and $4\omega$, while PME shows $\omega$ and $2\omega$ plus a residual $3\omega$ component._
 
 Figure 7 shows this. For a single sample ($\Psi = 41.2°$, $\Delta = 60.4°$) the waveforms of all three methods were computed and their harmonic content placed side by side. The sample's $\Psi$ and $\Delta$ come from the scattering matrix method of Ellipsometry Foundations post 3. RAE raises a single bar at $2\omega$. RCE raises two, at $2\omega$ and $4\omega$. PME sits mainly at $\omega$ and $2\omega$ but keeps a non-negligible bar at $3\omega$; the higher-order Bessel terms of section 6 show up in the figure as expected.
 

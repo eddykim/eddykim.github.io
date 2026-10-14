@@ -77,7 +77,7 @@ def deriv(z, y):                       # y = [r, r', theta]
 ```
 
 <img src="/assets/img/posts/electron-microscopy-electron-optics/en/fig1-magnetic-lens-trajectory.png" alt="Bell-shaped axial field, paraxial electron trajectories converging within it, and the same path seen along the axis" width="850">
-_Fig 2. Paraxial electron trajectories in a Glaser bell field ($B_0$ = 0.3 T, $a$ = 5 mm, 200 kV). Left, the axial field; centre, the trajectories in the Larmor frame, which meet at 18.0 mm whatever their entry height. Right, the same trajectory viewed along the axis, turning through 70° up to the focus within the plotted range._
+_Fig 2. Paraxial electron trajectories in a Glaser bell field ($$B_0$$ = 0.3 T, $a$ = 5 mm, 200 kV). Left, the axial field; centre, the trajectories in the Larmor frame, which meet at 18.0 mm whatever their entry height. Right, the same trajectory viewed along the axis, turning through 70° up to the focus within the plotted range._
 
 The left panel is the axial field of the model, and the shading in the centre panel marks the ±10 mm over which the field exceeds a fifth of its peak. In the centre panel, three electrons entering parallel to the axis meet at one point. The focal length is 18.0 mm. Putting the same field into the thin-lens formula of section 2 gives 15.4 mm, so even this weak lens is off by about 15%. At the level of a real objective (2 T peak, $a$ = 1.5 mm) the thin-lens formula gives 1.15 mm against 2.27 mm from the integrated trajectory, a factor of two. The shorter and stronger the lens, the more the thin-lens formula becomes a rough estimate.
 
@@ -125,7 +125,7 @@ Adding the three in quadrature and setting the derivative with respect to $\alph
 $$ \alpha_{opt} = \left(\frac{0.61\,\lambda}{\sqrt{3}\,C_s}\right)^{1/4}, \qquad d_{min} \propto C_s^{1/4}\,\lambda^{3/4} $$
 
 <img src="/assets/img/posts/electron-microscopy-electron-optics/en/fig2-aperture-tradeoff.png" alt="Diffraction, spherical and chromatic blur against aperture semi-angle, compared before and after aberration correction" width="800">
-_Fig 3. The three blurs set by aperture angle and their sum. Left, before correction; right, after. 200 kV, $C_c = 1.2$ mm, $\Delta E = 0.7$ eV for a Schottky field emission gun. The black dot marks the minimum of the sum, which is the optimum aperture angle. After correction, chromatic aberration (green dotted) sets its position._
+_Fig 3. The three blurs set by aperture angle and their sum. Left, before correction; right, after. 200 kV, $$C_c = 1.2$$ mm, $\Delta E = 0.7$ eV for a Schottky field emission gun. The black dot marks the minimum of the sum, which is the optimum aperture angle. After correction, chromatic aberration (green dotted) sets its position._
 
 The left panel is the uncorrected case. At $C_s = 0.5$ mm the optimum is 6.5 mrad, the same order as the 10 mrad quoted loosely in post 1. The sum reaches its minimum near where the blue dashed curve (diffraction) crosses the red one (spherical), and the value there is 0.27 nm. Chromatic aberration sits far below the other two in this range and hardly matters.
 
@@ -142,7 +142,7 @@ The right panel reduces $C_s$ to 1 µm. The red curve shifts far to the right, a
 Reducing $C_s$ improves resolution. By how much, for how much reduction?
 
 <img src="/assets/img/posts/electron-microscopy-electron-optics/en/fig3-resolution-vs-cs.png" alt="Scherzer point resolution against spherical aberration coefficient at 200 kV and 300 kV" width="750">
-_Fig 4. Scherzer point resolution $0.66(C_s\lambda^3)^{1/4}$ at 200 kV (blue) and 300 kV (red). The log-log slope is 1/4, so cutting $C_s$ by a factor of 500, from 0.5 mm to 1 µm, improves resolution only 4.7 times, from 0.197 nm to 0.042 nm._
+_Fig 4. Scherzer point resolution $$0.66(C_s\lambda^3)^{1/4}$$ at 200 kV (blue) and 300 kV (red). The log-log slope is 1/4, so cutting $$C_s$$ by a factor of 500, from 0.5 mm to 1 µm, improves resolution only 4.7 times, from 0.197 nm to 0.042 nm._
 
 The log-log slope is $1/4$. Cutting $C_s$ from 0.5 mm to 1 µm, a factor of 500, improves resolution from 0.197 nm to 0.042 nm, a factor of only 4.7. A fourth root is that unforgiving. It explains why an aberration corrector, for all its cost and complexity, returns so little. Put the other way, even that little was worth building for.
 

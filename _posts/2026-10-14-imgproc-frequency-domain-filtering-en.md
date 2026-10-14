@@ -106,7 +106,7 @@ so the mean of the two envelopes is the baseline.
 
 $$ I_{BLS}(\sigma) = \frac{I_{max}(\sigma) + I_{min}(\sigma)}{2} $$
 
-The source intensity is folded into the baseline here. The dissertation factors it out as $I_{in}\!\left(I_{BLS} \pm A\right)$, but it divides out during normalization, so the conclusion is unchanged. The first equation is also an approximation that holds when the baseline and amplitude vary slowly within one fringe period. For the signal in this post its error is at most $2.4\times10^{-4}$, about 0.1% of the modulation amplitude.
+The source intensity is folded into the baseline here. The dissertation factors it out as $$I_{in}\!\left(I_{BLS} \pm A\right)$$, but it divides out during normalization, so the conclusion is unchanged. The first equation is also an approximation that holds when the baseline and amplitude vary slowly within one fringe period. For the signal in this post its error is at most $2.4\times10^{-4}$, about 0.1% of the modulation amplitude.
 
 No frequency domain means no periodicity assumption and no cutoff to choose. Two settings remain instead: the smoothing width used to detect extrema and the fitting window around each one. As section 7 shows, both are chosen relative to one fringe period.
 

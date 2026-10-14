@@ -58,7 +58,7 @@ The signs are fixed here once. This post writes the wave leaving the specimen as
 Where $\chi$ is zero, $\sin\chi$ is zero as well. A perfect lens with no aberration shows no phase object, which is section 1's conclusion restated. Phase contrast is obtained not by removing aberration but by leaving the right amount of it.
 
 <img src="/assets/img/posts/electron-microscopy-tem-phase-contrast-ctf/en/fig1-ctf-curves.png" alt="Contrast transfer function curves compared across defocus values" width="820">
-_Fig 1. $\sin\chi(k)$ calculated at 200 kV (λ = 2.51 pm) with $C_s$ = 0.5 mm for three defocus values. At the Scherzer defocus (−42.5 nm, solid red) it stays negative out to 5.2 nm⁻¹, while at ±20 nm it changes sign within that range._
+_Fig 1. $\sin\chi(k)$ calculated at 200 kV (λ = 2.51 pm) with $$C_s$$ = 0.5 mm for three defocus values. At the Scherzer defocus (−42.5 nm, solid red) it stays negative out to 5.2 nm⁻¹, while at ±20 nm it changes sign within that range._
 
 The three curves differ only in defocus. The solid red one is the Scherzer defocus explained below; the others are 20 nm under and 20 nm over. Same lens, same specimen, yet shifting the focus alone completely changes which spatial frequencies get through, how strongly, and with which sign.
 

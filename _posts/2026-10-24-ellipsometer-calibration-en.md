@@ -44,7 +44,7 @@ $$I_t(t) = I_0\big[1 + \eta\,\alpha\cos 2(\omega t - A_s) + \eta\,\beta\sin 2(\o
 
 $P_s$ and $A_s$ are the offsets of the polarizer and analyzer zero positions from the plane of incidence. When the dial reads $P$, the true angle is $P - P_s$, and likewise for the analyzer. The coefficient $\eta$ carries the detector non-ideality: it states how far the ac component is attenuated relative to the dc component. The nonlinear response and the polarization-dependent sensitivity of the previous section both enter here at once. That $\eta$ is not the coefficient of a single cause becomes a problem later.
 
-How, then, are the measured $(\alpha', \beta')$ related to the true $(\alpha, \beta)$? Regrouping the expression above by the $\cos 2\omega t$ and $\sin 2\omega t$ coefficients gives
+How, then, are the measured $$(\alpha', \beta')$$ related to the true $(\alpha, \beta)$? Regrouping the expression above by the $\cos 2\omega t$ and $\sin 2\omega t$ coefficients gives
 
 $$\begin{bmatrix}\alpha'\\ \beta'\end{bmatrix} = \eta\begin{bmatrix}\cos 2A_s & -\sin 2A_s\\ \sin 2A_s & \cos 2A_s\end{bmatrix}\begin{bmatrix}\alpha\\ \beta\end{bmatrix}$$
 
@@ -55,9 +55,9 @@ Undoing $A_s$ mathematically matters most in multichannel instruments. A photodi
 The three errors leave different marks on the signal. A clock makes the difference easy to see. $A_s$ is a dial fitted back on at an angle, so every reading is off by the same amount. $\eta$ is a shortened hand: the direction is right but the length is misread. $P_s$ leaves the clock intact but shifts the moment at which it is read. The right panel of Figure 1 shows exactly these three.
 
 <img src="/assets/img/posts/ellipsometer-calibration/en/fig1-error-anatomy.png" alt="What the three errors do to the measured signal" width="780">
-_Figure 1. Left, the detected intensity over half an analyzer revolution (0°–180°, one signal period). Right, the locus traced by $(\alpha', \beta')$ as the polarizer is scanned. The errors are exaggerated for visibility, $P_s = 4°$, $A_s = 8°$, $\eta = 0.7$ (the text works with errors around $0.1°$). The right panel uses a sample with large $\lvert\cos\Delta\rvert$ ($\Psi = 35°$, $\Delta = 50°$) so the ellipse is not flattened. In the waveform the three look alike; in the plane of the ellipse they separate into rotation ($A_s$), shrinkage ($\eta$), and sliding along the ellipse ($P_s$)._
+_Figure 1. Left, the detected intensity over half an analyzer revolution (0°–180°, one signal period). Right, the locus traced by $$(\alpha', \beta')$$ as the polarizer is scanned. The errors are exaggerated for visibility, $$P_s = 4°$$, $$A_s = 8°$$, $\eta = 0.7$ (the text works with errors around $0.1°$). The right panel uses a sample with large $\lvert\cos\Delta\rvert$ ($\Psi = 35°$, $\Delta = 50°$) so the ellipse is not flattened. In the waveform the three look alike; in the plane of the ellipse they separate into rotation ($$A_s$$), shrinkage ($\eta$), and sliding along the ellipse ($$P_s$$)._
 
-In the waveform the three look like similar distortions. In the $(\alpha', \beta')$ plane they separate cleanly. Scanning the polarizer from $-90°$ to $+90°$ traces a closed ellipse with semi-axes $1$ and $\lvert\cos\Delta\rvert$; $\Psi$ does not enter. Substituting $u = \tan(P - P_s) = \tan\Psi\,\tan\theta$ gives $\alpha = \cos 2\theta$ and $\beta = \cos\Delta\,\sin 2\theta$, and $\Psi$ cancels. $A_s$ rotates this ellipse about the origin, $\eta$ shrinks it whole, and $P_s$ **leaves the ellipse untouched and only slides the operating point along it.**
+In the waveform the three look like similar distortions. In the $$(\alpha', \beta')$$ plane they separate cleanly. Scanning the polarizer from $-90°$ to $+90°$ traces a closed ellipse with semi-axes $1$ and $\lvert\cos\Delta\rvert$; $\Psi$ does not enter. Substituting $u = \tan(P - P_s) = \tan\Psi\,\tan\theta$ gives $\alpha = \cos 2\theta$ and $\beta = \cos\Delta\,\sin 2\theta$, and $\Psi$ cancels. $A_s$ rotates this ellipse about the origin, $\eta$ shrinks it whole, and $P_s$ **leaves the ellipse untouched and only slides the operating point along it.**
 
 Because the three act differently, they can be measured separately. Residual calibration uses that separation.
 
@@ -66,9 +66,9 @@ Because the three act differently, they can be measured separately. Residual cal
 Before the methods, it helps to fix the size of the problem. Synthesize a signal with one error at a time, then feed the dial readings straight into the ideal formulas and read off $\Psi$ and $\Delta$. The polarizer sits at $45°$. The signal is synthesized from products of component Mueller matrices alone, and the implementation was checked separately against the closed-form expressions of Fujiwara's Eqs. 4.59–4.60.
 
 <img src="/assets/img/posts/ellipsometer-calibration/en/fig2-uncalibrated-error.png" alt="Uncalibrated readings fed straight into the ideal formulas" width="780">
-_Figure 2. Errors propagated into $\Psi$ (left) and $\Delta$ (right) for a sample with $\Psi = 16.8°$, sweeping $\Delta$, with one error injected at a time. The polarizer is at $45°$, and the dotted line marks the $0.01°$ level. $P_s$ reaches only $\Psi$; $A_s$ disturbs $\Delta$ near $\Delta \approx 90°$; $\eta$ disturbs $\Delta$ more and more as $\Delta$ approaches $0°$ or $180°$._
+_Figure 2. Errors propagated into $\Psi$ (left) and $\Delta$ (right) for a sample with $\Psi = 16.8°$, sweeping $\Delta$, with one error injected at a time. The polarizer is at $45°$, and the dotted line marks the $0.01°$ level. $$P_s$$ reaches only $\Psi$; $$A_s$$ disturbs $\Delta$ near $\Delta \approx 90°$; $\eta$ disturbs $\Delta$ more and more as $\Delta$ approaches $0°$ or $180°$._
 
-The three errors go to different places. A polarizer offset $P_s = 0.1°$ shifts $\Psi$ by $0.055°$ (by $0.064°$ with the polarizer at $30°$ or $60°$) but does **not** propagate into $\Delta$ at all. In the ideal inversion $\cos\Delta = \beta' / \sqrt{1 - \alpha'^2}$, and the polarizer angle cancels between numerator and denominator. The $10^{-13}$ degrees left in the computation are floating-point noise.
+The three errors go to different places. A polarizer offset $P_s = 0.1°$ shifts $\Psi$ by $0.055°$ (by $0.064°$ with the polarizer at $30°$ or $60°$) but does **not** propagate into $\Delta$ at all. In the ideal inversion $$\cos\Delta = \beta' / \sqrt{1 - \alpha'^2}$$, and the polarizer angle cancels between numerator and denominator. The $10^{-13}$ degrees left in the computation are floating-point noise.
 
 Near $\Delta \approx 90°$ an analyzer offset $A_s = 0.1°$ does the opposite. It barely touches $\Psi$ and shifts $\Delta$ by $0.30°$, amplified threefold over the injected error. This $\Delta$ error, however, scales with $\sin\Delta$ and shrinks toward $0°$ and $180°$ ($0.016°$ at $\Delta = 3°$), while the $\Psi$ error grows to nearly $0.1°$ instead.
 
@@ -83,7 +83,7 @@ The three errors so far, together with the polarization-dependent sensitivity of
 | Error | Injected | Where it goes | How to diagnose it | Calibration | Figure |
 | --- | --- | --- | --- | --- | --- |
 | Polarizer offset $P_s$ | $0.1°$ | $0.055°$ in $\Psi$, none in $\Delta$ | position of the minimum of $R(P)$ | residual, regression | 3, 4 |
-| Analyzer offset $A_s$ | $0.1°$ | $0.30°$ in $\Delta$ near $\Delta \approx 90°$ | direction of $(\alpha', \beta')$ at the minimum | residual, regression | 3 |
+| Analyzer offset $A_s$ | $0.1°$ | $0.30°$ in $\Delta$ near $\Delta \approx 90°$ | direction of $$(\alpha', \beta')$$ at the minimum | residual, regression | 3 |
 | Detector attenuation $\eta$ | $0.999$ | $2.5°$ in $\Delta$ at $\Delta = 3°$ | depth of the minimum of $R(P)$ | residual, regression | 3 |
 | Polarization-dependent sensitivity $\epsilon$ | $0.25$ | if unmodelled, $\eta$ becomes $1.0865$ and $\Psi$ shifts by $-0.65°$ | MSE of the regression fit | include it in the model | 5 |
 
@@ -103,14 +103,14 @@ $P_s$ comes from measuring $R(P)$ at several polarizer settings, fitting a parab
 
 $\eta$ comes from the depth of that minimum. At $P = P_s$ we have $\alpha = 1$ and $\beta = 0$, so $R(P_{\min}) = 1 - \eta^2$. **The position of the minimum gives $P_s$, and the depth of the minimum gives $\eta$.**
 
-$A_s$ is read off at the same setting. At $P - P_s = 0$ the rotation relation of Section 2 reduces to $(\alpha', \beta') = \eta(\cos 2A_s,\ \sin 2A_s)$, so $A_s = \tfrac12 \tan^{-1}(\beta'/\alpha')$.
+$A_s$ is read off at the same setting. At $P - P_s = 0$ the rotation relation of Section 2 reduces to $$(\alpha', \beta') = \eta(\cos 2A_s,\ \sin 2A_s)$$, so $$A_s = \tfrac12 \tan^{-1}(\beta'/\alpha')$$.
 
 Three numbers from one curve. The tidiness carries a condition, however. If the polarizer is a quartz Rochon prism, the optical activity of quartz rotates the plane of polarization along the path. An optical-activity correction is then needed before the procedure holds. The optical activity flagged as a property of Rochon prisms in Post 2 returns here as a bill.
 
 Running it gives the following.
 
 <img src="/assets/img/posts/ellipsometer-calibration/en/fig3-residual-calibration.png" alt="Residual calibration: three numbers from one minimum" width="780">
-_Figure 3. Left, $R(P)$ synthesized with $P_s = 0.26°$, $A_s = 64.3°$, $\eta = 0.9687$, together with its quadratic fit. The position of the minimum returns $P_s$ exactly, but the $\eta$ read from its depth is $0.9665$, short of the true value by $2.2 \times 10^{-3}$. Right, the error in recovered $\eta$ as the scan range is narrowed; the error shrinks with the range._
+_Figure 3. Left, $R(P)$ synthesized with $$P_s = 0.26°$$, $$A_s = 64.3°$$, $\eta = 0.9687$, together with its quadratic fit. The position of the minimum returns $$P_s$$ exactly, but the $\eta$ read from its depth is $0.9665$, short of the true value by $2.2 \times 10^{-3}$. Right, the error in recovered $\eta$ as the scan range is narrowed; the error shrinks with the range._
 
 With the scan taken symmetrically about the minimum, $P_s$ and $A_s$ return at machine precision. $\eta$ does not. The injected $0.9687$ comes back as $0.9665$, a systematic shortfall of $2.2 \times 10^{-3}$.
 
@@ -130,7 +130,7 @@ Put together as a procedure:
 2. Scan widely around the dial zero once to find the approximate minimum. A narrow first scan is unlikely to be symmetric about the minimum, and $P_s$ is pulled.
 3. Rescan symmetrically over less than $10°$, centred on that point. Symmetry keeps the even-order terms from moving $P_s$; narrowness keeps the systematic error in $\eta$ small. Too narrow, and the curve sinks into the noise.
 4. Fit the parabola: read $P_s$ from the position of the minimum and $\eta$ from its depth.
-5. Set the polarizer to $P_s$ and read $A_s$ from the direction of $(\alpha', \beta')$.
+5. Set the polarizer to $P_s$ and read $A_s$ from the direction of $$(\alpha', \beta')$$.
 6. Check that the sample's $\Delta$ lies within $30°$–$150°$. If not, do not use this procedure. The next section explains why.
 
 ## 5. Why does residual calibration fail when the phase difference nears 0° or 180°?
@@ -144,7 +144,7 @@ A sample with little absorption has $\Delta$ near $0°$ or $\pm180°$. Then $\si
 In a noiseless calculation the blind spot does not appear. However small the curvature, perfect data still locate the minimum exactly. The blind spot emerges when the curvature sinks below the noise, so noise must be added to the detected intensity and the trial repeated.
 
 <img src="/assets/img/posts/ellipsometer-calibration/en/fig4-blind-spot.png" alt="Near Delta = 0 or 180 degrees, residual calibration loses its minimum" width="780">
-_Figure 4. For a sample with $\Psi = 27°$, the depth of the minimum as $\Delta$ is lowered (left) and the error in recovered $P_s$ (right). For the right panel, Gaussian noise of standard deviation $2\times10^{-4}$ was added to the detected intensity (dc component $0.25$) over 40 trials, and the median is taken over the successful fits only. The dashed line marks $0.01°$. The error stays below it down to $\Delta = 30°$ and crosses it at $\Delta = 10°$, where it reaches $0.047°$._
+_Figure 4. For a sample with $\Psi = 27°$, the depth of the minimum as $\Delta$ is lowered (left) and the error in recovered $$P_s$$ (right). For the right panel, Gaussian noise of standard deviation $2\times10^{-4}$ was added to the detected intensity (dc component $0.25$) over 40 trials, and the median is taken over the successful fits only. The dashed line marks $0.01°$. The error stays below it down to $\Delta = 30°$ and crosses it at $\Delta = 10°$, where it reaches $0.047°$._
 
 Going from $\Delta = 90°$ to $\Delta = 1°$, the curvature of the minimum collapses by more than three orders of magnitude. The scatter that noise leaves in $R$ stays near $3.6 \times 10^{-4}$. From $\Delta = 3°$ downward, the depth of the minimum is shallower than that scatter.
 
@@ -158,7 +158,7 @@ The paper Johs published in 1993 states the limits of residual calibration at th
 
 The shift in approach can be put in one sentence. Instead of hunting for special conditions under which one parameter separates, **model the response of the optical system with exact expressions and fit every parameter at once.**
 
-Scan the polarizer broadly from $5°$ to $85°$, measure $(\alpha', \beta')$ at each setting, and fit the model below with the [Levenberg-Marquardt (LM) method](/en/posts/optimization-levenberg-marquardt/).
+Scan the polarizer broadly from $5°$ to $85°$, measure $$(\alpha', \beta')$$ at each setting, and fit the model below with the [Levenberg-Marquardt (LM) method](/en/posts/optimization-levenberg-marquardt/).
 
 $$\alpha_0 = \frac{\tan^2\Psi - \tan^2(P - P_s)}{\tan^2\Psi + \tan^2(P - P_s)}, \qquad \beta_0 = \frac{2\tan\Psi\cos\Delta\,\tan(P - P_s)}{\tan^2\Psi + \tan^2(P - P_s)}$$
 

@@ -39,12 +39,12 @@ $$ \frac{n_1}{n_2} = \frac{I_1 / (\sigma_1 \lambda_1 T_1)}{I_2 / (\sigma_2 \lamb
 특히 투과함수가 장비마다 다르다는 점이 중요하다. 1편에서 서베이 스캔은 통과 에너지(pass energy)를 높게, 고분해능 스캔은 낮게 잡는다고 하고 그 원리를 여기로 미뤘다. 대부분의 XPS 분광기는 반구형 분석기(concentric hemispherical analyzer, CHA)를 쓴다. 시편에서 나온 전자를 먼저 렌즈로 감속해 정해진 통과 에너지 $E_p$로 맞춘 뒤, 전위차가 걸린 두 반구 사이로 보낸다. 반구 사이를 무사히 지나 출구 슬릿에 닿는 전자는 운동에너지가 $E_p$ 근처인 것뿐이다. 안쪽 반구에 양(+), 바깥 반구에 음(−) 전위를 걸면 전자는 안쪽으로 끌리며 원호를 그린다. 운동에너지가 $E_p$보다 큰 전자는 더 큰 반지름으로 돌아 바깥 반구 쪽에, 작은 전자는 안쪽 반구 쪽에 닿는다. 즉, 두 반구는 전자를 에너지에 따라 펼치는 프리즘이다(그림1). 감속 전압을 훑으면서 $E_p$를 고정해 두는 방식을 FAT(fixed analyzer transmission) 모드라 하며, XPS에서 표준으로 쓴다.
 
 <img src="/assets/img/posts/xps-quantification-peak-fitting/ext-hemispherical-analyzer-principle.png" alt="반구형 분석기 단면. 입구 슬릿으로 들어온 전자가 두 반구 사이에서 휘어 출구의 검출기에 운동에너지별로 펼쳐진다" width="560">
-_그림1. 반구형 분석기(hemispherical analyzer)의 구조다. 오른쪽 아래 입구 슬릿으로 들어온 전자(electrons)는 두 반구 사이에서 휘어 왼쪽 아래 검출기(detector)에 닿는다. 검출기에서 슬릿 길이 방향의 위치(x)는 그대로 보존되고, 그에 수직인 방향으로 운동에너지($E_k$)가 펼쳐진다. 세 색의 띠는 슬릿의 서로 다른 자리로 들어온 전자이고, 띠의 폭이 곧 에너지의 퍼짐이다. (출처: Ponor, [Hemispherical electron energy analyzer working principle](https://commons.wikimedia.org/wiki/File:Hemispherical_electron_energy_analyzer_working_principle.svg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
+_그림1. 반구형 분석기(hemispherical analyzer)의 구조다. 오른쪽 아래 입구 슬릿으로 들어온 전자(electrons)는 두 반구 사이에서 휘어 왼쪽 아래 검출기(detector)에 닿는다. 검출기에서 슬릿 길이 방향의 위치(x)는 그대로 보존되고, 그에 수직인 방향으로 운동에너지($$E_k$$)가 펼쳐진다. 세 색의 띠는 슬릿의 서로 다른 자리로 들어온 전자이고, 띠의 폭이 곧 에너지의 퍼짐이다. (출처: Ponor, [Hemispherical electron energy analyzer working principle](https://commons.wikimedia.org/wiki/File:Hemispherical_electron_energy_analyzer_working_principle.svg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
 
 이 분석기의 에너지 분해능은 통과 에너지에 비례한다. 입구 슬릿 폭을 $W$, 반구의 평균 반지름을 $R$이라 하면 분해능은 대략 $\Delta E \approx E_p \, W/(2R)$에 전자가 들어오는 각도 퍼짐에서 오는 항이 더해진 값이다. 에너지가 같은 전자라도 입구에서 들어오는 각도가 조금 다르면 출구의 다른 자리에 닿기 때문이다(그림2). 각도 항은 문헌마다 $\alpha^2$, $\alpha^2/2$처럼 계수가 다르게 적히는데, 분해능을 바닥 폭(base width)으로 정의하느냐 반치폭(FWHM)으로 정의하느냐, $\alpha$를 반각으로 잡느냐 전각으로 잡느냐에 따라 달라진다. 식을 가져다 쓸 때는 $\Delta E$와 $\alpha$의 정의부터 확인해야 한다. 어느 경우든 결론은 같다. $E_p$를 낮추면 분해능이 좋아지고, 대신 분석기를 통과하는 전자가 줄어 신호가 약해진다. Thermo Fisher의 분석기 자료는 같은 Ag 3d 피크를 통과 에너지 4~40 eV로 측정해, 선폭이 좁아질수록 피크 높이가 떨어지는 맞교환 곡선을 보여 준다. 같은 자료에서 Ag 3d₅/₂ 피크의 가장 좁은 FWHM은 비단색 Mg K$\alpha$ 광원으로 0.82 eV 미만, 단색 광원으로 0.46 eV 미만이다. 7절 합성 스펙트럼의 Si⁰ 가우시안 폭 0.55 eV는 이 범위에 든다. FAT 모드에서는 이 분해능이 스펙트럼 전체에서 일정하지만, 투과함수는 감속비 $E_K/E_p$에 따라 달라진다. 그래서 같은 장비라도 통과 에너지를 바꾸면 감도가 바뀐다.
 
 <img src="/assets/img/posts/xps-quantification-peak-fitting/ext-hemispherical-analyzer-trajectories.png" alt="반구형 분석기 안에서 운동에너지 다섯 가지와 입사각 다섯 가지 전자의 계산 궤적" width="680">
-_그림2. 반구형 분석기 안의 전자 궤적을 계산한 그림이다. 왼쪽 아래 입구 슬릿에서 운동에너지가 다른 전자 다섯 무리(노랑에서 빨강)가 각각 다섯 각도로 들어오고, 안쪽 반구($V_1$, +)와 바깥 반구($V_2$, −) 사이에서 휘어 오른쪽 출구에 닿는다. $\alpha$는 입사 각도의 퍼짐이다. 바깥쪽에 닿는 전자일수록 운동에너지가 크다. 같은 색의 궤적도 각도에 따라 출구에서 퍼져 이웃 색과 겹치며, 이 겹침이 분해능 식의 각도 항이다. (출처: Ponor, [Hemispherical electron energy analyzer - calculated trajectories for different energies and initial angles](https://commons.wikimedia.org/wiki/File:Hemispherical_electron_energy_analyzer_-_calculated_trajectories_for_different_energies_and_initial_angles.svg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
+_그림2. 반구형 분석기 안의 전자 궤적을 계산한 그림이다. 왼쪽 아래 입구 슬릿에서 운동에너지가 다른 전자 다섯 무리(노랑에서 빨강)가 각각 다섯 각도로 들어오고, 안쪽 반구($$V_1$$, +)와 바깥 반구($$V_2$$, −) 사이에서 휘어 오른쪽 출구에 닿는다. $\alpha$는 입사 각도의 퍼짐이다. 바깥쪽에 닿는 전자일수록 운동에너지가 크다. 같은 색의 궤적도 각도에 따라 출구에서 퍼져 이웃 색과 겹치며, 이 겹침이 분해능 식의 각도 항이다. (출처: Ponor, [Hemispherical electron energy analyzer - calculated trajectories for different energies and initial angles](https://commons.wikimedia.org/wiki/File:Hemispherical_electron_energy_analyzer_-_calculated_trajectories_for_different_energies_and_initial_angles.svg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
 
 실무 결론은 이렇다. XPS 정량은 상대 비교에 강하고 절대값에 약하다. 같은 장비, 같은 조건으로 잰 시편들 사이의 추세는 믿을 만하지만, 다른 장비와 다른 RSF 표로 얻은 문헌값과 소수점 이하를 비교하는 것은 의미가 없다.
 
@@ -164,7 +164,7 @@ def resid(p):   # p = [Si0 위치, 면적, 폭, Si4+ 위치, 면적, 폭]
 잔차는 푸아송 잡음의 표준편차로 나눠 가중했다. 이렇게 하면 잔차 제곱합이 곧 $\chi^2$이고, 이를 자유도로 나눈 $\chi^2_{\text{red}}$가 1 근처면 모델이 잡음 수준까지 데이터를 설명한다는 뜻이다. 최소화는 `scipy.optimize.least_squares`로 했다.
 
 <img src="/assets/img/posts/xps-quantification-peak-fitting/fig3-fit-result.png" alt="Shirley 배경을 뺀 뒤 제약 이중선 모델로 피팅한 합성 Si 2p 스펙트럼과 정규화 잔차, 참값과 추정값 표" width="680">
-_그림5. 제약 피팅 결과 (합성 스펙트럼). 위: 데이터, Shirley 배경, 성분별 이중선(진한 색 2p₃/₂, 옅은 색 2p₁/₂), 피팅 합. 아래: 푸아송 표준편차로 나눈 잔차. 위치는 0.01 eV 안에서 맞지만 Si⁴⁺ 면적은 497(참값 600)로 작게 나오고, 잔차에는 101~102 eV와 105~107 eV에 음의 골이 남는다($\chi^2_{\text{red}}$ 2.57)._
+_그림5. 제약 피팅 결과 (합성 스펙트럼). 위: 데이터, Shirley 배경, 성분별 이중선(진한 색 2p₃/₂, 옅은 색 2p₁/₂), 피팅 합. 아래: 푸아송 표준편차로 나눈 잔차. 위치는 0.01 eV 안에서 맞지만 Si⁴⁺ 면적은 497(참값 600)로 작게 나오고, 잔차에는 101~102 eV와 105~107 eV에 음의 골이 남는다($$\chi^2_{\text{red}}$$ 2.57)._
 
 결과는 반쯤 성공이다. 위치는 두 성분 모두 0.01 eV 안에서 맞았다. 그런데 면적은 Si⁰가 954 ± 12(참값 1000), Si⁴⁺가 497 ± 11(참값 600)로 나왔고, Si⁴⁺의 폭도 1.06 ± 0.04 eV(참값 1.30)로 좁게 나왔다. Si⁴⁺ 몫은 34.3%로 참값보다 3.2%p 낮다. $\chi^2_{\text{red}}$는 2.57로 1보다 확연히 크고, 그림5 아래의 잔차에는 101~102 eV와 105~107 eV에 체계적인 음의 골이 남아 있다.
 
@@ -176,7 +176,7 @@ _그림5. 제약 피팅 결과 (합성 스펙트럼). 위: 데이터, Shirley �
 
 같은 데이터에서 스핀-궤도 제약을 풀면 무슨 일이 생기는가. 이중선 대신 위치, 면적, 폭이 모두 자유로운 단일 Voigt 함수 $n$개로 피팅하고, 초기값을 여러 번 바꿔 가장 좋은 해를 골랐다. 그리고 분석자가 하듯 각 성분을 Lu 등(1995)의 화학이동표(Si⁰ 기준 Si¹⁺ +0.98, Si²⁺ +1.82, Si³⁺ +2.65, Si⁴⁺ +3.84 eV)와 대조해, 가장 가까운 화학상태의 이름을 붙였다.
 
-단일선 2개로는 $\chi^2_{\text{red}}$가 4.91로 명백히 모자란다. 단일선 3개로 늘리면 $\chi^2_{\text{red}}$가 2.55로 떨어진다. 올바른 제약 모델의 2.57과 사실상 같은 값이다. 그런데 세 성분의 위치는 99.42, 100.04, 103.49 eV다. 가운데 성분은 Si⁰의 2p₁/₂가 따로 떨어져 나온 것인데, Si⁰에서 +0.62 eV 떨어져 있어 화학이동표에서는 Si¹⁺에 가장 가깝다. 결과를 문헌표와 대조한 분석자는 "Si⁰ 48.7%, Si¹⁺ 17.0%, Si⁴⁺ 34.3%"라고 보고하게 된다. 존재하지 않는 중간 산화물이 17% 나타났는데도, 잔차로는 올바른 모델과 구별되지 않는다.
+단일선 2개로는 $$\chi^2_{\text{red}}$$가 4.91로 명백히 모자란다. 단일선 3개로 늘리면 $$\chi^2_{\text{red}}$$가 2.55로 떨어진다. 올바른 제약 모델의 2.57과 사실상 같은 값이다. 그런데 세 성분의 위치는 99.42, 100.04, 103.49 eV다. 가운데 성분은 Si⁰의 2p₁/₂가 따로 떨어져 나온 것인데, Si⁰에서 +0.62 eV 떨어져 있어 화학이동표에서는 Si¹⁺에 가장 가깝다. 결과를 문헌표와 대조한 분석자는 "Si⁰ 48.7%, Si¹⁺ 17.0%, Si⁴⁺ 34.3%"라고 보고하게 된다. 존재하지 않는 중간 산화물이 17% 나타났는데도, 잔차로는 올바른 모델과 구별되지 않는다.
 
 <img src="/assets/img/posts/xps-quantification-peak-fitting/fig4-overfitting.png" alt="제약 없는 단일선 수를 늘릴 때 χ²의 감소와 가짜 중간 산화물 몫, Si4+ 몫의 변화" width="720">
 _그림6. 성분 수를 늘릴 때 (합성 스펙트럼, 잡음 실현 20회의 평균과 표준편차). (a) χ²는 성분 수에 따라 계속 줄고, n = 3에서 이미 제약 모델(파선) 수준까지 내려온다. (b) 그 사이 Si¹⁺~Si³⁺로 보고되는 가짜 성분이 나타나며, n이 커질수록 결과의 퍼짐도 커진다._

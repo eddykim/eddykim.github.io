@@ -30,7 +30,7 @@ There are three local minima in this range: $d\approx1293$ nm ($J\approx0.867$),
 
 A local optimizer cannot leave its valley because it never takes a single step uphill. So why not let it go the wrong way now and then, on purpose? Simulated annealing turns that idea into one probabilistic rule.
 
-Proposed by Kirkpatrick, Gelatt and Vecchi (1983), it takes its name from annealing in metallurgy: cool a metal slowly and its atoms settle into the lowest-energy crystal structure. The algorithm is simple. From the current position $d$, a randomly proposed $d'$ is accepted or rejected by the Metropolis criterion.
+Proposed by Kirkpatrick, Gelatt and Vecchi (1983), it takes its name from annealing in metallurgy: cool a metal slowly and its atoms settle into the lowest-energy crystal structure. The algorithm is simple. From the current position $d$, a randomly proposed $$d'$$ is accepted or rejected by the Metropolis criterion.
 
 $$ P(\text{accept}) = \min\!\left(1,\ \exp(-\Delta J / T)\right), \qquad \Delta J = J(d') - J(d) $$
 
@@ -81,9 +81,9 @@ All three found the global minimum within this 300-step budget, but widening the
 
 SA compares arbitrary points at every step, so it keeps taking small steps even near a valley floor. What if the comparison were made between valley floors from the start? Basin-hopping has the same aim as SA, and this is exactly where it differs. Where SA accepts or rejects each coordinate $d$ by the Metropolis criterion, basin-hopping accepts or rejects the answer to "which basin's floor is the search on?"
 
-1. Apply a large random perturbation to the current solution: $d_0' = d + \mathcal{N}(0,\sigma^2)$
-2. Run a local optimization from $d_0'$ to convergence, finding that basin's floor $d'$
-3. Compare the two floors, $J(d)$ against $J(d')$, by the Metropolis criterion, and accept or reject
+1. Apply a large random perturbation to the current solution: $$d_0' = d + \mathcal{N}(0,\sigma^2)$$
+2. Run a local optimization from $$d_0'$$ to convergence, finding that basin's floor $$d'$$
+3. Compare the two floors, $J(d)$ against $$J(d')$$, by the Metropolis criterion, and accept or reject
 
 Why this moves so cleanly becomes clear from the landscape basin-hopping effectively sees. Wales and Doye described the method as a transformation of the landscape: each point $d$ is replaced by the value of the floor that local optimization reaches from it. Applied to the landscape of Figure 1, every point between 1391 nm and 1589 nm takes the same value, 0.0024, because LM started anywhere in that range descends to the 1490 nm floor. The left basin becomes 0.867 and the right 1.059. The landscape turns into flat steps, one per basin, and the barriers between them vanish. The Metropolis criterion in basin-hopping therefore sees only the height of the steps (floor differences of 0.19–0.86), not the height of the barriers (about 4.25). It is unmoved by fine ripples in the landscape, such as those the noise creates, and moves far more cleanly in units of whole basins.
 

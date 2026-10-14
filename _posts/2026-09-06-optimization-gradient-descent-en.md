@@ -118,15 +118,15 @@ That value is no accident. When the model sits at the true parameter, only noise
 
 The red curve (`alpha=1500`) behaves differently. It oscillates by tens to over a hundred nanometres per step — 1540 → 1423 → 1527 → 1416 → 1503 — and fails to converge through all twenty iterations (Fig 3). It passes near the minimum on occasion (at the seventh iteration $J$ falls to approximately 0.03, Fig 4) but departs again at the following step. The situation is that of descending a valley with a stride so long that it overshoots the floor and climbs the opposite slope.
 
-Why the two curves part ways can be explained in one line by treating the floor as a parabola. Near the minimum $d^*$ the gradient is approximately $J''\,(d-d^*)$, and substituting this into the update gives
+Why the two curves part ways can be explained in one line by treating the floor as a parabola. Near the minimum $$d^*$$ the gradient is approximately $$J''\,(d-d^*)$$, and substituting this into the update gives
 
 $$ e_{k+1} = \left(1 - \alpha J''\right) e_k , $$
 
-where $e_k = d_k - d^*$ is the error of the $k$-th estimate and $J''$ the curvature of the floor. Each step multiplies the error by the same factor $1-\alpha J''$. The error shrinks only if that factor has magnitude below 1, which is the condition $\alpha < 2/J''$. With this problem's curvature, $J''\approx0.00258$, the limit is about 775.
+where $e_k = d_k - d^*$ is the error of the $k$-th estimate and $$J''$$ the curvature of the floor. Each step multiplies the error by the same factor $$1-\alpha J''$$. The error shrinks only if that factor has magnitude below 1, which is the condition $$\alpha < 2/J''$$. With this problem's curvature, $$J''\approx0.00258$$, the limit is about 775.
 
 For `alpha=300` the factor is 0.23. It keeps its sign, so the iteration never overshoots, and the error falls to nearly a quarter at each step. The error ratios of the actual trajectory settle at 0.23 after the first two steps (0.53, 0.31). For `alpha=1500` the factor is −2.87: each time the iterate comes near the floor, it is thrown nearly three times as far to the other side. Away from the floor, however, the slope flattens again, so the trajectory does not run off indefinitely but wanders between 1415 and 1566 nm. This is the characteristic failure mode of gradient descent under an excessive step size, and the same problem is noted in darkpgmr's article on optimization ([darkpgmr.tistory.com/133](https://darkpgmr.tistory.com/133), in Korean).
 
-The same equation gives a rule for choosing the step size: take $\alpha$ on the order of the inverse curvature. At $\alpha = 1/J'' \approx 390$ the factor is zero and the iterate lands on the floor in one step. Somewhat larger values overshoot and swing back while converging, and beyond twice that (about 775) the iteration fails to converge. Newton's method in [Part 2](/posts/optimization-newton-gauss-newton/) computes exactly this $1/J''$ at every step and puts it in place of $\alpha$.
+The same equation gives a rule for choosing the step size: take $\alpha$ on the order of the inverse curvature. At $$\alpha = 1/J'' \approx 390$$ the factor is zero and the iterate lands on the floor in one step. Somewhat larger values overshoot and swing back while converging, and beyond twice that (about 775) the iteration fails to converge. Newton's method in [Part 2](/posts/optimization-newton-gauss-newton/) computes exactly this $$1/J''$$ at every step and puts it in place of $\alpha$.
 
 A single difference in step size separated convergence from endless oscillation.
 
@@ -140,7 +140,7 @@ Second, the convergence rate depends strongly on $\alpha$, and determining $\alp
 
 ## Summary
 
-Gradient descent moves downhill in small steps opposite the gradient. The gradient supplies only the direction; how far to go is set by the step size $\alpha$, and the right size for $\alpha$ is set by the curvature of the floor. In this problem convergence requires $\alpha<2/J''\approx775$, and `alpha=300` reached the noise floor in five iterations. The initial value must also lie inside the basin of the global minimum. In short, gradient descent works well only when someone already knows the curvature and the landscape on its behalf.
+Gradient descent moves downhill in small steps opposite the gradient. The gradient supplies only the direction; how far to go is set by the step size $\alpha$, and the right size for $\alpha$ is set by the curvature of the floor. In this problem convergence requires $$\alpha<2/J''\approx775$$, and `alpha=300` reached the noise floor in five iterations. The initial value must also lie inside the basin of the global minimum. In short, gradient descent works well only when someone already knows the curvature and the landscape on its behalf.
 
 Newton's method, covered in the next post, determines the step size automatically from the Hessian, at the cost of computing the Hessian and inverting it.
 

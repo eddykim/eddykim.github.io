@@ -108,14 +108,14 @@ Multiplying out the Mueller matrices gives
 
 $$I(\phi) \propto \frac{3 + u}{2} - 2\cos 2\Psi\,\cos 2\phi + \frac{1-u}{2}\cos 4\phi, \qquad u = \sin 2\Psi\,\cos\Delta$$
 
-**The sine terms vanish identically and only the $2\phi$ and $4\phi$ cosines survive.** The $2\phi$ term carries $\cos 2\Psi$ alone, and $\cos\Delta$ enters only the constant and the $4\phi$ term. A rotating analyzer, by contrast, produces $2\omega$ alone. This is why Ye's paper writes the Fourier coefficients as $\{\alpha_2, \alpha_4\}$ rather than $\alpha$ and $\beta$. Ye's equations take $\Delta$ $180°$ away from this series, so the sign of $\cos\Delta$ is reversed; keep that in mind when comparing.
+**The sine terms vanish identically and only the $2\phi$ and $4\phi$ cosines survive.** The $2\phi$ term carries $\cos 2\Psi$ alone, and $\cos\Delta$ enters only the constant and the $4\phi$ term. A rotating analyzer, by contrast, produces $2\omega$ alone. This is why Ye's paper writes the Fourier coefficients as $$\{\alpha_2, \alpha_4\}$$ rather than $\alpha$ and $\beta$. Ye's equations take $\Delta$ $180°$ away from this series, so the sign of $\cos\Delta$ is reversed; keep that in mind when comparing.
 
 With $\alpha_2$ and $\alpha_4$ normalized by the constant term, the inversion is straightforward.
 
 $$\cos 2\Psi = \frac{-\alpha_2}{1+\alpha_4}, \qquad \sin 2\Psi\,\cos\Delta = \frac{1-3\alpha_4}{1+\alpha_4}$$
 
 <img src="/assets/img/posts/ellipsometer-back-focal-plane-micro/en/fig3-annular-readout.png" alt="Pupil intensity and annular demodulation" width="780">
-_Figure 5. A synthesized example of annular acquisition (32.9 nm SiO$_2$ on Si, 632.8 nm, NA 0.90). Left, pupil intensity with polarizer and analyzer both along $x$. Centre, intensity around the white ring ($46.1°$ incidence) and its $2\phi$ and $4\phi$ components. Right, $\Psi$ and $\Delta$ recovered at each radius. The data are noise-free, so the recovered values (markers) sit on the true values (pale lines)._
+_Figure 5. A synthesized example of annular acquisition (32.9 nm SiO$$_2$$ on Si, 632.8 nm, NA 0.90). Left, pupil intensity with polarizer and analyzer both along $x$. Centre, intensity around the white ring ($46.1°$ incidence) and its $2\phi$ and $4\phi$ components. Right, $\Psi$ and $\Delta$ recovered at each radius. The data are noise-free, so the recovered values (markers) sit on the true values (pale lines)._
 
 Putting the values in Figure 5(b), $\alpha_2 = -0.705$ and $\alpha_4 = 0.904$, into the inversion gives $\Psi = 34.13°$, the true value. The two coefficients of one ring fix $\Psi$ and $\cos\Delta$.
 
@@ -169,7 +169,7 @@ Munro and Török treated the same problem in Mueller form in 2008. The two line
 Why the distinction matters: the average of Jones matrices is still a single Jones matrix, so it produces no depolarization. The average of Mueller matrices does.
 
 <img src="/assets/img/posts/ellipsometer-back-focal-plane-micro/en/fig4-focusing-average.png" alt="The averaging that focusing performs" width="780">
-_Figure 6. Averages computed by widening the angular spread about $45°$ incidence (32.9 nm SiO$_2$ on Si, 632.8 nm). Left, the depolarization index: the Jones average (green, solid) stays at 1 and only the Mueller average (red, dashed) falls below it. Right, the error the Mueller average leaves in $\Psi$, which stays below $0.01°$ even at a $12°$ half-width._
+_Figure 6. Averages computed by widening the angular spread about $45°$ incidence (32.9 nm SiO$$_2$$ on Si, 632.8 nm). Left, the depolarization index: the Jones average (green, solid) stays at 1 and only the Mueller average (red, dashed) falls below it. Right, the error the Mueller average leaves in $\Psi$, which stays below $0.01°$ even at a $12°$ half-width._
 
 The Jones average holds an index of $1.000000000$ exactly, and **only the Mueller average falls below 1**, further as the spread widens. Not one component in the system depolarizes. Yet with conventional detection **the act of focusing itself produces depolarization.**
 
@@ -198,7 +198,7 @@ $$\theta = \sin^{-1}\!\left(\frac{r\,\sin\theta_b}{r_b}\right)$$
 Here $\theta_b$ is the Brewster angle of the reference sample. With one reference point fixed, the numerical aperture is no longer needed.
 
 <img src="/assets/img/posts/ellipsometer-back-focal-plane-micro/en/fig5-brewster-calibration.png" alt="Calibrating the angle scale with the Brewster angle" width="780">
-_Figure 7. Calibrating the angle scale with the Brewster angle. Left, the $\tan^2\Psi$ profile of a fused silica reference; the minimum at $r_b = 0.916$ corresponds to the Brewster angle of $55.55°$. Right, for a lens whose true NA is 0.90, the scale obtained by trusting the nominal NA of 0.95 (red, dashed) and the scale calibrated with the Brewster angle (green markers), which agrees with the true scale (grey) to about $0.005°$._
+_Figure 7. Calibrating the angle scale with the Brewster angle. Left, the $\tan^2\Psi$ profile of a fused silica reference; the minimum at $$r_b = 0.916$$ corresponds to the Brewster angle of $55.55°$. Right, for a lens whose true NA is 0.90, the scale obtained by trusting the nominal NA of 0.95 (red, dashed) and the scale calibrated with the Brewster angle (green markers), which agrees with the true scale (grey) to about $0.005°$._
 
 The objective the author used was rated NA 0.95 but measured 0.90. Using the rated value as it stands puts the rim **off by up to $7.6°$.** Solving for a thickness from $\Psi$ and $\Delta$ attributed to an angle that is $7.6°$ wrong cannot give the right answer. Setting the scale by the Brewster angle reduces that error to about $0.005°$.
 

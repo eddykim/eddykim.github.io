@@ -81,7 +81,7 @@ def phase_shift_n(frames, shifts):
 ```
 
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/en/fig3-three-methods.png" alt="Phase error of three methods against noise, and the sideband width trade of the Fourier method" width="750">
-_Fig 4. Phase error of the three methods on the same 512-pixel fringe (30 pixels excluded at each end). Left: RMS error against frame noise for the Hilbert method (red), the Fourier method (orange) and 4-step phase shifting (blue), averaged over 60 runs per noise level; as noise grows the Fourier method becomes the most accurate. Right: as the Fourier sideband width is varied (passband $f_0 \pm$ width), the error under noise 0.05 (orange) and the noiseless error where the shape is steep (green)._
+_Fig 4. Phase error of the three methods on the same 512-pixel fringe (30 pixels excluded at each end). Left: RMS error against frame noise for the Hilbert method (red), the Fourier method (orange) and 4-step phase shifting (blue), averaged over 60 runs per noise level; as noise grows the Fourier method becomes the most accurate. Right: as the Fourier sideband width is varied (passband $$f_0 \pm$$ width), the error under noise 0.05 (orange) and the noiseless error where the shape is steep (green)._
 
 Without noise, phase shifting errs by $6\times10^{-15}$ rad, which is floating-point precision. Adding no spatial assumption makes it exact in principle. The Hilbert and Fourier methods carry error even without noise: 0.0022 and 0.0037 rad respectively where the shape is steep, which is exactly how far the slow-phase assumption has been violated.
 

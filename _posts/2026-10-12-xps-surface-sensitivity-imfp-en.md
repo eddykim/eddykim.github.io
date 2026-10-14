@@ -122,13 +122,13 @@ Figure 3(b) plots the cumulative contribution at several angles for Si 2p in sil
 
 ### Which Plane Is the Angle Measured From?
 
-This is the place to flag a common practical mistake: the literature measures the detection angle from different reference planes. This post and Powell (2020) use the emission angle $\theta$ from the surface normal, so the effective depth is written $\lambda\cos\theta$. Papers that use the take-off angle measured from the surface plane write the same physics as $\lambda\sin\theta'$. This post writes the take-off angle as $\theta'$. The two are related by $\theta' = 90° - \theta$, and normal emission is $\theta$ = 0° but $\theta'$ = 90°.
+This is the place to flag a common practical mistake: the literature measures the detection angle from different reference planes. This post and Powell (2020) use the emission angle $\theta$ from the surface normal, so the effective depth is written $\lambda\cos\theta$. Papers that use the take-off angle measured from the surface plane write the same physics as $$\lambda\sin\theta'$$. This post writes the take-off angle as $$\theta'$$. The two are related by $$\theta' = 90° - \theta$$, and normal emission is $\theta$ = 0° but $$\theta'$$ = 90°.
 
 A typical example is the Strohmeier equation, widely used to compute oxide thickness.
 
 $$ d = \lambda_{ox}\sin\theta'\,\ln\!\left(\frac{N_m\lambda_m I_{ox}}{N_{ox}\lambda_{ox} I_m} + 1\right) $$
 
-$N$ is the volume density of metal atoms, and $I$ the peak areas of the oxide and metal components. The equation is written in the take-off angle $\theta'$. At normal emission $\sin 90° = 1$ and $\lambda_{ox}$ remains unchanged, so it expresses the same physics as the normal-referenced $\cos\theta$ form. Yet many widely used practical guides that present this equation simply call $\theta'$ the "take-off angle" without saying which plane it is measured from. On an instrument whose analyser is not at 45° from the normal, plugging the normal-referenced angle into the equation gives the wrong thickness. For an analyser tilted 30° from the normal, the correct value is $\sin 60°$ = 0.87; using $\sin 30°$ = 0.5 instead gives a thickness 42% too small. Before borrowing an equation, check the reference plane of its angle.
+$N$ is the volume density of metal atoms, and $I$ the peak areas of the oxide and metal components. The equation is written in the take-off angle $$\theta'$$. At normal emission $\sin 90° = 1$ and $\lambda_{ox}$ remains unchanged, so it expresses the same physics as the normal-referenced $\cos\theta$ form. Yet many widely used practical guides that present this equation simply call $$\theta'$$ the "take-off angle" without saying which plane it is measured from. On an instrument whose analyser is not at 45° from the normal, plugging the normal-referenced angle into the equation gives the wrong thickness. For an analyser tilted 30° from the normal, the correct value is $\sin 60°$ = 0.87; using $\sin 30°$ = 0.5 instead gives a thickness 42% too small. Before borrowing an equation, check the reference plane of its angle.
 
 ## 6. When Is Seeing Only the Surface a Disadvantage?
 

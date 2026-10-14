@@ -100,7 +100,7 @@ Every detector so far has collapsed its signal to one number. A bright field det
 What if nothing is discarded?
 
 <img src="/assets/img/posts/electron-microscopy-stem-analytical/en/fig3-4dstem.png" alt="The 4D-STEM data structure and the images extracted from it" width="850">
-_Fig 5. The structure of 4D-STEM data. One diffraction pattern $(k_x, k_y)$ is stored at every scan position $(x, y)$. After the measurement, summing the centre gives a bright field image and summing the ring an annular dark field image, while the centre-of-mass shift gives differential phase contrast and the full patterns give ptychography._
+_Fig 5. The structure of 4D-STEM data. One diffraction pattern $$(k_x, k_y)$$ is stored at every scan position $(x, y)$. After the measurement, summing the centre gives a bright field image and summing the ring an annular dark field image, while the centre-of-mass shift gives differential phase contrast and the full patterns give ptychography._
 
 Storing the full two-dimensional diffraction pattern $(k_x, k_y)$ at every scan position $(x, y)$ yields a four-axis dataset. This is four-dimensional STEM (4D-STEM). Each pixel holds a pattern rather than an image, so which image to form can be decided after the measurement is over. For scale: scanning 256×256 positions with a 128×128-pixel detector gives about a billion values, or 4 GiB at 32 bits each. That is why a four-axis dataset is a measurement problem and a computing problem at once.
 

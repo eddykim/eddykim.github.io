@@ -59,7 +59,7 @@ $$ I = \lvert \langle \mathbf{S} \rangle \rvert = \frac{1}{2}\sqrt{\frac{\epsilo
 입사광의 진행 방향과 경계면 법선이 이루는 평면을 입사면(plane of incidence)이라 한다. 모든 편광 성분은 이 평면에 수직인 s편광(s-polarization)과 평행한 p편광(p-polarization)으로 나누어 다룬다. 입사각 $\theta_i$, 반사각 $\theta_r$, 굴절각 $\theta_t$를 각각 법선과 이루는 각으로 정의한다. 그림1은 이 정의를 한 장에 모은 것이다. ⊙ 기호는 지면에서 튀어나오는 방향의 진동(s편광)을, 양방향 화살표는 지면 안에서 광선에 수직인 진동(p편광)을 뜻한다.
 
 <img src="/assets/img/posts/ellipsometry-electromagnetic-fresnel/fig1-concept-diagram.png" alt="입사면 위의 s/p 편광과 입사·반사·굴절 광선" width="600">
-_그림1. 입사면(지면) 위의 입사·반사·굴절 광선. s편광은 지면에 수직으로(⊙), p편광은 입사면 안에서 광선에 수직으로(↔) 진동한다. 매질 2의 굴절률이 더 커서 굴절광이 법선 쪽으로 꺾인다(도식용 각도 $\theta_i = 35°$, $\theta_t = 22°$)._
+_그림1. 입사면(지면) 위의 입사·반사·굴절 광선. s편광은 지면에 수직으로(⊙), p편광은 입사면 안에서 광선에 수직으로(↔) 진동한다. 매질 2의 굴절률이 더 커서 굴절광이 법선 쪽으로 꺾인다(도식용 각도 $$\theta_i = 35°$$, $$\theta_t = 22°$$)._
 
 반사각은 언제나 입사각과 같고, 굴절각은 스넬의 법칙(Snell's law)으로 결정된다.
 
@@ -72,7 +72,7 @@ $$ \theta_i = \theta_r, \qquad N_1 \sin\theta_i = N_2 \sin\theta_t $$
 식으로 쓰면 이렇다. 평면파 해 $e^{j(\omega t - \mathbf{k}\cdot\mathbf{r})}$가 경계면 위의 모든 점, 모든 시각에서 입사파·반사파·굴절파 세 파동에 걸쳐 같은 위상으로 이어져야 한다. 그러려면 각 파수 벡터를 경계면 방향으로 투영한 성분이 서로 같아야 한다. 이 조건을 위상 정합(phase matching)이라 한다. 각도로 풀어 쓰면 $\lvert \mathbf{k}_1 \rvert \sin\theta_i = \lvert \mathbf{k}_2 \rvert \sin\theta_t$이고, $\lvert \mathbf{k} \rvert = N\omega/c$를 넣으면 정확히 $N_1\sin\theta_i = N_2\sin\theta_t$가 된다. 즉, 위상 정합 자체가 스넬의 법칙이다. 그림2가 이 과정을 파면으로 보여 준다.
 
 <img src="/assets/img/posts/ellipsometry-electromagnetic-fresnel/ext-wavefront-refraction.png" alt="경계면을 지나며 꺾이는 평면파의 파면" width="450">
-_그림2. 굴절률 $n_1$인 매질에서 $n_2$인 매질로 들어가는 평면파. 굵은 회색 선은 빛줄기의 양쪽 가장자리이고, 가는 선(위는 파랑, 아래는 초록)은 파면이다. 파면은 경계면의 노란 점에서 끊기지 않고 이어지며, 아래 매질에서 파면 간격이 좁아진 만큼 진행 방향(점선 화살표)이 법선 쪽으로 꺾인다. (출처: 老陳, [Wavefront Refraction](https://commons.wikimedia.org/wiki/File:Wavefront_Refraction.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
+_그림2. 굴절률 $$n_1$$인 매질에서 $$n_2$$인 매질로 들어가는 평면파. 굵은 회색 선은 빛줄기의 양쪽 가장자리이고, 가는 선(위는 파랑, 아래는 초록)은 파면이다. 파면은 경계면의 노란 점에서 끊기지 않고 이어지며, 아래 매질에서 파면 간격이 좁아진 만큼 진행 방향(점선 화살표)이 법선 쪽으로 꺾인다. (출처: 老陳, [Wavefront Refraction](https://commons.wikimedia.org/wiki/File:Wavefront_Refraction.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
 
 ## 4. 경계면에서 빛은 얼마나 반사되는가
 
@@ -93,12 +93,12 @@ $$ R_p = \lvert r_p \rvert^2, \qquad R_s = \lvert r_s \rvert^2 $$
 공기($N_1=1.0$)에서 유리($N_2=1.5$)로 들어가는 빛의 $R_p, R_s$를 입사각에 따라 계산하면 그림3과 같다.
 
 <img src="/assets/img/posts/ellipsometry-electromagnetic-fresnel/fig2-fresnel-reflectance.png" alt="프레넬 반사율 R_p, R_s를 입사각에 따라 그린 그래프, 브루스터각 표시" width="600">
-_그림3. 공기($N_1=1.0$)에서 유리($N_2=1.5$)로 입사할 때의 프레넬 반사율. $R_s$(보라)는 입사각에 따라 단조증가하고, $R_p$(초록)는 브루스터각 56.3°(점선)에서 0이 된다. 수직 입사에서는 둘 다 0.04다._
+_그림3. 공기($$N_1=1.0$$)에서 유리($$N_2=1.5$$)로 입사할 때의 프레넬 반사율. $$R_s$$(보라)는 입사각에 따라 단조증가하고, $$R_p$$(초록)는 브루스터각 56.3°(점선)에서 0이 된다. 수직 입사에서는 둘 다 0.04다._
 
 두 곡선은 수직 입사의 0.04에서 함께 출발한다. $R_s$는 입사각이 커질수록 단조증가하지만, $R_p$는 줄어들다가 특정 각도에서 0을 찍고 다시 올라간다. 이 각도를 브루스터각(Brewster's angle)이라 한다. $r_p$의 분자가 0이 되는 조건 $N_2\cos\theta_i = N_1\cos\theta_t$를 스넬의 법칙과 함께 풀면 $\theta_B = \arctan(N_2/N_1)$를 얻는다. 공기-유리 조합에서는 56.3°다. 브루스터각에서는 p편광 성분이 전혀 반사되지 않고 반사광에는 s편광만 남는다. 이때 반사광과 굴절광은 서로 직각을 이룬다(유리에서 굴절각은 33.7°라 56.3° + 33.7° = 90°). 이 성질은 실제 계측 현장에서 편광자 방위각(azimuth)의 기준, 곧 입사면 방향을 잡는 보정에 활용된다. 그림4가 이 상황을 보여 준다.
 
 <img src="/assets/img/posts/ellipsometry-electromagnetic-fresnel/ext-brewster-angle.png" alt="브루스터각으로 입사한 빛의 반사와 굴절, 반사광은 s편광만 남는다" width="500">
-_그림4. 브루스터각 $\theta_B$로 입사한 무편광 빛(incident ray)의 반사(reflected ray)와 굴절(refracted ray). 점은 지면에 수직인 진동(s편광), 양방향 화살표는 입사면 안의 진동(p편광)이다. 반사광에는 점만 남아 s편광이 되고, 굴절광은 두 성분을 모두 지녀 약간만 편광되며, 반사광과 굴절광 사이는 직각이다. (출처: Pajs, [Brewsters-angle](https://commons.wikimedia.org/wiki/File:Brewsters-angle.svg), 퍼블릭 도메인)_
+_그림4. 브루스터각 $$\theta_B$$로 입사한 무편광 빛(incident ray)의 반사(reflected ray)와 굴절(refracted ray). 점은 지면에 수직인 진동(s편광), 양방향 화살표는 입사면 안의 진동(p편광)이다. 반사광에는 점만 남아 s편광이 되고, 굴절광은 두 성분을 모두 지녀 약간만 편광되며, 반사광과 굴절광 사이는 직각이다. (출처: Pajs, [Brewsters-angle](https://commons.wikimedia.org/wiki/File:Brewsters-angle.svg), 퍼블릭 도메인)_
 
 그림3이 보여 주지 못하는 것이 하나 있다. $r_p$의 부호다. 유리에서 $r_s$는 입사각이 커질수록 음수 쪽으로 커진다(45°에서 −0.303, 70°에서 −0.547). 반면 $r_p$는 줄어들다가 브루스터각에서 0을 지나 음수가 된다(45°에서 +0.092, 70°에서 −0.206). 즉, 브루스터각을 지나는 순간 두 반사파의 위상차가 180°에서 0°로 뒤집힌다. 그런데 반사율로는 이 변화가 보이지 않는다. 45°와 63.6°의 $R_p$는 0.0085로 같지만, 그 두 각에서 $r_p$는 +0.092와 −0.092로 부호가 반대다. 세기는 위상을 지운다는 2절의 결론이 여기서 숫자로 드러난다.
 

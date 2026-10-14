@@ -105,18 +105,18 @@ Each cell is the sum and difference of its row and column frequencies. The centr
 
 Each harmonic, in other words, is a broadcast frequency assigned to particular Mueller elements. That the same element is carried on several frequencies is what overdetermination looks like in practice.
 
-The rule also shows why the speeds must differ. Two stations on one frequency are heard mixed. If the sums and differences of the column frequencies $\{0, 2m_1, 4m_1\}$ and the row frequencies $\{0, 2m_2, 4m_2\}$ coincide, different elements fall into the same harmonic and cannot be separated. Computed, 5:1, 5:2, 5:3 and 5:4 have no coinciding positions. Ratios 2:1, 3:1, 4:1 and 3:2 do, and cannot resolve all sixteen. Ratio 4:3 resolves them, but $16-12 = 12-8 = 4$ puts two addresses at 4C, and the condition number of section 6 rises to 12.8 against 9.45 for the collision-free ratios (at 90° retardance). With the fast side at 5, any slow side from 1 to 4 keeps the information unmixed.
+The rule also shows why the speeds must differ. Two stations on one frequency are heard mixed. If the sums and differences of the column frequencies $$\{0, 2m_1, 4m_1\}$$ and the row frequencies $$\{0, 2m_2, 4m_2\}$$ coincide, different elements fall into the same harmonic and cannot be separated. Computed, 5:1, 5:2, 5:3 and 5:4 have no coinciding positions. Ratios 2:1, 3:1, 4:1 and 3:2 do, and cannot resolve all sixteen. Ratio 4:3 resolves them, but $16-12 = 12-8 = 4$ puts two addresses at 4C, and the condition number of section 6 rises to 12.8 against 9.45 for the collision-free ratios (at 90° retardance). With the fast side at 5, any slow side from 1 to 4 keeps the information unmixed.
 
 <img src="/assets/img/posts/ellipsometer-dual-rotating-compensator-mme/en/fig3-coefficient-map.png" alt="Mueller elements carried by each harmonic" width="780">
-_Figure 3. For the 5:3 layout, the elements carried at each harmonic and the representative factor that sets their strength. Red rows ride on $\sin\delta$ and disappear when a retardance is 0° or 180°; blue rows ride on $s = \sin^2(\delta/2)$. Terms multiplied by the dc share $c_j$ are omitted._
+_Figure 3. For the 5:3 layout, the elements carried at each harmonic and the representative factor that sets their strength. Red rows ride on $\sin\delta$ and disappear when a retardance is 0° or 180°; blue rows ride on $s = \sin^2(\delta/2)$. Terms multiplied by the dc share $$c_j$$ are omitted._
 
 Figure 3 attaches strength factors to the same map. Write $\delta_1$ and $\delta_2$ for the two retardances, with $s_j = \sin^2(\delta_j/2)$ and $c_j = \cos^2(\delta_j/2)$. Expanding what the generator contributes to the sample shows where the factors come from.
 
 $$K_j = M_{j1} + \big[c_1\cos 2P' + s_1\cos(4C'_1-2P')\big]M_{j2} + \big[c_1\sin 2P' + s_1\sin(4C'_1-2P')\big]M_{j3} + \big[\sin\delta_1\sin(2C'_1-2P')\big]M_{j4}$$
 
-Here $j$ is the row index of the Mueller matrix. $P'$ and $C'_1$ are the true angles after subtracting the offsets found by calibration, with $C'_1 = 5(C - C_{S1})$.
+Here $j$ is the row index of the Mueller matrix. $$P'$$ and $$C'_1$$ are the true angles after subtracting the offsets found by calibration, with $$C'_1 = 5(C - C_{S1})$$.
 
-The second and third columns are carried partly by a dc share and partly by a share modulated at $4C'_1$. Since $c_1 + s_1 = 1$, a larger retardance shifts weight from the dc term to the modulated one. The fourth column behaves differently. It rides on $\sin\delta_1$ alone, and only at $2C'_1$.
+The second and third columns are carried partly by a dc share and partly by a share modulated at $$4C'_1$$. Since $c_1 + s_1 = 1$, a larger retardance shifts weight from the dc term to the modulated one. The fourth column behaves differently. It rides on $\sin\delta_1$ alone, and only at $$2C'_1$$.
 
 Section 3 of post 2 said that a retardance of 0° or 180° destroys the information. This is what that statement means precisely. At either value $\sin\delta_1$ is zero and the fourth column disappears wholesale, taking the sensitivity to circular polarization with it. The calculation makes it plain. Set the first retardance to 0° or 180° and a sample with its fourth column zeroed out produces exactly the same signal as the original. Do the same to the second compensator and the fourth row vanishes in the same way. A constraint discussed in post 2 as a matter of choosing parts here trims the list of measurable quantities directly.
 

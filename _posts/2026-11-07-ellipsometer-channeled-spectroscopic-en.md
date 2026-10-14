@@ -101,7 +101,7 @@ Put in numbers. Over 400–800 nm, a spectrometer with 1 nm resolution and a 1:2
 Combining the two inequalities leaves a window of allowed thicknesses.
 
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/en/fig2-thickness-window.png" alt="The allowed thickness window" width="780">
-_Figure 2. The range of base thickness $t_0$ for quartz retarders over 400–800 nm, against the spectrometer's wavelength resolution. The green region under the solid line is usable by a channeled spectropolarimeter (CSP) measuring the Stokes vector with two retarders (ratio 1:2); the darker region under the dashed line is usable by a four-retarder Mueller arrangement (ratio 2:1:7:15). The darker region closes at 1.37 nm._
+_Figure 2. The range of base thickness $$t_0$$ for quartz retarders over 400–800 nm, against the spectrometer's wavelength resolution. The green region under the solid line is usable by a channeled spectropolarimeter (CSP) measuring the Stokes vector with two retarders (ratio 1:2); the darker region under the dashed line is usable by a four-retarder Mueller arrangement (ratio 2:1:7:15). The darker region closes at 1.37 nm._
 
 The lower bound is a horizontal line. It is fixed by the source bandwidth, so it has nothing to do with spectrometer performance. The upper bound slopes: a finer spectrometer raises it.
 
@@ -132,7 +132,7 @@ There is a price. The ordinary and extraordinary indices of calcite differ subst
 This imbalance creates a term the signal did not have: **one whose carrier frequency is $L_1$.** The original expression held only $L_2$ and $L_1 \pm L_2$; now there are four.
 
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/en/fig3-thickness-ratio.png" alt="Channel layout for two thickness ratios" width="780">
-_Figure 3. Channel layout for one input polarization seen through two calcite retarders, with ratio 1:2 on the left and 3:1 on the right. The dark curve assumes no diattenuation; the red curve includes the Fresnel imbalance of calcite. At 1:2 the two curves coincide and the new term stays hidden; at 3:1 it rises in the empty $L_1$ slot._
+_Figure 3. Channel layout for one input polarization seen through two calcite retarders, with ratio 1:2 on the left and 3:1 on the right. The dark curve assumes no diattenuation; the red curve includes the Fresnel imbalance of calcite. At 1:2 the two curves coincide and the new term stays hidden; at 3:1 it rises in the empty $$L_1$$ slot._
 
 The problem is that the two curves in the left panel coincide. The new term hides inside an existing channel, and the intensity alone cannot tell where the original signal ends. With a thickness ratio $d_1 : d_2$ of $1:2$, $L_2 = 2L_1$, so the new $L_1$ term lands at $L_2 - L_1 = L_1$, **exactly on top of** the $L_1-L_2$ channel. The ratio that was optimal in the ideal calculation, with its even spacing, becomes unusable once the new $L_1$ term is taken into account. (Okabe places the retarders before the sample, which reverses the numbering, so he describes the same situation as $2:1$.)
 
