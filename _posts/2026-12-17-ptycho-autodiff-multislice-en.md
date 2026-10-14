@@ -40,7 +40,7 @@ Is the result the same as the hand derivation? We rewrote the three costs of pos
 <img src="/assets/img/posts/ptycho-autodiff-multislice/en/fig1-gradient-check.png" alt="Pixel-by-pixel comparison of AD and hand-derived gradients for three costs" width="950">
 _Fig 1. Autodiff gradient (half, per the PyTorch convention) against the hand-derived gradient for three costs. All 2000 pixels lie on the diagonal_
 
-For all three costs the maximum relative difference is below $2\times10^{-9}$. One point differs, by exactly a factor of two. PyTorch differentiates a complex variable through its real and imaginary parts, so it returns twice the $\partial L / \partial O^*$ of post 6. The direction is identical; only the step size needs rescaling. In short, writing a few lines of forward model reproduces the derivative of post 6 automatically.
+For all three costs the maximum relative difference is below $2\times10^{-9}$. One point differs, by exactly a factor of two. PyTorch differentiates a complex variable through its real and imaginary parts, so it returns twice the gradient $\partial L / \partial O^*$ taken with respect to the conjugate variable. The direction is identical; only the step size needs rescaling. In short, writing a few lines of forward model reproduces the derivative worked out by hand in post 6 automatically.
 
 ## 3. Choosing an Optimizer
 
@@ -74,7 +74,7 @@ _Fig 3. Position correction by autodiff with the positions as unknowns (3 error 
 |---|---|---|---|---|
 | 0.71 px | 0.10–0.14 | 0.0085–0.010 (position 0.014–0.020 px) | 0.0026 | 0.0038 |
 | 1.4 px | 0.22–0.23 | 0.013–0.18 (2 of 3 succeeded) | 0.011 | 0.0065 |
-| 2.8 px | 0.39–0.43 | 0.19–0.24 (position 0.57–0.77 px left) | 0.010 | 0.036 |
+| 2.8 px | 0.38–0.43 | 0.19–0.24 (position 0.57–0.77 px left) | 0.010 | 0.036 |
 
 From the rPIE 50-iteration result we updated the object, probe and positions together with Adam for 300 iterations. Removing the positions from the unknowns and running the same Adam leaves the 1.4 px case at 0.19–0.22. Small errors were corrected well: the 0.71 px error shrank to 0.014–0.020 px. The error remained larger than with the dedicated methods of post 7, however, and at 2.8 px, like the gradient method of post 7, it fell outside the capture range and was not fully corrected. Annealing is a random search rather than a derivative, so it is robust to large errors. A derivative sees only its neighborhood.
 
@@ -88,7 +88,7 @@ $$ \psi_1 = P\,O_1, \qquad \psi_{k+1} = \mathcal{P}_{\Delta z}\{\psi_k\}\; O_{k+
 
 Here $\mathcal{P}_{\Delta z}$ is angular-spectrum propagation over a distance $\Delta z$. Deriving the gradient by hand requires unwinding this chain slice by slice, which is what the 3PIE of Maiden et al. does. With AD, it takes one added line of propagation in the forward model.
 
-We computed two phase slices (phase 0.8 rad) separated by $\Delta z$, with a focused probe of numerical aperture 0.15. The depth of focus $\lambda/\mathrm{NA}^2$ of this probe is about 28 µm. With the probe known, we reconstructed from an empty object with Adam for 500 iterations, using a one-slice model and a two-slice model.
+We computed two phase slices (phase 0.8 rad) separated by $\Delta z$, with a focused probe of numerical aperture 0.15. At a wavelength of 633 nm, $\lambda/\mathrm{NA}^2$ (half the distance over which the axial intensity first drops to zero) is about 28 µm. With the probe known, we reconstructed from an empty object with Adam for 500 iterations, using a one-slice model and a two-slice model.
 
 <img src="/assets/img/posts/ptycho-autodiff-multislice/en/fig4-multislice-separation.png" alt="Data residual and object error of the one- and two-slice models versus the spacing of two phase slices" width="950">
 _Fig 4. Data residual (left) and specimen error (right) versus the separation between two phase slices. Close slices mix_
@@ -106,13 +106,13 @@ The one-slice model explains the data less and less as the spacing grows. The re
 <img src="/assets/img/posts/ptycho-autodiff-multislice/en/fig5-multislice-images.png" alt="True first and second slices, the two slices reconstructed by the two-slice model at 30 µm and 1 µm, and the one-slice result at 30 µm" width="950">
 _Fig 5. With enough separation the two-slice model recovers each slice (top); with close slices it fits the data but the slices mix (bottom right)_
 
-The situation differs when the spacing is small. At 1 µm the two-slice model fits the data well (residual $1.7\times10^{-3}$). The per-slice error, however, is 0.078, and as in the lower right of Fig 5 the pattern of the second slice shows through in the first. This is the ambiguity pointed out by Maiden et al. When two slices are close enough for the product approximation to hold, replacing them by $(f\,O_1,\ O_2/f)$ for any function $f$ leaves the measurement nearly unchanged. It has the same form as the periodic function that a regular grid let the object and probe trade in [post 4](/posts/ptycho-probe-ambiguity-raster-rpie/). In short, the power of the multislice model to separate slices, its depth resolution, is set by the probe. The larger the numerical aperture, the more the spreading of light differs even over short distances, and the better two slices can be told apart. In this calculation the two slices separated at 10 µm, about a third of the depth of focus.
+The situation differs when the spacing is small. At 1 µm the two-slice model fits the data well (residual $1.7\times10^{-3}$). The per-slice error, however, is 0.078, and as in the lower right of Fig 5 the pattern of the second slice shows through in the first. This is the ambiguity pointed out by Maiden et al. When two slices are close enough for the product approximation to hold, replacing them by $(f\,O_1,\ O_2/f)$ for any function $f$ leaves the measurement nearly unchanged. It has the same form as the periodic function that a regular grid let the object and probe trade in [post 4](/posts/ptycho-probe-ambiguity-raster-rpie/). In short, the power of the multislice model to separate slices, its depth resolution, is set by the probe. The larger the numerical aperture, the more the spreading of light differs even over short distances, and the better two slices can be told apart. In this calculation the two slices separated clearly at 10 µm, about a third of $\lambda/\mathrm{NA}^2$; among the spacings tested, the boundary lay between 3 µm and 10 µm.
 
 ## 6. The Price and the Tools
 
 Automatic differentiation has a cost. Walking backwards requires remembering every intermediate value of the forward pass, which takes a lot of memory. With real data of tens of thousands of positions and several slices, this becomes the limit. Practical tools therefore process positions in batches and use GPUs. The calculations here ran on a laptop CPU, with 0.18 s per Adam iteration.
 
-Tools in this direction have indeed taken hold. PtyRAD by Lee et al. optimizes positions, mixed modes, specimen thickness and local tilt together on top of PyTorch, and is reported to be up to 24 times faster than earlier packages. The features we attached one by one by hand up to post 7 become one line each in the list of unknowns. The electron ptychography of Chen et al. (2021), which pushed resolution to the limit set by atomic lattice vibrations, was likewise a reconstruction that combined mixed states with a multislice model.
+Tools in this direction have indeed taken hold. PtyRAD by Lee et al. optimizes positions, mixed modes, specimen thickness and local tilt together on top of PyTorch, and is reported to be up to 24 times faster than earlier packages (PtychoShelves, py4DSTEM) on GPU for experimental data. The features we attached one by one by hand up to post 7 become one line each in the list of unknowns. The electron ptychography of Chen et al. (2021), which pushed resolution to the limit set by atomic lattice vibrations, was likewise a reconstruction that combined mixed states with a multislice model.
 
 ## Summary
 
@@ -120,7 +120,7 @@ The algorithms of posts 3 through 8 were all ways of reducing one cost. Automati
 
 What it does not take over was equally clear. The hand-coded version, which divides the step by the illumination, was 2–5 times faster than Adam, and Adam's step still had to be chosen by a person. From an empty start with an unknown probe, both Adam and L-BFGS lagged far behind rPIE. Position correction was less precise than the dedicated methods and could not fix large errors. The practical order is therefore unchanged: start quickly with a projection method and finish with a differentiable model. Automatic differentiation nearly removes the cost of changing the model in that finishing stage.
 
-Thick specimens were handled with the multislice model. The product approximation explained the data less as the specimen grew thicker, and the two-slice model recovered the two slices separately when their spacing was wide enough for the probe to tell them apart. When they were too close, it fit the data while the two slices mixed.
+Thick specimens were handled with the multislice model. The product approximation explained the data less as the spacing between the two slices grew, and the two-slice model recovered the two slices separately when their spacing was wide enough for the probe to tell them apart. When they were too close, it fit the data while the two slices mixed.
 
 ## Next Post
 
