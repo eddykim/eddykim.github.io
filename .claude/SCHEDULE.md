@@ -102,11 +102,3 @@
 
 | slug | 글 | 등록일 | 남은 일 |
 |---|---|---|---|
-| ptycho-computational-imaging-inverse-problem | 타이코그래피 1편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-phase-problem-iterative-retrieval | 타이코그래피 2편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-overlap-pie-epie | 타이코그래피 3편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-probe-ambiguity-raster-rpie | 타이코그래피 4편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-momentum-difference-map | 타이코그래피 5편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-noise-maximum-likelihood | 타이코그래피 6편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-position-correction-mixed-states | 타이코그래피 7편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
-| ptycho-fourier-ptychography | 타이코그래피 8편 재교정 | 2026-10-13 | revise-post 점검(tech-writing-style) |
