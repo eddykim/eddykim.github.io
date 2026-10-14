@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2026-12-05 20:00:00 +0900
-title: "Wave Optics Foundations 3 — Why Is the Centre of a Shadow Bright? Fresnel and Fraunhofer Diffraction"
+title: "Wave Optics Foundations 3 — Why Is the Centre of a Shadow Bright?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/wave-optics-diffraction/
@@ -31,7 +31,7 @@ This post starts from that scene and answers three questions.
 
 You can hear sound from behind a wall, but you cannot see light from behind it. Both are waves, so what is different? The answer is the size of the wavelength. Sound at 500 Hz has a wavelength of about 68 cm, comparable to walls and trees, so it spreads widely around obstacles. Visible light has a wavelength of about 0.5 µm, tens of thousands of times smaller than everyday objects [1]. Water waves behave the same way. When a gap is narrower than the wavelength, the waves spread out in semicircles beyond it. When the gap is much wider than the wavelength, they split into a straight bundle of waves and a calm shadow beside it. Straight-line propagation in geometrical optics is the limit of zero wavelength.
 
-So how do we calculate the light behind an aperture when the wavelength is finite? In 1678 Huygens (C. Huygens) regarded each point of a wavefront as a small source emitting a new spherical wave. Fresnel added the interference of Part 1 to this. Add up all the small spherical waves from the points of the aperture, keeping their phases, and you obtain the light at any point behind it. This is the Huygens–Fresnel principle, and in its modern form it reads [3]:
+So how do we calculate the light behind an aperture when the wavelength is finite? In 1678 Christiaan Huygens regarded each point of a wavefront as a small source emitting a new spherical wave. Fresnel added the interference of Part 1 to this. Add up all the small spherical waves from the points of the aperture, keeping their phases, and you obtain the light at any point behind it. This is the Huygens–Fresnel principle, and in its modern form it reads [3]:
 
 $$
 U(P) = \frac{1}{i\lambda}\iint_{\text{aperture}} U(Q)\,\frac{e^{ikr}}{r}\,\cos\theta\; dS
@@ -60,7 +60,7 @@ Here $a$ is the half-width of the aperture (the radius, for a circle) and $z$ is
 
 We can now answer half of the first question. Think of the shadow of a hand on a wall 1 m away. Taking the half-width of the hand as 2.5 cm gives $N_F = 1250$. The shadow follows geometrical optics, and fringes appear only in a band about $\sqrt{\lambda z} \approx 0.7$ mm wide at the edge. Moreover, a lamp is an extended source, so its spatial coherence, discussed in Part 2, is short. The patterns made by different points of the source are slightly offset, and as they overlap even that narrow band is washed out. That is why the photograph in Figure 1 narrowed the sunlight through a 0.5 mm hole.
 
-## 2. A bright spot in the shadow: Fresnel zones
+## 2. Why is the centre of a shadow bright?
 
 Why is the centre of a disk's shadow bright? The answer appears when the integral above is split up cleverly. Stand at a point $P$ on the axis behind a circular aperture and look back at the aperture. The distance from the centre of the aperture to $P$ is $z$, and the distance to $P$ grows slightly as you move away from the centre. Draw a circle each time that distance grows by half a wavelength, and the aperture is divided into annular bands. These bands are called Fresnel zones. The outer radius of the $m$-th zone is
 
@@ -89,7 +89,7 @@ Figure 3(c) calculates the same geometry as Figure 1. The disk covers about 18 z
 
 Knowing the zones also lets us focus light without a lens. Cover all the even-numbered zones and leave only the odd ones open, and the contributions of the remaining zones all add in the same direction. This is called a zone plate, and Rayleigh (Lord Rayleigh) devised it in 1871 [1]. Cut the zone radii as $r_m = \sqrt{m\lambda f}$ and a focus appears at distance $f = r_1^2/\lambda$. Each open zone adds an amplitude of 2, so opening 20 odd zones gives an amplitude of 40 and an intensity 1600 times larger (Figure 3(d)) [1]. The same plate also makes foci at $f/3$, $f/5$, $f/7$, …. Seen from distance $f/3$, each zone of the plate covers three zones at that distance; two of the three cancel and one remains. The on-axis intensity is therefore the same as at $f$, but the focus is narrower by the same factor and collects less energy. Because the focal length is inversely proportional to the wavelength, the chromatic aberration is also large. Even so, zone plates replace lenses in the X-ray region. At X-ray wavelengths the refractive index of matter is very close to 1, which makes refractive lenses hard to build.
 
-## 3. Fringes at an edge and Babinet's principle
+## 3. Where exactly is the edge of a shadow?
 
 When a knife edge blocks half the light, where exactly is the boundary of its shadow? For anyone measuring the edge of an object in an image taken with coherent light, this is a practical question.
 
@@ -106,7 +106,7 @@ There is one more principle that pairs with the edge. Babinet (J. Babinet) point
 
 Thanks to this principle, the diameter of a hair or a thin wire can be measured with a single laser. Since it makes the same pattern as a slit of the same width, measuring the spacing of the zeros with the slit formula of the next section gives the diameter.
 
-## 4. Far away it becomes a Fourier transform: Fraunhofer diffraction
+## 4. How does the far-field pattern relate to the aperture?
 
 Light that travelled far, as in Figure 2(e), stopped changing shape. How is that shape related to the aperture? Expanding the distance from an aperture point $(\xi, \eta)$ to an observation point $(x, y, z)$ for large $z$ gives
 
@@ -146,7 +146,7 @@ Figure 6 is the real thing. Webb's eight spikes are made by the hexagonal mirror
 
 The link to Part 2 also appears here. The van Cittert–Zernike theorem said that the spatial degree of coherence is the Fourier transform of the source's brightness distribution. This section says that the far field is the Fourier transform of the aperture function. The same mathematics sets coherence on one side and diffraction patterns on the other. That is why the degree of coherence of a round star and the diffraction pattern of a round aperture are both $2J_1(x)/x$. The next section is about that round aperture.
 
-## 5. The circular aperture: the Airy disk and resolution
+## 5. How small a spot can a round aperture form?
 
 The apertures of telescopes and microscopes are usually round. What does the far-field pattern of a round aperture look like, and what does its size determine? Computing the Fourier transform of a circle gives the first-order Bessel function $J_1$. Airy (G. B. Airy) first obtained the result in 1835 [2].
 
@@ -198,7 +198,7 @@ $$
 
 Here $N = f/D$ is the f-number. In other words, the depth of focus is proportional to the square of the f-number. An f/10 lens with 500 nm light gives ±0.1 mm; opening it to f/2 gives ±4 µm, 25 times shallower. The photographer's rule of thumb that stopping down increases depth of field comes out of wave optics this way. Also hidden in this figure is the phenomenon in which the phase passing through focus differs by π from that of an ideal spherical wave (the Gouy phase) [2]. That story is told in Part 5 on Gaussian beams.
 
-## 6. Many slits: the diffraction grating
+## 6. What changes when there are many slits?
 
 Hold a CD in sunlight and you see a rainbow (Figure 9). The information-bearing track on a CD's surface is wound in a tight spiral. Neighbouring turns of the track act like many slits placed side by side. What changes when there are many slits?
 
@@ -234,7 +234,7 @@ In other words, the resolving power is the product of the diffraction order and 
 
 Gratings have their price too. Higher orders give better resolution, but the $m$-th order of wavelength $\lambda$ and the $(m+1)$-th order of wavelength $\lambda m/(m+1)$ overlap at the same angle. The wavelength range free of overlap (the free spectral range) is $\lambda/m$ [1]. And most of the light goes into the useless zeroth order. Calculating the efficiency of thin gratings, an amplitude grating whose transmittance varies sinusoidally sends at most 6.25 % into the first order, while a phase grating that varies only the phase sinusoidally sends at most 33.8 % [3]. Practical gratings therefore cut the grooves into a sawtooth profile to steer light into the desired order. This is called blazing. The idea of pulling energy out of the zeroth order came from Rayleigh in 1888, and Wood (R. W. Wood) actually ruled such gratings in 1910 [1].
 
-## 7. How to compute diffraction: split light into plane waves
+## 7. How is diffraction computed?
 
 So far we have viewed diffraction as "the sum of spherical waves from each point of the aperture". The same calculation can be viewed the other way round: split the field just behind the aperture into a sum of plane waves travelling in different directions. Why is this view needed? It shows at a glance why patterns smaller than a wavelength cannot travel far, and the standard way to compute diffraction on a computer also comes from it.
 

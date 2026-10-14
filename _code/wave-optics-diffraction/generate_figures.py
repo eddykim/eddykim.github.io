@@ -165,7 +165,7 @@ def figure3(L):
     cc.set_ylim(0, 1.45)
     cc.set_xlabel(t(L, "화면 위 위치 (mm)", "position on the screen (mm)"), **font(L))
     cc.set_ylabel(t(L, "세기 (원판 없을 때 = 1)", "intensity (no disk = 1)"), **font(L))
-    cc.set_title(t(L, f"(c) 원판 그림자 (그림1과 같은 배치, 550 nm)\n$N_F$ ≈ {a**2 / (lam * zeff):.0f}, 회색은 기하학적 그림자", f"(c) Shadow of the disk (geometry of Fig. 1, 550 nm)\n$N_F$ ≈ {a**2 / (lam * zeff):.0f}, grey: geometric shadow"), fontsize=10, **font(L))
+    cc.set_title(t(L, f"(c) 원판 그림자 (사진과 같은 배치, 550 nm)\n$N_F$ ≈ {a**2 / (lam * zeff):.0f}, 회색은 기하학적 그림자", f"(c) Shadow of the disk (same geometry as the photograph, 550 nm)\n$N_F$ ≈ {a**2 / (lam * zeff):.0f}, grey: geometric shadow"), fontsize=10, **font(L))
     ins = cc.inset_axes([0.33, 0.52, 0.34, 0.4])
     s = r <= 400
     ins.plot(np.concatenate([-R[s][::-1], R[s]]), np.concatenate([I[s][::-1], I[s]]), color=C_RED, lw=1)
