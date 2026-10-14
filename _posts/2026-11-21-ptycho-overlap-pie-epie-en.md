@@ -1,5 +1,5 @@
 ---
-title: "Computational Imaging and Ptychography 3 — Why Moving the Illumination Solves the Phase Problem: PIE and ePIE"
+title: "Computational Imaging and Ptychography 3 — Can Moving the Illumination Recover the Lost Phase?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ptycho-overlap-pie-epie/
@@ -17,7 +17,7 @@ This post follows that hint. Recording diffraction patterns from overlapping reg
 
 The idea is old, but a practical algorithm came much later: the PIE (ptychographical iterative engine) published by Rodenburg and Faulkner in 2004. According to Rodenburg and Maiden, the name also teases an eminent scientist who, in the early 1990s, called ptychography "pie in the sky". This post writes PIE and its successor ePIE from scratch and quantifies why overlapping measurements make such a difference.
 
-## 1. What Ptychography Measures
+## 1. What Does Ptychography Measure?
 
 Start with what is measured. If the specimen is thin enough, the exit wave, the wave just after the specimen, is the product of the illumination and the specimen's transmission function. The illumination is called the probe. At position $j$, with the probe shifted by $R_j$,
 
@@ -28,15 +28,15 @@ where $P$ is the probe, $O$ the specimen, and $I_j$ the diffraction intensity re
 <img src="/assets/img/posts/ptycho-overlap-pie-epie/en/fig1-setup.png" alt="Scan positions over the specimen and diffraction patterns at individual positions" width="900">
 _Fig 1. The probe is stepped with overlap, and one diffraction pattern is recorded at each position_
 
-The computations follow the 2009 simulation conditions of Maiden and Rodenburg. The probe is the field 200 µm behind a pinhole of radius 12 µm (wavelength 633 nm, pixel 1 µm). It spreads as it propagates and develops Fresnel fringes at its edge. Since 90 % of its energy lies within a diameter of 36 pixels, that is used as the probe diameter here. The specimen carries different images in its amplitude (0.2–1) and phase (0–π). The scan is a regular grid with each position jittered by ±1 pixel; Maiden and Rodenburg warned that a perfectly regular grid leaves a periodic pattern in the reconstruction, a topic for Post 4. Fig. 1 shows an 8-pixel step, 12 × 12 = 144 positions.
+The computations follow the 2009 simulation conditions of Maiden and Rodenburg. The probe is the field 200 µm behind a pinhole of radius 12 µm (wavelength 633 nm, pixel 1 µm). It spreads as it propagates and develops Fresnel fringes at its edge. Since 90 % of its energy lies within a diameter of 36 pixels, that is used as the probe diameter here. The specimen carries different images in its amplitude (0.2–1) and phase (0–π). The scan is a regular grid with each position jittered by ±1 pixel; Maiden and Rodenburg warned that a perfectly regular grid leaves a periodic pattern in the reconstruction, a topic for Post 4. Fig. 1 shows an 8-pixel step, 12 × 12 = 144 positions. The circles on the left mark the regions the probe illuminates, and the three orange circles are positions 1, 2 and 14, whose patterns are shown on the right. Neighbouring circles overlap heavily, and each pattern has a bright central spot ringed by the Fresnel fringes of the probe.
 
 In the language of [Post 1](/en/posts/ptycho-computational-imaging-inverse-problem/), this is again an inverse problem. The difference is that each pattern draws on a different set of unknowns. The same specimen pixel appears in many patterns, each time multiplied by a different part of the probe. That repetition is the protagonist of this post.
 
-## 2. Dividing the Exit Wave by the Probe
+## 2. Does Dividing the Exit Wave by the Probe Give the Specimen?
 
 As in Post 2's ER, pick a position, form the exit wave from the current estimate, and replace its magnitude in the diffraction plane with the measurement. This gives an exit wave $\psi_j'$ consistent with the data. How is the specimen extracted from it?
 
-The first idea is to divide: since $\psi' = P\,O$, $O = \psi' / P$. But as Rodenburg and Maiden point out, the probe is not a sharp disc. It weakens towards its edge and drops almost to zero in the troughs of its Fresnel fringes, and dividing there blows up. The red curve in Fig. 2 shows how much division amplifies noise: a factor of 50 just 30 pixels from the centre.
+The first idea is to divide: since $\psi' = P\,O$, $O = \psi' / P$. But as Rodenburg and Maiden point out, the probe is not a sharp disc. It weakens towards its edge and drops almost to zero in the troughs of its Fresnel fringes, and dividing there diverges. The red curve in Fig. 2 shows how much division amplifies noise: a factor of 50 just 30 pixels from the centre.
 
 <img src="/assets/img/posts/ptycho-overlap-pie-epie/en/fig2-pie-weight.png" alt="Probe amplitude and phase, and the gain of plain division and the PIE weight versus distance from the probe centre" width="900">
 _Fig 2. Instead of dividing by the probe, PIE corrects only as much as the probe is bright_
@@ -49,7 +49,7 @@ What it does is simple. Of the correction that division would give, it applies a
 
 If the illumination is a sharp disc, the update amounts to pasting the data-consistent values into the disc. With a single position as well, the original paper states, PIE is mathematically identical to Post 2's ER. Running PIE and ER ten times each with one disc illumination, the exit waves agree to $10^{-12}$. PIE is Post 2's method extended to many positions.
 
-## 3. Running PIE
+## 3. Does PIE Bring the Specimen Back?
 
 Assume the probe is known exactly and run PIE. One iteration uses each of the 144 positions once, in random order.
 
@@ -60,7 +60,7 @@ The specimen error falls from 0.47 after one iteration to 0.039 after 10, 0.0033
 
 The reason is the overlap. Taken alone, any single pattern is matched equally well by the twin image or a shifted image. But where it overlaps the neighbouring pattern, both must use the same specimen values. If one position drifts towards the twin, it no longer agrees with its neighbours. Overlap lets neighbours hold each other's ambiguities in place.
 
-## 4. How Much Overlap?
+## 4. How Much Overlap Is Needed?
 
 If overlap is the key, how much is needed? The step was varied from 4 to 24 pixels while covering the same area. Wider steps reduce the number of positions from 484 to 25, and with it the overlap.
 
@@ -81,7 +81,7 @@ Overlap is one minus the step divided by the probe diameter. PIE with an exactly
 
 The two overlap columns measure the same step in two ways. Taking the pinhole diameter (24 pixels) as the probe size, a step of 24 means no overlap; but the real probe spreads as it propagates, and by the 90 %-energy criterion it still overlaps by 33 %. Maiden and Rodenburg wrote that good results need an overlap of around 60–70 %. Such figures should be read together with how the probe size was defined.
 
-## 5. When the Probe Is Unknown Too
+## 5. What if the Probe Is Unknown Too?
 
 So far the probe has been known exactly. What about real experiments? Maiden and Rodenburg note that modelling the probe accurately, phase included, is at best very time-consuming and at worst impossible to measure accurately enough. What happens to PIE if the probe is slightly wrong?
 
@@ -102,7 +102,7 @@ The price is overlap. The ePIE column of the table and Fig. 4 show that recoveri
 
 More unknowns also bring new ambiguities. Multiplying the specimen by a constant $c$ and dividing the probe by $c$ leaves the exit wave unchanged. Multiplying the specimen by a phase ramp $e^{i g \cdot r}$ and removing the same ramp from the probe adds only a constant phase per position, leaving the intensities intact. Shifting specimen and probe together does the same. Every error in this post was measured after aligning these three. When they cause real trouble in a reconstruction is the subject of Post 4.
 
-## 6. The Redundancy Overlap Creates
+## 6. Does Overlap Make the Measurement Redundant?
 
 Post 2 ended by saying that a single pattern has no redundancy. Does overlap create it? Counting makes the difference plain. Each of the 144 positions in Fig. 1 gives 64 × 64 = 4096 intensities, about 590,000 measurements in total. The well-illuminated specimen has about 11,000 pixels, or about 23,000 unknowns since they are complex. Measurements outnumber unknowns about 26 to 1, and still 19 to 1 counting the probe as unknown. Each specimen pixel appears in 12 different patterns on average.
 
@@ -123,7 +123,7 @@ At high dose ePIE has a larger error than PIE, because 200 iterations are not ye
 
 ## Summary
 
-Ptychography moves the probe with overlap and records many diffraction patterns. PIE corrects the exit wave at one position at a time to agree with the data and feeds the correction back into the specimen. Plain division by the probe blows up in dark regions, so a small constant is added as in a Wiener filter and the correction is applied in proportion to the probe's brightness. With a disc illumination and a single position it is identical to Post 2's ER. With many overlapping positions there is no need for a support or for worry about the twin image, and it converges in tens of iterations.
+Ptychography moves the probe with overlap and records many diffraction patterns. PIE corrects the exit wave at one position at a time to agree with the data and feeds the correction back into the specimen. Plain division by the probe diverges in dark regions, so a small constant is added as in a Wiener filter and the correction is applied in proportion to the probe's brightness. With a disc illumination and a single position it is identical to Post 2's ER. With many overlapping positions there is no need for a support or for worry about the twin image, and it converges in tens of iterations.
 
 When the probe is unknown, ePIE corrects specimen and probe symmetrically, as stochastic gradient descent on the error at each position. The cost is more overlap: in these computations PIE needed 56 % and ePIE 72 % or more. Overlap gives the measurement redundancy, and for the same photons a reconstruction 2–4 times more accurate than a single pattern.
 

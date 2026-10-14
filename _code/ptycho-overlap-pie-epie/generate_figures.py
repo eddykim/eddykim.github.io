@@ -1,4 +1,4 @@
-"""계산 이미징과 타이코그래피 3편 그림 7개 생성 (한국어판·영문판)."""
+"""계산 이미징과 타이코그래피 3편 그림 6개 생성 (한국어판·영문판)."""
 import os
 
 import matplotlib.pyplot as plt
@@ -102,8 +102,7 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.06, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
+    def cap(fig, key, rect=(0, 0, 1, 1)):
         fig.tight_layout(rect=rect)
 
     def save(fig, name, dpi=150):
@@ -140,9 +139,9 @@ def draw(L):
     ax[2].semilogy(r, np.abs(pie_weight(P)[n // 2, n // 2:] * row), "--", color=C_B, lw=1.6, label=L["frac"])
     gain = 1 / np.maximum(np.abs(row), 1e-30)
     ax[2].semilogy(r, gain / gain.min(), color=C_A, lw=1.2, label=L["naive"])
-    ax[2].set_ylim(1e-3, 3e2); ax[2].set_xlabel(L["pos_ax"], **Fk)
+    ax[2].set_ylim(1e-4, 3e2); ax[2].set_xlabel(L["pos_ax"], **Fk)
     ax[2].legend(prop=LG, fontsize=7.5, loc="lower left"); ax[2].grid(alpha=0.3, which="both")
-    cap(fig, "fig2", rect=(0, 0.07, 1, 0.94)); save(fig, "fig2-pie-weight.png")
+    cap(fig, "fig2", rect=(0, 0, 1, 0.94)); save(fig, "fig2-pie-weight.png")
 
     # 그림3: 수렴
     fig = plt.figure(figsize=(12.5, 4.6))
@@ -162,7 +161,7 @@ def draw(L):
     img(fig.add_subplot(gs[0, 2]), np.abs(rec), L["r_amp"], vmin=0, vmax=1)
     img(fig.add_subplot(gs[1, 1]), np.angle(tru), L["t_ph"], cmap="twilight", vmin=-np.pi, vmax=np.pi)
     img(fig.add_subplot(gs[1, 2]), np.angle(rec), L["r_ph"], cmap="twilight", vmin=-np.pi, vmax=np.pi)
-    cap(fig, "fig3", rect=(0, 0.06, 1, 1)); save(fig, "fig3-pie-convergence.png")
+    cap(fig, "fig3", rect=(0, 0, 1, 1)); save(fig, "fig3-pie-convergence.png")
 
     # 그림4: 중첩률
     fig = plt.figure(figsize=(12.5, 4.3))
@@ -182,7 +181,7 @@ def draw(L):
         a_ = align(r_[key], r_["obj"], m)
         img(fig.add_subplot(gs[k + 1]), np.abs(np.where(m, a_, np.nan)[bb]), L[lab].format(r_["overlap"]),
             vmin=0, vmax=1)
-    cap(fig, "fig4", rect=(0, 0.06, 1, 1)); save(fig, "fig4-overlap.png")
+    cap(fig, "fig4", rect=(0, 0, 1, 1)); save(fig, "fig4-overlap.png")
 
     # 그림5: 프로브 복원
     fig, ax = plt.subplots(2, 3, figsize=(9, 6.2))
@@ -191,7 +190,7 @@ def draw(L):
         img(ax[0, k], np.abs(pp), f"{L[key]}: {L['amp']}")
         img(ax[1, k], np.where(np.abs(pp) > 0.05 * np.abs(pp).max(), np.angle(pp), np.nan), L["phase"],
             cmap="twilight", vmin=-np.pi, vmax=np.pi)
-    cap(fig, "fig5", rect=(0, 0.05, 1, 1)); save(fig, "fig5-epie-probe.png")
+    cap(fig, "fig5", rect=(0, 0, 1, 1)); save(fig, "fig5-epie-probe.png")
 
     # 그림6: 선량
     fig = plt.figure(figsize=(12, 4.2))
@@ -211,7 +210,7 @@ def draw(L):
     sub = align(r_["rec_pie"], r_["obj"], r_["mask"])[c - 24:c + 24, c - 24:c + 24]
     img(fig.add_subplot(gs[2]), np.abs(sub), f"{L['c_pie']} ({r_['pie']:.2f})\n{L['photons'].format(d)}",
         vmin=0, vmax=1)
-    cap(fig, "fig6", rect=(0, 0.06, 1, 0.92)); save(fig, "fig6-dose.png")
+    cap(fig, "fig6", rect=(0, 0, 1, 0.92)); save(fig, "fig6-dose.png")
 
 
 if __name__ == "__main__":
