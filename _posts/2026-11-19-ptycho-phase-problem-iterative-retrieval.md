@@ -46,7 +46,7 @@ Shechtman 등이 든 예다. $u = [1, 0, -2, 0, -2]$ 와 $v = [1-\sqrt{3}, 0, 1,
 
 이유는 다항식으로 보면 드러난다. 1차원 신호의 $z$ 변환은 $z$ 의 다항식이고, 1차원 다항식은 언제나 일차식들의 곱으로 인수분해된다. 그 인수 하나를 골라 근을 단위원 반대편으로 뒤집으면 크기 스펙트럼은 그대로인 다른 신호가 생긴다. 인수가 여럿이면 그런 짝도 여럿이다. 즉, 1차원에서는 세기만으로 신호가 정해지지 않는 것이 보통이다.
 
-2차원부터는 사정이 다르다. 2변수 다항식은 대부분 인수분해되지 않는다. Bruck과 Sodin, Hayes, Bates는 이를 근거로, 2차원 이상에서는 인수분해되는 예외적인 경우를 빼면 세기만으로 물체가 자명한 모호성 안에서 하나로 정해진다는 것을 보였다. 그 예외는 측도가 0인 집합이라, 무작위로 고른 물체가 거기 걸릴 일은 사실상 없다. 위상 복원이 영상에서 실제로 쓰이는 것은 이 덕분이다.
+2차원부터는 사정이 다르다. 2변수 다항식은 대부분 인수분해되지 않는다. Bruck과 Sodin, Hayes, Bates는 이를 근거로, 2차원 이상의 실수 물체는 인수분해되는 예외적인 경우를 빼면 세기만으로 물체가 자명한 모호성 안에서 하나로 정해진다는 것을 보였다. 그 예외는 측도가 0인 집합이라, 무작위로 고른 물체가 거기 걸릴 일은 사실상 없다. 위상 복원이 영상에서 실제로 쓰이는 것은 이 덕분이다.
 
 ## 3. 회절 패턴을 얼마나 촘촘히 재야 하는가
 
@@ -85,7 +85,7 @@ $$ g_{k+1} = P_s \, P_m \, g_k $$
 
 여기서 $g_k$ 는 $k$ 번째 반복의 실공간 추정이다. 즉, 크기를 맞춘 뒤 지지로 자르는 일을 한 번 하는 것이 반복 한 번이다.
 
-Fienup은 1982년 논문에서 두 가지를 보였다. 첫째, 이 반복에서 측정과의 불일치는 늘지 않는다. 둘째, ER은 그 불일치 $E = \lVert\, \lvert F g \rvert - m \,\rVert^2$ 을 줄이는 최급강하(steepest descent)와 같다. 여기서 $F$ 는 푸리에 변환, $m$ 은 측정한 크기다. 실제로 $E$ 의 기울기는 $2(g - P_m g)$ 이고, 기울기의 절반만큼 내려간 뒤 지지 영역으로 사영하면 ER 한 단계와 정확히 같다. 유한차분으로 구한 기울기와 대조하면 둘은 $10^{-8}$ 수준까지 일치한다. [1편](/posts/ptycho-computational-imaging-inverse-problem/)의 랜드웨버 반복처럼, ER도 최적화 방법론의 [경사하강](/posts/optimization-gradient-descent/)이 취하는 형태 중 하나다.
+Fienup은 1982년 논문에서 두 가지를 보였다. 첫째, 이 반복에서 측정과의 불일치는 늘지 않는다. 둘째, ER은 그 불일치 $E = \lVert\, \lvert F g \rvert - m \,\rVert^2$ 을 줄이는 최급강하(steepest descent)와 같다(Fienup의 표현으로는 오차를 어떻게 정규화하느냐에 따라 두 배 걸음 최급강하다). 여기서 $F$ 는 푸리에 변환, $m$ 은 측정한 크기다. 실제로 $E$ 의 기울기는 $2(g - P_m g)$ 이고, 기울기의 절반만큼 내려간 뒤 지지 영역으로 사영하면 ER 한 단계와 정확히 같다. 유한차분으로 구한 기울기와 대조하면 둘은 $10^{-8}$ 수준까지 일치한다. [1편](/posts/ptycho-computational-imaging-inverse-problem/)의 랜드웨버 반복처럼, ER도 최적화 방법론의 [경사하강](/posts/optimization-gradient-descent/)이 취하는 형태 중 하나다.
 
 경사하강이라면 약점도 같다. 목적함수가 볼록하지 않으면 국소 최솟값(local minimum)에서 멈춘다. ER은 실제로 그렇게 멈출까?
 
@@ -102,7 +102,7 @@ _그림6. ER의 오차는 0.19 근처에서 멈추고, HIO의 오차는 한동�
 
 $$ g_{k+1}(r) = \begin{cases} g'_k(r) & r \in S \\ g_k(r) - \beta\, g'_k(r) & r \notin S \end{cases}, \qquad g'_k = P_m g_k $$
 
-여기서 $S$ 는 지지 영역, $g'_k$ 는 크기를 측정값으로 바꾼 출력, $\beta$ 는 바깥을 얼마나 세게 밀지 정하는 계수다. 즉, 지지 안에서는 출력을 그대로 받고 바깥에서는 입력에서 출력의 $\beta$ 배를 뺀다. 이 글의 비교는 $\beta = 0.9$ 로 했다.
+여기서 $S$ 는 지지 영역, $$g'_k$$ 는 크기를 측정값으로 바꾼 출력, $\beta$ 는 바깥을 얼마나 세게 밀지 정하는 계수다. 즉, 지지 안에서는 출력을 그대로 받고 바깥에서는 입력에서 출력의 $\beta$ 배를 뺀다. 이 글의 비교는 $\beta = 0.9$ 로 했다.
 
 지지 영역 안에서는 ER과 같다. 차이는 바깥이다. ER은 바깥을 매번 0으로 지우고 잊어버리지만, HIO는 이전 입력을 기억하고 거기서 출력만큼을 뺀다. 출력이 몇 번이고 바깥에 남아 있으면 그 자리의 입력이 계속 반대쪽으로 쌓여서, 결국 출력을 밀어낸다. Fienup의 비교에서 오차를 가장 많이 줄인 것은 $\beta$ 가 1 근처인 HIO였다.
 
@@ -119,9 +119,9 @@ HIO는 왜 되고 ER은 왜 안 될까? 위상 복원을 기하 문제로 바꾸
 <img src="/assets/img/posts/ptycho-phase-problem-iterative-retrieval/fig7-sets-toy.png" alt="직선과 곡선의 교점을 찾는 ER과 HIO의 궤적" width="900">
 _그림7. 별표가 두 집합의 교점이다. ER(빨강)은 두 집합이 가장 가까운 곳에 갇히고, HIO(파랑)는 틈의 방향으로 밀려나 교점을 찾는다_
 
-ER(빨강)은 곡선이 직선에 가장 가까이 다가오는 골짜기로 미끄러져 들어가 거기서 멈춘다. 그 자리에서는 어느 쪽으로 사영해도 서로를 가리키므로 움직일 이유가 없다. 남은 틈은 0.077이다. HIO(파랑)는 다르다. 틈이 남아 있는 한 그 방향으로 입력을 계속 밀어낸다. 200회 동안 아래로 밀려나다가, 가장 가까운 곡선 위치가 다른 쪽 가지로 넘어가는 순간 옆으로 건너뛰고, 교점 주위를 돌다가 500회 무렵 정확히 내려앉는다. Marchesini는 HIO가 틈의 방향으로 계속 움직이는 알고리즘이라고 요약했다.
+ER(빨강)은 곡선이 직선에 가장 가까이 다가오는 골짜기로 미끄러져 들어가 거기서 멈춘다. 그 자리에서는 어느 쪽으로 사영해도 서로를 가리키므로 움직일 이유가 없다. 남은 틈은 0.077이다. HIO(파랑)는 다르다. 틈이 남아 있는 한 그 방향으로 입력을 계속 밀어낸다. 200회 동안 아래로 밀려나다가, 가장 가까운 곡선 위치가 다른 쪽 가지로 넘어가는 순간 옆으로 건너뛰고, 교점 주위를 돌다가 수백 회 뒤 정확히 내려앉는다. Marchesini는 HIO가 틈의 방향으로 계속 움직이는 알고리즘이라고 요약했다.
 
-이 틀에서 보면 여러 알고리즘이 사영 $P$ 와 반사 $R = 2P - I$ 의 조합으로 정리된다. ER은 $P_s P_m$ 이고, Luke가 제안한 RAAR(relaxed averaged alternating reflections)는 $\tfrac{\beta}{2}(R_s R_m + I) + (1-\beta) P_m$ 이다. 양수 제약이 없고 $\beta = 1$ 이면 HIO와 RAAR은 같은 식이 된다. 두 식으로 한 단계를 계산하면 $10^{-16}$ 까지 같다. 같은 시작점에서 50번을 이어 돌리면 차이가 $10^{-6}$ 으로 커진다. 반올림 오차가 반복마다 불어나기 때문이다. 즉, HIO 계열의 궤적은 작은 흔들림에 그만큼 민감하다. Marchesini가 장난감 예제에서 매 반복 아주 작은 난수를 더해 정체를 풀어낸 것도 이 성질과 맞닿아 있다. Elser의 차분 사상(difference map)도 같은 계열이고, Thibault 등은 이것을 타이코그래피에 썼다. 타이코그래피 5편에서 다시 만난다.
+이 틀에서 보면 여러 알고리즘이 사영 $P$ 와 반사 $R = 2P - I$ 의 조합으로 정리된다. ER은 $P_s P_m$ 이고, Luke가 제안한 RAAR(relaxed averaged alternating reflections)는 $\tfrac{\beta}{2}(R_s R_m + I) + (1-\beta) P_m$ 이다. 양수 제약이 없고 $\beta = 1$ 이면 HIO와 RAAR은 같은 식이 된다. 두 식으로 한 단계를 계산하면 $10^{-16}$ 까지 같다. 같은 시작점에서 50번을 이어 돌리면 차이가 $10^{-6}$ 으로 커진다. 반올림 오차가 반복마다 불어나기 때문이다. 즉, HIO 계열의 궤적은 작은 흔들림에 그만큼 민감하다. Marchesini의 2004년 프리프린트는 장난감 예제에서 매 반복 수치 정밀도 수준의 난수를 더하면 HIO류가 정체에서 빠져나온다고 보고했다. 이 글의 반올림 오차 실험과 같은 종류의 현상으로 읽을 수 있으나, 그 연결은 필자의 추정이다. Elser의 차분 사상(difference map)도 같은 계열이고, Thibault 등은 이것을 타이코그래피에 썼다. 타이코그래피 5편에서 다시 만난다.
 
 조합이 다르면 성질도 다르다. RAAR은 $\beta$ 에 민감했다. 복소 물체에서 1000회를 돌렸을 때 성공 횟수는 다음과 같았다.
 
@@ -158,7 +158,8 @@ _그림8. 패턴 한 장에는 여유분이 없어서, 광자가 줄면 복원�
 
 - J. R. Fienup, "[Phase retrieval algorithms: a comparison](https://doi.org/10.1364/AO.21.002758)," *Applied Optics* 21(15), 2758-2769 (1982). Gerchberg–Saxton 알고리즘(R. W. Gerchberg, W. O. Saxton, *Optik* 35, 237, 1972)의 설명도 이 논문을 따랐다.
 - J. M. Rodenburg, A. M. Maiden, "[Ptychography](https://eprints.whiterose.ac.uk/id/eprint/127795/)," in *Springer Handbook of Microscopy*, P. W. Hawkes, J. C. H. Spence (eds.), Springer, 2019, pp. 819-904, [doi:10.1007/978-3-030-00069-1_17](https://doi.org/10.1007/978-3-030-00069-1_17), 3.1–3.3절 (지지 제약의 직관, 세기 샘플링, 쌍둥이 상과 겹침).
-- Y. Shechtman, Y. C. Eldar, O. Cohen, H. N. Chapman, J. Miao, M. Segev, "[Phase retrieval with application to optical imaging: a contemporary overview](https://doi.org/10.1109/MSP.2014.2352673)," *IEEE Signal Processing Magazine* 32(3), 87-109 (2015). 자명한 모호성, 1차원 반례, 2차원 유일성(Bruck–Sodin, Hayes, Bates), 위상 맞바꾸기 실험의 출처다.
+- Y. Shechtman, Y. C. Eldar, O. Cohen, H. N. Chapman, J. Miao, M. Segev, "[Phase retrieval with application to optical imaging: a contemporary overview](https://doi.org/10.1109/MSP.2014.2352673)," *IEEE Signal Processing Magazine* 32(3), 87-109 (2015). 자명한 모호성, 1차원 반례, 2차원 유일성(Bruck–Sodin, Hayes, Bates)의 출처이고, 위상 맞바꾸기는 같은 종류의 예를 보여 준다.
+- S. Marchesini, "[Benchmarking iterative projection algorithms for phase retrieval](https://arxiv.org/abs/physics/0404091)," arXiv:physics/0404091 (2004). 장난감 예제에서 난수를 더해 정체를 푸는 보고의 출처다.
 - S. Marchesini, "[A unified evaluation of iterative projection algorithms for phase retrieval](https://doi.org/10.1063/1.2403783)," *Review of Scientific Instruments* 78, 011301 (2007).
 - D. R. Luke, "[Relaxed averaged alternating reflections for diffraction imaging](https://doi.org/10.1088/0266-5611/21/1/004)," *Inverse Problems* 21, 37-50 (2005).
 - E. J. Candès, X. Li, M. Soltanolkotabi, "[Phase retrieval via Wirtinger flow: theory and algorithms](https://doi.org/10.1109/TIT.2015.2399924)," *IEEE Transactions on Information Theory* 61(4), 1985-2007 (2015).
