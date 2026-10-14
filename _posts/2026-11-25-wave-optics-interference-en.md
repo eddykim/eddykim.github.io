@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2026-11-25 20:00:00 +0900
-title: "Wave Optics Foundations 1 — Why Can Light Plus Light Be Darker? Interference"
+title: "Wave Optics Foundations 1 — Why Can Light Plus Light Be Darker?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/wave-optics-interference/
@@ -19,7 +19,7 @@ _Figure 1. A film of diesel spread on a wet road. The film thickness varies from
 
 In the [geometrical optics foundations](/en/posts/geometric-optics-fermat-eikonal/), rays were lines carrying energy, and where two bundles of rays overlapped their brightnesses added. That picture cannot explain Figure 1. We need the fact that light is a wave, that a wave has crests and troughs, and that a crest meeting a trough cancels it. This is interference. At the end of [Geometrical Optics Foundations 4](/en/posts/geometric-optics-aberrations/), once aberrations shrank to the size of a wavelength, the ray picture gave way to diffraction. This series starts from there and takes in turn interference, coherence, diffraction, Fourier imaging, Gaussian beams and high-NA focusing. The first part is interference, the basis of all wave optics.
 
-## 1. Add amplitudes, measure intensity
+## 1. What happens to the intensity when two beams are added?
 
 There is one key to interference: light adds as amplitudes, and we measure intensity.
 
@@ -27,7 +27,7 @@ Where two waves meet, the electric field is the sum of the two fields. This is t
 
 $$ I = I_1 + I_2 + 2\sqrt{I_1 I_2}\,\cos\delta $$
 
-[1, 2, 3]. The third term is the interference term. At zero phase difference the intensity exceeds the sum (constructive interference); at $\pi$ it falls below it (destructive interference). If the two intensities are equal, $I = 4I_1\cos^2(\delta/2)$: four times a single beam at the bright points and exactly zero at the dark ones [1, 2].
+[1, 2, 3]. In other words, the intensity of the sum is the sum of the intensities plus one extra term whose sign follows the phase difference. The third term is the interference term. At zero phase difference the intensity exceeds the sum (constructive interference); at $\pi$ it falls below it (destructive interference). If the two intensities are equal, $I = 4I_1\cos^2(\delta/2)$: four times a single beam at the bright points and exactly zero at the dark ones [1, 2].
 
 Phasors make this intuitive. Draw each wave as an arrow whose length is the amplitude and whose direction is the phase, and place the arrows head to tail. The squared length of the resulting arrow is the intensity (Figure 2(a)). Arrows pointing the same way add their lengths; arrows pointing opposite ways subtract.
 
@@ -40,11 +40,11 @@ How clear the fringes are is measured by the visibility
 
 $$ V = \frac{I_{\max} - I_{\min}}{I_{\max} + I_{\min}} = \frac{2\sqrt{I_1 I_2}}{I_1 + I_2} $$
 
-With equal intensities $V = 1$ and the dark fringes are completely black [1]. What stands out in Figure 2(c) is how gently the curve falls. Even when one beam is only 1/100 as intense as the other, the visibility is 0.2. Its amplitude is the square root, 1/10, and adding to and subtracting from the strong beam it swings the intensity by ±20%. Techniques that read a very weak signal by mixing it with a strong reference beam and amplifying it through interference exploit exactly this.
+Here $I_{\max}$ and $I_{\min}$ are the intensities at the brightest and darkest points of the pattern; in other words, the closer $V$ is to 1, the clearer the fringes. With equal intensities $V = 1$ and the dark fringes are completely black [1]. What stands out in Figure 2(c) is how gently the curve falls. Even when one beam is only 1/100 as intense as the other, the visibility is 0.2. Its amplitude is the square root, 1/10, and adding to and subtracting from the strong beam it swings the intensity by ±20%. Techniques that read a very weak signal by mixing it with a strong reference beam and amplifying it through interference exploit exactly this.
 
-## 2. When can interference be seen?
+## 2. Why do two lamps make no interference fringes?
 
-Why, then, don't two lamps in a room produce interference fringes? The interference formula assumes that the phase difference $\delta$ is constant. Three things are needed to see fringes.
+Two lamps in a room produce no interference fringes. Why not? The interference formula assumes that the phase difference $\delta$ is constant. Three things are needed to see fringes.
 
 First, the two beams must have almost the same frequency. If the frequencies differ, the phase difference rotates rapidly in time and the interference term averages to zero over the detection time [1]. Second, the phase difference must stay constant. Even if the phases differ, a constant difference only shifts the pattern sideways. Two such sources are called coherent [1]. Light from an ordinary source oscillates as a well-behaved sine wave for less than about 10 ns before its phase changes at random [1]. The pattern from two lamps jumps to a new position every such interval and averages away [1]. So to see interference, one splits a single beam in two and recombines it. The two halves change phase together, so their difference stays constant [1, 2]. How long and over how wide a region the phase stays orderly is coherence, the subject of the next part.
 
@@ -52,7 +52,7 @@ Third, the polarizations of the two beams must be parallel. Strictly, the interf
 
 There are two ways to split light in two [2]. Division of wavefront takes different parts of a wavefront; division of amplitude splits the intensity at a partially reflecting surface. Division of wavefront requires a small source, while division of amplitude works with extended sources and gives brighter fringes [2]. Sections 3 and 4 take them in turn.
 
-## 3. Division of wavefront: Young's experiment
+## 3. How can two holes measure the wavelength of light?
 
 In 1665 Grimaldi let sunlight through two pinholes to see whether the region where the two discs of light overlapped would darken [1]. A hundred and forty years later the physician Thomas Young repeated the experiment, and the key was a third pinhole placed before the two [1]. The same wavefront spreading from the first hole illuminated both of the others, so the light leaving them formed phase-locked twins. Young published the result in 1804, and it became the experiment that established the wave theory of light against Newton's widely accepted corpuscular theory [1].
 
@@ -65,7 +65,7 @@ On a distant screen the hyperbolas become nearly straight, and the pattern becom
 
 $$ \Delta x = \frac{\lambda L}{d} $$
 
-[1, 3]. Two holes 0.5 mm apart lit with 550 nm light give fringes 1.1 mm apart on a screen 1 m away (Figure 3(b)). The wavelength is less than a micrometre, yet the fringes are millimetres wide; the distance $L$ magnifies the wavelength. Measuring the fringe spacing and the two distances gives the wavelength in return.
+[1, 3]. In other words, the closer the holes, the farther the screen and the longer the wavelength, the wider the fringes. Two holes 0.5 mm apart lit with 550 nm light give fringes 1.1 mm apart on a screen 1 m away (Figure 3(b)). The wavelength is less than a micrometre, yet the fringes are millimetres wide; the distance $L$ magnifies the wavelength. Measuring the fringe spacing and the two distances gives the wavelength in return.
 
 A more general form hides in this formula. Seen from afar, the light from the two holes is two plane waves meeting at an angle $\theta \approx d/L$. Two plane waves meeting at an angle $\theta$ produce sinusoidal fringes of period $\lambda/\sin\theta$ [3]. At 30° the period is twice the wavelength. This is how fine diffraction gratings are written with light, and holography, which records the fringes between a reference beam and the light from an object, starts from the same idea [3].
 
@@ -74,7 +74,7 @@ _Figure 4. Interference fringes from sunlight passing through two slits about 0.
 
 Figure 4 is Young's experiment done directly with sunlight. Sunlight contains every colour. Red interferes with red and blue with blue, and the patterns of all the colours overlap into a single white-light pattern [1]. At the central fringe, where the path difference is zero, every colour is bright together, so it is white. As the path difference grows, the patterns of different colours drift apart, and after a few fringes the colours mix and the fringes vanish. This is why white-light fringes extend over a much narrower range than monochromatic ones, and it returns in the next part as the coherence length.
 
-## 4. Division of amplitude: thin films and Newton's rings
+## 4. Why does a thin film show colours?
 
 Back to the oil film of Figure 1. Light reflected from the top of the film overlaps light reflected from the bottom. The two surfaces have split the same light by intensity, so this is division of amplitude. The optical path difference between the two is one round trip inside the film, $2nt$ at normal incidence, where $n$ is the film index and $t$ its thickness.
 
@@ -85,32 +85,32 @@ _Figure 5. (a) Normal-incidence reflectance of a water film (n = 1.33) in air at
 
 In Figure 5(a) the calculation with only two reflections (orange) and the one with all the multiply reflected light (black dashed) are almost identical. A water–air boundary reflects only 2% of the light, so the third reflection onwards is negligible. Things change when the reflectance is high, as Section 6 shows. Reflection from a stack of many layers is computed with the transfer-matrix method of [Ellipsometry Foundations 3](/en/posts/ellipsometry-thin-film-multilayer-reflectance/).
 
-### Fringes of equal thickness
+### How does thickness become a pattern?
 
 When the film thickness varies, places of equal thickness form stripes of equal brightness. These are fringes of equal thickness [1, 2]. The coloured bands of Figure 1 are contour lines of the oil film. In white light, different thicknesses strengthen different colours and give coloured bands; in monochromatic light they give bright and dark stripes. In a wedge whose thickness grows uniformly in one direction, as in Figure 5(b), the stripes are evenly spaced. The thickness increases by $\lambda/2n$ from one stripe to the next, so a water film tilted by 0.1 mrad gives stripes 2.2 mm apart. Press two clean microscope slides together and you can see the coloured bands of the air film between them shift as you press [1].
 
-### Newton's rings
+### What do Newton's rings tell us?
 
 Place a convex lens on a flat plate and the air gap between them thickens outwards in proportion to the square of the radius. The fringes of equal thickness become concentric circles, Newton's rings (Figure 5(c), Figure 6). For a lens of radius of curvature $R$, the radius of the $m$-th dark ring is
 
 $$ r_m = \sqrt{m\lambda R} $$
 
-[1]. The centre, where the thickness is zero, is dark. A lens with a 1 m radius of curvature seen in sodium light (589 nm) has its first dark ring at a radius of 0.77 mm. Measuring the ring radii gives the curvature of the lens, and distorted rings mean the surface is uneven [1]. This is the check done in lens shops when a lens surface is laid against a reference.
+[1]. In other words, the ring radius grows as $\sqrt{m}$, so the rings crowd together towards the edge. The centre, where the thickness is zero, is dark. A lens with a 1 m radius of curvature seen in sodium light (589 nm) has its first dark ring at a radius of 0.77 mm. Measuring the ring radii gives the curvature of the lens, and distorted rings mean the surface is uneven [1]. This is the check done in lens shops when a lens surface is laid against a reference.
 
 <img src="/assets/img/posts/wave-optics-interference/ext-newton-rings.jpg" alt="Newton's rings in sodium light" width="560">
 _Figure 6. Newton's rings formed in sodium light by the air gap between a 20 cm focal-length convex lens and a flat, seen through a microscope. (Source: Warrencarpani, [20cm Air 1](https://commons.wikimedia.org/wiki/File:20cm_Air_1.jpg), [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en))_
 
 The rings bear Newton's name, but Hooke and Newton each studied the colours of such thin films in detail, from soap bubbles to the air between lenses [1].
 
-### Films that cancel reflection
+### How does a coating cancel reflection?
 
 Interference can remove reflection as well as create it. Coat a glass surface with a film whose index lies between those of air and glass, with a thickness of $\lambda/4n$: the two reflections from the top and bottom of the film then differ by half a wavelength and cancel. This is an antireflection coating. A bare surface of glass with index 1.52 reflects 4.3%; a quarter-wave coating of magnesium fluoride (MgF₂, index 1.38) reduces that to 1.3% at the design wavelength. The coating is usually tuned to suppress reflection most strongly near green, where the eye is most sensitive. What remains is reflected at the two ends of the spectrum, violet and red, which is why coated camera lenses and spectacle lenses show a purplish tint when viewed at an angle.
 
-## 5. Interferometers
+## 5. How does interference measure length?
 
 An interferometer splits light with a beamsplitter, sends the two parts along different paths and recombines them [3]. The slightest change in the optical path of either arm shifts the phase difference and moves the fringes, so an interferometer is a ruler that measures length, refractive index and wavefronts in units of the wavelength.
 
-### The Michelson interferometer
+### How does a Michelson interferometer turn mirror motion into fringes?
 
 The Michelson interferometer splits light with a single half-silvered mirror, sends the two parts to mirrors at the ends of two arms, and recombines the returning light at the same half-silvered mirror (Figure 7) [1, 3]. Moving one mirror by $\lambda/2$ lengthens that arm's round trip by $\lambda$, and one fringe passes. With a 633 nm helium–neon laser, one fringe passes for every 316 nm of mirror travel (Figure 8(a)). Counting fringes measures the mirror's motion to a fraction of a wavelength.
 
@@ -126,16 +126,16 @@ With an extended source, concentric fringes appear as in Figure 8(b). Light ente
 
 Other interferometers follow from the same idea [1, 3]. The Mach–Zehnder interferometer has separate splitting and recombining mirrors, so its two arms are physically apart and a sample can be placed in one of them. A typical use is to view density variations in gas flow in a wind tunnel [1]. The Sagnac interferometer sends two beams round the same loop in opposite directions; if the whole device rotates, the two optical paths differ, and the rotation rate can be measured. Optical gyroscopes work on this principle [1, 3].
 
-### Seeing aberrations as fringes
+### How can fringes show the aberrations of a lens?
 
 Interferometers are used to test lenses. [Geometrical Optics Foundations 4](/en/posts/geometric-optics-aberrations/) defined aberration as the departure $W$ of the wavefront in the exit pupil from a reference sphere. Overlap the wavefront that has passed through a test lens with a perfect reference wave, and the fringes are the contour lines of $W$: from one dark fringe to the next, the wavefront changes by one wavelength. The Twyman–Green interferometer is a Michelson adapted for optical testing. One arm contains the lens under test, followed by a spherical mirror whose centre of curvature coincides with the focus of the lens [1]. If the lens is free of aberrations, the returning light is again a plane wave; if not, the aberration shows up as fringes [1]. Since the light passes through the test lens twice, one fringe corresponds to half a wavelength of wavefront error.
 
 <img src="/assets/img/posts/wave-optics-interference/en/fig9-aberration-interferograms.png" alt="Interferograms of the Seidel aberrations" width="780">
 _Figure 9. Interferograms of the aberrations of Geometrical Optics Foundations 4 against a plane reference wave (light passing the test optics once). Top row: reference parallel. Bottom row: reference tilted. One fringe is one wavelength of wavefront difference._
 
-Figure 9 computes how the aberrations of Part 4 look in an interferometer. Two waves of defocus give two concentric rings; three waves of spherical aberration give rings that crowd together towards the edge. Coma gives rings pushed to one side, and astigmatism a saddle-shaped pattern. Deliberately tilting the reference (bottom row) turns the pattern into straight stripes bent by the aberration, which is easier to read. Reading the phase quantitatively from fringes (phase shifting, unwrapping) was the subject of [Image Processing for Metrology Part 6](/en/posts/imgproc-phase-hilbert-unwrapping/). Interferometers and wavefront sensors report the measured wavefront as the Zernike coefficients met in Part 4 [4], and lens makers use those coefficients to polish or align their optics.
+Figure 9 computes how the aberrations of Geometrical Optics Foundations 4 look in an interferometer. Two waves of defocus give two concentric rings; three waves of spherical aberration give rings that crowd together towards the edge. Coma gives rings pushed to one side, and astigmatism a saddle-shaped pattern. Deliberately tilting the reference (bottom row) turns the pattern into straight stripes bent by the aberration, which is easier to read. Reading the phase quantitatively from fringes (phase shifting, unwrapping) was the subject of [Image Processing for Metrology Part 6](/en/posts/imgproc-phase-hilbert-unwrapping/). Interferometers and wavefront sensors report the measured wavefront as the Zernike coefficients met in Geometrical Optics Foundations 4 [4], and lens makers use those coefficients to polish or align their optics.
 
-### A length smaller than a proton: LIGO
+### How can a length smaller than a proton be measured?
 
 The most extreme use of the Michelson interferometer is the detection of gravitational waves. LIGO in the United States is a Michelson interferometer with 4 km arms (Figure 10). A passing gravitational wave stretches space in one direction and squeezes it in the perpendicular one, changing the difference between the arm lengths. The first gravitational wave detected, in 2015, changed the arm length by about $5\times10^{-22}$ of itself, roughly 2 am (attometres, $10^{-18}$ m) — some 400 times smaller than the radius of a proton [3].
 
@@ -144,7 +144,7 @@ _Figure 10. The LIGO Hanford Observatory in Washington State. A 4 km arm runs ac
 
 To catch such a small change, LIGO places a Fabry–Pérot interferometer of Section 6 inside each arm. The light travels up and down the arm hundreds of times, multiplying the phase difference produced by the same change in length. An arm with a finesse of about 450 amplifies phase changes by $2\mathcal{F}/\pi \approx 286$ [3]. This is multiple-beam interference, the subject of the next section.
 
-## 6. Multiple-beam interference: the Fabry–Pérot
+## 6. How do fringes change when many beams are added?
 
 So far only two beams have overlapped. Two-beam fringes have a $\cos^2$ shape, with bright and dark bands of equal width. Adding $M$ beams that each differ by the same phase step changes this. Only when the step is a multiple of $2\pi$ do the phasors line up and the intensity reach $M^2$ times one beam; for a slight departure the phasors curl round and cancel. The first zero comes at a step of $2\pi/M$ [3]. The more beams, the narrower the bright peaks (Figure 11(a)). The sharp spectral lines of a diffraction grating come from this.
 

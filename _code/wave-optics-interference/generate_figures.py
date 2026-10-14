@@ -247,8 +247,8 @@ def figure9(L):
                 ax.set_title(name, fontsize=10.5, **font(L))
     axes[0, 0].set_ylabel(t(L, "기준파와 나란히", "reference parallel"), fontsize=10, **font(L))
     axes[1, 0].set_ylabel(t(L, "기준파를 4λ 기울임", "reference tilted by 4λ"), fontsize=10, **font(L))
-    fig.suptitle(t(L, "4편의 수차를 평면 기준파와 겹친 간섭무늬 (한 번 지나는 파면, 무늬 하나 = 파면 차 1λ)",
-                   "Interferograms of Part 4's aberrations against a plane reference (single pass, one fringe = 1λ of wavefront)"),
+    fig.suptitle(t(L, "기하광학 배경이론 4편의 수차를 평면 기준파와 겹친 간섭 무늬 (한 번 지나는 파면, 무늬 하나 = 파면 차 1λ)",
+                   "Interferograms of the aberrations of Geometrical Optics Foundations 4 against a plane reference (single pass, one fringe = 1λ of wavefront)"),
                  fontsize=11, **font(L))
     fig.tight_layout()
     save(fig, L, "fig9-aberration-interferograms.png")
