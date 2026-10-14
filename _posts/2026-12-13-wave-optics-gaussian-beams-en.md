@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2026-12-13 20:00:00 +0900
-title: "Wave Optics Foundations 5 — Why Does a Laser Beam Seem Not to Spread? The Gaussian Beam"
+title: "Wave Optics Foundations 5 — Why Does Laser Light Seem Not to Spread, Even Far Away?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/wave-optics-gaussian-beams/
@@ -25,7 +25,7 @@ _Figure 1. The laser ranging facility at NASA's Goddard Space Flight Center. Two
 - As previewed at the end of [Part 4](/en/posts/wave-optics-fourier-imaging/), why does the phase of light passing through focus shift by π?
 - How far does a real laser beam depart from the ideal Gaussian, and how is that measured?
 
-## 1. The least-spreading beam: the Gaussian beam
+## 1. Which beam shape spreads the least?
 
 What is the difference between a flashlight and a laser pointer? In the language of [Part 2](/en/posts/wave-optics-coherence/), it is spatial coherence. In a flashlight, the many points of an extended source emit independently, so light from many directions is mixed from the start. A laser beam has its phase ordered across the whole cross-section and moves as a single wave. Even such a wave cannot avoid the diffraction of Part 3. So what cross-sectional shape spreads the least?
 
@@ -34,7 +34,7 @@ The answer is the Gaussian. Figure 2 shows a photograph of a commercial green la
 <img src="/assets/img/posts/wave-optics-gaussian-beams/en/fig2-tem00-profile.png" alt="Photograph of a green laser pointer beam cross-section and a Gaussian fit to its intensity profile" width="780">
 _Figure 2. (a) Beam cross-section of a 5 mW green laser pointer. (b) The green channel of the photograph read along the dashed line (green) and a Gaussian fit (black dashes). The standard deviation of the residual is 0.8 % of the peak, so the shape is nearly identical to a Gaussian. The camera's gamma correction raises intensity to a power, which keeps the Gaussian shape but may change the width. (Photo source: Zaereth, [Green laser pointer TEM00 profile](https://commons.wikimedia.org/wiki/File:Green_laser_pointer_TEM00_profile.JPG), [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en))_
 
-Where does the Gaussian beam come from? Light that travels almost in one direction, like a beam, obeys the paraxial wave equation. The simplest solution of that equation is a spherical wave spreading from a point (a paraboloidal wave in the paraxial case). Saleh and Teich play a clever trick here [1]. Shifting the source position $z$ by an imaginary amount still gives a solution. But placing the source at an imaginary position turns the quadratic phase $e^{ikr^2/2z}$ of the paraboloidal wave into a Gaussian amplitude $e^{-r^2/W^2}$ across the cross-section. In other words, a Gaussian beam is "a spherical wave whose source sits at an imaginary distance". This picture contains all the formulas that follow. The field at a distance $z$ from the waist (the narrowest point) is [1, 2]
+Where does the Gaussian beam come from? Light that travels almost in one direction, like a beam, obeys the paraxial wave equation. The simplest solution of that equation is a spherical wave spreading from a point (a paraboloidal wave in the paraxial case). Saleh and Teich use a neat trick here [1]. Shifting the source position $z$ by an imaginary amount still gives a solution. But placing the source at an imaginary position turns the quadratic phase $e^{ikr^2/2z}$ of the paraboloidal wave into a Gaussian amplitude $e^{-r^2/W^2}$ across the cross-section. In other words, a Gaussian beam is "a spherical wave whose source sits at an imaginary distance". This picture contains all the formulas that follow. The field at a distance $z$ from the waist (the narrowest point) is [1, 2]
 
 $$
 U(r, z) = \frac{W_0}{W(z)}\exp\!\left[-\frac{r^2}{W(z)^2}\right]\exp\!\left[i\left(kz + \frac{kr^2}{2R(z)} - \zeta(z)\right)\right]
@@ -63,15 +63,15 @@ Now let us plug in numbers. A 532 nm green beam 1 mm in diameter (beam radius 0.
 
 Why does the Gaussian shape spread the least? Cutting light with an aperture of the same diameter produces the Airy pattern of Part 3, which spreads by a full angle of $2.44\lambda/D$. A Gaussian beam with waist diameter $D = 2W_0$ spreads by a full angle of $1.27\lambda/D$, a little over half as much [2]. Sharp edges create high spatial frequencies, which scatter to wide angles. A Gaussian fades out smoothly at its edges and has no such high frequencies. The Fourier transform of a Gaussian is again a Gaussian. The product of spatial width and spread angle mentioned in Part 3 is smallest for the Gaussian. Inside the beam radius $W$ lies 86 % of the beam power [1].
 
-## 2. The Gouy phase: falling behind by π through focus
+## 2. Why does the phase of light lag as it passes through focus?
 
-Besides $kz$ and the curvature term, the formula above contains one more phase:
+Why does the phase of light passing through focus drift away from a plane wave's? Besides $kz$ and the curvature term, the formula above contains one more phase:
 
 $$
 \zeta(z) = \tan^{-1}\frac{z}{z_0}
 $$
 
-This is the Gouy phase. On the axis, the phase of a Gaussian beam lags that of a plane wave of the same frequency by $\zeta$. $\zeta$ goes from $-\pi/2$ far before the waist, through 0 at the waist, to $+\pi/2$ far after the waist. In other words, passing through focus the beam falls behind the plane wave by a total of $\pi$ [1]. Gouy (L. G. Gouy) first demonstrated this in 1890 [4]. The "phase anomaly" near focus introduced in Part 3, Section 5, following Born and Wolf, is exactly this.
+Here $z_0$ is the Rayleigh range. $\zeta$ is called the Gouy phase. On the axis, the phase of a Gaussian beam lags that of a plane wave of the same frequency by $\zeta$. $\zeta$ goes from $-\pi/2$ far before the waist, through 0 at the waist, to $+\pi/2$ far after the waist. In other words, passing through focus the beam falls behind the plane wave by a total of $\pi$ [1]. Gouy (L. G. Gouy) first demonstrated this in 1890 [4]. The "phase anomaly" near focus introduced in Part 3, Section 5, following Born and Wolf, is exactly this.
 
 Why does it fall behind? Confining a beam sideways mixes in oblique components in the plane-wave decomposition of Part 3, Section 7. An obliquely travelling plane wave accumulates phase along the axis with wavenumber $k_z = \sqrt{k^2 - k_x^2 - k_y^2}$, more slowly than $k$. So the average phase of the confined beam falls behind a plane wave travelling straight along the axis. Near the waist the beam is narrowest, so the phase falls behind fastest; far away the beam is wide and hardly falls behind any further [1, 5].
 
@@ -80,7 +80,7 @@ _Figure 4. (a) How far the on-axis phase lags behind a plane wave. Lines are the
 
 Why does this phase matter? First, the higher-order modes of Section 5 fall behind more the more complex their shape. A mode of order $N$ lags by $(N+1)\zeta$ (Figure 4(a)) [1]. Second, in the laser resonator we will see in Section 4, the Gouy phase is added to the phase accumulated in one round trip, so the resonance frequency differs slightly from mode to mode (Figure 4(b)). Between the longitudinal-mode spacing $c/2L$ set by the resonator length, the transverse modes sit at positions shifted by the Gouy phase [1]. In the resonator of Figure 4(b) the shift is exactly 1/3 of the spacing, because the resonator's Gouy phase difference is $\pi/3$.
 
-## 3. A beam through a lens: the q-parameter and the ABCD law
+## 3. Where does a lens put the waist of a beam, and how small is it?
 
 When a lens focuses a beam, where does the waist form, and how small is it? Rewriting the "source at an imaginary distance" of Section 1 makes the calculation simple. Bundle the state of the beam into a single complex number:
 
@@ -109,7 +109,7 @@ $$
 
 In other words, the spot size is proportional to the f-number, and the depth of focus $2z_0' = 2\pi W_0'^2/\lambda$ is proportional to the square of the f-number (Figure 5(c)). Focusing at 532 nm with an f-number of 2 gives a spot 1.4 µm across and 5.4 µm deep. At f-number 10 it is 6.8 µm and 135 µm. This trade-off, that a small spot lasts only a short distance, shapes the design of laser machining, optical recording and laser-scanning microscopes. To keep a small spot over a long depth, one of the two must be given up. Conversely, widening the beam with a telescope used backwards (a beam expander) reduces the divergence by as much as the waist grows, exactly as in the lunar ranging of Section 1.
 
-## 4. The resonator picks out the Gaussian beam
+## 4. Why does a laser emit a Gaussian beam?
 
 Why is the beam from a laser Gaussian of all shapes? Light in a laser is amplified as it bounces back and forth between two mirrors countless times. A shape survives only if the light returns in the same shape after one round trip. The wavefront of a Gaussian beam is spherical, so if a mirror's curvature equals the wavefront curvature at that point, the beam retraces its own path after reflection [1, 3]. In other words, the mirror curvatures and spacing pick out the one beam that satisfies the $R(z)$ condition, and that beam's $z_0$ and $W_0$ set the size of the laser beam. Fowles puts it the other way round: pick any two wavefronts of a mode and place mirrors of the same curvature there, and you always get a resonator with the same mode [3].
 
@@ -132,7 +132,7 @@ Figure 6(a) shows uniform light turning into a Gaussian shape. After one pass, d
 
 A brief note on history. In July 1960 Maiman (T. H. Maiman) announced the ruby laser, and in February 1961 Javan (A. Javan), Bennett (W. R. Bennett) and Herriott (D. R. Herriott) built the first continuously operating He-Ne laser [2]. The papers of Fox and Li and of Boyd and Gordon appeared the same year. The laser and the theory of its beam were born almost at the same time.
 
-## 5. Higher-order modes and beam quality M²
+## 5. How far does a real laser beam depart from the Gaussian?
 
 Is the Gaussian the only thing a resonator picks out? No. A Gaussian multiplied by Hermite polynomials is also a solution of the paraxial wave equation, and it keeps its shape as it spreads. These are called Hermite–Gaussian (HG) modes, labelled $\mathrm{HG}_{lm}$ by the numbers of nodes $l$, $m$ in the $x$ and $y$ directions. Written in cylindrical coordinates they become Laguerre–Gaussian (LG) modes (Figure 7(a)) [1]. The $\mathrm{TEM}_{00}$ in laser specifications is exactly the Gaussian mode. The higher the mode order, the larger the Gouy phase, $(l + m + 1)\zeta$ (Section 2). In this post's calculation, propagating four HG modes and three LG modes, the phase lag at $z = z_0$ agrees with the formula to within 0.002 rad.
 
@@ -160,7 +160,7 @@ Is there really no beam that spreads less than a Gaussian? The Bessel beam glimp
 - A resonator picks out the beam whose wavefront curvature matches the mirror curvature. The stability condition is $0 \le g_1g_2 \le 1$. Fox–Li iteration grows a Gaussian mode from uniform light, and an aperture filters out higher modes.
 - The quality of a real beam is measured by $M^2$: how many times the product of waist and divergence exceeds a Gaussian's. The focal spot grows by the same factor.
 
-Every formula in this post rests on the paraxial approximation, the assumption that the beam travels almost in one direction. Focus light with a lens whose NA approaches 1, like a microscope objective, and that assumption breaks. When light converges on the focus from all sides, the direction of the electric field, that is, the polarization, changes the shape of the focus. The final Part 6 is high-NA vector focusing.
+Every formula in this post rests on the paraxial approximation, the assumption that the beam travels almost in one direction. Focus light with a lens whose numerical aperture (NA) approaches 1, like a microscope objective, and that assumption breaks. When light converges on the focus from all sides, the direction of the electric field, that is, the polarization, changes the shape of the focus. The final Part 6 is high-NA vector focusing.
 
 ## References
 
