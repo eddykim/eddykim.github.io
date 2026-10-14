@@ -237,7 +237,7 @@ def figure5(L):
     b.axhline(1, color=C_GREY, lw=0.5)
     b.set_xlabel(t(L, "입력 허리의 렌즈 앞 거리 / f", "input waist distance before the lens / f"), **font(L))
     b.set_ylabel(t(L, "출력 허리의 렌즈 뒤 거리 / f", "output waist distance after the lens / f"), **font(L))
-    b.set_title(t(L, "(b) 출력 허리의 위치\n(빔이 가늘면 상의 자리로 가지 않는다)", "(b) Position of the output waist\n(a narrow beam does not go to the image point)"), fontsize=10, **font(L))
+    b.set_title(t(L, "(b) 출력 허리의 위치\n(빔이 굵을수록 상의 자리에서 멀어진다)", "(b) Position of the output waist\n(the wider the beam, the further from the image point)"), fontsize=10, **font(L))
     legend(b, L, loc="upper right", size=8)
     # (c) F수에 따른 초점의 크기와 깊이
     c = axes[2]
