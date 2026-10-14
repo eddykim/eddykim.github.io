@@ -34,7 +34,7 @@ LABELS = {
         "zeros": "영점: 이 주파수의 정보는 사라진다",
         "fig3": "그림3. 상자 셔터의 전달함수는 영점을 갖고, 부호 셔터는 빛이 절반인 대신 영점이 없다",
         "s0": "노이즈 0", "s1": "노이즈 $\\sigma = 10^{-3}$", "s2": "노이즈 $\\sigma = 10^{-2}$",
-        "err": "상대 오차",
+        "err": "상대 오차", "true": "참 신호", "recon": "복원한 신호",
         "fig4": "그림4. 노이즈가 없으면 완벽히 되돌아오지만, 노이즈가 1 %면 되돌린 신호가 원 신호보다 커진다",
         "idx": "특잇값 번호 $i$", "sv": "특잇값 $s_i$", "coef": "측정 성분 $|u_i \\cdot y|$",
         "ratio": "복원한 해의 성분 $|u_i \\cdot y| / s_i$", "floor": "노이즈 바닥",
@@ -48,7 +48,7 @@ LABELS = {
         "fig6": "그림6. 티호노프 정규화는 작은 특잇값 쪽 성분만 눌러 노이즈를 막는다",
         "iters": "반복 횟수", "stop": "여기서 멈추면 최선", "times": "회",
         "fig7": "그림7. 최소자승 경사하강은 처음엔 좋아지다가, 오래 돌리면 노이즈를 복원하기 시작한다",
-        "tikd": "매끈함 가정 (미분 티호노프)", "tv": "계단 가정 (TV)",
+        "tikd": "미분 티호노프(매끈함 가정)", "tv": "총변동(계단 가정)",
         "fig8": "그림8. 신호가 계단형이면 기울기가 드물다는 가정이 모서리를 살린다",
         "sig_ax": "가우시안 노이즈 $\\sigma$", "ph_ax": "칩당 광자 수 (밝기 1 기준)",
         "g_t": "읽기 노이즈 (신호와 무관)", "p_t": "샷 노이즈 (광자 수의 제곱근)",
@@ -74,7 +74,7 @@ LABELS = {
         "zeros": "Zeros: information at these frequencies is gone",
         "fig3": "Fig 3. The box shutter has spectral zeros; the coded shutter has none, at the cost of half the light",
         "s0": "No noise", "s1": "Noise $\\sigma = 10^{-3}$", "s2": "Noise $\\sigma = 10^{-2}$",
-        "err": "relative error",
+        "err": "relative error", "true": "True signal", "recon": "Recovered signal",
         "fig4": "Fig 4. Without noise the inversion is perfect; with 1 % noise the error exceeds the signal",
         "idx": "Singular value index $i$", "sv": "Singular value $s_i$", "coef": "Data $|u_i \\cdot y|$",
         "ratio": "Recovered $|u_i \\cdot y| / s_i$", "floor": "Noise floor",
@@ -88,7 +88,7 @@ LABELS = {
         "fig6": "Fig 6. Tikhonov regularization damps only the small-singular-value components",
         "iters": "Iterations", "stop": "Best place to stop", "times": " it.",
         "fig7": "Fig 7. Least-squares gradient descent first improves, then starts reconstructing the noise",
-        "tikd": "Smoothness prior (derivative Tikhonov)", "tv": "Piecewise-constant prior (TV)",
+        "tikd": "Derivative Tikhonov (smoothness prior)", "tv": "Total variation (piecewise-constant prior)",
         "fig8": "Fig 8. For a piecewise-constant signal, a sparse-gradient prior keeps the edges",
         "sig_ax": "Gaussian noise $\\sigma$", "ph_ax": "Photons per chip (at brightness 1)",
         "g_t": "Read noise (signal-independent)", "p_t": "Shot noise (square root of counts)",
@@ -188,8 +188,7 @@ def draw(L):
     F, LG = L["font"], L["legend"]
 
     def cap(fig, key, rect=(0, 0.06, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **F)
-        fig.tight_layout(rect=rect)
+        fig.tight_layout()   # 그림 번호와 캡션은 본문에 둔다. 이미지 안에는 넣지 않는다.
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)
@@ -215,7 +214,6 @@ def draw(L):
         box(x, y2, 1.5, t, c)
     for a in (1.85, 3.85, 5.85, 7.85):
         arrow(a, a + 0.4, y2 + 0.4)
-    fig.text(0.5, 0.015, L["fig1"], ha="center", fontsize=9, **F)
     save(fig, "fig1-concept.png")
 
     # 그림2: 전방 모델
@@ -236,14 +234,15 @@ def draw(L):
     cap(fig, "fig2", rect=(0, 0.07, 1, 1)); save(fig, "fig2-forward-model.png")
 
     # 그림3: 전달함수
-    f, Hb = transfer_function(box_kernel(), 4096)
-    _, Hc = transfer_function(coded_kernel(), 4096)
+    f, Hb = transfer_function(box_kernel(), 52 * 80)
+    _, Hc = transfer_function(coded_kernel(), 52 * 80)
     fig, ax = plt.subplots(figsize=(8.5, 3.6))
     ax.semilogy(f, np.maximum(Hb, 1e-5), color=C_BOX, lw=1.2, label=L["kbox"])
     ax.semilogy(f, Hc, color=C_CODE, lw=1.2, label=L["kcode"])
     zf = np.arange(1, 6) / K
     ax.plot(zf, np.full_like(zf, 1.3e-5), "v", color=C_BOX, ms=6)
-    ax.text(zf[-1] + 0.01, 1.3e-5, L["zeros"], fontsize=8.5, va="center", color=C_BOX, **F)
+    ax.text(zf[-1] + 0.012, 1.3e-5, L["zeros"], fontsize=8.5, va="center", color=C_BOX,
+            bbox=dict(fc="white", ec="none", alpha=0.9, pad=1.5), **F)
     ax.set_ylim(1e-5, 1.5); ax.set_xlim(0, 0.5)
     ax.set_xlabel(L["freq"], **F); ax.set_ylabel(L["mag"], **F)
     ax.legend(prop=LG, fontsize=8.5, loc="lower right"); ax.grid(alpha=0.3, which="both")
@@ -253,8 +252,10 @@ def draw(L):
     fig, ax = plt.subplots(1, 3, figsize=(12, 3.3), sharey=False)
     for a, key in zip(ax, ("s0", "s1", "s2")):
         xs, e = LS[key]
-        a.plot(POS, X, color=C_TRUE, lw=1.0, ls="--")
-        a.plot(POS, xs, color=C_BOX, lw=1.0)
+        a.plot(POS, X, color=C_TRUE, lw=1.0, ls="--", label=L["true"])
+        a.plot(POS, xs, color=C_BOX, lw=1.0, label=L["recon"])
+        lo, hi = a.get_ylim(); a.set_ylim(lo, hi + 0.3 * (hi - lo))
+        a.legend(prop=LG, fontsize=7.5, loc="upper center", ncol=2)
         a.set_title(f"{L[key]}  ({L['err']} {e:.2g})", fontsize=9.5, **F)
         a.set_xlabel(L["pos"], **F); a.grid(alpha=0.3)
     cap(fig, "fig4", rect=(0, 0.07, 1, 1)); save(fig, "fig4-inverse-blowup.png")
@@ -268,14 +269,15 @@ def draw(L):
     ax[0].semilogy(i[sl], smooth(COEF)[sl], color=C_CODE, lw=1.6, label=L["coef"])
     ax[0].semilogy(i[sl], smooth(COEF0)[sl], color=C_CODE, lw=1.2, ls="--", label=L["coef0"])
     ax[0].axhline(SIG * np.sqrt(2 / np.pi), color=C_CODE, ls=":", lw=1.2)
-    ax[0].text(215, SIG * np.sqrt(2 / np.pi) * 0.5, L["floor"], color=C_CODE, fontsize=8.5, **F)
+    ax[0].text(12, SIG * np.sqrt(2 / np.pi) * 0.45, L["floor"], color=C_CODE, fontsize=8.5,
+               bbox=dict(fc="white", ec="none", alpha=0.85, pad=1.5), **F)
     ax[0].set_title(L["p_data"], fontsize=10, **F)
     ax[1].semilogy(i, COEF / S, ".", color=C_BOX, ms=2.5, alpha=0.35)
     ax[1].semilogy(i[sl], smooth(COEF / S)[sl], color=C_BOX, lw=1.6, label=L["ratio"])
     ax[1].semilogy(i[sl], smooth(XCOEF)[sl], color=C_TRUE, lw=1.2, ls="--", label=L["xtrue"])
     ax[1].set_title(L["p_sol"], fontsize=10, **F)
     for a in ax:
-        a.set_xlabel(L["idx"], **F); a.legend(prop=LG, fontsize=8.5, loc="lower left")
+        a.set_xlabel(L["idx"], **F); a.legend(prop=LG, fontsize=8.5, loc="upper right" if a is ax[0] else "lower left")
         a.grid(alpha=0.3, which="both")
     cap(fig, "fig5", rect=(0, 0.06, 1, 1)); save(fig, "fig5-picard.png")
 
@@ -313,7 +315,7 @@ def draw(L):
                    arrowprops=dict(arrowstyle="->", color=C_CODE), color=C_CODE, fontsize=9, **F)
     ax[0].set_xlabel(L["iters"], **F); ax[0].set_ylabel(L["err"], **F)
     ax[1].plot(POS, X, color=C_TRUE, lw=1.0, ls="--")
-    for k, c, lw in ((200000, C_BOX, 0.7), (10, "#999999", 1.4), (K_BEST, C_CODE, 1.4)):
+    for k, c, lw in ((10, "#999999", 1.4), (K_BEST, C_CODE, 1.4), (200000, C_BOX, 0.7)):
         xs = LW_SNAP[k]
         ax[1].plot(POS, xs, color=c, lw=lw, label=f"{k:,}{L['times']} ({L['err']} {rel_error(xs, X):.2f})")
     ax[1].set_ylim(-0.8, 1.8); ax[1].set_xlabel(L["pos"], **F)
@@ -323,10 +325,10 @@ def draw(L):
 
     # 그림8: TV
     fig, ax = plt.subplots(figsize=(9, 3.6))
-    ax.plot(POS, X, color=C_TRUE, lw=1.0, ls="--")
-    ax.plot(POS, X_TIKD, color=C_BOX, lw=1.1, label=f"{L['tikd']} ({ED:.3f})")
-    ax.plot(POS, X_TV, color=C_CODE, lw=1.3, label=f"{L['tv']} ({ET:.3f})")
-    ax.set_xlabel(L["pos"], **F); ax.legend(prop=LG, fontsize=8.5); ax.grid(alpha=0.3)
+    ax.plot(POS, X, color=C_TRUE, lw=1.0, ls="--", label=L["true"])
+    ax.plot(POS, X_TIKD, color=C_BOX, lw=1.1, label=f"{L['tikd']}, {L['err']} {ED:.3f}")
+    ax.plot(POS, X_TV, color=C_CODE, lw=1.3, label=f"{L['tv']}, {L['err']} {ET:.3f}")
+    ax.set_xlabel(L["pos"], **F); ax.set_ylim(-0.2, 1.55); ax.legend(prop=LG, fontsize=8.5, loc="upper center", ncol=1); ax.grid(alpha=0.3)
     cap(fig, "fig8", rect=(0, 0.07, 1, 1)); save(fig, "fig8-tv.png")
 
     # 그림9: 잡음 조건별
