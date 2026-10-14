@@ -127,8 +127,8 @@ def figure3(L):
         b.axvline(k * beat / 1000, color=C_GREY, ls=":", lw=1)
     b.set_xlabel(t(L, r"광로차 $\Delta$ (mm)", r"path difference $\Delta$ (mm)"), **font(L))
     b.set_ylabel(t(L, "세기", "intensity"), **font(L))
-    b.set_title(t(L, f"(b) 나트륨 D 이중선: 광로차 {beat / 1000:.2f} mm 마다 무늬가 사라졌다 돌아온다 (검정: 가시도 포락선)",
-                  f"(b) Sodium D doublet: fringes vanish and return every {beat / 1000:.2f} mm of path difference (black: visibility envelope)"),
+    b.set_title(t(L, f"(b) 나트륨 D 이중선: 광로차 {beat / 1000:.2f} mm마다 무늬가 사라졌다 돌아온다",
+                  f"(b) Sodium D doublet: fringes vanish and return every {beat / 1000:.2f} mm of path difference"),
                 fontsize=10.5, **font(L))
     # (c) 백색광: 한 줄의 흰 무늬
     s0w, dsw = wavelength_band(0.57, 0.25)
@@ -144,8 +144,8 @@ def figure3(L):
     # (d) 푸리에 변환 분광: (b) 의 간섭무늬에서 이중선을 되찾는다
     d_ax = fig.add_subplot(gs[:, 1])
     sig_out = np.linspace(1 / 0.5900, 1 / 0.5884, 1601)
-    for Dmax, col, lab_ko, lab_en in [(1800.0, C_RAY, "광로차 1.8 mm 까지 잼", "scan to 1.8 mm"),
-                                       (300.0, C_RED, "광로차 0.3 mm 까지만", "scan to 0.3 mm only")]:
+    for Dmax, col, lab_ko, lab_en in [(1800.0, C_RAY, "광로차 1.8 mm까지", "scan to 1.8 mm"),
+                                       (300.0, C_RED, "광로차 0.3 mm까지만", "scan to 0.3 mm only")]:
         sel = DN <= Dmax
         Dsym = np.concatenate([-DN[sel][::-1], DN[sel][1:]])
         Isym = np.concatenate([IN[sel][::-1], IN[sel][1:]])
@@ -157,6 +157,7 @@ def figure3(L):
     d_ax.set_xticks([588.5, 589.0, 589.5, 590.0])
     d_ax.set_xlabel(t(L, "파장 (nm)", "wavelength (nm)"), **font(L))
     d_ax.set_ylabel(t(L, "되찾은 스펙트럼 (상대)", "recovered spectrum (relative)"), **font(L))
+    d_ax.set_ylim(-0.3, 1.32)
     legend(d_ax, L, loc="upper right")
     d_ax.set_title(t(L, "(d) (b)의 간섭무늬를 푸리에 변환하면\n두 선이 갈라진다 (점선: 589.0, 589.6 nm)",
                      "(d) Fourier transforming the interferogram of (b)\nseparates the two lines (dotted: 589.0, 589.6 nm)"),

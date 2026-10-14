@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2026-11-29 20:00:00 +0900
-title: "Wave Optics Foundations 2 — When Does Light Interfere? Temporal and Spatial Coherence"
+title: "Wave Optics Foundations 2 — Why Does Laser Light Interfere When Flashlight Light Does Not?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/wave-optics-coherence/
@@ -36,7 +36,7 @@ _Figure 2. Two random light waves that differ only in spectral width. (a), (d) F
 
 Figure 2 makes this visible. The top row is light with a narrow spectrum, the bottom row light with a spectrum ten times broader. The narrow-band light has a slowly undulating envelope and keeps its sinusoidal shape for tens of periods. The broad-band light changes amplitude and phase every few periods. The widths of the two degrees of coherence differ by the same factor of ten.
 
-## 2. Spectrum and coherence are a Fourier pair
+## 2. Why does a broader spectrum shorten the coherence?
 
 The degree of coherence in Figure 2 was obtained in two ways: by measuring the autocorrelation of the generated random wave (lines) and by Fourier transforming the spectrum (circles). The two coincide, and not by accident. The autocorrelation of light and its power spectrum are Fourier transforms of each other; this is the Wiener–Khinchin theorem [1, 3]. Since the coherence time and the spectral width are the widths of a Fourier pair, they are inversely proportional [3]:
 
@@ -60,30 +60,30 @@ The coherence length of sunlight is 0.8 µm, comparable to its wavelength. That 
 
 Increasing the coherence time is simple: trim the spectrum with a narrow-band filter. The price is intensity. Every frequency thrown away takes its light with it [3].
 
-## 3. Measuring coherence with a Michelson interferometer
+## 3. How does an interferometer measure coherence?
 
 The Michelson interferometer of Part 1 splits light in two, delays one half, and recombines them. It overlaps light with a delayed copy of itself, which is exactly the definition of the degree of coherence. So when the mirror is moved and the fringe visibility is measured, that visibility is $\lvert g\rvert$ at the corresponding path difference [3]. In Part 1 the visibility was set by the intensity ratio of the two beams; for partially coherent light it is multiplied by $\lvert g\rvert$ [3]:
 
 $$ V = \frac{2\sqrt{I_1 I_2}}{I_1 + I_2}\,\lvert g\rvert $$
 
 <img src="/assets/img/posts/wave-optics-coherence/en/fig3-michelson-interferograms.png" alt="Michelson interferograms of an LED, the sodium doublet and white light, and the spectrum recovered by Fourier transform" width="780">
-_Figure 3. Computed output of a Michelson interferometer versus path difference. (a) LED: fringes only within about ±10 µm of path difference. (b) Sodium D doublet: the fringes are so dense they appear as a filled band, and its edge (black) — the visibility — drops to zero and returns every 0.58 mm. (c) White light: only a few central fringes. (d) Spectrum recovered by Fourier transforming the interferogram of (b). Scanning to 1.8 mm separates the 589.0 nm and 589.6 nm lines; scanning only to 0.3 mm merges them into one._
+_Figure 3. Computed output of a Michelson interferometer versus path difference. (a) LED: fringes only within about ±10 µm of path difference. (b) Sodium D doublet: the fringes are so dense they appear as a filled band, and its edge (black), the visibility, drops to zero and returns every 0.58 mm. (c) White light: only a few central fringes. (d) Spectrum recovered by Fourier transforming the interferogram of (b). Scanning to 1.8 mm separates the 589.0 nm and 589.6 nm lines; scanning only to 0.3 mm merges them into one._
 
 In Figure 3(a) the LED fringes exist only within about ±10 µm of path difference. The white light of (c) shows only two or three central fringes. The distance the mirror moves before the fringes vanish is the coherence length.
 
 The sodium lamp of (b) is more interesting. The yellow light of sodium consists of two lines, at 589.0 nm and 589.6 nm. Each is nearly a pure sine wave, but their wavelengths differ slightly, so as the path difference grows their fringe patterns slide apart. At a path difference of $\lambda^2/(2\Delta\lambda) = 0.29$ mm the bright fringes of one line fall on the dark fringes of the other and the pattern disappears; at 0.58 mm they line up again and the fringes return. It is the same as the beating of two musical notes with slightly different pitch. Since the mirror moves half the path difference, the fringes vanish and reappear every 0.29 mm of mirror travel. This is how Michelson read the structure of spectral lines from fringe visibility [2].
 
-### From interferogram to spectrum
+### How does an interferogram give a spectrum?
 
 Read the Wiener–Khinchin theorem backwards and the spectrum can be obtained by Fourier transforming the interferogram recorded while moving the mirror [3]. This is Fourier transform spectroscopy. Figure 3(d) transforms the sodium interferogram of (b). Recording out to 1.8 mm of path difference separates the two lines cleanly; recording only to 0.3 mm merges them. The smallest resolvable wavenumber difference is roughly the inverse of the scanned path difference. When 1/(0.3 mm) = 33 cm⁻¹ exceeds the separation of the two lines (17 cm⁻¹), they are not resolved. Scanning further increases the resolution.
 
 The Fourier transform infrared spectrometer (FTIR), widely used in infrared spectroscopy, works on this principle. Bell summarizes the advantages of interferometric spectroscopy in two points [4]. A grating spectrometer measures only the narrow band of wavelengths passing its exit slit at any moment, whereas an interferometer measures all wavelengths at every moment. This is the Fellgett, or multiplex, advantage. An interferometer can also accept light through a large circular aperture rather than a narrow slit, collecting more light at the same resolution. This is the Jacquinot, or throughput (étendue), advantage [4]. The étendue of [Geometrical Optics Foundations 3](/en/posts/geometric-optics-stops-pupils-etendue/) appears again here.
 
-## 4. Short coherence is useful
+## 4. Is short coherence a loss for measurement?
 
 Short coherence looks like a defect, but in measurement it turns out to be useful.
 
-### Film thickness and coherence
+### Why does a thick film show no coloured bands?
 
 The oil and soap films of Part 1 showed colours only when thin. A thick window pane reflects light from both its faces, yet shows no coloured bands. Once the path difference $2nt$ between the two reflections exceeds the coherence length, the two beams no longer interfere and their intensities simply add. The coherence length of sunlight as seen by the eye is under 1 µm, so films thicker than a few micrometres lose their fringes.
 
@@ -92,20 +92,20 @@ _Figure 4. (a) Reflectance of a water film in air versus thickness, viewed throu
 
 Look at the same film with a spectrometer, however, and the fringes return (Figure 4). Each spectrometer pixel receives only a narrow band of wavelengths, so the light it sees has a long coherence length. A 2 nm band has a coherence length of about 0.15 mm, enough for the two reflections from a film tens of micrometres thick to interfere. The fringes now appear along the wavelength axis rather than the thickness axis (Figure 4(b)). The thicker the film, the denser the fringes in wavelength, and their spacing gives the thickness. This is how the spectral reflectometers that measure film thickness in semiconductor processing work, as do [ellipsometers](/en/posts/ellipsometry-thin-film-multilayer-reflectance/). Conversely, a very thick layer such as a substrate washes out the fringes even within one spectrometer pixel, so multilayer calculations add the two reflections from such a layer by intensity, not by amplitude [5].
 
-### White-light interferometry and OCT
+### How does short coherence measure depth?
 
-The white-light fringes of Figure 3(c) exist only near zero path difference. Turned around, this locates "zero path difference" very sharply. A white-light interferometer uses the sample surface as one arm of a Michelson and moves the reference mirror; for each pixel it finds the mirror position at which the fringes are strongest and takes that as the height of the pixel. A laser interferometer repeats its fringes every half wavelength and cannot tell apart steps that differ by more than half a wavelength, but white light has only one fringe packet and no such ambiguity.
+The white-light fringes of Figure 3(c) exist only near zero path difference. Turned around, this locates "zero path difference" very sharply. A white-light interferometer uses the specimen surface as one arm of a Michelson and moves the reference mirror; for each pixel it finds the mirror position at which the fringes are strongest and takes that as the height of the pixel. A laser interferometer repeats its fringes every half wavelength and cannot tell apart steps that differ by more than half a wavelength, but white light has only one fringe packet and no such ambiguity.
 
-Applying the same principle inside tissue gives optical coherence tomography (OCT) [3]. As the reference mirror moves, the reference light interferes with light returning from boundaries inside the sample, producing a fringe packet about one coherence length wide for each boundary (Figure 5) [3]. The position of the packet gives the depth of the boundary, and its size the strength of the reflection. Since the depth resolution is set by the coherence length, a broader spectrum resolves depth more finely. For a Gaussian spectrum the full width at half maximum of the fringe packet is
+Applying the same principle inside tissue gives optical coherence tomography (OCT) [3]. As the reference mirror moves, the reference light interferes with light returning from boundaries inside the specimen, producing a fringe packet about one coherence length wide for each boundary (Figure 5) [3]. The position of the packet gives the depth of the boundary, and its size the strength of the reflection. Since the depth resolution is set by the coherence length, a broader spectrum resolves depth more finely. For a Gaussian spectrum the full width at half maximum of the fringe packet is
 
 $$ \Delta z = \frac{2\ln 2}{\pi}\,\frac{\lambda_0^2}{\Delta\lambda} $$
 
 For a source centred at 840 nm with a 50 nm FWHM, this is 6.2 µm, which is why two boundaries 8 µm apart are resolved in Figure 5. OCT is widely used in clinical medicine, and frequency-domain schemes, which sweep the wavelength of the source or measure the spectrum with a spectrometer instead of moving the reference mirror, offer better sensitivity and speed [3]. It is the same idea as the Fourier transform spectroscopy of Section 3.
 
 <img src="/assets/img/posts/wave-optics-coherence/en/fig5-oct-ascan.png" alt="OCT interference signal and envelope" width="780">
-_Figure 5. Computed time-domain OCT (840 nm, 50 nm FWHM) of a sample with boundaries at depths of 100, 130, 138 and 200 µm (dotted). (a) Interference signal as the reference mirror moves. (b) Its envelope. Each boundary gives a peak 6.2 µm wide, and the two boundaries 8 µm apart are resolved._
+_Figure 5. Computed time-domain OCT (840 nm, 50 nm FWHM) of a specimen with boundaries at depths of 100, 130, 138 and 200 µm (dotted). (a) Interference signal as the reference mirror moves. (b) Its envelope. Each boundary gives a peak 6.2 µm wide, and the two boundaries 8 µm apart are resolved._
 
-## 5. Spatial coherence: the size of the source
+## 5. How does the size of the source change coherence?
 
 So far we have asked how orderly the phase stays in time at one point. The same question can be asked in space: at the same instant, how closely do the fields at two laterally separated points move together? Young's experiment measures exactly this. For the light from two holes to interfere, the light at the two holes must be coherent with each other. This is spatial coherence [1, 3].
 
@@ -120,9 +120,9 @@ $$ \lvert g\rvert = \left\lvert \frac{2J_1(x)}{x} \right\rvert, \qquad x = \frac
 
 and it first reaches zero at a separation $d = 1.22\,\lambda/\theta_s$ [1, 3], where $\theta_s$ is the angular diameter of the source and $J_1$ the first-order Bessel function. For sunlight at 550 nm this separation is 73 µm. To do Young's experiment with bare sunlight, the two holes must be within tens of micrometres of each other [3]. Light coming directly from an extended surface, such as just in front of a hot filament, has a coherence area of the order of the wavelength squared and is effectively incoherent [3].
 
-The shape of this formula will return in the next part. The amplitude of the diffraction pattern of a circular aperture — the Airy pattern — is $2J_1(x)/x$. This is no coincidence. As van Cittert showed in 1934 and Zernike in 1938 [2], the spatial degree of coherence produced far away by a source made of independent points is the Fourier transform of the source's intensity distribution. Mathematically it is the same as the diffraction amplitude of coherent light through an aperture of the same shape. This is the van Cittert–Zernike theorem. Even an incoherent source gains coherence as its light spreads out, which is why light from very distant stars is coherent over a wide region on the ground [3].
+The shape of this formula will return in the next part. The amplitude of the diffraction pattern of a circular aperture, the Airy pattern, is $2J_1(x)/x$. This is no coincidence. As van Cittert showed in 1934 and Zernike in 1938 [2], the spatial degree of coherence produced far away by a source made of independent points is the Fourier transform of the source's intensity distribution. Mathematically it is the same as the diffraction amplitude of coherent light through an aperture of the same shape. This is the van Cittert–Zernike theorem. Even an incoherent source gains coherence as its light spreads out, which is why light from very distant stars is coherent over a wide region on the ground [3].
 
-### Measuring the size of a star
+### How does coherence measure the size of a star?
 
 Turned around, this relation measures the size of a source. In 1890, following a suggestion by Fizeau, Michelson proposed a stellar interferometer: two mirrors spread apart in front of a telescope, with their separation varied until the fringes vanish [1]. At the separation $h$ where the fringes first vanish, the angular diameter of the star is $\theta_s = 1.22\lambda/h$. In December 1920, with the instrument mounted on the 2.5 m telescope at Mount Wilson, the fringes of Betelgeuse vanished at a mirror separation of 121 inches (about 3.1 m). With a wavelength of 570 nm this gives an angular diameter of 0.047 arcseconds, and since the distance was known, a diameter about 280 times that of the Sun [1]. The telescope alone could not resolve this angle; measuring coherence did.
 
@@ -131,7 +131,7 @@ _Figure 7. ALMA's 12 m antennas on the Chajnantor plateau in Chile (about 5000 m
 
 Radio astronomy developed this principle into an imaging technique [1]. A radio interferometer spreads many antennas over a wide area (Figure 7) and measures the coherence of the signals received by each pair. By the van Cittert–Zernike theorem, each such value is one point of the Fourier transform of the sky's brightness distribution. The more varied the separations and orientations of the antenna pairs, the more of the Fourier plane is filled, and inverting the transform gives an image.
 
-## 6. Speckle: noise made by coherence
+## 6. Why does speckle appear, and how is it reduced?
 
 Back to Figure 1. The wall is rough on the scale of a wavelength. When laser light scatters from it, light from many small patches of the wall reaches each point of the eye along different optical paths. Because the laser's coherence is long, all of this light interferes. The paths are random, so the phases are random: in the phasor picture of Part 1, many arrows of similar length pointing in random directions, joined head to tail. In some places the sum is long; in others it is nearly zero. This produces the bright and dark grains called speckle.
 
@@ -151,7 +151,7 @@ That is why instruments that image with lasers often reduce coherence deliberate
 - An extended source reduces spatial coherence. The degree of coherence is the Fourier transform of the source's brightness distribution (van Cittert–Zernike), and for a disc source it first reaches zero at $1.22\lambda/\theta_s$. This measures the sizes of stars and builds images in radio interferometers.
 - Coherent light scattered by a rough surface forms speckle with contrast 1. Averaging $N$ independent speckle patterns reduces the contrast to $1/\sqrt{N}$.
 
-Section 5 showed that the spatial degree of coherence has the same shape as the diffraction pattern of a circular aperture. Why does light passing through an aperture draw such a pattern? Why a lens images a star as a small disc rather than a point, and why the diffraction images of Geometrical Optics Foundations 4 and the degree of coherence of this post come from the same mathematics, is the subject of the next part: diffraction.
+Section 5 showed that the spatial degree of coherence has the same shape as the diffraction pattern of a circular aperture. Why does light passing through an aperture draw such a pattern? Why a lens images a star as a small disc rather than a point, and why the point spread function (PSF) of Geometrical Optics Foundations 4 and the degree of coherence of this post come from the same mathematics, is the subject of the next part: diffraction.
 
 ## References
 
