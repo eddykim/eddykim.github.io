@@ -286,7 +286,7 @@ def figure7(L):
     fig.colorbar(im, ax=a, fraction=0.046, pad=0.03, label=t(L, "log₁₀ (새는 비율)", "log₁₀ (leakage fraction)").replace("₁₀", "10"))
     a.set_xlabel(r"$\sin\theta\cos\varphi$")
     a.set_ylabel(r"$\sin\theta\sin\varphi$")
-    a.set_title(t(L, "(a) 직교 편광판 사이의 새는 빛 (NA 0.9)\n유리판(n = 1.5) 앞뒤 면을 지난 광선", "(a) Leakage between crossed polarizers (NA 0.9)\nrays through both faces of a glass plate (n = 1.5)"), fontsize=10, **font(L))
+    a.set_title(t(L, "(a) 직교 편광판 사이의 새는 빛 (NA 0.9)\n공기-유리 경계(n = 1.5) 2면을 지난 광선", "(a) Leakage between crossed polarizers (NA 0.9)\nrays through 2 air–glass surfaces (n = 1.5)"), fontsize=10, **font(L))
     b = axes[1]
     NAs = np.linspace(0.05, 0.95, 60)
     for ns, col in [(2, C_RED), (8, C_RAY)]:
