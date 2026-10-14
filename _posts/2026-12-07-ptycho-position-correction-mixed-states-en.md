@@ -13,7 +13,7 @@ math: true
 
 [Post 6](/en/posts/ptycho-noise-maximum-likelihood/) dealt with measurements that carry noise. Real experiments break two more assumptions. One is the scan position. So far the post assumed we know exactly where the probe illuminated, but a real stage misses its commanded position slightly and drifts slowly with thermal expansion or vibration. The other is the coherence of the light, meaning how well its waves keep a fixed phase relation. So far the probe was a single wave, but a real source has a finite size, so several mutually incoherent waves arrive together.
 
-The two problems are of the same kind: the model that explains the measurement is wrong. So the questions are the same too. How wrong does the model have to be before the reconstruction breaks? And can the wrong part be found from the data and corrected? The calculations use the pinhole probe and the 144-position Fermat spiral used since Post 3, without noise. The size of a position error is quoted as a root-mean-square (rms) value. Position errors were repeated with three error draws and coherence with three pattern orders.
+The two problems are of the same kind: the model that explains the measurement is wrong. So the questions are the same too. How wrong does the model have to be before the reconstruction breaks? And can the wrong part be found from the data and corrected? The calculations use the pinhole probe used since Post 3 and the 144-position Fermat spiral of Post 4, without noise. The size of a position error is quoted as a root-mean-square (rms) value. Position errors were repeated with three error draws and coherence with three pattern orders.
 
 ## 1. Does a Slightly Wrong Position Ruin the Reconstruction?
 
@@ -22,21 +22,21 @@ With a scan step of 8 pixels, Gaussian errors were added to each position, and t
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig1-position-error-recon.png" alt="True specimen phase and phases reconstructed with positions wrong by 1.4 px rms, without correction, with annealing, and with the gradient method" width="950">
 _Fig 1. Phase reconstructed from the same data with positions wrong by 1.4 px rms. Uncorrected it collapses; correcting the positions recovers it._
 
-It breaks at far smaller errors than one might expect. With exact positions the specimen error is 0.0023. With positions wrong by only 0.35 px rms, one twenty-third of the scan step, it becomes 0.060, 27 times larger. At 1.4 px it is 0.23, and the image becomes blotchy, as in the second panel of Fig 1.
+It breaks at far smaller errors than one might expect. With exact positions the specimen error is 0.0023. With positions wrong by only 0.35 px rms, one twenty-third of the scan step, it becomes 0.060, 26 times larger. At 1.4 px it is 0.23, and the image becomes blotchy, as in the second panel of Fig 1.
 
 Why so sensitive? Recall how overlap provides information. A specimen pixel is illuminated by different parts of the probe from several positions, and the answer is fixed when those patterns point to the same specimen. With wrong positions, the algorithm believes the pixel was illuminated by the wrong part of the probe. Where the intensity changes strongly within one pixel, as at the edge and rings of a pinhole probe, a shift of 0.35 px changes the exit wave substantially. Each pattern then demands a different specimen, and the algorithm settles on a blotchy compromise between them.
 
 ## 2. Can Wrong Positions Be Found and Corrected from the Data?
 
-Then the positions can be treated as unknowns and found together with the rest. In their handbook chapter, Rodenburg and Maiden describe two widely used methods. Both start from a reconstruction that ignores position errors and then move the positions slightly one at a time. This post compares annealing with a gradient method that follows directly from the cost function of Post 6.
+Then the positions can be treated as unknowns and found together with the rest. In their handbook chapter, Rodenburg and Maiden name annealing and cross-correlation as the two most common methods, and describe the gradient-based conjugate-gradient family separately as a computationally heavier option. Annealing and cross-correlation both start from a reconstruction that ignores position errors and then move the positions slightly one at a time. This post compares annealing with a gradient method that follows directly from the cost function of Post 6 (a simplification of the conjugate-gradient family).
 
 The first is the annealing method of Maiden and colleagues. For each position, a few random candidates are generated around the current position, the diffraction pattern of each candidate is computed from the current specimen and probe, and the position moves to the candidate that best matches the measurement. The radius for drawing candidates shrinks as the iterations proceed: at first positions can wander far, and later they settle on a single point. Here the radius started at 1 pixel, comparing four candidates with the current position.
 
-The second is a gradient method. Differentiating the amplitude cost of Post 6 with respect to the position tells which way to move the position to lower the cost.
+The second is a gradient method. Differentiating the amplitude cost $E_j$ of Post 6 with respect to the position tells which way to move the position to lower the cost.
 
 $$ \frac{\partial E_j}{\partial \mathbf{d}} = 2\,\mathrm{Re}\left\langle \chi_j,\ \mathcal{F}\left[ -(\nabla P)(r - \mathbf{d})\, O_j \right] \right\rangle $$
 
-Here $\mathbf{d}$ is the sub-pixel shift of position $j$, and $\chi_j = \left(1 - \sqrt{n_j}/\lvert\Psi_j\rvert\right)\Psi_j$ is the amplitude-cost gradient from Post 6. The term in brackets on the right is the direction in which the exit wave changes when the probe moves. In other words, it measures how much the change of the exit wave overlaps with the correction the data demand. The larger the probe gradient $\nabla P$, the larger this quantity, so the same property that made the reconstruction sensitive to position in Section 1 becomes the clue for finding it. Positions were moved by a Gauss–Newton step, this gradient divided by its squared size, limited to 0.5 pixel per step.
+Here $\mathbf{d}$ is the sub-pixel shift of position $j$, and $\chi_j = \left(1 - \sqrt{n_j}/\lvert\Psi_j\rvert\right)\Psi_j$ is the amplitude-cost gradient from Post 6. The term in brackets on the right is the direction in which the exit wave changes when the probe moves. In other words, it measures how much the change of the exit wave overlaps with the correction the data demand. The larger the probe gradient $\nabla P$, the larger this quantity, so the same property that made the reconstruction sensitive to position in Section 1 becomes the clue for finding it. Positions were moved by a Gauss–Newton step, this gradient divided by its squared size and multiplied by 0.5, limited to 0.5 pixel per step.
 
 One point deserves attention. Moving all positions together in the same direction is the shift ambiguity from [Post 4](/en/posts/ptycho-probe-ambiguity-raster-rpie/). If the specimen moves along with them, the measurement is unchanged, so the data cannot fix the mean of the positions. The mean of the corrections was therefore reset to zero at every iteration.
 
@@ -80,7 +80,7 @@ The cure is to fix the model. Thibault and Menzel represented the probe with sev
 
 $$ \Psi'_k = \Psi_k \, \frac{\sqrt{n}}{\sqrt{\sum_{l} \lvert \Psi_l \rvert^2}} $$
 
-With a single mode this is the Fourier projection of Post 3. The handbook gives an intuitive picture. When two incoherent waves arrive at one pixel, what is lost is two phases and two amplitudes, four unknowns. But the condition that the two intensities sum to the measured value remains, so there are really three. The formula above is exactly that condition. The specimen is corrected by summing the corrections of all modes, and each mode is corrected separately. Mixing the modes among themselves does not change the summed intensity, so the modes were orthogonalized by SVD at every iteration to fix their order.
+With a single mode this is the Fourier projection of Post 3. Following the handbook's account makes this intuitive. When two incoherent waves arrive at one pixel, what is lost is two phases and two amplitudes, four unknowns. But the condition that the two intensities sum to the measured value remains, so there are really three. The formula above is exactly that condition. The specimen is corrected by summing the corrections of all modes, and each mode is corrected separately. Mixing the modes among themselves does not change the summed intensity, so the modes were orthogonalized by SVD at every iteration to fix their order.
 
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig5-modes-vs-k.png" alt="Specimen error and data residual of mixed-state rPIE and ML refinement versus number of modes, with the residual of the truncated true state" width="950">
 _Fig 5. Specimen error and data residual versus number of modes (3 orders). The dashed line is the residual of the true state truncated to K modes; at 72 % occupancy the reconstruction's residual is of the same size as this line._
@@ -102,7 +102,7 @@ Comparing the modes at the bottom of Fig 6, the first mode is nearly identical, 
 
 ## 5. Why Does Error Remain Even with the Right Number of Modes?
 
-Even with the right number of modes, the specimen error is 0.025–0.04, far above the 0.0006 for coherent data. Where does it come from? As in Posts 4 and 6, the data residual separates the possibilities.
+Even with the right number of modes, the specimen error is 0.025–0.04, far above the 0.0006 for coherent data. Where does it come from? As in Posts 4 and 5, the data residual separates the possibilities.
 
 The dashed lines on the right of Fig 5 are the residuals of the true state truncated to its first $K$ modes. At 72 % occupancy, truncating to three modes gives a residual of $3.7\times10^{-2}$, and to five modes $1.1\times10^{-2}$. The reconstruction's residual is lower at three modes, $2.3\times10^{-2}$, and slightly higher at five, $1.6\times10^{-2}$; both are of the same size. With three or five modes, the remaining residual is a limit of the model. The intensity carried by the discarded modes cannot be explained by the remaining ones, so the specimen absorbs part of the difference.
 
@@ -117,7 +117,7 @@ With eight modes, the true state could bring the residual down to $1.1\times10^{
 | First mode 72 % | 0.97 (one mode) | 0.025–0.040 (three or more modes) |
 | First mode 47 % | 0.99 (one mode) | 0.034 (eight modes) |
 
-Positions wrong by only a twentieth of the scan step badly damage the reconstruction. The same data, however, can recover the positions to a few hundredths of a pixel or better. Annealing is robust to large errors, and the gradient method corrects small errors more precisely. The data cannot set the mean of the positions, so it is held fixed.
+Positions wrong by only one twenty-third of the scan step badly damage the reconstruction. The same data, however, can recover the positions to a few hundredths of a pixel or better. Annealing is robust to large errors, and the gradient method corrects small errors more precisely. The data cannot set the mean of the positions, so it is held fixed.
 
 Treating incoherent light as a single wave makes the reconstruction fail outright. With the probe represented by several coherent modes, the data reveal the modes and their occupancies. The stronger the mixing, the more modes are needed. Too few modes leave the model wrong by the discarded modes; too many make the problem harder to solve. In these calculations, the smaller the first mode's share, the larger the remaining error.
 
