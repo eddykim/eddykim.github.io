@@ -247,6 +247,19 @@ def figure4(L):
 
 # ------------------------------------------------------------------ 그림 5: 구멍 모양과 원거리 무늬
 
+def webb_pupil(n, strut_px=2.5):
+    """그림 6 사진과 같은 배치: 육각 조각의 윗변·아랫변이 수직(조각 배열을 90° 돌림), 받침대는 위로 하나, 아래 양쪽으로 둘."""
+    p = segmented_pupil(n, 17.5, gap_px=2.0, strut_px=0).T.astype(bool)
+    y, x = np.mgrid[:n, :n] - (n - 1) / 2
+    r = np.hypot(x, y)
+    for ang in (90, -120, -60):
+        a = np.radians(ang)
+        along = x * np.cos(a) + y * np.sin(a)
+        across = -x * np.sin(a) + y * np.cos(a)
+        p &= ~((along > 0) & (np.abs(across) < strut_px / 2) & (r < n / 2))
+    return p.astype(float)
+
+
 def figure5(L):
     n, pad = 256, 4
     y, x = np.mgrid[:n, :n] - (n - 1) / 2
@@ -254,7 +267,7 @@ def figure5(L):
         (((np.abs(x) <= 12) & (np.abs(y) <= 70)).astype(float), t(L, "(a) 가늘고 긴 직사각형", "(a) Narrow rectangle")),
         (((np.abs(x) <= 50) & (np.abs(y) <= 50)).astype(float), t(L, "(b) 정사각형", "(b) Square")),
         (circle_pupil(n, 60), t(L, "(c) 원", "(c) Circle")),
-        (segmented_pupil(n, 17.5, gap_px=2.0, strut_px=2.5), t(L, "(d) 육각 조각 18장 + 받침대 3개", "(d) 18 hexagonal segments + 3 struts")),
+        (webb_pupil(n), t(L, "(d) 육각 조각 18장 + 받침대 3개", "(d) 18 hexagonal segments + 3 struts")),
     ]
     fig, axes = plt.subplots(2, 4, figsize=(14, 7.2))
     for i, (p, title) in enumerate(shapes):
