@@ -32,7 +32,7 @@ For a single-wavelength instrument there is no difficulty. Pick a thickness that
 <img src="/assets/img/posts/ellipsometer-components/en/fig1-wavelength-coverage.png" alt="Usable spectral range of each component" width="740">
 _Figure 1. The spectral range each component can serve. The red band marks the 0.2–1 μm range a spectroscopic ellipsometer commonly covers, and an arrow means the source gives no upper limit. How far you push that band is what narrows the available materials._
 
-Figure 1 is the summary of this post. Push toward the ultraviolet and calcite stops at 0.21 μm, so you switch to MgF$_2$. Push into the infrared and prism polarizers do not transmit at all, so you need a component built on an entirely different principle. The wire-grid bar at the bottom (2.5–100 μm) does not overlap the red band at all. Now take the parts one at a time.
+Figure 1 is the summary of this post. Push toward the ultraviolet and calcite stops at 0.21 μm, so you switch to MgF$_2$. Push beyond the near-infrared edge (about 5–7 μm) and prism polarizers do not transmit, so you need a component built on an entirely different principle. The wire-grid bar at the bottom (2.5–100 μm) does not overlap the red band at all. Now take the parts one at a time.
 
 ## 2. How Far in Wavelength Can a Polarizer Go?
 
@@ -40,7 +40,7 @@ A polarizer extracts linear polarization from unpolarized light. How far it reac
 
 Performance is quoted as an extinction ratio.
 
-$$\rho \equiv \frac{I_x}{I_y}$$
+$$\mathrm{ER} \equiv \frac{I_x}{I_y}$$
 
 Here $I_x$ is the intensity along the transmission axis and $I_y$ the intensity perpendicular to it. An extinction ratio of $10^5$ means that one part in a hundred thousand of the unwanted component leaks through.
 
@@ -60,7 +60,7 @@ Figure 3 shows a real Rochon prism splitting light. Rotate the prism and the dev
 <img src="/assets/img/posts/ellipsometer-components/ext-rochon-prism-split.jpg" alt="A Rochon prism splitting a white laser beam into a straight beam and a deviated rainbow beam" width="680">
 _Figure 3. A Rochon prism in a rotation mount with a white laser beam passing through it. One polarization goes straight through, while the orthogonal one leaves at an angle and is spread by wavelength into a rainbow. (Source: Peeter Piksarv, [Rochoni polarisaator](https://commons.wikimedia.org/wiki/File:Rochoni_polarisaator.jpg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
 
-In the infrared all of these prisms drop out. Over roughly 100–4000 cm$^{-1}$ a wire-grid polarizer is used instead: fine metal lines on a substrate. The field parallel to the wires drives electrons and is absorbed as heat or reflected, and only the perpendicular component gets through. This exploits anisotropy in absorption, which is dichroism rather than birefringence. The extinction ratio is about $10^3$, two orders below a Glan-Taylor, but in that band there is no alternative.
+Beyond about 5–7 μm, in the infrared, all of these prisms drop out. Over roughly 100–4000 cm$^{-1}$ a wire-grid polarizer is used instead: fine metal lines on a substrate. The field parallel to the wires drives electrons and is absorbed as heat or reflected, and only the perpendicular component gets through. This exploits anisotropy in absorption, which is dichroism rather than birefringence. The extinction ratio is about $10^3$, two orders below a Glan-Taylor, but in that band there is no alternative.
 
 So the choice goes like this. A spectroscopic instrument that reaches the ultraviolet uses an air-spaced Glan-Taylor, with an extinction ratio of $10^5$ over 0.21–5 μm. An instrument that stays out of the ultraviolet and takes light in over a wide cone is better served by the wider field of a Glan-Thompson. A component that has to rotate calls for a Rochon, which does not move the beam, and beyond 2.5 μm in the infrared the wire grid is the answer, at an extinction ratio of $10^3$.
 
@@ -74,13 +74,13 @@ Write $\delta = 2\pi N$ in the equation of section 1 and $N$ counts the retardan
 
 A multi-order plate, though, amplifies both the wavelength dependence and the temperature dependence. It is several times thicker, so the same change in wavelength swings the retardance several times as far. Zero order is the better choice.
 
-The difficulty is making one. Quartz has $n_e - n_o \approx 0.009$, and a zero-order quarter-wave plate at 633 nm works out to 17.6 μm thick. That matches the roughly 18 μm quoted in the Handbook, and it is a fraction of a sheet of paper. A plate that thin is hard to fabricate and hard to handle.
+The difficulty is making one. Quartz has $n_e - n_o \approx 0.009$, and a zero-order quarter-wave plate at 633 nm works out to 17.6 μm thick. That nearly matches the roughly 18 μm quoted in the Handbook, and it is only a fraction of the thickness of a single sheet of paper. A plate that thin is hard to fabricate and hard to handle.
 
 The practical answer is the pseudo zero-order plate. Bond two thick crystals with their fast axes perpendicular and their retardances subtract, leaving only the difference. Each piece is thick enough to handle, and the thicknesses are chosen so that what remains is a quarter wave.
 
 ### Why Does It Break Down Once the Band Gets Wide?
 
-Here is the most important fact in this post. The retardance does not have to be exactly 90°. It is enough that the analysis software knows the retardance at every wavelength.
+The most important fact in this post follows from this. The retardance does not have to be exactly 90°. It is enough that the analysis software knows the retardance at every wavelength.
 
 There is an exception. If the retardance is zero or a multiple of 360°, no data can be obtained at all; if it is 180°, or 180° plus a multiple of 360°, $\Delta$ cannot be measured accurately. At 0° or 360° the part behaves like a sheet of plain glass, and at 180° it merely flips the polarization without producing any circular component.
 
@@ -115,13 +115,13 @@ Figure 6 is the calculation. In glass of index 1.51 the critical angle is 41.5°
 
 What is gained? In Figure 6 the three curves for indices from 1.50 to 1.52 nearly coincide around 74.7° (four bounces give 89.5–90.5°); near the critical angle, at 42.3°, the same change swings the total from 70° to 106°, which is why that branch is not used. The refractive index depends only weakly on wavelength, so the retardance is nearly wavelength-independent as well, unlike a wave plate, which goes as $1/\lambda$. This is why an old method is still in use when a wide-band achromatic retarder is needed.
 
-The third route is to make the retardance adjustable rather than fixed. The Babinet-Soleil compensator drives a wedge of birefringent material with a micrometer screw to change the thickness, so it can be set to 90° at whatever wavelength is wanted. It was used in manual instruments before lasers.
+The third route is to make the retardance adjustable rather than fixed. The Babinet-Soleil compensator drives a wedge of birefringent material with a micrometer screw to change the thickness, so it can be set to 90° at whatever wavelength is wanted. It was used mainly in manual instruments before lasers.
 
 The Berek compensator works differently. In an ordinary wave plate the optic axis lies in the plane of the crystal face; in a Berek compensator it is perpendicular to that face. Untilted, both polarizations see the same index and no phase shift occurs; tilt it and one component becomes partly extraordinary, producing a phase difference. Tilting the crystal tunes the retardance continuously.
 
-Its use connects directly back to post 1. The literature states its purpose plainly: in rotating-analyzer instruments it shifts the operating point so that $\Delta$ does not sit near 0° or 180°. Section 4 of post 1 described measuring at several values of $\delta$ and stitching together only the stretches where $$\Delta' \sim \pm 90°$$. This is the hardware that carries out that strategy.
+Its use connects directly back to post 1. In rotating-analyzer instruments it serves to shift the operating point so that $\Delta$ does not sit near 0° or 180°. Section 4 of post 1 described measuring at several values of $\delta$ and stitching together only the stretches where $$\Delta' \sim \pm 90°$$. This is the hardware that carries out that strategy.
 
-Choosing by material goes like this. Calcite, the workhorse of polarizers, is rarely used for compensators: its birefringence is so large that the required thickness becomes impractically small. A compensator that has to work in the ultraviolet is made of MgF$_2$ (transmitting above 0.12 μm); if nothing shorter than 0.29 μm is needed, mica will do. MgF$_2$ dominates now because of its ultraviolet transmission. For polarizers and for compensators alike, the answer converges on MgF$_2$.
+Choosing by material goes like this. Calcite, the workhorse of polarizers, is rarely used for compensators: its birefringence is so large that the required thickness becomes impractically small. A compensator that has to work in the ultraviolet is made of MgF$_2$ (transmitting above 0.12 μm); if nothing shorter than 0.29 μm is needed, mica will do. MgF$_2$ dominates now because of its ultraviolet transmission. Polarizers, too, must turn to MgF$_2$ Rochon prisms once they go below 0.21 μm.
 
 ## 4. Can the Retardance Change Without Moving Anything?
 
@@ -162,7 +162,7 @@ _Figure 7. A deuterium arc lamp. The discharge light comes out through a small h
 
 Detectors are chosen by spectral range. Photomultiplier tubes (PMTs) served visible ellipsometry for a long time and sometimes need cooling to stay stable; silicon photodiodes are widely used as well. But the spectral response curve is not the only thing to look at when choosing a detector. Its noise characteristic directly governs the precision of the measurement.
 
-That sentence answers post 1 from the component side. Null ellipsometry never uses an absolute intensity. It only judges whether the signal is zero, and so is free of detector nonlinearity in principle. How precisely the null can be located still depends on detector noise, and the Azzam–Bashara sentence above sits in their section on the null ellipsometer. Photometric methods trust the intensity reading and are fast in return. The limit of that trust shows up as the noise characteristic of the detector.
+The previous sentence answers post 1 from the component side. Null ellipsometry never uses an absolute intensity, so in principle it is free of detector nonlinearity. How precisely the null can be located still depends on detector noise, which is why the Azzam–Bashara sentence above sits in their section on the null ellipsometer. Photometric methods trust the intensity reading and are fast in return, and the limit of that trust shows up as the noise characteristic of the detector.
 
 Spectrometers moved from prisms to diffraction gratings. The $m$-th order of a grating interferes constructively at angles satisfying
 
@@ -183,7 +183,7 @@ At the slit the trade-off becomes numerical. A slit width of 40 μm gives a spec
 
 Lay out the components covered so far and the methods of post 1 fall out. Use only a polarizer and an analyzer and rotate the analyzer, and you have RAE. Insert a compensator between them and rotate it, and you have RCE (rotating-compensator ellipsometry). Put a photoelastic modulator in the compensator's place and you have PME.
 
-The components also explain why null ellipsometry was the standard for three quarters of the twentieth century. There was almost no need to quantify intensity, so the detector did not have to be good, and a single wavelength meant a simple quarter-wave plate cut for that one wavelength sufficed. It was a method whose components were allowed to be simple.
+The components also explain why null ellipsometry was, by and large, the standard for three quarters of the twentieth century. There was almost no need to quantify intensity, so the detector did not have to be good, and a single wavelength meant a simple quarter-wave plate cut for that one wavelength sufficed. It was a method whose components were allowed to be simple.
 
 Moving to spectroscopy changes the terms. The spectroscopic condition can even reduce the number of components. Section 4 of post 1 covered the strategy of shifting the operating point with a compensator and combining several runs, yet many real spectroscopic ellipsometers carry no compensator at all. They simply discard the data at wavelengths where $\Delta$ falls near 0° or 180° and run the regression on what remains. With some two hundred wavelengths in hand, a few can be thrown away. For a single-wavelength instrument that choice does not exist.
 
@@ -193,7 +193,7 @@ $$\tan\Psi = \sqrt{\frac{1+\alpha}{1-\alpha}} \, \lvert \tan P \rvert$$
 
 Here $\alpha$ is the Fourier coefficient of the $\cos 2\omega t$ term in the RAE intensity of post 1, and $P$ is the azimuth of the fixed polarizer.
 
-What links the components is a component too. An optical fibre lets the spectrometer sit somewhere convenient instead of riding on the goniometer arm. A fibre preserves intensity, however, and not phase. [Ellipsometry Foundations 2](/en/posts/ellipsometry-polarization-mueller-matrix/) said an intensity measurement loses phase, post 1 said the same thing repeats at the instrument level, and here it repeats once more in a single cable.
+What links the components is a component too. An optical fibre lets the spectrometer sit somewhere convenient instead of riding on the goniometer arm. A fibre carries intensity through, however, but scrambles the polarization state. [Ellipsometry Foundations 2](/en/posts/ellipsometry-polarization-mueller-matrix/) said an intensity measurement loses phase, post 1 said the same thing repeats at the instrument level, and here it repeats once more in a single cable.
 
 ## 8. Components Do Not Arrive as Specified
 
