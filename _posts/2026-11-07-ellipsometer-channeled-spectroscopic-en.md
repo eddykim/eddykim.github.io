@@ -37,7 +37,7 @@ Here $\sigma = 1/\lambda$ is the wave number. Wave number replaces wavelength be
 
 $$\phi(\sigma) = 2\pi\,B_{\rm eff}\,t\,\sigma = 2\pi L\sigma$$
 
-Strictly, a constant phase and higher-order terms are added. The constant phase is removed by calibration and returns in Section 8.
+Strictly, a constant phase and higher-order terms are added. The constant phase is removed by calibration.
 
 This is the $\delta = 2\pi d\,\Delta n/\lambda$ of Post 2 rewritten in wave number. The reading, however, is inverted. In Post 2 the wavelength dependence of retardance was a **defect**, which is why zero-order plates were preferred and multi-order plates avoided. Here that dependence is the **principle**. The plate is made deliberately thick to maximize it.
 
@@ -45,12 +45,14 @@ The slope $L = B_{\rm eff}\,t$ is the optical path difference (OPD), and this si
 
 $$B_{\rm eff} = B(\bar\sigma) + \bar\sigma\,\frac{dB}{d\sigma}\Big\vert_{\bar\sigma}$$
 
-This matters because it is not the birefringence $B = n_e - n_o$ itself but that value plus a dispersion term. For quartz Hagen uses about $0.00998$ over 400–1045 nm, rather than the nominal $0.009$ of Post 2. Narrowing the band to 400–800 nm gives about $0.0102$ from the dispersion formula of quartz, and back-calculating from Hagen's own measured channel positions gives $0.0101$. The differences stay near 2% and do not change the scale of the thickness limits, so every calculation here uses $0.00998$. Hagen writes this coefficient $\beta$; since Posts 1 and 4 already use that symbol for the Fourier coefficients of a rotating-element instrument, it appears here as $B_{\rm eff}$. Hagen notes that for common retarder materials the value runs **about 10% above** the nominal birefringence, and indeed $0.009 \times 1.1 = 0.0099$.
+This matters because it is not the birefringence $B = n_e - n_o$ itself but that value plus a dispersion term. For quartz Hagen uses about $0.00998$ over 400–1045 nm, rather than the nominal $0.009$ of Post 2. Hagen notes that for common retarder materials the value runs **about 10% above** the nominal birefringence, and indeed $0.009 \times 1.1 = 0.0099$.
+
+Narrowing the band to 400–800 nm gives about $0.0102$ from the dispersion formula of quartz, and back-calculating from Hagen's own measured channel positions gives $0.0101$. The differences stay near 2% and do not change the scale of the thickness limits, so every calculation here uses $0.00998$. Hagen writes this coefficient $\beta$; since Posts 1 and 4 already use that symbol for the Fourier coefficients of a rotating-element instrument, it appears here as $B_{\rm eff}$.
 
 What happens when this spectrum is Fourier transformed along the wave-number axis?
 
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/en/fig1-single-retarder-channels.png" alt="Spectrum and Fourier channels for a single retarder" width="780">
-_Figure 1. One sample ($\Psi = 35°$, $\Delta = 50°$) seen through quartz retarders of two thicknesses: 0.4 mm ($L = 4.0\ \mu m$) on top and 3.0 mm ($L = 29.9\ \mu m$) below. Left, the detected spectrum; right, its Fourier transform along the wave-number axis. With the thin plate the $\pm L$ peaks merge into the dc peak; with the thick plate the three peaks separate._
+_Figure 1. One sample ($\Psi = 35°$, $\Delta = 50°$) seen through quartz retarders of two thicknesses: 0.4 mm ($L = 4.0\ \mu m$) on top and 3.0 mm ($L = 29.9\ \mu m$) below. Left, the detected spectrum; right, its Fourier transform along the wave-number axis. With the thin plate the $\pm L$ peaks sit against the dc peak and would mix with it under a filter window; with the thick plate the three peaks separate._
 
 Because $\cos\phi$ and $\sin\phi$ each move to $\pm L$, peaks appear at $h = 0, \pm L$. The dc peak carries the source intensity and the sample reflectance; the $\pm L$ peaks carry $a$ and $b$. Only the latter two are wanted, so only those channels need to be cut out.
 
@@ -64,11 +66,11 @@ Treat the source intensity as a Gaussian along the wave-number axis and take its
 
 $$\mathrm{STD}\big\vert_h = \frac{6}{2\pi(\sigma_{max}-\sigma_{min})}$$
 
-The Fourier transform of a Gaussian inverts its width, and on an $h$ axis defined through the phase $2\pi h\sigma$ a factor of $2\pi$ comes along. The idea of setting a lower bound this way comes from Seung Woo Lee's dissertation (2021). Its Eq. 3.26, however, writes this standard deviation as $6/(\sigma_{max}-\sigma_{min})$ and drops the $2\pi$. With the transform kernel $e^{-2\pi jh\sigma}$ defined in its own Eq. 3.9, a further division by $2\pi$ is required. Requiring the dc peak and the sidebands to sit $3\,\mathrm{STD}$ apart gives
+The Fourier transform of a Gaussian inverts its width, and on an $h$ axis defined through the phase $2\pi h\sigma$ a factor of $2\pi$ comes along. The idea of setting a lower bound this way comes from Seung Woo Lee's dissertation (2021). Requiring the centers of the dc peak and the sidebands to sit at least $3\,\mathrm{STD}$ apart gives
 
 $$L > \frac{36}{2\pi(\sigma_{max}-\sigma_{min})}$$
 
-Over the visible range 400–800 nm, $\sigma$ runs from $1.25$ to $2.5\ \mu m^{-1}$, so $L > 4.6\ \mu m$ and a quartz plate must exceed **about 0.46 mm**. Post 2 put the zero-order quarter-wave plate at 17.6 μm; this is roughly 26 times thicker. That is the scale meant by a "thick" plate in channeled spectroscopy. Lee's dissertation arrives at a minimum of $3200\ \mu m$, but besides the $2\pi$ it takes the birefringence of quartz as $0.0045$ and the peak separation as $1.5\,\mathrm{STD}$, so the two numbers are not directly comparable.
+Over the visible range 400–800 nm, $\sigma$ runs from $1.25$ to $2.5\ \mu m^{-1}$, so $L > 4.6\ \mu m$ and a quartz plate must exceed **about 0.46 mm**. Post 2 put the zero-order quarter-wave plate at 17.6 μm; this is roughly 26 times thicker. That is the scale meant by a "thick" plate in channeled spectroscopy. (Lee's Eq. 3.26 writes the standard deviation as $6/(\sigma_{max}-\sigma_{min})$ and drops the $2\pi$. With the transform kernel $e^{-2\pi jh\sigma}$ defined in his own Eq. 3.9, a further division by $2\pi$ is required.) Lee's dissertation arrives at a minimum of $3200\ \mu m$, but besides the $2\pi$ it takes the birefringence of quartz as $0.0045$ and the peak separation as $1.5\,\mathrm{STD}$, so the two numbers are not directly comparable.
 
 Real instruments are built well above this bound. Hagen's experimental instrument uses quartz plates of 3.89 mm and 7.77 mm; Oka and Kato used 13 mm and 39 mm. That is 200 to more than 2000 times a zero-order plate. Feeding Hagen's conditions (400–1035 nm, 1.01 nm resolution, thickness ratio 1:2) into this lower bound and the upper bound of Section 3 puts the base thickness between 0.37 and 5.9 mm. His 3.89 mm sits inside the upper part of that window.
 
@@ -84,7 +86,7 @@ The essential bargain of the method appears here. **Spectral resolution on the s
 
 Does that mean thicker is always better? No.
 
-A thicker retarder packs the fringes closer together. Once they are finer than the pixel spacing of the spectrometer, the fringes cannot be recorded and the sampling theorem produces aliasing. Writing $f_0 = B_{\rm eff}\,t_0$ for the carrier frequency of the base thickness, the highest carrier frequency in an arrangement measuring the full Stokes vector is $(m+n+\tfrac12)f_0$, so the condition becomes
+A thicker retarder packs the fringes closer together. Once they are finer than the pixel spacing of the spectrometer, the fringes cannot be recorded and the sampling theorem produces aliasing. Writing $f_0 = B_{\rm eff}\,t_0$ for the carrier frequency of the base thickness, the highest carrier frequency in an arrangement measuring the full Stokes vector is $(m+n+\tfrac12)f_0$ (the $\tfrac12$ is the half-width of the highest channel), so the condition becomes
 
 $$\frac{1}{\Delta\sigma} \ge \big[2(m+n)+1\big]\,B_{\rm eff}\,t_0$$
 
@@ -105,7 +107,7 @@ _Figure 2. The range of base thickness $$t_0$$ for quartz retarders over 400–8
 
 The lower bound is a horizontal line. It is fixed by the source bandwidth, so it has nothing to do with spectrometer performance. The upper bound slopes: a finer spectrometer raises it.
 
-What matters is where the two meet. **Going to four retarders to measure the full Mueller matrix drops the upper bound by a factor of $7.3$.** With the ratio 2:1:7:15 proposed by Hagen, the highest carrier frequency jumps from $m+n = 3$ to $m+n+p+q = 25$ times the base frequency ($p$ and $q$ are the ratios of the third and fourth retarders). As a result, a spectrometer coarser than $1.37$ nm leaves **no usable thickness at all.** The window closes.
+**Going to four retarders to measure the full Mueller matrix drops the upper bound by a factor of $7.3$.** With the ratio 2:1:7:15 proposed by Hagen, the highest carrier frequency jumps from $m+n = 3$ to $m+n+p+q = 25$ times the base frequency ($p$ and $q$ are the ratios of the third and fourth retarders; both multiples are taken before adding the half-width $\tfrac12$). What matters is where the lower bound meets the dashed Mueller line. Past that point, a spectrometer coarser than $1.37$ nm leaves **no usable thickness at all.** The window closes.
 
 In Post 3, going from one compensator to two in order to reach all sixteen Mueller elements cost speed. Moved onto the wavelength axis, the same cost appears as a **spectrometer specification**.
 
@@ -163,7 +165,7 @@ Discard the redundancy and gain resolution; keep it and gain self-calibration. T
 
 ## 7. What error does demodulation leave behind?
 
-The act of cutting out a channel, demodulation, creates error of its own. This is the third constraint of channeled spectroscopy. The review by Zhang and Zhao also lists Fourier-domain crosstalk among the three fundamental constraints of the method.
+The act of cutting out a channel, demodulation, creates error of its own. After the two-sided thickness limit and the sharing of resolution points, demodulation error is the third constraint of channeled spectroscopy. The review by Zhang and Zhao also lists Fourier-domain crosstalk among the three fundamental constraints of the method.
 
 Applying a window in the Fourier domain to isolate one channel does two things. First comes **crosstalk**: the skirts of neighbouring channels fall inside the window and mix in. The weaker the polarization signal, the more easily it is buried by that leakage. Second comes **degraded spectral resolution**: the window acts as a low-pass filter and shaves off the high-frequency content of the sample spectrum.
 
@@ -176,7 +178,7 @@ and $\Psi$ and $\Delta$ are computed from these. The important point is that it 
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/en/fig5-demodulation.png" alt="Demodulation distortion and retardance drift" width="780">
 _Figure 5. Calculation for a SiO₂ film (index 1.46) on silicon at 70° incidence. Left, RMS error in $\Psi$ and $\Delta$ as the channel half-width is narrowed: green solid for the 100 nm film, red dashed for the 600 nm film, dark lines for $\Psi$ and pale lines for $\Delta$; the vertical dotted line marks $L/2$. Right, the $(a, b)$ locus of a 60 nm film rotating with the retardance drift $\delta\phi$._
 
-Two things are readable on the left. Narrowing the window raises the error, and **a thicker film suffers more.** A thick film makes $\Psi$ and $\Delta$ oscillate rapidly with wavelength, so its band is wide and more of it is cut away. What Section 2 called trading the sample's spectral resolution for polarization channels appears here as numbers. With the window half-width set to $L/2$, a 100 nm film shows $0.39°$ of error in $\Psi$ while a 600 nm film shows $2.27°$. $\Delta$ fares worse, at $7.0°$ and $15.6°$ under the same conditions. Using $\Delta$ through a window therefore effectively requires one of the remedies below.
+Two things are readable on the left. Narrowing the window raises the error, and in this calculation (SiO₂ on silicon at 70°, films of 100 and 600 nm) **the thicker film suffers more.** A thick film makes $\Psi$ and $\Delta$ oscillate rapidly with wavelength, so its band is wide and more of it is cut away. What Section 2 called trading the sample's spectral resolution for polarization channels appears here as numbers. With the window half-width set to $L/2$, a 100 nm film shows $0.39°$ of error in $\Psi$ while a 600 nm film shows $2.27°$. $\Delta$ fares worse, at $7.0°$ and $15.6°$ under the same conditions. Using $\Delta$ through a window therefore effectively requires one of the remedies below.
 
 The remedies split three ways.
 
@@ -191,13 +193,13 @@ Okabe's remedy touches Post 4 directly. The goal of ellipsometry is usually not 
 As an example of the third category, the author's dissertation (Chapter 3) introduced the extrema envelope method (EEM) to channeled spectra. A channeled spectrum is a baseline with a single harmonic riding on it, so taking the envelopes through the local maxima and minima and averaging them cancels the harmonic and leaves the baseline. Figure 6 shows the two envelopes. The method removes at the source the Gibbs and edge errors a Fourier filter produces at the signal boundaries. Averaging two envelopes to obtain a local mean is an idea Huang and colleagues used first, in empirical mode decomposition (EMD). It has a cost: because it locates extrema directly, it does worse than a Fourier low-pass filter when noise dominates. Metrology Image Processing 3 (the frequency domain) compares the two.
 
 <img src="/assets/img/posts/ellipsometer-channeled-spectroscopic/ext-signal-envelopes.png" alt="Upper and lower envelopes of an oscillating signal" width="600">
-_Figure 6. Upper (red) and lower (green) envelopes drawn over an oscillating signal (blue). When the signal oscillates symmetrically about a baseline, as a channeled spectrum does, the mean of the two envelopes is the baseline. (Source: Brews ohare, [Signal envelopes](https://commons.wikimedia.org/wiki/File:Signal_envelopes.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
+_Figure 6. Upper (red) and lower (green) envelopes drawn over an oscillating signal (blue). An example of envelopes drawn over a generic oscillating signal, not a channeled spectrum. (Source: Brews ohare, [Signal envelopes](https://commons.wikimedia.org/wiki/File:Signal_envelopes.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
 
 ## 8. Which dials drift in a channeled instrument?
 
 The thesis of Post 4 was that the angle a dial reports is not the true angle. The same problem arises here, but the dial that drifts is a different one.
 
-The first is **retardance**. A thick plate is sensitive to temperature. The real plates of Section 2 are hundreds of times thicker than a zero-order plate, so the same temperature change shifts their retardance correspondingly more. Calibrating in advance does not help if the temperature changes between calibration and measurement.
+The first is **retardance**. A thick plate is sensitive to temperature. The real plates of Section 2 are hundreds to thousands of times thicker than a zero-order plate, so the same temperature change shifts their retardance correspondingly more. Calibrating in advance does not help if the temperature changes between calibration and measurement.
 
 Writing the drift as $\delta\phi$, the two measured quantities move as
 
@@ -213,7 +215,7 @@ The way to undo it also resembles Post 4. In the two-retarder arrangement, the t
 
 The second dial runs deeper: **the wavelength scale itself**.
 
-A channeled instrument writes its information into fringes along the wavelength axis. The moment the pixel-to-wavelength mapping drifts, the carrier phase is corrupted directly. A group at Jeonbuk National University identified exactly this while working on an interferometric snapshot ellipsometer. Matching the known lines of a calibration lamp to the pixels of its two spectrometers, the ordinary wavelength calibration, was not enough. The spectrometers had to be calibrated against the dense peaks produced by the instrument's own Mach–Zehnder interferometer.
+A channeled instrument writes its information into fringes along the wavelength axis. The moment the pixel-to-wavelength mapping drifts, the carrier phase is corrupted directly. A group at Jeonbuk National University identified exactly this while working on an interferometric snapshot ellipsometer. The ordinary wavelength calibration, matching known lamp lines to the pixels of the two spectrometers, was not enough. The spectrometers had to be calibrated against the dense peaks produced by the instrument's own Mach–Zehnder interferometer.
 
 Post 4 dealt with an angular dial; Post 5 deals with a retardance and a wavelength scale. Change the instrument and the dial you must distrust changes with it.
 
@@ -225,9 +227,9 @@ Okabe's instrument has a palm-sized sensing head of $220 \times 45 \times 30$ mm
 
 The author's dissertation reached similar results. An instrument that adds the back-focal-plane angle resolution of Post 6 to channeled spectroscopy measured single and multilayer films of about 10–1500 nm on silicon. A single shot of under 0.05 s, with no mechanical motion, gave both thickness and refractive index; thickness repeatability was at most 0.39 nm at three standard deviations, and agreement with a commercial ellipsometer reached $R^2 = 0.9999$.
 
-It is worth noting where the field is heading. The doubt the snapshot family has long carried is accuracy: the belief that it falls well short of commercial spectroscopic ellipsometry. Recent work confronts that directly. The snapshot approach of Wang and colleagues, using the back focal plane, brings the thickness RMS error down to $0.2$ nm against a commercial instrument and, at $1$ ms exposure, maps 60,000 points on a 4-inch wafer in 600 s, more than a hundred times faster than a commercial spectroscopic ellipsometer.
+It is worth noting where the field is heading. The doubt often raised about the snapshot family is accuracy: the belief that it falls well short of commercial spectroscopic ellipsometry. Recent work shows that doubt to be wrong. The snapshot approach of Wang and colleagues, using the back focal plane, brings the thickness RMS error down to $0.2$ nm against a commercial instrument and, at $1$ ms exposure, maps 60,000 points on a 4-inch wafer in 600 s, more than a hundred times faster than a commercial spectroscopic ellipsometer.
 
-With 3D NAND at 232 tiers and CFET stacking twenty to thirty layers under 10 nm each, the number of layers whose thickness and composition must be verified has exploded. An instrument that holds its accuracy while taking one frame is what breaks that bottleneck.
+According to Wang and colleagues, with 3D NAND at 232 tiers and CFET stacking twenty to thirty layers under 10 nm each, the number of layers whose thickness and composition must be verified has exploded. An instrument that holds its accuracy while taking one frame is what breaks that bottleneck.
 
 ## Summary
 
