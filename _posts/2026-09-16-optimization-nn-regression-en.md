@@ -25,7 +25,7 @@ The example is unchanged from posts 1 through 4. Normal-incidence reflectance of
 
 One thing deserves attention first. Local minima were the difficulty throughout posts 1 to 4. Yet the neural network literature does not treat local minima as nearly so serious a problem. Why?
 
-Because the number of unknowns differs. Posts 1 to 4 had a single unknown, the thickness $d$. The network built here has tens of thousands of weights. Dauphin and co-workers argued that the real obstacle in high-dimensional non-convex minimization is not local minima but saddle points, and one strand of their argument is a counting argument over dimension. For a critical point to be a local minimum, the surface must curve upward along **every** direction. As the dimension $N$ grows, the probability of satisfying that condition in all directions falls exponentially, and saddle points — up along some directions, down along others — come to dominate. Think of a mountain path. On a path that runs along a single line, any dip is a hollow. In a range that spreads in tens of thousands of directions, a hollow that rises on every side is far rarer than a pass that climbs one way and descends another.
+Because the number of unknowns differs. Posts 1 to 4 had a single unknown, the thickness $d$. The network built here has tens of thousands of weights. Dauphin and co-workers argued that the real obstacle in high-dimensional non-convex minimization is not local minima but saddle points, The first strand of their argument is a counting argument over dimension. For a critical point to be a local minimum, the surface must curve upward along **every** direction. As the dimension $N$ grows, the probability of satisfying that condition in all directions falls exponentially, and saddle points — up along some directions, down along others — come to dominate. Think of a mountain path. On a path that runs along a single line, any dip is a hollow. In a range that spreads in tens of thousands of directions, a hollow that rises on every side is far rarer than a pass that climbs one way and descends another.
 
 Read the same argument backwards and the situation of this series appears. **At $N=1$, an exact saddle point is a probability-zero event.** In a landscape with a single unknown, every critical point is an extremum, which is precisely why three basins caused so much trouble in posts 1 to 4. Weight space is a different world. That is why training the network below never raises the question of whether it is stuck in a local minimum.
 
@@ -182,7 +182,7 @@ The three cases behave entirely differently.
 
 **(c) Model error deceives both methods equally.** This is the most important result. Given the spectrum of a film whose SiO2 index is actually 1.50, while both methods assume 1.46, the network is off by +40.87 nm and LM by +40.91 nm. **The two answers agree to within 0.04 nm while both are wrong by 41 nm.** The residual, meanwhile, rises only to 4.4 times baseline, hardly an alarm next to the 1,130 of the extrapolation case.
 
-How small 4.4 is becomes clear from how the residual is tied to the noise. If the residual is noise alone, $J = \frac{1}{2}\sum_i r_i^2 \approx \frac{1}{2}N\sigma^2 = \frac{1}{2} \times 300 \times 0.004^2 = 0.0024$, which matches the baseline of the normal measurement (0.0025). The residual multiple, in other words, reads as a multiple of the noise variance. Fivefold noise should give 25 times; 23 was observed. A model error at 4.4 times is then indistinguishable from noise that has grown by $\sqrt{4.4} \approx 2.1$. On the log axis of Fig 2, only the extrapolation bar rises three orders of magnitude above baseline; fivefold noise and model error stay within one or two. The residual multiple alone cannot tell model error from a measurement that happens to be noisy today.
+To see how small 4.4 is, look at how the residual relates to the noise. If the residual is noise alone, $J = \frac{1}{2}\sum_i r_i^2 \approx \frac{1}{2}N\sigma^2 = \frac{1}{2} \times 300 \times 0.004^2 = 0.0024$, which matches the baseline of the normal measurement (0.0025). The residual multiple, in other words, reads as a multiple of the noise variance. Fivefold noise should give 25 times; 23 was observed. A model error at 4.4 times is then indistinguishable from noise that has grown by $\sqrt{4.4} \approx 2.1$. On the log axis of Fig 2, only the extrapolation bar rises three orders of magnitude above baseline; fivefold noise and model error stay within one or two. The residual multiple alone cannot tell model error from a measurement that happens to be noisy today.
 
 Post 3 showed Gauss-Newton collapsing and LM rescuing it when the refractive index was wrongly assumed to be 1.02. There the difference between algorithms decided the outcome. Here it does not. **When the forward model itself is wrong, every method built on that model is wrong in the same direction by the same amount.** The network inherits the faulty physics through its training data, LM through its fitting model.
 
@@ -199,7 +199,7 @@ The augmentation axes follow the setup Kwak and co-workers used for 3D multilaye
 - **Lateral**: the wavelength axis shifted by ±6 nm
 
 <img src="/assets/img/posts/optimization-nn-regression/en/fig3-augmentation-rmse.png" alt="Errors augmentation fixes, and errors it does not" width="700">
-_Fig 3. Prediction RMSE (log axis) without augmentation (grey) and with it (orange), for 8,000 (left) and 250 (right) training thicknesses. Of the five test conditions, only model error leaves the two bars at the same height._
+_Fig 3. Prediction RMSE (log axis) without augmentation (grey) and with it (orange), for 8,000 (left) and 250 (right) training thicknesses. Of the five test conditions, augmentation fails to reduce the error only for model error._
 
 The test conditions must include the error modes the augmentation targets. RMSE was computed over 200 random thicknesses per condition.
 
@@ -210,7 +210,7 @@ The test conditions must include the error modes the augmentation targets. RMSE 
 | 250 thicknesses, no augmentation | 9.69 | 13.48 | 39.48 | 21.22 | 22.24 |
 | 250 thicknesses, **augmented** | **2.15** | 7.08 | 41.25 | **2.39** | **2.66** |
 
-In Fig 3, the grey and orange bars are nearly equal in height only for model error. The result splits three ways.
+In Fig 3, augmentation fails to reduce the error, and even raises it slightly, only for model error. The result splits three ways.
 
 Augmentation works **only on the perturbations it covers, but there it works dramatically.** On a spectrometer whose wavelength axis is off by 4 nm, RMSE falls from 14.65 to 2.68 nm, a factor of 5.5; on a photometric offset, from 16.13 to 2.56 nm, a factor of 6.3.
 
@@ -251,7 +251,7 @@ The band was narrowed to 595-605 nm (0.12 fringes) with the noise raised fivefol
 
 The pull toward the centre that Bishop predicts appears. At 1500 nm, the centre of the training range, prediction nearly coincides with truth (−2.7 nm), because the candidates are symmetric about the centre and their average lands on the true value. Toward the edges, however, predictions are **pulled toward the centre by as much as 194 nm.** A 1750 nm sample reads as 1574.7 nm, a 1250 nm sample as 1415.9 nm. The red curve in Fig 4 is not even monotonic: as the true thickness rises from 1550 to 1650 nm, the prediction falls from 1489.4 to 1456.2 nm.
 
-The point worth attention is that **the value pulled to is not any basin at all.** 1574.7 nm is none of the thicknesses this band cannot tell apart from the 1750 nm sample (about 1341, 1545 and 1750 nm), but a value between them. No thickness with that solution exists physically; only the arithmetic mean sits there. LM would have converged to one of the three. It might be wrong, but it would be a physically meaningful value.
+The point worth attention is that **the value pulled to is not any basin at all.** 1574.7 nm matches none of the candidates (about 1341, 1545 and 1750 nm) that this band cannot distinguish from the 1750 nm sample; it lies between them. No thickness with that solution exists physically; only the arithmetic mean sits there. LM would have converged to one of the three. It might be wrong, but it would be a physically meaningful value.
 
 Repeating the test on the wide band (450-750 nm, 3.9 fringes) leaves every error below 2.5 nm. **The effect appears only when the ambiguity is real.** Nothing is wrong with the network; by the definition of the loss it has no choice but to average over what the data does not distinguish.
 
@@ -277,7 +277,7 @@ Add an unknown to see it more sharply. What happens if the refractive index $n_1
 | 450-750 nm | −0.997866 | 2.47e+08 | 0.962 |
 | 450-1000 nm | −0.996694 | 1.59e+08 | 0.967 |
 
-Widening the range moves the correlation only from −0.9979 to −0.9967, and the thickness scatter shrinks by only 8-9%. The reason lies in the physics. At normal incidence the phase is $\beta = 2\pi n_1 d / \lambda$, so reflectance depends chiefly on the **product of $n_1$ and $d$**. However much data of the same kind is collected, none of it constrains that degenerate direction.
+Widening the range moves the correlation only from −0.9979 to −0.9967, and the thickness scatter in the table above stays at 0.962 versus 0.967 nm. In the 300-point simulation below it shrinks by only about 10% (9.7%). The reason lies in the physics. At normal incidence the phase is $\beta = 2\pi n_1 d / \lambda$, so reflectance depends chiefly on the **product of $n_1$ and $d$**. However much data of the same kind is collected, none of it constrains that degenerate direction.
 
 ### Adding a different kind of measurement
 
@@ -299,11 +299,11 @@ _Fig 5. Scatter of (d, n1) estimates when the number of data points is fixed at 
 | **0°+60°, 150 points each** | **−0.976132** | **3.45e+07** | **0.458** | **0.00034** |
 | **0°+45°+70°, 100 points each** | −0.975515 | 3.84e+07 | **0.340** | **0.00024** |
 
-The same 300 points give different answers. Widening the wavelength range improves the thickness scatter by 9%, while **mixing angles improves it roughly threefold (3.1 from the linearized covariance, 3.8 in the 40-trial simulation) and the condition number by a factor of 6.4.**
+The same 300 points give different answers. Widening the wavelength range improves the thickness scatter by 9.7%, while **mixing angles improves it roughly threefold (3.1 from the linearized covariance, 3.8 in the 40-trial simulation) and the condition number by a factor of 6.4.**
 
-The normal-incidence points in Fig 5 fall on a line with a slope of about −0.001 per nm. That line is the direction along which $n_1 d$ stays constant: keeping $n_1 d$ fixed requires $\Delta n_1 = -(n_1/d)\,\Delta d \approx -(1.46/1490)\,\Delta d = -0.00098\,\Delta d$, and lines fitted to the normal-incidence points have slopes of −0.00097 to −0.00098 per nm. The line the points follow is the degenerate direction. Mixing angles (orange) turns the slope slightly, to about −0.0007 per nm, and shortens the spread considerably.
+The normal-incidence points in Fig 5 fall on a line with a slope of about −0.001 per nm. That line is the direction along which $n_1 d$ stays constant: keeping $n_1 d$ fixed requires $\Delta n_1 = -(n_1/d)\,\Delta d \approx -(1.46/1490)\,\Delta d = -0.00098\,\Delta d$, and lines fitted to the normal-incidence points have slopes of −0.00097 to −0.00098 per nm. The line the points follow is the degenerate direction. Mixing angles (orange) shortens the spread considerably.
 
-This is the conclusion of the post. **What is needed is not "enough data" but "data that sees the degenerate direction."** Kwak and Kim reach the same conclusion for semiconductor multilayer metrology. They write that single-wavelength ellipsometry does not yield a unique multilayer thickness solution, so multiangle or multisample measurements are used alongside it, and that this additional information improves the uniqueness of the characterization.
+This is the conclusion of section 9. **What is needed is not "enough data" but "data that sees the degenerate direction."** Kwak and Kim reach the same conclusion for semiconductor multilayer metrology. They write that single-wavelength ellipsometry does not yield a unique multilayer thickness solution, so multiangle or multisample measurements are used alongside it, and that this additional information improves the uniqueness of the characterization.
 
 And this is not a neural network story. Johnson, treating parameter cross-correlation in curve fitting generally, observed that once the correlation is nearly complete the estimation procedure cannot identify unique parameter values or their standard errors. The correlation coefficient in his two-exponential example was −0.999933, the same kind of degeneracy as the −0.9979 seen here. More important is the qualification he adds: a correlation between two parameters does not imply that anything in the underlying mechanism is correlated, and **may simply be a consequence of estimating from a limited set of observations.**
 
@@ -311,7 +311,7 @@ And this is not a neural network story. Johnson, treating parameter cross-correl
 
 From gradient descent in post 1 to here, five posts have solved the same problem with seven methods: gradient descent, Newton's method, Gauss-Newton, LM, simulated annealing, Basin-Hopping and the network regressor. Posts 1 through 4 were about how well a given set of data can be mined: how to use the gradient ([post 1](/en/posts/optimization-gradient-descent/)), how to approximate the curvature ([post 2](/en/posts/optimization-newton-gauss-newton/)), how to tune the damping ([post 3](/en/posts/optimization-levenberg-marquardt/)), how to cross between basins ([post 4](/en/posts/optimization-global-heuristics/)).
 
-Post 5 adds a layer on top. A learned function **cannot replace** iterative optimization. It loses on accuracy, its precision swings with the training seed, and it collapses outside its training range. What it can do is **pick the basin**, matching Basin-Hopping's success rate with 1/52 of the forward-model calls. Its place as an initial-value supplier rather than a replacement was already written down thirty years ago, and these experiments confirm it again.
+Post 5 adds a layer on top. In this example, a learned function **could not replace** iterative optimization. It loses on accuracy, its precision swings with the training seed, and it collapses outside its training range. What it can do is **pick the basin**, matching Basin-Hopping's success rate with 1/52 of the forward-model calls. Its place as an initial-value supplier rather than a replacement was already written down thirty years ago, and these experiments confirm it again.
 
 There is one thing none of the five can do. **Create information that is not there.** In a measurement where index and thickness enter only as a product, neither LM nor the network can separate them. LM converges wherever the starting value sends it; the network quietly returns an average. What is needed then is not a better algorithm but one more angle of incidence.
 
