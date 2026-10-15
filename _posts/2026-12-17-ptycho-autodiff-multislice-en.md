@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Computational Imaging and Ptychography 9 — Is a Forward Model All We Need? Automatic Differentiation and Thick Specimens"
+title: "Computational Imaging and Ptychography 9 — Is a Forward Model All We Need?"
 lang: en
 lang-exclusive: ["en"]
 permalink: /posts/ptycho-autodiff-multislice/
@@ -18,7 +18,7 @@ Yet the most effort always went into the gradient. We had to derive the derivati
 
 This post asks two questions. Does automatic differentiation really replace the hand derivation? And what does it not replace? Finally, we use the same framework on the thick specimens we have so far avoided. The calculations were done in PyTorch.
 
-## 1. The Series in One Table
+## 1. What Do the Methods So Far Look Like in One Table?
 
 | Post | Unknowns | Cost | One step |
 |---|---|---|---|
@@ -42,12 +42,12 @@ _Fig 1. Autodiff gradient (half, per the PyTorch convention) against the hand-de
 
 For all three costs the maximum relative difference is below $2\times10^{-9}$. One point differs, by exactly a factor of two. PyTorch differentiates a complex variable through its real and imaginary parts, so it returns twice the gradient $\partial L / \partial O^*$ taken with respect to the conjugate variable. The direction is identical; only the step size needs rescaling. In short, writing a few lines of forward model reproduces the derivative worked out by hand in post 6 automatically.
 
-## 3. Choosing an Optimizer
+## 3. Does Changing the Optimizer Change the Result?
 
 If the gradients are the same, are the results? We used the problem of post 6 ($10^6$ photons per pattern, unknown probe), started with 50 iterations of rPIE, and continued with three methods: the hand-coded ML of post 6, Adam, the optimizer common in machine learning, and L-BFGS, a quasi-Newton method. All reduce the same Poisson cost.
 
 <img src="/assets/img/posts/ptycho-autodiff-multislice/en/fig2-optimizers.png" alt="Object error versus iteration count and time for hand-coded ML, Adam with three step sizes, and L-BFGS" width="950">
-_Fig 2. Convergence from a 50-iteration rPIE result with the probe unknown (median of 3 noise draws; right: one draw). Hand-coded ML is fastest, Adam reaches the same answer later depending on its step, L-BFGS stalled_
+_Fig 2. Convergence from a 50-iteration rPIE result with the probe unknown (median of 3 noise draws; right: one draw). Hand-coded ML is fastest, Adam reaches the same answer later depending on its step, L-BFGS stalled (at 0.026 in the draw on the right)_
 
 | Method | 10 iter. | 50 iter. | 100 iter. | 300 iter. | Time per iteration |
 |---|---|---|---|---|---|
@@ -59,13 +59,13 @@ _Fig 2. Convergence from a 50-iteration rPIE result with the probe unknown (medi
 
 The starting error is 0.036, and the entries are medians over three noise realizations. Hand-coded ML was fastest: it reached the final value in 10 iterations, 3.7 s. Adam takes half the time per iteration, but needed 50–100 iterations (9–18 s) to reach the same answer. With step 0.003 it had not arrived by 300 iterations. L-BFGS stopped at 0.026 in one of the three realizations.
 
-Why is the hand-coded version faster when the gradients agree? The difference lies in how a step is taken. The ML of post 6 divided the gradient by the illumination each pixel received, $\sum \lvert P \rvert^2$. A well-lit pixel has plenty of data and should change little; a poorly lit pixel should change a lot. This scaling comes from the physics. On top of it sat a line search that accepts only steps that actually reduce the cost. Adam does something similar by dividing each pixel's step by the magnitude of its past gradients, but it has to learn this from the data, which takes time, and the overall step size is still chosen by a person. This is the same situation as the momentum value in post 5, which differed from problem to problem. The LSQ-ML of Odstrčil et al. pushes the idea further and computes the best step along each update direction in closed form by least squares. In short, automatic differentiation replaces the gradient, but not a good step.
+Why is the hand-coded version faster when the gradients agree? The difference lies in how a step is taken. The ML of post 6 divided the gradient by the illumination each pixel received, $\sum \lvert P \rvert^2$. A well-lit pixel has plenty of data and should change little; a poorly lit pixel should change a lot. This scaling comes from the physics. On top of it sat a line search that accepts only steps that actually reduce the cost. Adam does something similar by dividing each pixel's step by the magnitude of its past gradients, but it has to learn this from the data, which takes time, and the overall step size is still chosen by a person. This is the same situation as the momentum value in post 5, which differed from problem to problem. The LSQ-ML of Odstrčil et al. pushes the idea further and computes the best step along each update direction in closed form by least squares. In short, automatic differentiation replaces the gradient, but not a good step. Since the gradients themselves agree (Fig 1), putting the same illumination scaling and line search on the autodiff gradient would likely narrow the gap; this post did not test that combination. What separated in this comparison was not automatic differentiation but the optimizer that chooses the step.
 
-The starting point matters in the same way. On the same data, starting directly from an empty object and a disk probe without rPIE, Adam descended only from 0.78 to 0.62 in 300 iterations, and L-BFGS stayed at 0.69–0.80. rPIE reached 0.036 in 50 iterations. In the early phase of a reconstruction with an unknown probe, the projection methods refined since post 3 are still strong. The order of post 6, starting with rPIE and finishing with ML, holds here too.
+The starting point matters in the same way. On the same data, starting directly from an empty object and a disk probe without rPIE, Adam descended only from 0.78 to 0.62 in 300 iterations, and L-BFGS stayed at 0.69–0.80. rPIE reached 0.036 in 50 iterations. In this calculation, in the early phase of a reconstruction with an unknown probe, the projection methods refined since post 3 were still strong. The order of post 6, starting with rPIE and finishing with ML, holds here too.
 
-## 4. Positions as Unknowns
+## 4. What Happens When Positions Become Unknowns Too?
 
-The real advantage of AD is how easily it adds unknowns. Consider the position correction of post 7 again. Shifting the probe by a sub-pixel amount at each position is a Fourier phase ramp, so it is differentiable with respect to the shift. We put the shift into the probe in the forward model and add the shifts to the list of unknowns. We wrote not one line of the derivative with respect to position. As in post 7, the ambiguity of shifting all positions together was removed by resetting the mean of the corrections to zero at every iteration.
+The real advantage of AD is how easily it adds unknowns. Consider the position correction of post 7 again. Shifting the probe by a sub-pixel amount at each position is a Fourier phase ramp, so it is differentiable with respect to the shift. We put the shift into the probe in the forward model and add the shifts to the list of unknowns. We did not write a single line of the position derivative. As in post 7, the ambiguity of shifting all positions together was removed by resetting the mean of the corrections to zero at every iteration.
 
 <img src="/assets/img/posts/ptycho-autodiff-multislice/en/fig3-autodiff-positions.png" alt="Initial position error and the error remaining after AD-based correction" width="650">
 _Fig 3. Position correction by autodiff with the positions as unknowns (3 error draws). Large errors are not fully corrected_
@@ -80,7 +80,7 @@ From the rPIE 50-iteration result we updated the object, probe and positions tog
 
 In short, automatic differentiation nearly removes the cost of adding a new unknown. How well that unknown is found still depends on the shape of the cost and on the step.
 
-## 5. Thick Specimens and the Multislice Model
+## 5. How Do We Model a Thick Specimen?
 
 In every post so far the exit wave was the product of the probe and the object. That is an approximation for thin specimens. In a thick specimen, light spreads inside, and the front and back parts are crossed at different angles. A single product cannot express this. In 2012 Maiden, Humphry and Rodenburg brought the multislice model, used in electron microscopy, to ptychography. The specimen is divided into several thin slices; the wave is multiplied by each slice and then propagated through free space to the next.
 
@@ -104,11 +104,13 @@ _Fig 4. Data residual (left) and specimen error (right) versus the separation be
 The one-slice model explains the data less and less as the spacing grows. The residual rises from $10^{-2}$ at 1 µm to 0.12 at 80 µm. The product approximation breaks down. The two-slice model recovers the two slices separately once the spacing is 10 µm or more. At 30 µm and beyond, the error is of order $10^{-6}$.
 
 <img src="/assets/img/posts/ptycho-autodiff-multislice/en/fig5-multislice-images.png" alt="True first and second slices, the two slices reconstructed by the two-slice model at 30 µm and 1 µm, and the one-slice result at 30 µm" width="950">
-_Fig 5. With enough separation the two-slice model recovers each slice (top); with close slices it fits the data but the slices mix (bottom right)_
+_Fig 5. With enough separation the two-slice model recovers each slice (top); with close slices it fits the data but the slices mix (bottom third)_
 
-The situation differs when the spacing is small. At 1 µm the two-slice model fits the data well (residual $1.7\times10^{-3}$). The per-slice error, however, is 0.078, and as in the lower right of Fig 5 the pattern of the second slice shows through in the first. This is the ambiguity pointed out by Maiden et al. When two slices are close enough for the product approximation to hold, replacing them by $(f\,O_1,\ O_2/f)$ for any function $f$ leaves the measurement nearly unchanged. It has the same form as the periodic function that a regular grid let the object and probe trade in [post 4](/posts/ptycho-probe-ambiguity-raster-rpie/). In short, the power of the multislice model to separate slices, its depth resolution, is set by the probe. The larger the numerical aperture, the more the spreading of light differs even over short distances, and the better two slices can be told apart. In this calculation the two slices separated clearly at 10 µm, about a third of $\lambda/\mathrm{NA}^2$; among the spacings tested, the boundary lay between 3 µm and 10 µm.
+The situation differs when the spacing is small. At 1 µm the two-slice model fits the data well (residual $1.7\times10^{-3}$). The per-slice error, however, is 0.078, and as in the third lower panel of Fig 5 the pattern of the second slice shows through in the first. This is the ambiguity pointed out by Maiden et al. When two slices are close enough for the product approximation to hold, replacing them by $(f\,O_1,\ O_2/f)$ for any function $f$ leaves the measurement nearly unchanged. It has the same form as the periodic function that a regular grid let the object and probe trade in [post 4](/posts/ptycho-probe-ambiguity-raster-rpie/).
 
-## 6. The Price and the Tools
+In short, the power of the multislice model to separate slices, its depth resolution, is set by the probe. The larger the numerical aperture, the more the spreading of light differs even over short distances, and the better two slices can be told apart. In this calculation the two slices separated clearly at 10 µm, about a third of $\lambda/\mathrm{NA}^2$; among the spacings tested, the boundary lay between 3 µm and 10 µm.
+
+## 6. What Does This Framework Cost, and Which Tools Implement It?
 
 Automatic differentiation has a cost. Walking backwards requires remembering every intermediate value of the forward pass, which takes a lot of memory. With real data of tens of thousands of positions and several slices, this becomes the limit. Practical tools therefore process positions in batches and use GPUs. The calculations here ran on a laptop CPU, with 0.18 s per Adam iteration.
 
@@ -118,13 +120,13 @@ Tools in this direction have indeed taken hold. PtyRAD by Lee et al. optimizes p
 
 The algorithms of posts 3 through 8 were all ways of reducing one cost. Automatic differentiation takes over the gradient. It matched the hand-derived gradient exactly, and it turned adding a new unknown or a new model, such as positions or slices, into one or two lines of forward model.
 
-What it does not take over was equally clear. The hand-coded version, which divides the step by the illumination, was 2–5 times faster than Adam, and Adam's step still had to be chosen by a person. From an empty start with an unknown probe, both Adam and L-BFGS lagged far behind rPIE. Position correction was less precise than the dedicated methods and could not fix large errors. The practical order is therefore unchanged: start quickly with a projection method and finish with a differentiable model. Automatic differentiation nearly removes the cost of changing the model in that finishing stage.
+What it does not take over was equally clear. In this problem the hand-coded version, which divides the step by the illumination, was 2–5 times faster than Adam, and Adam's step still had to be chosen by a person. From an empty start with an unknown probe, both Adam and L-BFGS lagged far behind rPIE. Position correction was less precise than the dedicated methods and could not fix large errors. The practical order is therefore unchanged: start quickly with a projection method and finish with a differentiable model. Automatic differentiation nearly removes the cost of changing the model in that finishing stage.
 
 Thick specimens were handled with the multislice model. The product approximation explained the data less as the spacing between the two slices grew, and the two-slice model recovered the two slices separately when their spacing was wide enough for the probe to tell them apart. When they were too close, it fit the data while the two slices mixed.
 
 ## Next Post
 
-Post 10 closes this series. So far imaging has meant looking at a specimen; the same technology can also measure it. We move to imaging reflectometry, the study of measuring the thickness and composition of thin films and patterns by extreme ultraviolet (EUV) reflective ptychography. It is where the reflection measurements of the ellipsometer series meet the phase retrieval of this one.
+Post 10 closes this series. So far imaging has meant looking at a specimen; the same technology can also measure it. We move to imaging reflectometry, which uses extreme ultraviolet (EUV) reflection ptychography to measure the thickness and composition of thin films and patterns. It is where the reflection measurements of the ellipsometer series meet the phase retrieval of this one.
 
 ## References
 
