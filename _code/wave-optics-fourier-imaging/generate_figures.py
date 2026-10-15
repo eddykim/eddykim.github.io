@@ -380,11 +380,20 @@ def figure7(L):
         I = incoherent_image(obj, dx, NA, LAM, W)
         ax.imshow(I, cmap="gray", origin="lower", extent=[-n * dx / 2, n * dx / 2] * 2)
         ttl = t(L, f"({lab}) 바큇살 표적, 초점", f"({lab}) Spoke target, in focus") if Wd == 0 else \
-            t(L, f"({lab}) 초점 어긋남 $W_{{020}}$ = 1 λ\n가운데 근처 고리에서 명암이 뒤집힌다", f"({lab}) Defocus $W_{{020}}$ = 1 λ\ncontrast flips in rings near the centre")
+            t(L, f"({lab}) 초점 어긋남 $W_{{020}}$ = 1 λ\n주황 점선 두 고리 사이에서 명암이 뒤집힌다", f"({lab}) Defocus $W_{{020}}$ = 1 λ\ncontrast flips between the two orange dotted rings")
         ax.set_title(ttl, fontsize=10, **font(L))
         ax.set_xlabel("x (µm)")
         r_cut = 36 / (2 * np.pi * 2 * NA / LAM)
         ax.add_patch(mpatches.Circle((0, 0), r_cut, fill=False, ec="c", ls="--", lw=0.9))
+        if Wd:                       # OTF 가 음수인 주파수 구간(첫 영점 ~ 마지막 음수 끝)에 해당하는 고리
+            W1 = (lambda rho, th: rho**2)
+            nu_f = np.linspace(0.02, 1.0, 400) * 2 * NA / LAM
+            O = np.real(otf_by_overlap(nu_f * 0 + nu_f, NA, LAM, W=W1, m=501))
+            neg = nu_f[O < 0]
+            r_hi, r_lo = (36 / (2 * np.pi * neg.min()), 36 / (2 * np.pi * neg.max()))
+            for rr in (r_lo, r_hi):
+                ax.add_patch(mpatches.Circle((0, 0), rr, fill=False, ec=C_KEY, ls=":", lw=1.4))
+            print(f"    그림7(c): OTF<0 구간 반지름 {r_lo:.2f}–{r_hi:.2f} µm (주파수 {neg.min()/(2*NA/LAM):.2f}–{neg.max()/(2*NA/LAM):.2f} 차단)")
     fig.tight_layout()
     save(fig, L, "fig7-defocus-mtf-spoke.png", palette=True)
 
