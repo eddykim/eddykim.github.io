@@ -21,7 +21,7 @@ Optimization theory is the branch concerned with finding the parameter $x$ that 
 
 $$ x^* = \arg\min_x J(x) $$
 
-When $J$ is linear or quadratic, $x^*$ can sometimes be obtained algebraically. When $J$ is nonlinear or the dimension of $x$ grows, however, closed-form solutions are the exception rather than the rule. This is where iterative methods are used. Starting from an initial estimate $x_0$, the parameter is updated at each step in a direction that decreases $J(x)$, approaching the minimum. This contrasts with direct methods, which reach the solution in a fixed number of operations.
+When $J$ is quadratic (as in least squares with a linear model), $x^*$ can be obtained algebraically. When $J$ is nonlinear or the dimension of $x$ grows, however, closed-form solutions are the exception rather than the rule. This is where iterative methods are used. Starting from an initial estimate $x_0$, the parameter is updated at each step in a direction that decreases $J(x)$, approaching the minimum. This contrasts with direct methods, which reach the solution in a fixed number of operations.
 
 The series has five parts. This one covers the simplest method, gradient descent. [Part 2](/posts/optimization-newton-gauss-newton/) treats Newton's method and the Gauss-Newton method, and [Part 3](/posts/optimization-levenberg-marquardt/) treats LM (Levenberg-Marquardt), the de facto standard in metrology. [Part 4](/posts/optimization-global-heuristics/) turns to global optimization heuristics that get past local minima, and [Part 5](/posts/optimization-nn-regression/) asks whether neural-network regression can replace iterative optimization.
 
@@ -65,9 +65,9 @@ The shallow valleys bottom out at 1293 nm and 1689 nm, where $J$ (0.87 and 1.06)
 
 Section 2 established why an iterative method is needed. For such a method to proceed, each step must determine in which direction, and by how much, to move from the current estimate $d_k$ to the next estimate $d_{k+1}$. Moving in an arbitrary direction may increase $J$, so this decision requires a basis. That basis is provided by the gradient.
 
-The derivative $dJ/dd$ indicates the direction through its sign and, through its magnitude, how steeply $J$ changes at that point. $J$ is large at the initial value in Fig 1 ($d=1540$ nm), so that point is not the optimum, and the gradient there indicates the direction of motion that decreases $J$. In this post the only parameter is thickness, so the gradient is a scalar derivative. In later posts, as parameters multiply (multilayer thicknesses, refractive indices, and so on), this scalar extends to a gradient vector and the second derivative to a Hessian matrix.
+The derivative $dJ/dd$ indicates the direction through its sign and, through its magnitude, how steeply $J$ changes at that point. In Fig 2, $J$ at the initial value $d=1540$ nm is far above the global minimum, so that point is not the optimum, and the sign of the gradient there indicates the direction of motion that decreases $J$. In this post the only parameter is thickness, so the gradient is a scalar derivative. In later posts, as parameters multiply (multilayer thicknesses, refractive indices, and so on), this scalar extends to a gradient vector and the second derivative to a Hessian matrix.
 
-Repeatedly moving along the gradient eventually reaches a point with no direction left to move, that is, a point where the gradient is zero. The necessary condition at the minimum of $J(d)$ is therefore:
+Repeatedly moving against the gradient eventually stops at a point with no downhill direction left, that is, where the gradient is zero. Conversely, at the minimum of $J(d)$ the gradient must vanish; this is the necessary condition:
 
 $$ \frac{dJ}{dd} = 0 $$
 
@@ -116,7 +116,7 @@ The blue curve (`alpha=300`) reaches the true value (1490 nm, within 0.3 nm) aft
 
 That value is no accident. When the model sits at the true parameter, only noise remains, and the expected value of $J$ is then $\tfrac{1}{2}N\sigma^2$, where $N=300$ is the number of wavelength points and $\sigma=0.004$ the noise standard deviation. This gives $\tfrac{1}{2}\cdot300\cdot0.004^2=0.0024$. Once $J$ flattens near this value, all the mismatch the model can explain is gone, and further iterations will not improve the thickness. This serves as a stopping criterion: stop when $J$ reaches about $\tfrac{1}{2}N\sigma^2$, and suspect the model or the initial value if it flattens well above it.
 
-The red curve (`alpha=1500`) behaves differently. It oscillates by tens to over a hundred nanometres per step — 1540 → 1423 → 1527 → 1416 → 1503 — and fails to converge through all twenty iterations (Fig 3). It passes near the minimum on occasion (at the seventh iteration $J$ falls to approximately 0.03, Fig 4) but departs again at the following step. The situation is that of descending a valley with a stride so long that it overshoots the floor and climbs the opposite slope.
+The red curve (`alpha=1500`) behaves differently. It oscillates by tens to over a hundred nanometres per step — 1540 → 1423 → 1527 → 1416 → 1503 — and fails to converge through all twenty iterations (Fig 3). It passes near the minimum on occasion (at the seventh iteration $J\approx0.03$, and at the eleventh it falls to about 0.007, Fig 4) but departs again at the following step. The situation is that of descending a valley with a stride so long that it overshoots the floor and climbs the opposite slope.
 
 Why the two curves part ways can be explained in one line by treating the floor as a parabola. Near the minimum $$d^*$$ the gradient is approximately $$J''\,(d-d^*)$$, and substituting this into the update gives
 
