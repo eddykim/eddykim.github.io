@@ -15,7 +15,7 @@ math: true
 
 ## 1. Why does no refractive index enter reflection?
 
-Refraction takes the refractive indices of both media as inputs; Snell's law itself is $n_1 \sin\theta_1 = n_2 \sin\theta_2$. On top of that, the lens, the prism and the TIR branch of this library each computed the refraction angle in their own way.
+Refraction takes the refractive indices of both media as inputs; Snell's law itself is $n_1 \sin\theta_1 = n_2 \sin\theta_2$. On top of that, the library's lens, prism and TIR branch each worked out the ray's new direction in their own way.
 
 Reflection is different. It says only that the angle of incidence equals the angle of reflection, and no refractive index appears. Split the incident vector $\vec v$ into a component along the normal $\hat n$ and one along the tangent:
 
@@ -119,7 +119,7 @@ def _vertex_normal(x0, y0, x1, y1, x2, y2, xc, yc, dup_point):
     return n / np.linalg.norm(n)
 ```
 
-Writing the circle as $x^2+y^2+J_0 x+J_1 y+J_2=0$ and substituting the three points gives a linear system: each row of `M` holds one point's coordinates and the matching entry of `P` holds that point's $-(x^2+y^2)$. Transcribing a system like this invites a familiar mistake: copy a line, paste it, and forget to change one index. The `dup_point=True` branch reproduces that mistake. It puts the second point `(x1, y1)`, the vertex itself, into the third entry of `P` instead of the third point `(x2, y2)`. How much can one wrong index move the reflected ray?
+Writing the circle as $x^2+y^2+J_0 x+J_1 y+J_2=0$ and substituting the three points gives a linear system: each row of `M` is one point's $(x, y, 1)$ and the matching entry of `P` holds that point's $-(x^2+y^2)$. Transcribing a system like this invites a familiar mistake: copy a line, paste it, and forget to change one index. The `dup_point=True` branch reproduces that mistake. It puts the second point `(x1, y1)`, the vertex itself, into the third entry of `P` instead of the third point `(x2, y2)`. How much can one wrong index move the reflected ray?
 
 The system does not become degenerate. The third row of `M` is still `(x2, y2)`, so the matrix stays non-singular and `solve` returns an answer without a warning. The mistake therefore produces plausible numbers and no error message. What breaks is the premise that both sides of the third equation refer to the same point. The resulting circle passes through the first two points, the previous point and the vertex, and misses only the third. The two versions were compared while making the adjoining edges increasingly unequal in length and slope (`verify_vertex_normal.py`).
 
@@ -129,14 +129,16 @@ asymmetric vertex: n_dup=[-0.057, -0.998]  n_uniq=[0.310, -0.951]  diff=21.319de
 more asymmetric  : n_dup=[0.161, -0.987]  n_uniq=[0.685, -0.728]  diff=33.983deg  third point missed by 143.4mm
 ```
 
-In these coordinates the discrepancy grows with asymmetry, 12° to 21° to 34°, and the distance by which the corrupted circle misses the third point grows with it, 35 mm to 76 mm to 143 mm. The ordering, however, is not set by the shape of the vertex. With the right-hand sides of the second and third equations now equal, subtracting them forces the centre $\vec c$ to satisfy $\vec c\cdot(\vec p_2-\vec p_1)=0$. That pins the centre to a line through the coordinate origin, so the same mirror gives a different error depending on where it sits in the coordinate system. Shifting the three vertices by 500 mm in $y$ reverses the trend: 17.5° to 13.6° to 9.1°. A ray sent perpendicularly onto a symmetric vertex ought to retrace its own path (Fig 2). With the normal from the reused third point it leaves 24° off course instead, twice the 12° error in the normal, the doubling of section 1.
+In these coordinates the discrepancy grows with asymmetry, 12° to 21° to 34°, and the distance by which the corrupted circle misses the third point grows with it, 35 mm to 76 mm to 143 mm. The ordering, however, is not set by the shape of the vertex alone. With the right-hand sides of the second and third equations now equal, subtracting them forces the centre $\vec c$ to satisfy $\vec c\cdot(\vec p_2-\vec p_1)=0$. That pins the centre to a line through the coordinate origin, so the same mirror gives a different error depending on where it sits in the coordinate system. Shifting the three vertices by 500 mm in $y$ reverses the trend: 17.5° to 13.6° to 9.1°.
+
+A ray sent perpendicularly onto a symmetric vertex ought to retrace its own path (Fig 2). With the normal from the reused third point it leaves 24° off course instead, twice the 12° error in the normal, the doubling of section 1.
 
 <img src="/assets/img/posts/raytracing-reflection-family/en/fig2-vertex-normal-typo.png" alt="Effect of the vertex normal calculation" width="600">
 _Fig 2. A ray falls vertically onto the symmetric vertex (0, 50), whose neighbours are (−100, 0) and (100, 0). Reusing the third point (red solid) tilts the normal by 12.1°, which turns the reflected ray by twice that, 24.2°. Using all three points (blue dashed) retraces the incident path, so the blue dashed line hides the grey incident ray._
 
 ## 4. What does this implementation leave out?
 
-The reflection formula is independent of the medium, and one copy of it suffices, but the accuracy rests entirely on how the normal is found. As `ArbitraryMirror` shows, an edge hit and a vertex hit compute the normal in quite different ways, and the result is correspondingly sensitive to how that is done.
+The reflection formula is independent of the medium, and one copy of it suffices, but the accuracy rests entirely on how the normal is found. As `ArbitraryMirror` shows, an edge hit and a vertex hit compute the normal in quite different ways. That is why the vertex handling of section 3 decides the accuracy.
 
 Reflectance is not modelled either. Even `BeamSplitter` emits the reflected and transmitted rays as two full-strength rays. A real beam splitter divides the intensity according to its reflection-to-transmission ratio, such as 50:50. The one in Fig 3 is aluminium-coated to reflect 80%.
 
