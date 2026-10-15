@@ -20,7 +20,7 @@ The two problems are of the same kind: the model that explains the measurement i
 With a scan step of 8 pixels, Gaussian errors were added to each position, and the reconstruction trusted those wrong positions as they were. At what error does trouble start?
 
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig1-position-error-recon.png" alt="True specimen phase and phases reconstructed with positions wrong by 1.4 px rms, without correction, with annealing, and with the gradient method" width="950">
-_Fig 1. Phase reconstructed from the same data with positions wrong by 1.4 px rms. Uncorrected it collapses; correcting the positions recovers it._
+_Fig 1. Phase reconstructed from the same data with positions wrong by 1.4 px rms. Uncorrected it collapses; correcting the positions recovers it. The specimen errors in the panels are for a single error draw, so they differ from the medians in the table._
 
 It breaks at far smaller errors than one might expect. With exact positions the specimen error is 0.0023. With positions wrong by only 0.35 px rms, one twenty-third of the scan step, it becomes 0.060, 26 times larger. At 1.4 px it is 0.23, and the image becomes blotchy, as in the second panel of Fig 1.
 
@@ -36,12 +36,12 @@ The second is a gradient method. Differentiating the amplitude cost $E_j$ of Pos
 
 $$ \frac{\partial E_j}{\partial \mathbf{d}} = 2\,\mathrm{Re}\left\langle \chi_j,\ \mathcal{F}\left[ -(\nabla P)(r - \mathbf{d})\, O_j \right] \right\rangle $$
 
-Here $\mathbf{d}$ is the sub-pixel shift of position $j$, and $\chi_j = \left(1 - \sqrt{n_j}/\lvert\Psi_j\rvert\right)\Psi_j$ is the amplitude-cost gradient from Post 6. The term in brackets on the right is the direction in which the exit wave changes when the probe moves. In other words, it measures how much the change of the exit wave overlaps with the correction the data demand. The larger the probe gradient $\nabla P$, the larger this quantity, so the same property that made the reconstruction sensitive to position in Section 1 becomes the clue for finding it. Positions were moved by a Gauss–Newton step, this gradient divided by its squared size and multiplied by 0.5, limited to 0.5 pixel per step.
+Here $\mathbf{d}$ is the sub-pixel shift of position $j$, and $\chi_j = \left(1 - \sqrt{n_j}/\lvert\Psi_j\rvert\right)\Psi_j$ is the amplitude-cost gradient from Post 6. The term in brackets on the right is the direction in which the exit wave changes when the probe moves. In other words, it measures how much the change of the exit wave overlaps with the correction the data demand. The larger the probe gradient $\nabla P$, the larger this quantity, so the same property that made the reconstruction sensitive to position in Section 1 becomes the clue for finding it. Positions were moved by a Gauss–Newton step: this gradient divided by its squared size, multiplied by 0.5 and limited to 0.5 pixel per step.
 
 One point deserves attention. Moving all positions together in the same direction is the shift ambiguity from [Post 4](/en/posts/ptycho-probe-ambiguity-raster-rpie/). If the specimen moves along with them, the measurement is unchanged, so the data cannot fix the mean of the positions. The mean of the corrections was therefore reset to zero at every iteration.
 
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig2-position-correction.png" alt="Final specimen error versus position error, and the position error reduced by annealing and the gradient method at 1.4 px rms" width="950">
-_Fig 2. Left, final specimen error versus position error (3 error draws); right, convergence of the remaining position error at 1.4 px rms. Both methods cut the error sharply._
+_Fig 2. Left, final specimen error versus position error (3 error draws; the shading spans minimum to maximum); right, convergence of the remaining position error at 1.4 px rms. Both methods cut the error sharply._
 
 | Position error (rms) | No correction | Annealing | Gradient |
 |---|---|---|---|
@@ -50,12 +50,12 @@ _Fig 2. Left, final specimen error versus position error (3 error draws); right,
 | 1.4 px | 0.23 | 0.011 | 0.0065 |
 | 2.8 px | 0.38 | 0.010 | 0.036 |
 
-The values are median specimen errors after 300 iterations. Both methods reduced the position errors sharply. An error of 0.71 px fell to 0.005 px with annealing and 0.003 px with the gradient method, and the specimen error came close to the 0.0023 of exact positions. The positions were recovered from the data to a few hundredths of a pixel or better.
+The values are median specimen errors after 300 iterations. Both methods reduced the position errors sharply. An error of 0.71 px fell to 0.005 px with annealing and 0.003 px with the gradient method, and the specimen error came close to the 0.0023 of exact positions. For the 0.71 px error, the positions were recovered from the data to a few thousandths of a pixel.
 
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig3-position-arrows.png" alt="Errors of the nominal positions and the errors left after annealing, drawn as arrows" width="900">
 _Fig 3. Errors of the 144 positions drawn as arrows (magnified 5×). After annealing they shrink almost to dots._
 
-The two methods part ways when the errors are large. Annealing searched only a 1-pixel radius at a time yet corrected an error of 2.8 px (0.03 px left). Because new candidates are drawn around the position it has just moved to, a position can walk a long way over many iterations. The gradient method left positions about 0.5 px off in the same case. A gradient uses only information near the current position, so it slows down when started outside the range where the cost decreases smoothly. Conversely, for errors of 0.7 px or less, the gradient method located the positions more precisely (0.002–0.003 px, against 0.005–0.007 px for annealing). The handbook notes that annealing and the cross-correlation method increase the total computation by about a factor of three. If the positions are badly wrong, start with annealing; if they are nearly right, refine with the gradient.
+The two methods part ways when the errors are large. Annealing searched only a 1-pixel radius at a time yet corrected an error of 2.8 px (0.03 px left). Because new candidates are drawn around the position it has just moved to, a position can walk a long way over many iterations. The gradient method left positions about 0.5 px off in the same case. A gradient uses only information near the current position, so it slows down when started outside the range where the cost decreases smoothly. Conversely, for errors of 0.7 px or less, the gradient method left smaller position errors (0.002–0.003 px, against 0.005–0.007 px for annealing). The specimen errors in the table, however, are lower for annealing at 0.35 px and 0.71 px, so at small errors both methods were sufficient. The handbook notes that annealing and the cross-correlation method increase the total computation by about a factor of three. From this comparison alone, when the positions are badly wrong, it is safer to start with annealing.
 
 ## 3. How Does the Measurement Change When the Light Is Not Fully Coherent?
 
@@ -70,7 +70,7 @@ There can be tens or hundreds of source points. Fortunately this can be rewritte
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig4-coherent-modes.png" alt="Coherent-mode amplitudes and occupancies of the probe for a coherent source and two extended sources" width="850">
 _Fig 4. Coherent modes (amplitude) and occupancies of the probe made by an extended source. The wider the source, the smaller the first mode's share._
 
-Fig 4 uses two widths for the source illuminating the pinhole. The first mode's occupancy is 72 % for the narrower one and 47 % for the wider one. The second and third modes are two-lobed and have equal occupancies. Thibault and Menzel reported that even in an X-ray experiment thought to be highly coherent the first mode carried about 80 %, and in an experiment with reduced coherence less than 40 %. Mixtures of this size are common in practice.
+Fig 4 uses two widths for the source illuminating the pinhole. The first mode's occupancy is 72 % for the narrower one and 47 % for the wider one. The second and third modes are two-lobed and have equal occupancies. Thibault and Menzel reported that even in an X-ray experiment thought to be highly coherent the first mode carried about 80 %, and in an experiment with reduced coherence less than 40 %. Mixtures of this size appeared in that experiment.
 
 ## 4. How Is Light That Is Not Fully Coherent Reconstructed?
 
@@ -96,9 +96,9 @@ _Fig 5. Specimen error and data residual versus number of modes (3 orders). The 
 At 72 % occupancy the reconstruction works from three modes. At 47 % it needs at least five, and eight are stable. The stronger the mixing, the more modes are needed. The recovered occupancies match the true ones well. With eight modes, the 72 % case gives 71/12/12/1.5 % (true 72/12/12/1.5 %) and the 47 % case gives 47/18/18/5.9 % (true 47/18/18/5.1 %).
 
 <img src="/assets/img/posts/ptycho-position-correction-mixed-states/en/fig6-mode-reconstruction.png" alt="Phase reconstructed with one and three modes from data with 72 % occupancy, and amplitudes of the true and recovered modes" width="950">
-_Fig 6. Phase reconstructed with one and three modes from data with a 72 % dominant mode, and the true and recovered modes. The first mode agrees; the second and third differ in orientation._
+_Fig 6. Phase reconstructed with one and three modes from data with a 72 % dominant mode, and the true and recovered modes. This is a single three-mode reconstruction from one pattern order, so its specimen error and occupancies differ slightly from the table and text (medians, eight modes). The first mode agrees; the second and third are mixtures of the true two-lobed shapes._
 
-Comparing the modes at the bottom of Fig 6, the first mode is nearly identical, but the second and third have their lobes pointing in different directions. Their occupancies are equal, so any combination mixing the two gives the same data. Modes with equal occupancy have no fixed orientation. This is not a failure of the reconstruction but a freedom the measurement cannot distinguish, of the same kind as the ambiguities of Post 4.
+Comparing the modes at the bottom of Fig 6, the first mode is nearly identical, but the recovered second and third modes are mixtures of the true two-lobed shapes. Their occupancies are equal, so any linear combination mixing the two gives the same data. Modes with equal occupancy have no fixed way of mixing. This is not a failure of the reconstruction but a freedom the measurement cannot distinguish, of the same kind as the ambiguities of Post 4.
 
 ## 5. Why Does Error Remain Even with the Right Number of Modes?
 
@@ -117,7 +117,7 @@ With eight modes, the true state could bring the residual down to $1.1\times10^{
 | First mode 72 % | 0.97 (one mode) | 0.025–0.040 (three or more modes) |
 | First mode 47 % | 0.99 (one mode) | 0.034 (eight modes) |
 
-Positions wrong by only one twenty-third of the scan step badly damage the reconstruction. The same data, however, can recover the positions to a few hundredths of a pixel or better. Annealing is robust to large errors, and the gradient method corrects small errors more precisely. The data cannot set the mean of the positions, so it is held fixed.
+Positions wrong by only one twenty-third of the scan step badly damage the reconstruction. The same data, however, can recover the positions: to a few thousandths of a pixel for the 0.71 px error. Annealing is robust to large errors, and at small errors both methods were sufficient. The data cannot set the mean of the positions, so it is held fixed.
 
 Treating incoherent light as a single wave makes the reconstruction fail outright. With the probe represented by several coherent modes, the data reveal the modes and their occupancies. The stronger the mixing, the more modes are needed. Too few modes leave the model wrong by the discarded modes; too many make the problem harder to solve. In these calculations, the smaller the first mode's share, the larger the remaining error.
 
