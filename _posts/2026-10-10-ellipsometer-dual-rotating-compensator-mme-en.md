@@ -27,7 +27,7 @@ The Mueller matrix of an isotropic sample is fixed by three values, $S_1$, $S_2$
 
 An anisotropic sample needs the four complex elements of a Jones matrix. That is eight real numbers; the absolute phase cannot be measured and the intensity is normalized, which leaves six. Existing instruments can still fill these by measuring at several component angles.
 
-The difficulty arrives when an anisotropic sample also depolarizes. At least seven parameters are then required, and the Jones matrix cannot describe the sample at all. The limitation of the Jones formalism to fully polarized light, discussed in [post 2 of the ellipsometry foundations series](/en/posts/ellipsometry-polarization-mueller-matrix/), becomes a hardware requirement here. Faced with an anisotropic, depolarizing sample, the two-number summary breaks down, and the only remaining route is to measure the Mueller matrix directly.
+The difficulty arrives when an anisotropic sample also depolarizes. At least seven parameters are then required, and the Jones matrix cannot describe the sample at all. Isolating those seven without a model requires measuring all sixteen Mueller elements. The limitation of the Jones formalism to fully polarized light, discussed in [post 2 of the ellipsometry foundations series](/en/posts/ellipsometry-polarization-mueller-matrix/), becomes a hardware requirement here. Faced with an anisotropic, depolarizing sample, the two-number summary breaks down, and the only remaining route is to measure the Mueller matrix directly.
 
 ## 2. Which Elements Can Each Rotating Configuration Reach?
 
@@ -42,7 +42,7 @@ What deserves attention is that the configuration with the compensator after the
 
 Three rows or three columns do not make sixteen. Among rotating-element configurations, only two compensators turning at different frequencies deliver the whole matrix in a single measurement. The design was proposed in the late 1970s and built in the early 1990s. Collins's group reported an instrument capable of real-time spectroscopic measurement in 2000 (Lee et al. 2000).
 
-Photoelastic modulators can also measure a Mueller matrix. Two modulators at different resonant frequencies give nine elements, and four measurements at different component angles fill the rest. The ordinary PME of post 1 reaches only the first three columns, and needs eight measurements to do it. Among the configurations Fujiwara (2007) surveys, only the rotating type gives all sixteen in one measurement. Doing it without rotation takes four modulators (electro-optic in Thompson et al. 1980, photoelastic in Arteaga et al. 2012), or moving the modulation onto the wavelength axis as in the channeled approach of post 5.
+Photoelastic modulators can also measure a Mueller matrix. Two modulators at different resonant frequencies give nine elements, and four measurements at different component angles fill the rest. The ordinary PME of post 1 reaches only the first three columns, and needs eight measurements to do it. Among the configurations Fujiwara (2007) surveys, only the rotating type gives all sixteen in one measurement. There are also ways to do it in one shot without rotation. One is to use four modulators (electro-optic in Thompson et al. 1980, photoelastic in Arteaga et al. 2012). The other is to move the modulation onto the wavelength axis, as in the channeled approach of post 5.
 
 ## 3. Why Must the Two Compensators Turn at Different Speeds?
 
@@ -60,11 +60,11 @@ The number of frequencies required falls out here too. Solving for sixteen eleme
 
 Driving both sides is not enough on its own. If the two compensators turn at the same speed, the frequencies they generate pile onto the same positions, and different elements fall into the same harmonic. Computed, equal speeds leave only eight of the sixteen combinations independent. Section 4 returns to how the speeds must differ, in terms of harmonic "addresses".
 
-The specific instrument Azzam proposed rotates two quarter-wave plates together, at $\omega$ in the generator and $5\omega$ in the analyzer. This post writes rotation ratios as fast:slow, so this is 5:1. The result is a periodic signal whose fundamental is $2\omega$, carrying harmonics up to twelfth order on top of a dc term, twenty-five amplitudes in all. The twelfth order comes from the fact that a rotating compensator modulates the signal up to four times its own rotation frequency. The highest frequency is $4\omega + 20\omega = 24\omega$, twelve times the $2\omega$ fundamental.
+The specific instrument Azzam proposed rotates two quarter-wave plates, one at $\omega$ in the generator and the other at $5\omega$ in the analyzer. This post writes rotation ratios as fast:slow, so this is 5:1. The result is a periodic signal whose fundamental is $2\omega$, carrying harmonics up to twelfth order on top of a dc term, twenty-five amplitudes in all. The twelfth order comes from the fact that a rotating compensator modulates the signal up to four times its own rotation frequency. The highest frequency is $4\omega + 20\omega = 24\omega$, twelve times the $2\omega$ fundamental.
 
 Not all twenty-five carry information. Four of them vanish identically, and five identities hold among the rest. Subtract four and then five from twenty-five and exactly sixteen remain, matching the number of unknowns.
 
-Writing $a_n$ and $b_n$ for the cosine and sine amplitudes of the $n$th harmonic (a different symbol from the analyzer components $a_i$ above), the identities look like this: $a_7 = -a_3$, $b_7 = b_3$, $a_6 = -a_4$, $a_{11} = -a_9$, $b_{11} = -b_9$. Values read at different harmonics are tied together, so if one drifts its partner must drift with it. Azzam noted that departures from these identities are symptoms of azimuth errors, non-ideal components or detector nonlinearity, and can be used to characterize those faults. The surplus coefficients are a diagnostic built into the instrument.
+Writing $a_n$ and $b_n$ for the cosine and sine amplitudes of the $n$th harmonic (a different symbol from the analyzer components $a_i$ above), the identities look like this: $a_7 = -a_3$, $b_7 = b_3$, $a_6 = -a_4$, $a_{11} = -a_9$, $b_{11} = -b_9$. Values read at different harmonics are tied together, so if this relation breaks, something in the instrument is not ideal. Azzam noted that departures from these identities are symptoms of azimuth errors, non-ideal components or detector nonlinearity, and can be used to isolate the cause. The surplus coefficients are a diagnostic built into the instrument.
 
 Recovering the elements proceeds in three layers. The five in the fourth row and column each follow from one amplitude directly. The four in the central $2\times2$ come from linear combinations of two amplitudes each. The remainder, in the first row and column, require substituting the values already obtained. Rather than inverting one large matrix at once, Azzam breaks it into small pieces.
 
@@ -72,7 +72,7 @@ All of that gives the normalized matrix. Absolute values need the proportionalit
 
 Several remarks Azzam appended also touch this series directly. One is that a fixed analyzer at the end of the optical train avoids errors from polarization-dependent detector sensitivity. Section 5 of post 2 discussed why a depolarizer goes in front of the detector; here the layout itself solves the same problem.
 
-The second remark matters more. Scanning wavelength requires the quarter-wave plates to be achromatic or tunable at every wavelength. Arbitrary and differing retardances still permit the Mueller matrix to be determined, he added, but the mathematics become complicated. The whole of post 2 hangs on that sentence, and the Collins–Koh design in the next section takes precisely the complicated route.
+The second remark matters more. Scanning wavelength requires the quarter-wave plates to be achromatic or tunable at every wavelength. Arbitrary and differing retardances still permit the Mueller matrix to be determined, he added, but the mathematics become complicated. The retardance discussion of post 2 hangs on that sentence, and the Collins–Koh design in the next section takes precisely the complicated route.
 
 The last remark points ahead in the series. Replacing mechanical rotation with the optical rotation of a pair of Faraday cells would give an instrument with no moving parts at all. A 1978 paper was already looking toward doing away with rotation.
 
@@ -133,7 +133,7 @@ Reality intervenes. The minimum scan time of a commercial photodiode array is 5.
 A photodiode array is a detector that lines up its sensing elements in a row and reads them one after another (figure 4). Behind a spectrograph each element takes one wavelength, so many wavelengths are measured at once. Reading the whole row, though, takes a fixed time. The 5.1 ms is that time.
 
 <img src="/assets/img/posts/ellipsometer-dual-rotating-compensator-mme/ext-linear-photodiode-array.jpg" alt="Linear photodiode array chip for multichannel spectroscopy" width="700">
-_Figure 4. A self-scanning linear photodiode array made for multichannel spectroscopy (Hamamatsu S3901-256Q). Photodiodes sit in a single row at 50 μm spacing along the long purple window, and one scan ends only when the whole row has been read. (Source: Mister rf, [S3901-256Q](https://commons.wikimedia.org/wiki/File:S3901-256Q.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
+_Figure 4. A self-scanning linear photodiode array made for multichannel spectroscopy (Hamamatsu S3901-256Q). Photodiodes sit in a single row at 50 μm spacing along the long purple window, and one scan ends only when the whole row has been read. This is an example of the same kind of commercial chip, not the detector the Collins–Koh instrument used. (Source: Mister rf, [S3901-256Q](https://commons.wikimedia.org/wiki/File:S3901-256Q.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
 
 The way out is to raise the slow side. Keeping the fast side at 5 and raising the slow side from 1 to 4 lifts the highest harmonic to $4(5+m_2)C$. How many reads that takes follows from counting unknowns. At 5:3 the harmonics run to sixteenth order ($32C$), so the unknowns are one dc term plus sixteen cosine–sine pairs, 33 in all, and the detector must be read at least 33 times per optical period. In general $N = 4(m_1+m_2)+1$. More reads lengthen the period, but under the same detector limit they let the slow motor run faster.
 
@@ -159,7 +159,7 @@ How the reads are timed is part of the design too. The detector fires every 5° 
 
 Turning the compensators in the same direction or in opposite directions yields the same information. Counter-rotation flips the sign of the terms belonging to the third and fourth columns. If the polarizer is not at 0°, its angle must be read with the opposite sign as well. With those signs reversed, the same information comes back.
 
-Section 7 of post 1 said the number of samples needed is set by the number of unknown coefficients: three intervals for RAE, five for RCE. Here it is 33. The same principle, an order of magnitude larger.
+Section 7 of post 1 said the number of samples needed is set by the number of unknown coefficients: three intervals for RAE, five for RCE. Here it is 33. The same principle, with the count several times larger.
 
 ## 6. Does Choosing 5:3 Cost Precision?
 
@@ -171,14 +171,14 @@ The answer is unambiguous. 5:3 and 5:1 have identical condition numbers across t
 
 Among ratios whose harmonic addresses do not collide, the ratio plays no part in noise amplification. What it changes is the highest harmonic, that is, how many times per period the detector must be read.
 
-Given that 5:3 is a compromise forced by the detector and the motors, it is natural to assume that abandoning the mathematically optimal 5:1 costs something somewhere. The only cost turns out to be reading 33 times instead of 25. Not a digit of precision is lost. As long as addresses do not collide, the ratio can be treated purely as a timing question.
+Given that 5:3 is a compromise forced by the detector and the motors, it is natural to assume that abandoning the mathematically optimal 5:1 costs something somewhere. The only cost turns out to be reading 33 times instead of 25. The upper bound on noise amplification, the condition number, does not get any worse. As long as addresses do not collide, the ratio can be treated purely as a timing question.
 
 This also fits what Smith obtained in 2002 by minimizing the condition number. With exactly sixteen measurements the relationship between condition number and angular increments is intricate, but once the measurement is overdetermined a broad range of increments performs essentially identically. Overdetermination relieves the burden of choosing a ratio.
 
 So what does set the precision?
 
 <img src="/assets/img/posts/ellipsometer-dual-rotating-compensator-mme/en/fig5-condition-number.png" alt="Condition number against retardance" width="780">
-_Figure 6. Condition number of the data reduction matrix (5:3) as both retardances are swept together. It is 9.45 at 90° and reaches its minimum of 2.49 at 128°, so a quarter-wave plate is not the best choice._
+_Figure 6. Condition number of the data reduction matrix (5:3) as both retardances are swept together. It is 9.45 at 90° and reaches its minimum of 2.49 at 128°, so a quarter-wave plate is not the best choice. The condition number improves 3.8 times, while the actual error drops by about a factor of two (see text)._
 
 The retardance does. Figure 6 sweeps it, and the minimum sits at 128°, not at 90°. A quarter-wave plate gives a condition number of 9.45; a 128° plate gives 2.49. For the same detector noise, the error summed over the sixteen elements drops by about a factor of two. The condition-number ratio bounds the worst case; it is not the ratio of typical errors. Smith likewise said the noise could be cut by more than half. Smith's optimum of 127° is effectively the same answer.
 
@@ -186,7 +186,7 @@ The retardance does. Figure 6 sweeps it, and the minimum sits at 128°, not at 9
 
 Why not 90° can be read off the structure in section 4. The fourth row and column ride on $\sin\delta$, which peaks at 90°. The modulated share of the second and third columns rides on $s = \sin^2(\delta/2)$, which keeps growing to 180°. The compromise between the two is pushed above 90°. Maximizing $\sin\delta\cdot\sin^2(\delta/2)$ alone gives 120°; accounting for the condition number of the full matrix lands near 128°.
 
-Section 3 of post 2 said the retardance need not be exactly 90°. Here that sentence acquires a number. It is not merely unnecessary: 90° is a loss.
+Section 3 of post 2 said the retardance need not be exactly 90°. Here that sentence acquires a number. It is not merely unnecessary: when all sixteen are to be measured evenly, 90° is a loss.
 
 ## 7. What Does Measuring Sixteen at Once Cost?
 
@@ -194,7 +194,7 @@ Time.
 
 The optical period at 5:3 is 200 ms, so that is how long one Mueller matrix takes. The minimum measurement time for RAE and RCE in the table of post 1 was about 10 ms, making this twenty times slower.
 
-The chain is easy to follow. Two compensators lift the highest harmonic from four times the RCE's compensator frequency to $24C$ and beyond. The motor-driven choice of 5:3 takes it to $32C$, and a higher harmonic demands at least 33 integrations per period. Each detector read costs over 5 ms, so the period stretches to 200 ms. Touch any link and the rest move with it. The author's dissertation (section 1.2) also counts this long measurement time among the drawbacks of the dual-rotating-compensator approach.
+The chain is easy to follow. With one compensator the highest harmonic is four times its rotation frequency, $12C$; with two, it climbs to $24C$ even at 5:1. The motor-driven choice of 5:3 takes it to $32C$, and a higher harmonic demands at least 33 integrations per period. Each detector read costs over 5 ms, so the period stretches to 200 ms. Touch any link and the rest move with it. The author's dissertation (section 1.2) also counts this long measurement time among the drawbacks of the dual-rotating-compensator approach.
 
 What 200 ms means depends on the application. It is fast enough to follow film growth in real time, which was the original motivation for the instrument. But against the 20 μs with which the photoelastic modulator of post 1 tracked liquid crystal molecules, it is four orders of magnitude away. The price of all sixteen is paid in time.
 
@@ -206,13 +206,13 @@ Two approaches diverge.
 
 One pushes on the hardware. Collins's group described the development of this instrument in detail in 2001. With the fundamental mechanical frequency lowered to 2 Hz it took at least 0.25 s per Mueller matrix, a little slower than the 0.2 s of the design. The design table of section 5 already points that way: the ratio, the highest harmonic, the integration time and the motor frequency are linked in one chain, so a faster detector lets the whole chain be tightened. The ceiling of this approach is set by the detector.
 
-The other redesigns when to read. The approach published in 2019 starts from the observation that there is no reason for sampling points in a continuous measurement to be evenly spaced. It builds an objective that tolerates both systematic error and detection noise and searches for optimal unevenly spaced points with a multi-objective genetic algorithm. The result reaches a globally optimal measurement matrix with the minimum number of samples (sixteen), while improving error immunity rather than degrading it.
+The other redesigns when to read. The approach of Meng et al. (2019) starts from the observation that there is no reason for sampling points in a continuous measurement to be evenly spaced. It builds an objective that tolerates both systematic error and detection noise and searches for optimal unevenly spaced points with a multi-objective genetic algorithm. The result reaches a globally optimal measurement matrix with the minimum number of samples (sixteen), while improving error immunity rather than degrading it.
 
 The contrast is sharp. The first wants to read faster; the second wants to read less.
 
 The second is possible because twenty-four coefficients for fifteen elements left room to cut samples from the start. Cut them close to sixteen, though, and the conclusion of section 6 no longer holds. With exactly sixteen measurements Smith found an intricate dependence on the angular increments, and Meng et al. report that the optimum is highly sensitive to the speed ratio. That is why where the samples sit had to be solved as an optimization problem. Even spacing was never a requirement of the physics; it was a convenience imposed to keep the Fourier analysis simple.
 
-This also connects to the later parts of the series. Raising the rotation speed eventually runs into the motor and the detector. What remains is to change how the reading is done, or to remove the rotation altogether. Azzam's 1978 mention of Faraday cells is one end of that thought; the instruments of posts 5 and 6 are the other.
+This also connects to the later parts of the series. Raising the rotation speed eventually runs into the motor and the detector. What remains is to change how the reading is done, or to remove the rotation altogether. If Azzam's 1978 mention of Faraday cells marks the start of the road toward removing rotation, the instruments of posts 5 and 6 are where that road ends.
 
 ## 9. What Are the Surplus Measurements For?
 
@@ -238,7 +238,7 @@ Three things came out of this post.
 
 First, two compensators are needed because of the structure of the weight $\mu_{ij} = a_i p_j$. Driving one side moves the weight in one direction only, which never sweeps all sixteen positions. The two must turn at different speeds because of harmonic addresses: the sums and differences of column and row frequencies must not coincide, or elements mix. When a sample is anisotropic and depolarizing the Jones formalism breaks down, and from that point all sixteen elements are required.
 
-Second, the rotation ratio sets timing, not precision. 5:1 gives the lowest highest-order harmonic, but the minimum detector scan time and the low-frequency instability of the motors pushed the design to 5:3. Its addresses do not collide, so its condition number is identical to that of 5:1. What sets the precision is the retardance, and its optimum is near 128° rather than a quarter wave, although for $M_{44}$ alone 90° is better.
+Second, the rotation ratio sets timing, not the upper bound on noise amplification. 5:1 gives the lowest highest-order harmonic, but the minimum detector scan time and the low-frequency instability of the motors pushed the design to 5:3. Its addresses do not collide, so its condition number is identical to that of 5:1. What sets the precision is the retardance, and its optimum is near 128° rather than a quarter wave, although for $M_{44}$ alone 90° is better.
 
 Third, the instrument carries the material for checking itself inside its own signal. Azzam's five identities and the five calibration routes of Collins and Koh come from the same property. As section 9 showed, it is the surplus measurements that do that work.
 
