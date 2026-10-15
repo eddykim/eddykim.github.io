@@ -25,7 +25,7 @@ This series follows the questions an instrument user is likely to ask.
 - Is calibration really necessary? (post 4)
 - Can one measure in a single shot with nothing rotating? (posts 5 and 6)
 
-There are several ways to survey the designs. Fujiwara sums up the question in one sentence in section 4.2.1. Ellipsometry fundamentally measures Stokes parameters. The parameters each design can reach differ, and so do the measurement errors, for exactly that reason. This post therefore does not simply list the methods. It takes what each one *cannot* measure as its axis and traces how that gap comes back as a limit on the instrument.
+There are several ways to survey the designs. Fujiwara sums up the basis for the classification in one sentence in section 4.2.1: ellipsometry fundamentally measures Stokes parameters, each design reaches a different subset, and the differences in measurement error follow from that. This post therefore does not simply list the methods. It takes what each one *cannot* measure as its axis and traces how that gap comes back as a limit on the instrument.
 
 ## 1. Why Is the Light Sent in Obliquely?
 
@@ -44,10 +44,10 @@ The instrument splits into three blocks: the polarization state generator (PSG) 
 
 $$I = \left[ M_{PSA} \, M_{sample} \, M_{PSG} \, \mathbf{S}_{in} \right]_0$$
 
-The subscript 0 denotes the first component of the Stokes vector, the total intensity. Every waveform and Fourier coefficient in this post was computed directly as this product of component Mueller matrices; only figure 6 is drawn from a closed-form expression. The results were checked separately against Fujiwara's closed forms (4.18, 4.28, 4.32, 4.41, 4.44), sign conventions included.
+The subscript 0 denotes the first component of the Stokes vector, the total intensity. Every waveform and Fourier coefficient in this post was obtained by evaluating this product with the component Mueller matrices; only figure 6 is drawn from a closed-form expression. The results were checked separately against Fujiwara's closed forms (4.18, 4.28, 4.32, 4.41, 4.44), sign conventions included.
 
 <img src="/assets/img/posts/ellipsometer-oblique-rotating-element/ext-ellipsometer-laas.jpg" alt="A variable-angle ellipsometer with two arms on a circular rail" width="720">
-_Figure 2. A variable-angle ellipsometer. Two arms face each other across the sample stage, mounted on a circular rail. One arm is the polarization state generator and the other the polarization state analyzer; moving them along the rail changes the angle of incidence. (Source: Guillaume Paumier (user:guillom), [Ellipsometer at LAAS](https://commons.wikimedia.org/wiki/File:Ellipsometer_at_LAAS.jpg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
+_Figure 2. A variable-angle ellipsometer (PEM-based instrument). Two arms face each other across the sample stage, mounted on a circular rail. One arm is the polarization state generator and the other the polarization state analyzer; moving them along the rail changes the angle of incidence. (Source: Guillaume Paumier (user:guillom), [Ellipsometer at LAAS](https://commons.wikimedia.org/wiki/File:Ellipsometer_at_LAAS.jpg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0))_
 
 Figure 2 shows a real variable-angle ellipsometer. The PSG and PSA of figure 1 appear as the two arms, and the sample sits on the stage between them.
 
@@ -105,7 +105,7 @@ Extracting $\alpha$ and $\beta$ from the measured waveform and converting back t
 
 $$\tan\Psi = \sqrt{\frac{1+\alpha}{1-\alpha}} \, \lvert \tan P \rvert, \qquad \cos\Delta = \frac{\beta}{\sqrt{1-\alpha^2}}$$
 
-So $\alpha$ mainly carries $\Psi$, and $\beta$ carries $\Delta$. One component on a motor is the whole instrument. With no compensator there is no part whose behavior drifts with wavelength. As section 8 shows, this becomes RAE's main asset in spectroscopic measurement.
+So $\alpha$ mainly carries $\Psi$, and $\beta$ carries $\Delta$. One component on a motor is the whole instrument. With no compensator there is no part whose behavior drifts with wavelength. As section 8 shows, this is RAE's main strength in spectroscopic measurement.
 
 ### Why Does the Sign of the Phase Difference Disappear?
 
@@ -122,7 +122,7 @@ The left panel of figure 5 confirms the ambiguity numerically. The RAE waveforms
 
 The ambiguity is not the only problem. Differentiating $\beta$ with respect to $\Delta$ gives $\partial \beta / \partial \Delta \propto \sin\Delta$. The factor by which measurement noise is amplified into $\Delta$ is therefore $1/(\sin 2\Psi \, \lvert \sin\Delta \rvert)$, which as a function of $\Delta$ alone goes as $1/\lvert \sin\Delta \rvert$. It diverges for samples whose $\Delta$ lies near $0°$ or $180°$.
 
-Such samples are common. At 70° incidence, bare Si has $\Delta = 179.2°$, so $1/\lvert \sin\Delta \rvert$ is 74; Si under 2 nm of SiO$_2$ has $\Delta = 173.5°$ and a factor of 8.9. The 100 nm oxide sample of figure 7, by contrast, has $\Delta = 79.8°$ at the same angle and a factor of only 1.02. Thin films and bare substrates sit squarely in RAE's weak region. That is the practical reason for adding a compensator to RAE, or for rotating the compensator instead.
+Such samples are common. At 70° incidence, bare Si has $\Delta = 179.2°$, so $1/\lvert \sin\Delta \rvert$ is 74; Si under 2 nm of SiO$_2$ has $\Delta = 173.5°$ and a factor of 8.9. The same 100 nm oxide sample (the sample of figure 7), by contrast, has $\Delta = 79.8°$ at 70° and a factor of only 1.02. Thin films and bare substrates sit squarely in RAE's weak region. That is the practical reason for adding a compensator to RAE, or for rotating the compensator instead.
 
 <img src="/assets/img/posts/ellipsometer-oblique-rotating-element/en/fig4-rae-sensitivity.png" alt="Error amplification in Delta" width="760">
 _Figure 6. (a) Without a compensator, the RAE error amplification diverges at $\Delta \cong 0°, 180°$. (b) Taking, at each point, the best of four measurements whose operating points are shifted by $0°, 45°, 90°$ and $135°$ keeps the amplification at most 1.08 across the whole range._
@@ -143,13 +143,13 @@ What happens if the analyzer is held fixed and the compensator turns instead? Th
 
 $$I = I_0 \left[ (2 + S_1) - 2 S_3 \sin 2C + S_1 \cos 4C + S_2 \sin 4C \right]$$
 
-Here $C$ is the azimuth of the compensator's fast axis. The $$\Delta' = \Delta - \delta$$ of section 4 assumes the slow axis lies along p at $C = 0°$, so the two sections' $C$ differ by $90°$ (Fujiwara, end of 4.2.3). Mixing the conventions flips the sign of the $\sin 2C$ term and with it the sign of $\Delta$.
+Here $C$ is the azimuth of the compensator's fast axis. The $$\Delta' = \Delta - \delta$$ used in section 4 assumes the slow axis lies along p when $C = 0°$. Because $C$ here refers to the fast axis, the two conventions differ by $90°$ (Fujiwara, end of 4.2.3). Mixing the conventions flips the sign of the $\sin 2C$ term and with it the sign of $\Delta$.
 
 Terms in $2C$ and $4C$ appear together. More importantly, $S_3$ rides on the $2C$ term while $S_1$ and $S_2$ ride on $4C$. Because the frequencies split, extracting the Fourier coefficients separates all three Stokes parameters at once. No second measurement at a different retardance is needed.
 
 Why do the frequencies split? If the reflected light is linearly polarized, the detected intensity behind the rotating compensator repeats every $90°$; if it is circularly polarized, every $180°$. For linear input, a $90°$ turn yields the same ellipse with opposite handedness, which the analyzer cannot tell apart. The linear components $S_1$ and $S_2$ therefore modulate the intensity with a $4C$ period, and the circular component $S_3$ with a $2C$ period. A property of the polarization state is translated directly into a modulation frequency.
 
-Obtaining $S_1$ through $S_3$ in a single measurement means $\Delta$ can be measured over the full $-180°$ to $180°$, with uniform sensitivity across that range. This is why the latest commercial instruments use RCE. There is a bonus as well: the degree of polarization can be extracted from the same Fourier coefficients, which makes the depolarization discussed in Ellipsometry Foundations post 2 measurable as a function of wavelength.
+Obtaining $S_1$ through $S_3$ in a single measurement means $\Delta$ can be measured over the full $-180°$ to $180°$. This is why RCE is widely used in commercial instruments. There is a bonus as well: the degree of polarization can be extracted from the same Fourier coefficients, which makes the depolarization discussed in Ellipsometry Foundations post 2 measurable as a function of wavelength.
 
 ## 6. PME (Phase-Modulation Ellipsometry)
 
@@ -202,7 +202,7 @@ Why, then, can PME handle only about ten wavelengths at once? Collecting the pro
 | RCE | $-180°$ to $180°$ | about 10 ms | about 200 | chromatic |
 | PME | restricted, depending on configuration (errors grow in specific ranges) | 20 μs | about 10 | chromatic |
 
-The answer is in the last column. RAE uses only a polarizer and an analyzer, and those components barely change their behavior across a wide spectral band. Such an instrument is called achromatic, and that is why it can measure as many wavelengths simultaneously as a photodiode array has pixels. RCE, by contrast, has a compensator whose retardance depends on wavelength, and PME requires a different drive voltage at every wavelength to hold the retardance constant. Both are chromatic. This is the fundamental reason the number of wavelengths PME can handle in real time is an order of magnitude smaller.
+The answer lies not in the last column but in how the retardance is obtained. RAE uses only a polarizer and an analyzer, and those components barely change their behavior across a wide spectral band. Such an instrument is called achromatic, and that is why it can measure as many wavelengths simultaneously as a photodiode array has pixels. A compensator is chromatic, and its retardance differs with wavelength, but once the values are known an array detector can still measure all wavelengths at once (about 200 for RCE as well). PME must change the drive voltage at every wavelength to hold the retardance amplitude constant, so it handles only about ten wavelengths at a time. This is the fundamental reason the number of wavelengths PME handles in real time is more than an order of magnitude smaller than for RAE.
 
 The wavelength dependence of a single component thus sets the spectral capability of the whole instrument. That is the subject of [post 2](/en/posts/ellipsometer-components/).
 
