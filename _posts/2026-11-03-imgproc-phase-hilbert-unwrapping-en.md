@@ -24,7 +24,7 @@ $$ I(x) = a(x) + b(x)\cos\phi(x) $$
 Here $a$ is the background, $b$ the modulation amplitude, and $\phi$ the phase of interest. The difficulty is immediate: three unknowns, and the detector supplies only their combination.
 
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/en/fig1-where-is-phase.png" alt="The three components of a fringe pattern, and intensity versus shift at one pixel" width="750">
-_Fig 1. Pixels 220 to 380 of a 512-pixel fringe line (carrier 0.45 rad per pixel, period about 14 pixels). Left: the fringe (grey), the background $a$ (blue dashed) and the envelope $a \pm b$ (red dotted); the dash-dot line marks pixel 300, shown on the right. Right: intensity at that pixel as the shift $\delta$ runs from 0 to 2π (green), with the four 4-step samples (red dots). The intensity peaks at $\delta = -\phi$ (dotted, 5.21 rad), so the phase at this pixel is 1.07 rad._
+_Fig 1. Pixels 220 to 380 of a 512-pixel fringe line (carrier 0.45 rad per pixel, carrier-only period about 14 pixels). Left: the fringe (grey), the background $a$ (blue dashed) and the envelope $a \pm b$ (red dotted); the dash-dot line marks pixel 300, shown on the right. Right: intensity at that pixel as the shift $\delta$ runs from 0 to 2π (green), with the four 4-step samples (red dots). The intensity peaks at $\delta = -\phi$ (dotted, 5.21 rad), so the phase at this pixel is 1.07 rad._
 
 The left panel is a single frame. The background $a$ sets the centreline of the fringes and $a \pm b$ forms the envelope. Countless combinations of $(a, b, \phi)$ produce the same intensity.
 
@@ -45,20 +45,21 @@ The Hilbert transform casts that second shadow. It is a linear operation that ro
 
 $$ z(x) = I_{ac}(x) + j\,\mathcal{H}[I_{ac}(x)] \approx b(x)\,e^{j\phi(x)} $$
 
-Here $I_{ac}$ is the background-removed signal and $j$ the imaginary unit. Its magnitude is the instantaneous amplitude and its argument the instantaneous phase. The relation is approximate for the three reasons below. The author's dissertation (section 3.2) analysed the channelled spectroscopic signal from section 5 of [Post 3](/en/posts/imgproc-frequency-domain-filtering/) with exactly this analytic signal; Post 3 covered only the step of separating out the baseline.
-
+Here $I_{ac}$ is the background-removed signal and $j$ the imaginary unit. Its magnitude is the instantaneous amplitude and its argument the instantaneous phase. The relation is approximate for the three reasons below.
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/en/fig2-analytic-signal.png" alt="Background-removed signal with its Hilbert transform, instantaneous amplitude, and phase error with and without the background" width="750">
-_Fig 3. The analytic signal applied to the same 512-pixel fringe as Fig 1. Left: the background-removed signal (grey) and its Hilbert transform (orange); the background was estimated with a 15-pixel Gaussian smoothing and subtracted. Centre: the magnitude of the analytic signal (green) and the true modulation $b(x)$ (black dashed). Right: the phase error computed with the background left in (red) and removed (blue); once the background is removed, error remains only at the ends._
+_Fig 3. The analytic signal applied to the same 512-pixel fringe as Fig 1. Left: pixels 220 to 380 of the background-removed signal (grey) and its Hilbert transform (orange); the background was estimated with a 15-pixel Gaussian smoothing and subtracted. Centre: the magnitude of the analytic signal (green) and the true modulation $b(x)$ (black dashed). Right: the phase error computed with the background left in (red) and removed (blue); once the background is removed, error remains only at the ends._
 
-In the centre panel the magnitude of the analytic signal tracks the true modulation $b(x)$ closely, with a recovery error of 0.0009 root mean square (RMS) away from the outer 40 pixels.
+In the centre panel the magnitude of the analytic signal tracks the true modulation $b(x)$ closely, with a recovery error in the amplitude $b(x)$ of 0.0009 root mean square (RMS) away from the outer 40 pixels.
 
 Three conditions attach. First, the background $a$ must be removed beforehand. The right panel shows the difference: leaving it in gives a phase error of 0.235 rad RMS, removing it gives 0.061 rad. The argument is otherwise pulled toward the background.
 
-Yet that remaining 0.061 rad comes almost entirely from the two ends. Excluding 30 pixels at each border gives 0.0034 rad, while those 30 pixels alone give 0.178 rad. The Hilbert transform computes as though the signal continued forever, which is the boundary problem from section 6 of Post 2 appearing again. So is the remedy: shrink the region of interest.
+Yet that remaining 0.061 rad comes almost entirely from the two ends. Excluding 30 pixels at each border gives 0.0034 rad, while those 30 pixels alone give 0.178 rad. The Hilbert transform computes as though the signal continued forever, which is the boundary problem from section 6 of Post 2 appearing again. The remedy is the same too: shrink the region of interest.
 
 Second, the spectra of $b$ and $\cos\phi$ must not overlap. This is the Bedrosian condition, and in practice it means the modulation must vary far more slowly than the fringes. Images whose modulation changes within a few pixels break the method.
 
-Third, the phase must keep increasing in one direction, which the carrier guarantees. Where the phase decreases, the argument comes out as $-\phi$: the very ambiguity a single shadow could not resolve. Ring fringes like those of Fig 2 reverse direction as they pass through the centre, so without a carrier the method cannot be applied as it stands.
+Third, the phase must keep increasing in one direction, which the carrier guarantees when its slope exceeds the slope of the shape. Where the phase decreases, the argument comes out as $-\phi$: the very ambiguity a single shadow could not resolve. Ring fringes like those of Fig 2 reverse direction as they pass through the centre, so without a carrier the method cannot be applied as it stands.
+
+The author's dissertation (section 3.2) analysed the channelled spectroscopic signal from section 5 of [Post 3](/en/posts/imgproc-frequency-domain-filtering/) with exactly this analytic signal; Post 3 covered only the step of separating out the baseline.
 
 ## 3. One frame or several?
 
@@ -81,9 +82,9 @@ def phase_shift_n(frames, shifts):
 ```
 
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/en/fig3-three-methods.png" alt="Phase error of three methods against noise, and the sideband width trade of the Fourier method" width="750">
-_Fig 4. Phase error of the three methods on the same 512-pixel fringe (30 pixels excluded at each end). Left: RMS error against frame noise for the Hilbert method (red), the Fourier method (orange) and 4-step phase shifting (blue), averaged over 60 runs per noise level; as noise grows the Fourier method becomes the most accurate. Right: as the Fourier sideband width is varied (passband $$f_0 \pm$$ width), the error under noise 0.05 (orange) and the noiseless error where the shape is steep (green)._
+_Fig 4. Phase error of the three methods on the same 512-pixel fringe (30 pixels excluded at each end). Left: RMS error against frame noise for the Hilbert method (red), the Fourier method (orange) and 4-step phase shifting (blue), averaged over 60 runs per noise level; as noise grows the Fourier method's error becomes the smallest. Right: as the Fourier sideband width is varied (passband $$f_0 \pm$$ width), the error under noise 0.05 (orange) and the noiseless error where the shape is steep (green)._
 
-Without noise, phase shifting errs by $6\times10^{-15}$ rad, which is floating-point precision. Adding no spatial assumption makes it exact in principle. The Hilbert and Fourier methods carry error even without noise: 0.0022 and 0.0037 rad respectively where the shape is steep, which is exactly how far the slow-phase assumption has been violated.
+Without noise, phase shifting errs by $6\times10^{-15}$ rad, which is floating-point precision. Because it adds no spatial assumption, it is exact in principle. The Hilbert and Fourier methods carry error even without noise: 0.0022 and 0.0037 rad respectively where the shape is steep, which is exactly how far the slow-phase assumption has been violated.
 
 The left panel reverses that order once noise grows. Noise here is a standard deviation on the same scale as the intensity; with a modulation amplitude of 0.18 to 0.40, a noise of 0.10 is 25 to 56% of the modulation. At that level Fourier gives 0.127 rad against 0.214 for phase shifting. The Fourier method carries a bandpass that admits only the sideband and discards noise outside it, whereas phase shifting is a per-pixel operation that averages nothing spatially.
 
@@ -96,7 +97,7 @@ Phase shifting assumes the shifts $\delta_k$ are known exactly. In practice piez
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/en/fig4-detuning.png" alt="Phase error of four algorithms as the shift error grows" width="700">
 _Fig 5. Phase error of four algorithms when the shift is $(1+\varepsilon)$ times nominal (noiseless, 512 pixels). The 3-step (120° spacing) and 4-step (90° spacing) follow the first-order slope (grey dotted); only the Hariharan 5-step follows the second-order slope (grey dashed)._
 
-The 3-step and 4-step errors are proportional to $\varepsilon$: tenfold in $\varepsilon$ is tenfold in phase error. The 5-step least-squares solution has the same slope with a smaller coefficient at small $\varepsilon$, but steepens as a second-order term creeps in; from $\varepsilon = 0.01$ to $0.10$ its error grows sixteenfold.
+The 3-step and 4-step errors are proportional to $\varepsilon$: tenfold in $\varepsilon$ is tenfold in phase error. The 5-step least-squares solution, which solves five frames with shifts $0, \pi/2, \pi, 3\pi/2, 2\pi$ by the least squares of the code above, has the same slope with a smaller coefficient at small $\varepsilon$, but steepens as a second-order term creeps in; from $\varepsilon = 0.01$ to $0.10$ its error grows sixteenfold.
 
 Only the algorithm of Schwider and Hariharan behaves differently. With shifts of $0, \pi/2, \pi, 3\pi/2, 2\pi$ the phase is
 
@@ -119,11 +120,11 @@ _Fig 6. Left: maximum error of one-dimensional unwrapping as the carrier is rais
 
 The cliff in the left panel is that assumption. Up to a phase increment of 3.108 rad per pixel the unwrapping error stays at the $10^{-13}$ rad level, effectively exact. At 3.158 rad it leaps to 427 rad. The boundary is exactly $\pi = 3.1416$. Once broken, the result stays off by a multiple of $2\pi$ for the rest of the line.
 
-The structure matches the Nyquist limit of section 6 of Post 1. There, patterns finer than half a period per pixel folded down in frequency; here, phase differences beyond $\pi$ per pixel cannot be undone. They are in fact the same condition. Packing fringes more densely raises phase sensitivity but eventually makes unwrapping impossible.
+The structure matches the Nyquist limit of section 6 of Post 1. There, patterns finer than half a period per pixel folded down in frequency; here, phase differences beyond $\pi$ per pixel cannot be undone. They are the same condition in fact. Packing fringes more densely raises phase sensitivity but eventually makes unwrapping impossible.
 
 The right panel is the noise limit. The true phase difference of this fringe is at most 0.51 rad per pixel, leaving a margin of 2.63 rad below $\pi$, and noise eats that margin. Up to a noise level of 0.08 not one of 200 trials failed; at 0.10, 2.5% failed; at 0.14, 52%; at 0.20, all of them. The steepness of that transition matters. A small increase in noise turns a measurement that always worked into one that fails outright.
 
-Comparing the margin with the noise on neighbour differences gives a rule of thumb. In 4-step phase shifting, the standard deviation of the phase difference between adjacent pixels is roughly the noise divided by the modulation $b$. At the edges, where $b$ is smallest (0.18), that is 0.44 rad at noise 0.08, a sixth of the margin; 0.56 rad at 0.10, one part in 4.7; and 0.78 rad at 0.14, one part in 3.4. So a margin more than five times the neighbour-difference noise is safe, and at a little over three times half the trials fail (for one line of 512 pixels). With more pixels, one large excursion becomes more likely, and the multiple needed grows.
+Asking how many times the margin exceeds the noise on neighbour differences gives a rule of thumb. In 4-step phase shifting, the standard deviation of the phase difference between adjacent pixels is roughly the noise divided by the modulation $b$. At the edges, where $b$ is smallest (0.18), that is 0.44 rad at noise 0.08, 0.56 rad at 0.10, and 0.78 rad at 0.14. The 2.63 rad margin is 6, 4.7 and 3.4 times those values. So a margin more than five times the neighbour-difference noise is safe, and at a little over three times half the trials fail (for one line of 512 pixels). With more pixels, one large excursion becomes more likely, and the multiple needed grows.
 
 ## 6. Why does the answer depend on the path in two dimensions?
 
@@ -145,7 +146,7 @@ Real phase maps show the same problem. Fig 8 is an interferogram made from two S
 <img src="/assets/img/posts/imgproc-phase-hilbert-unwrapping/ext-sentinel1-turkiye-interferogram.jpg" alt="Satellite radar interferogram near Gaziantep, Türkiye, with rainbow fringes over terrain" width="760">
 _Fig 8. Interferogram of the area near Gaziantep, made from Copernicus Sentinel-1 radar acquisitions before and after the February 2023 Türkiye–Syria earthquakes. The colour bar at lower right runs from −3.14 to 3.14 rad, so one cycle of colour is 2π of wrapped phase. Places where the fringes crowd together or break up are where unwrapping is hard. (Source: European Space Agency, [Türkiye–Syria interferogram ESA24711647](https://commons.wikimedia.org/wiki/File:T%C3%BCrkiye%E2%80%93Syria_interferogram_ESA24711647.jpeg), [CC BY-SA 3.0 IGO](https://creativecommons.org/licenses/by-sa/3.0/igo/), contains modified Copernicus Sentinel data (2023), processed by ESA)_
 
-A phase map with residues can still be forced open with branch cuts or minimum-norm methods. Those do not create the missing information, though; they choose where the error goes, onto the cuts for branch cuts and spread over the whole map for minimum-norm. In metrology the better response is to treat the appearance of residues as a failed measurement and change the conditions.
+A phase map with residues can still be forced open with branch cuts or minimum-norm methods. Those do not create the missing information, though; they choose where the error goes, onto the cuts for branch cuts and spread over the whole map for minimum-norm. Where the conditions can be changed (interferometry, structured light), the better response is to treat the appearance of residues as a failed measurement and change them. Where they cannot, as in satellite radar, the only option is to choose where the error goes, for example with branch cuts.
 
 ## Summary
 
@@ -157,9 +158,9 @@ Which method to use comes down to what can be lived with.
 | One-dimensional signal whose modulation varies far more slowly than the fringes | Hilbert analytic signal | Remove the background first and discard the ends |
 | Specimen is still and the shifter can be calibrated | 4-step phase shifting | Exact without a spatial assumption |
 | The shifter's calibration cannot be trusted | Hariharan 5-step | Shift error enters only at second order (40 times better than the 3-step at $\varepsilon = 0.05$) |
-| Residues appear | Do not unwrap; change the conditions | Use sparser fringes or reduce the noise |
+| Residues appear (conditions can be changed) | Do not unwrap; change the conditions | Use sparser fringes or reduce the noise |
 
-A single fringe frame carries three unknowns (background, modulation, phase) against one equation. Solving from one frame requires the spatial assumption that phase varies slowly, which leaves error even without noise; in exchange, the Fourier method's bandpass rejects noise. Solving from several frames is exact without that assumption, but requires known shifts, and when those are wrong the choice of algorithm sets the order of the resulting error. In the recovery step, for spatial unwrapping, which links neighbours, $\pi$ per pixel is a hard limit, and in two dimensions residues make the result path-dependent.
+A single fringe frame carries three unknowns (background, modulation, phase) against one equation. Solving from one frame requires the spatial assumption that phase varies slowly, which leaves error even without noise; in exchange, the Fourier method's bandpass rejects noise. Solving from several frames is exact without that assumption, but requires known shifts, and when those are wrong the choice of algorithm sets the order of the resulting error. In recovery, spatial unwrapping, which links neighbours, cannot exceed $\pi$ per pixel, and in two dimensions residues make the result path-dependent.
 
 ## Closing the series
 
