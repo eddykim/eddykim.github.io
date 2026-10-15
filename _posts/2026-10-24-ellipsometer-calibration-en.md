@@ -14,9 +14,9 @@ math: true
 
 [Post 1](/en/posts/ellipsometer-oblique-rotating-element/) sorted rotating-element ellipsometers by what they cannot measure. [Post 2](/en/posts/ellipsometer-components/) followed where each component stops working across a spectral band. [Post 3](/en/posts/ellipsometer-dual-rotating-compensator-mme/) asked why one modulating element is not enough.
 
-All three rested on an assumption. When the polarizer dial reads $30°$, the transmission axis is taken to sit $30°$ from the plane of incidence. That assumption is false. No matter how precisely a divided circle is cut, the optical transmission axis and the mechanical zero do not coincide. Nor does a detector return a signal strictly proportional to the light that enters it.
+All three rested on an assumption. When the polarizer dial reads $30°$, the transmission axis is taken to sit $30°$ from the plane of incidence. That assumption is false. No matter how precisely a divided circle is cut, there is no guarantee that the optical transmission axis and the mechanical zero coincide. Nor does a detector return a signal strictly proportional to the light that enters it.
 
-The question here follows from that. **How do you measure the difference between what the dial reads and the true angle?** Measuring that difference and undoing it is called calibration. The instrument built to measure a sample must now measure itself, and the measuring tool is already misaligned. That is the whole difficulty.
+The question here follows from that. **How do you measure the difference between what the dial reads and the true angle?** Measuring that difference and undoing it is called calibration. The instrument built to measure a sample must now measure itself, and the measuring tool is already misaligned. That is the one difficulty.
 
 Three eras answered it differently, and this post follows them in order. Yet all three use one idea. Set up a relation that must hold if the instrument were ideal, then **gauge the defect by how far that relation is broken.** It is the general form of what Section 9 of Post 3 called the surplus observables watching over the instrument. The last section asks when the calibration values obtained this way have to be measured again.
 
@@ -30,9 +30,9 @@ Azimuth errors split further by origin. Residual calibration error of the divide
 
 Component imperfections are worse. Polarizing prisms have finite extinction ratios, cell windows carry stress birefringence, compensators scatter from defects. Azzam and Bashara write that these are **unavoidable**. The component specifications surveyed in Post 2 come back here as an error list.
 
-The detector side does not end in one line either. There is dark signal, removed by inserting and withdrawing a mechanical shutter from the beam path. There is nonlinear response, in which output is not proportional to input intensity. There is polarization-dependent sensitivity, produced when residual stress in a photomultiplier tube (PMT) window acts photoelastically. The photoelastic effect that served as a modulation tool in Post 2 appears here as a defect. Array detectors add image persistence, in which signal survives readout.
+The detector side does not end in one line either. There is dark signal, which has to be measured separately with a mechanical shutter blocking the beam path and subtracted. There is nonlinear response, in which output is not proportional to input intensity. There is polarization-dependent sensitivity, produced when residual stress in a photomultiplier tube (PMT) window acts photoelastically. The photoelastic effect that served as a modulation tool in Post 2 appears here as a defect. Array detectors add image persistence, in which signal survives readout.
 
-The list also shifts with the configuration. A rotating-compensator ellipsometer (RCE) must first fix the compensator retardance at each wavelength. This is measured in a straight-through arrangement, with the sample removed and only the compensator between polarizer and analyzer. Because of the $\delta \propto 1/\lambda$ relation from Post 2, the retardance of an MgF$_2$ compensator rises nearly linearly with photon energy. Parameterizing that dispersion lets it be recovered in the general arrangement as well. Phase-modulation ellipsometry (PME) needs retardance control, wavelength-by-wavelength control, and temperature control, plus a higher-harmonic correction. The higher-order Bessel terms from Post 1 and the temperature sensitivity of the photoelastic modulator from Post 2 meet here.
+The list also shifts with the configuration. A rotating-compensator ellipsometer (RCE) must first fix the compensator retardance at each wavelength. This is measured in a straight-through arrangement, with the sample removed and only the compensator between polarizer and analyzer. Because of the $\delta \propto 1/\lambda$ relation from Post 2, the retardance of an MgF$_2$ compensator rises nearly linearly with photon energy. Parameterizing that dispersion lets it be recovered in the general arrangement as well. Phase-modulation ellipsometry (PME) must control the retardance, set that value at each wavelength, and control the temperature as well, plus a higher-harmonic correction. The higher-order Bessel terms from Post 1 and the temperature sensitivity of the photoelastic modulator from Post 2 meet here.
 
 A list this long cannot be worked through one item at a time. Practical calibration takes a different route.
 
@@ -50,7 +50,7 @@ $$\begin{bmatrix}\alpha'\\ \beta'\end{bmatrix} = \eta\begin{bmatrix}\cos 2A_s & 
 
 This is a coordinate rotation through $2A_s$ in the $(\alpha, \beta)$ plane, multiplied by a scale factor $\eta$. Knowing $A_s$ and $\eta$ is therefore enough: invert the matrix and the true values come back. The error list ran to seven branches, but what must be undone reduces to **one rotation and one scale factor**. That reduction is what makes calibration tractable.
 
-Undoing $A_s$ mathematically matters most in multichannel instruments. A photodiode array is read out pixel by pixel, and the analyzer keeps turning during readout. So **$A_s$ differs from pixel to pixel.** No mechanical adjustment can fix that, so it has to be handled by calibration from the start. Section 8 of [Post 1](/en/posts/ellipsometer-oblique-rotating-element/) noted that RAE is achromatic and therefore measures as many wavelengths simultaneously as the array has pixels. This is the price attached to that strength.
+In multichannel instruments, undoing $A_s$ mathematically matters most. A photodiode array is read out pixel by pixel, and the analyzer keeps turning during readout. So **$A_s$ differs from pixel to pixel.** No mechanical adjustment can fix that, so it has to be handled by calibration from the start. Section 8 of [Post 1](/en/posts/ellipsometer-oblique-rotating-element/) noted that RAE is achromatic and therefore measures as many wavelengths simultaneously as the array has pixels. This is the price attached to that strength.
 
 The three errors leave different marks on the signal. A clock makes the difference easy to see. $A_s$ is a dial fitted back on at an angle, so every reading is off by the same amount. $\eta$ is a shortened hand: the direction is right but the length is misread. $P_s$ leaves the clock intact but shifts the moment at which it is read. The right panel of Figure 1 shows exactly these three.
 
@@ -70,7 +70,7 @@ _Figure 2. Errors propagated into $\Psi$ (left) and $\Delta$ (right) for a sampl
 
 The three errors go to different places. A polarizer offset $P_s = 0.1°$ shifts $\Psi$ by $0.055°$ (by $0.064°$ with the polarizer at $30°$ or $60°$) but does **not** propagate into $\Delta$ at all. In the ideal inversion $$\cos\Delta = \beta' / \sqrt{1 - \alpha'^2}$$, and the polarizer angle cancels between numerator and denominator. The $10^{-13}$ degrees left in the computation are floating-point noise.
 
-Near $\Delta \approx 90°$ an analyzer offset $A_s = 0.1°$ does the opposite. It barely touches $\Psi$ and shifts $\Delta$ by $0.30°$, amplified threefold over the injected error. This $\Delta$ error, however, scales with $\sin\Delta$ and shrinks toward $0°$ and $180°$ ($0.016°$ at $\Delta = 3°$), while the $\Psi$ error grows to nearly $0.1°$ instead.
+An analyzer offset $A_s = 0.1°$ does the opposite: it barely touches $\Psi$, and near $\Delta \approx 90°$ it shifts $\Delta$ by $0.30°$, amplified threefold over the injected error. This $\Delta$ error, however, scales with $\sin\Delta$ and shrinks toward $0°$ and $180°$ ($0.016°$ at $\Delta = 3°$), while the $\Psi$ error grows to nearly $0.1°$ instead.
 
 The detector coefficient $\eta$ leaves $\Delta$ untouched at $\Delta = 90°$ and degrades sharply as $\Delta$ approaches $0°$ or $180°$. An attenuation of one part in a thousand, $\eta = 0.999$, produces a $2.5°$ error on a sample with $\Delta = 3°$. This is the region where Post 1 put the RAE amplification factor at $1/\lvert\sin\Delta\rvert$.
 
@@ -80,7 +80,7 @@ That the vulnerable region lies at the extremes of $\Delta$ follows from the str
 
 The three errors so far, together with the polarization-dependent sensitivity of Section 7, collect into one table. The magnitudes are the values injected in this post's calculations.
 
-| Error | Injected | Where it goes | How to diagnose it | Calibration | Figure |
+| Error | Injected | Where it goes | How to diagnose it | Calibration | Figure showing the method |
 | --- | --- | --- | --- | --- | --- |
 | Polarizer offset $P_s$ | $0.1°$ | $0.055°$ in $\Psi$, none in $\Delta$ | position of the minimum of $R(P)$ | residual, regression | 3, 4 |
 | Analyzer offset $A_s$ | $0.1°$ | $0.30°$ in $\Delta$ near $\Delta \approx 90°$ | direction of $$(\alpha', \beta')$$ at the minimum | residual, regression | 3 |
@@ -164,11 +164,15 @@ $$\alpha_0 = \frac{\tan^2\Psi - \tan^2(P - P_s)}{\tan^2\Psi + \tan^2(P - P_s)}, 
 
 Here $\alpha_0$ and $\beta_0$ are the true coefficients $\alpha$ and $\beta$ of Section 2, written in terms of the dial reading $P$ and the offset $P_s$. The model is this with the rotation and scale factor of Section 2 applied, and the free parameters are the five $\Psi$, $\Delta$, $P_s$, $A_s$, $\eta$. That the optical constants of the sample need not be known in advance is essential. The sample is fitted along with the instrument.
 
-With the parabolic approximation gone there is no reason to stay in a narrow interval, and where $\sin\Delta$ goes to zero the $P$ dependence of $\alpha_0$ survives. Take the $\Delta = 1°$ sample that failed 19 times out of 40 in the previous section, add the same noise ($\sigma = 2\times10^{-4}$), and run regression calibration over this wide range. All 40 fits converge, with a median $P_s$ error of $0.0009°$, more than a thousand times smaller than the $1.15°$ of residual calibration. What residual calibration calls a blind spot is not one here.
+With the parabolic approximation gone there is no reason to stay in a narrow interval, and where $\sin\Delta$ goes to zero the $P$ dependence of $\alpha_0$ survives. Take the $\Delta = 1°$ sample that failed 19 times out of 40 in the previous section, add the same noise ($\sigma = 2\times10^{-4}$), and run regression calibration over this wide range. All 40 fits converge, with a median $P_s$ error of $0.0009°$, more than a thousand times smaller than the $1.15°$ of residual calibration. Regression calibration does not lose the minimum at what residual calibration calls a blind spot. How the precision fares is seen in the measurement below.
 
-Measurement says the same. Table 1 of Johs's paper reports calibrations of an SiO$_2$/Si sample and a glass (Corning 7059) sample at $75°$ incidence and 500 nm, with the polarizer scanned over $90°$ in 90 points. The glass sample has $\Delta = 2.01°$, where the residual function becomes a flat line and residual calibration is impossible. Regression calibration still returns $P_s$ to $\pm0.014°$ and $\eta = 0.9692 \pm 0.0004$, the same as the $0.9687$ from SiO$_2$/Si. Since $\eta$ belongs to the instrument rather than the sample, it should agree. The 90% confidence interval on $\Delta$, however, is $\pm0.984°$, 45 times wider than the $\pm0.022°$ for SiO$_2$/Si. The blind spot does not vanish; it moves into the confidence interval. A regression result must therefore be read together with its confidence intervals. Johs regards intervals below $0.01°$ on $\Psi$, $\Delta$, $P_s$, and $A_s$ as ideal.
+Measurement says the same. Table 1 of Johs's paper reports calibrations of an SiO$_2$/Si sample and a glass (Corning 7059) sample at $75°$ incidence and 500 nm, with the polarizer scanned over $90°$ in 90 points. The glass sample has $\Delta = 2.01°$, where the residual function becomes a flat line and residual calibration is impossible.
 
-There is a price. Initial values are required, and fitting five parameters simultaneously leaves correlated combinations poorly resolved. Above all, **a model cannot account for what is not in it.**
+Regression calibration still returns $P_s$ to $\pm0.014°$ and $\eta = 0.9692 \pm 0.0004$, the same as the $0.9687$ from SiO$_2$/Si. Since $\eta$ belongs to the instrument rather than the sample, it should agree.
+
+The 90% confidence interval on $\Delta$, however, is $\pm0.984°$, 45 times wider than the $\pm0.022°$ for SiO$_2$/Si. The blind spot does not vanish; it moves into the confidence interval. A regression result must therefore be read together with its confidence intervals. Johs regards intervals below $0.01°$ on $\Psi$, $\Delta$, $P_s$, and $A_s$ as ideal.
+
+There is a price. Initial values are required, and when parameters are strongly correlated, their individual values cannot be separated. Above all, **a model cannot account for what is not in it.**
 
 ## 7. Where does a defect missing from the model hide?
 
@@ -193,9 +197,9 @@ Long before regression calibration, the null-ellipsometry era used a different s
 
 Place the compensator at $C = +\pi/4$ and adjust polarizer and analyzer to obtain two nulls; turn the compensator by $90°$ to $C = -\pi/4$ and obtain two more. These four arrangements are called zones, and averaging the four pairs $(P_i, A_i)$ is four-zone averaging.
 
-The range of cancellation is unexpectedly wide. In treating two-zone averaging, Azzam and Bashara list imperfections such as azimuth errors, window birefringence and dichroism, imperfections of polarizer and analyzer, and non-ideal compensator behaviour. Four-zone averaging, they write, frees $\Psi$ from **all** of these, with a single exception, the depolarization of the polarizer output. $\Delta$ is likewise free of all of them, with one exception, the birefringence of the cell windows. That list is not the full set of seven branches in Section 1, though. Beam deviation, stray beams, and the polarization-dependent sensitivity of the detector are not on it.
+The range of cancellation is unexpectedly wide. In treating two-zone averaging, Azzam and Bashara list imperfections such as azimuth errors, window birefringence and dichroism, imperfections of polarizer and analyzer, and non-ideal compensator behaviour. Four-zone averaging, they write, keeps **all** of these from reaching $\Psi$, with a single exception, the depolarization of the polarizer output. None of them reaches $\Delta$ either, with one exception, the birefringence of the cell windows. That list is not the full set of seven branches in Section 1, though. Beam deviation, stray beams, and the polarization-dependent sensitivity of the detector are not on it.
 
-"Free" here does not mean the error shrinks. To first order in small imperfections, the coupling coefficients **cancel identically** as the zones are added and subtracted. And the two survivors are named explicitly. This is the content behind the single line in Section 3 of [Post 1](/en/posts/ellipsometer-oblique-rotating-element/) that four-zone averaging cancels the alignment errors of the components.
+"Not reaching" here does not mean the error shrinks. To first order in small imperfections, the coupling coefficients **cancel identically** as the zones are added and subtracted. And which two survive is fixed as well. This is the content behind the single line in Section 3 of [Post 1](/en/posts/ellipsometer-oblique-rotating-element/) that four-zone averaging cancels the alignment errors of the components.
 
 The procedure for actually locating a null rests on the same structure. Dither the polarizer slightly, read the two angles $P^+$ and $P^-$ at which the signal is equal on either side of the minimum, and take $P_n = \tfrac12(P^+ + P^-)$. This is the method of swings. It works because the detected signal is a **symmetric, parabolic function** of the departure from the null.
 
@@ -207,11 +211,11 @@ The methods differ; the principle does not.
 
 | Era | Method | Signal that reveals the non-ideality |
 | --- | --- | --- |
-| Null | Zone relations | How far the four null angles depart from the ideal zone relations |
-| Dual rotating | Identities | How far five Mueller-matrix identities are violated |
+| Null | Zone averaging | How far the four null angles depart from the ideal zone relations |
+| Parabola | Residual calibration | How far the minimum of $R(P)$ departs from the ideal value (0) |
 | Regression | MSE | How far the MSE exceeds what the noise would give |
 
-All three set up a relation that must hold for an ideal instrument and gauge the defect by how far it breaks. Post 3 noted that DRC-MME solves fifteen normalized Mueller elements from twenty-four surviving Fourier coefficients and has nine left over. This is what those nine are for.
+All three set up a relation that must hold for an ideal instrument and gauge the defect by how far it breaks. Post 3 noted that DRC-MME solves fifteen normalized Mueller elements from twenty-four surviving Fourier coefficients and has nine left over. This is what those nine are for. The dual-rotating method of Post 3, which is outside the table, also gauges defects by how far five Mueller-matrix identities are violated, so it fits the same frame.
 
 The philosophies diverge. One is **cancelling by symmetry**. Zone averaging does not model the defects. It arranges the measurement so that particular classes of defect cancel, and knows in advance which ones vanish and which remain. The other is **measuring by model**. Regression calibration sets the defects up as parameters and fits them alongside everything else. It requires a model, but it can handle arbitrary defects and **returns the defect values themselves as a bonus.**
 
@@ -225,7 +229,7 @@ Table 1 of Johs's paper puts numbers on this. It reports two calibrations on the
 
 It is not small. Reusing the previous sample's $P_s$ would shift $\Psi$ by $0.030°$ on SiO$_2$/Si and $0.045°$ on glass, three to four times the $0.01°$ Johs treats as ideal. It does not reach $\Delta$ (Section 3). $\eta$ needs attention too. An $\eta$ off by only $5\times10^{-4}$ costs just $0.005°$ in $\Delta$ on a sample with $\Delta = 87°$, but $0.74°$ on one with $\Delta = 3°$.
 
-The decision therefore splits. Remeasuring the same sample without touching the mount, the previous calibration values can be reused. After exchanging the sample, at least $P_s$ must be found again. For samples with $\Delta$ near $0°$ or $180°$, refit $\eta$ on the spot as well. Regression calibration fits all five parameters for every sample, so each measurement is itself a recalibration. And if the MSE climbs above its usual level on the same instrument and the same kind of sample, suspect the instrument before the sample (Section 7). Ilsin An reaches the same judgement: if today's sample has the same thickness as yesterday's and the mount has not been touched, yesterday's calibration can be used; if high precision is needed or there is drift, calibrate again.
+The decision therefore splits. If you remeasure the same sample without touching the mount, the previous calibration values can be reused. After exchanging the sample, it is safer to find at least $P_s$ again. For samples with $\Delta$ near $0°$ or $180°$, refit $\eta$ on the spot as well. Regression calibration fits all five parameters for every sample, so each measurement is itself a recalibration. And if the MSE climbs above its usual level on the same instrument and the same kind of sample, suspect the instrument before the sample (Section 7). Ilsin An reaches the same judgement: if today's sample has the same thickness as yesterday's and the mount has not been touched, yesterday's calibration can be used; if high precision is needed or there is drift, calibrate again.
 
 Calibration, in other words, is not something done once when the instrument is installed.
 
@@ -233,7 +237,7 @@ Calibration, in other words, is not something done once when the instrument is i
 
 The angle a dial reports is not the true angle, and the difference can be amplified several times in the result. What has to be undone, fortunately, reduces to one rotation and one scale factor.
 
-Residual calibration reads all three numbers off the minimum of a single curve. Because it leans on a parabolic approximation, though, it leaves a systematic error in $\eta$ and loses the minimum altogether on samples with $\Delta$ near $0°$ or $180°$. Regression calibration drops that approximation and escapes both restrictions, at the risk of absorbing unmodelled effects into other parameters. The MSE is what watches for that risk. Zone averaging removes defects by symmetry, without a model. Of the calibration values, $A_s$ and $\eta$ stay with the instrument, while $P_s$ must be found again whenever the sample is remounted.
+Residual calibration reads all three numbers off the minimum of a single curve. Because it leans on a parabolic approximation, though, it leaves a systematic error in $\eta$ and loses the minimum altogether on samples with $\Delta$ near $0°$ or $180°$. Regression calibration drops that approximation and escapes both restrictions, at the risk of absorbing unmodelled effects into other parameters. The MSE is what watches for that risk. Zone averaging removes defects by symmetry, without a model. Of the calibration values, $A_s$ and $\eta$ stay with the instrument, while $P_s$ can change when the sample is remounted, so it is safer to find it again.
 
 If Post 1 asked what cannot be measured, Post 2 where the components stop working, and Post 3 why one element is not enough, this post asks **how to work with limitations once they are known.**
 
