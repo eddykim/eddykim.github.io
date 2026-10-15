@@ -45,13 +45,13 @@ Lens imperfections add a phase to the wave that depends on spatial frequency $k$
 
 $$ \chi(k) = \pi\,\Delta f\,\lambda\,k^2 + \frac{1}{2}\,\pi\,C_s\,\lambda^3 k^4 $$
 
-Defocus $\Delta f$ enters as $k^2$ and spherical aberration $C_s$ as $k^4$. A component of spatial frequency $k$ travels at an angle $\theta \approx \lambda k$ to the axis. Shifting the focal plane by $\Delta f$ changes its path by $\Delta f\,\theta^2/2$, and that path difference expressed as phase is the first term. Spherical aberration, as post 2 showed, bends outer rays more strongly, so it grows as the fourth power of angle. By convention $\Delta f$ is negative at underfocus. That the two terms can carry opposite signs proves decisive shortly.
+Defocus $\Delta f$ enters as $k^2$ and spherical aberration $C_s$ as $k^4$. A component of spatial frequency $k$ travels at an angle $\theta \approx \lambda k$ to the axis. Shifting the focal plane by $\Delta f$ changes its path by $\Delta f\,\theta^2/2$, and that path difference expressed as phase is the first term. Spherical aberration, as post 2 showed, bends outer rays more strongly, so it grows as the fourth power of angle. By convention $\Delta f$ is negative at underfocus. This will matter shortly: the two terms can carry opposite signs.
 
 Apply this phase to a weak phase object and recompute the intensity. Dropping the $\sigma_e^2$ term and using the fact that $\chi$ is even in $k$, a few lines of algebra (Spence, in the references) bring the vanished first-order term back.
 
 $$ I(x,y) \approx 1 + 2\,\sigma_e V_p \otimes \mathcal{F}^{-1}\!\left[\sin\chi(k)\right] $$
 
-Here $\sin\chi(k)$ is the contrast transfer function (CTF). It states, frequency by frequency, how much phase information reaches the intensity and with what sign. At a frequency where $\chi = -\pi/2$, $\sin\chi = -1$: the 90° rotation of section 1 happens exactly, and the scattered wave ends up in antiphase with the transmitted wave.
+Here $\sin\chi(k)$ is the contrast transfer function (CTF). It states, frequency by frequency, how much phase information reaches the intensity and with what sign. For example, at a frequency where $\chi = -\pi/2$, $\sin\chi = -1$: the 90° rotation of section 1 happens exactly, and the scattered wave ends up in antiphase with the transmitted wave.
 
 The signs are fixed here once. This post writes the wave leaving the specimen as $\exp(+i\sigma_e V_p)$, the phase added by the lens as $\exp(-i\chi)$, and underfocus as $\Delta f<0$. Under this convention a spatial frequency with $\sin\chi<0$ makes the atom sites darker than the background, and one with $\sin\chi>0$ makes them brighter. Some textbooks take underfocus as positive (the Scherzer defocus below then becomes +42.5 nm) or define the CTF as $-2\sin\chi$, so their curves can look upside down. The physics is the same.
 
@@ -68,7 +68,7 @@ Note especially how often the curves cross zero. Information at a frequency wher
 
 If the curve oscillates like that, when does a usable image appear?
 
-When $\sin\chi$ stays flat near $-1$ over a wide band. Every spatial frequency in such a band transfers with the same sign and comparable strength, so the image faithfully resembles the object. The opposite signs available to the two terms of $\chi$ serve here: taking $\Delta f$ negative at underfocus makes the $k^2$ term negative, cancelling the positive $k^4$ term across a broad range.
+When $\sin\chi$ stays flat near $-1$ over a wide band. Every spatial frequency in such a band transfers with the same sign and comparable strength, so the image faithfully resembles the object. Here we use the fact that the two terms of $\chi$ can have opposite signs: taking $\Delta f$ negative at underfocus makes the $k^2$ term negative, cancelling the positive $k^4$ term across a broad range.
 
 The defocus that cancels best is the Scherzer defocus. This post uses the extended Scherzer condition, with a coefficient of 1.2.
 
@@ -88,7 +88,7 @@ Does information beyond the point resolution disappear entirely? No. It merely b
 
 Mathematically $\sin\chi$ never stops oscillating however large $k$ grows. In practice two effects erase the high frequencies. Both appear as damping envelopes that multiply the transfer function.
 
-One is temporal coherence. The gun energy spread of post 1 and instabilities in the lens supply make the focal position spread slightly. Each focus within that spread carries a different $\chi$, and the contributions cancel, producing an envelope that falls exponentially in $k^4$.
+One is temporal coherence. The gun energy spread of post 1 and instabilities in the lens power supply make the focal position spread slightly. Each focus within that spread carries a different $\chi$, and the contributions cancel, producing an envelope that falls exponentially in $k^4$.
 
 The other is spatial coherence. The illuminating beam is not a perfect plane wave but carries some convergence, so components arriving at slightly different angles experience different $\chi$.
 
@@ -97,7 +97,9 @@ _Fig 2. The effective transfer function for the conditions of Figure 1 with a fo
 
 Figure 2 assumes a focal spread of 5 nm and a convergence semi-angle of 0.5 mrad. The thin grey line is the undamped $\sin\chi$, oscillating at full amplitude to the right edge. The blue dashed and green dotted curves are the two envelopes, and the heavy red curve is what actually transfers. The frequency at which the temporal coherence envelope falls to $1/e^2$ is the information limit, which under these conditions is $k = 7.1$ nm$^{-1}$, or 0.140 nm.
 
-The temporal coherence envelope has the form $\exp[-\tfrac{1}{2}(\pi\lambda\Delta)^2 k^4]$, where $\Delta$ is the focal spread. Setting it to $1/e^2$ gives an information limit of $k = \sqrt{2/(\pi\lambda\Delta)}$, inversely proportional to the square root of the focal spread. Estimate the focal spread from the energy spread alone as $\Delta \approx C_c\,\Delta E/E$, with the $C_c$ = 1.2 mm of post 2 at 200 kV. A tungsten thermionic gun (3 eV) gives $\Delta$ = 18 nm and an information limit of 0.27 nm, worse than the 0.192 nm point resolution. A Schottky field-emission gun (0.7 eV) gives 4.2 nm and 0.13 nm, and a cold field-emission gun (0.3 eV) 1.8 nm and 0.084 nm. Lens supply instability is left out, and the values shift depending on whether the energy spread is read as a full width at half maximum or a standard deviation, so these are estimates only. The trend is clear all the same: the information limit is set mainly by the energy spread of the gun.
+The temporal coherence envelope has the form $\exp[-\tfrac{1}{2}(\pi\lambda\Delta)^2 k^4]$, where $\Delta$ is the focal spread. Setting it to $1/e^2$ gives an information limit of $k = \sqrt{2/(\pi\lambda\Delta)}$, inversely proportional to the square root of the focal spread.
+
+Estimate the focal spread from the energy spread alone as $\Delta \approx C_c\,\Delta E/E$, with the $C_c$ = 1.2 mm of post 2 at 200 kV. A tungsten thermionic gun (3 eV) gives $\Delta$ = 18 nm and an information limit of 0.27 nm, worse than the 0.192 nm point resolution. A Schottky field-emission gun (0.7 eV) gives 4.2 nm and 0.13 nm, and a cold field-emission gun (0.3 eV) 1.8 nm and 0.084 nm. Lens supply instability is left out, and the values shift depending on whether the energy spread is read as a full width at half maximum or a standard deviation, so these are estimates only. The trend is clear all the same: in this estimate, unless a monochromator or chromatic-aberration corrector is fitted, the energy spread of the gun sets the information limit.
 
 Between the point resolution at 0.192 nm and the information limit at 0.140 nm lies the shaded band. Information there does not disappear. Because $\sin\chi$ changes sign repeatedly across it, however, some frequencies arrive faithfully and others inverted, mixed together. No amount of looking at the image distinguishes them.
 
@@ -132,7 +134,7 @@ All three came from the same specimen, the same lens and the same voltage, with 
 
 A thicker specimen makes matters worse. The phase object approximation itself breaks down as electrons scatter repeatedly inside the specimen, and then contrast inverts with thickness as well. Hence the need to match thickness and defocus together when interpreting HRTEM images.
 
-Real images behave the same way. Figure 4 shows HRTEM images of a hematite crystal taken at different thicknesses and defocus values, with simulated images for the same conditions overlaid.
+Real images also include cases where contrast flips with defocus. Figure 4 shows HRTEM images of a hematite crystal taken at different thicknesses and defocus values, with simulated images for the same conditions overlaid.
 
 <img src="/assets/img/posts/electron-microscopy-tem-phase-contrast-ctf/ext-hrtem-hematite.png" alt="Three HRTEM images of hematite viewed along [001] compared with simulated images" width="760">
 _Fig 4. Real HRTEM images of hematite (α-Fe₂O₃) viewed along [001]. The left panel covers a region of varying thickness; the middle and right panels were taken at a thickness of 5.5 nm with only the defocus changed (60.5 nm and 80.5 nm as given in the source, whose sign convention is not stated). The red boxes hold simulated images for the same conditions with the atomic model overlaid (Fe grey, O teal); the lattice that appears as bright spots in the middle panel turns into dark spots on the right. (Source: Klingm01, [Hrtem hematit](https://commons.wikimedia.org/wiki/File:Hrtem_hematit.png), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0))_
@@ -153,7 +155,7 @@ A thin specimen alters the phase of the electron wave rather than its amplitude,
 
 The defocus and spherical aberration terms of $\chi$ can oppose one another. At the Scherzer defocus of $-42.5$ nm the cancellation opens a passband out to $k = 5.2$ nm$^{-1}$, whose edge is the point resolution of 0.192 nm, the same quantity as post 2's 0.197 nm. Beyond it information still transfers, but $\sin\chi$ mixes signs so that it cannot be read without computation, and the temporal coherence envelope cuts the information off entirely at 0.140 nm.
 
-Figure 3 carries the central conclusion. Photograph one specimen at three focus settings and the atoms come out dark, invisible, or bright. A high-resolution image is not a photograph of an atomic arrangement but the output of a transfer function, and interpreting it requires knowing the conditions that produced it.
+Figure 3 carries the central conclusion. Photograph one specimen at three focus settings and, for this lattice (0.25 nm), the atoms come out dark, invisible, or bright. A high-resolution image is not a photograph of an atomic arrangement but the output of a transfer function, and interpreting it requires knowing the conditions that produced it.
 
 The next post closes the series. Illumination has been a broad beam until now; post 7 converges it back to a point and scans. It covers why reciprocity holds in scanning transmission electron microscopy (STEM), and why a high-angle annular dark field (HAADF) detector, producing contrast that scales as roughly the 1.6th to 2nd power of atomic number, is free of the sign-reversal problem met here. Energy-dispersive X-ray spectroscopy (EDS) and electron energy loss spectroscopy (EELS) for reading composition follow, along with 4D-STEM, which stores whole diffraction patterns and recovers phase by computation, and finally focused ion beam (FIB) specimen preparation and semiconductor metrology applications.
 
