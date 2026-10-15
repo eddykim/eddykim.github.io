@@ -11,7 +11,7 @@ description: How Simulated Annealing and Basin-Hopping cross the basin boundarie
 math: true
 ---
 
-[Post 3](/en/posts/optimization-levenberg-marquardt/) showed that Levenberg-Marquardt (LM), by damping the step through the damping parameter $\mu$, prevents the divergence that comes from overly large Gauss-Newton steps; it reproduced this with a Jacobian close to zero. The slow convergence of large-residual problems, however, remains. And as the experiments at the end of that post established, LM has a further limit that $\mu$ cannot repair: starting from $d_0=1300$ nm it always converged near $d=1293$ nm, and from $d_0=1690$ nm always near $d=1689$ nm. Changing $\tau$, the initial damping scale, made no difference. Local methods all descend only the valley they happen to stand in; whether a deeper floor lies in the next valley is invisible to them. What, then, has to be added for a local optimizer to see the next valley?
+[Post 3](/en/posts/optimization-levenberg-marquardt/) showed that Levenberg-Marquardt (LM), by damping the step through the damping parameter $\mu$, prevents the divergence that comes from overly large Gauss-Newton steps. As the experiments at the end of that post established, LM has a further limit that $\mu$ cannot repair: starting from $d_0=1300$ nm it always converged near $d=1293$ nm, and from $d_0=1690$ nm always near $d=1689$ nm. Changing $\tau$, the initial damping scale, made no difference. Local methods all descend only the valley they happen to stand in; whether a deeper floor lies in the next valley is invisible to them. What, then, has to be added for a local optimizer to see the next valley?
 
 This post takes on that basin problem directly; a basin is the valley that drains into one minimum. Two classical heuristics leave the local optimizer itself alone and instead layer randomness and a probabilistic acceptance rule on top of it, so the search can leave a bad valley on its own: simulated annealing (SA) and basin-hopping. Both are implemented here and tested to see how well they actually work. The landscape has a single unknown, the thickness, so it is one-dimensional; the many-parameter case gets a brief word in Section 6. Where posts 1 through 3 were a series about local methods, this one is the global search layer wrapped around them.
 
@@ -22,7 +22,7 @@ Take the objective $J(d)$ of the running example again (single SiO2/Si film, tru
 <img src="/assets/img/posts/optimization-global-heuristics/en/fig1-objective-landscape.png" alt="The objective landscape and its three basins" width="600">
 _Fig 1. The objective landscape (1200–1800 nm, log scale). The red dots are the three local minima and the dashed lines the basin boundaries. Only the central floor at 1490 nm is more than two orders of magnitude deeper._
 
-There are three local minima in this range: $d\approx1293$ nm ($J\approx0.867$), $d\approx1490$ nm ($J\approx0.0024$, the global minimum), and $d\approx1689$ nm ($J\approx1.059$). The basin boundaries, the peaks of the landscape, sit at $d\approx1391$ nm and $d\approx1589$ nm, matching the "roughly 1390 and 1590" estimated in post 1. The boundary peaks reach $J\approx5.12$ and $J\approx4.88$, about 4.25 above the 1293 nm floor. It is also worth noting that the global minimum's $J$ is more than two orders of magnitude below the other two. If the initial position lies outside that 198 nm-wide basin, no amount of careful step adjustment lets LM leave the valley it is standing in.
+There are three local minima in this range: $d\approx1293$ nm ($J\approx0.867$), $d\approx1490$ nm ($J\approx0.0024$, the global minimum), and $d\approx1689$ nm ($J\approx1.059$). The basin boundaries, the peaks of the landscape, sit at $d\approx1391$ nm and $d\approx1589$ nm, matching the "roughly 1390 and 1590" estimated in post 1. The boundary peaks reach $J\approx5.12$ and $J\approx4.88$, about 4.25 and 4.01 above the 1293 nm floor respectively. Below, the barrier height is taken as 4.25, that of the higher left peak. It is also worth noting that the global minimum's $J$ is more than two orders of magnitude below the other two. If the initial position lies outside that 198 nm-wide basin, no amount of careful step adjustment lets LM leave the valley it is standing in.
 
 ## 2. Simulated Annealing (SA)
 
@@ -79,13 +79,13 @@ All three found the global minimum within this 300-step budget, but widening the
 
 ### 3.1 The principle
 
-SA compares arbitrary points at every step, so it keeps taking small steps even near a valley floor. What if the comparison were made between valley floors from the start? Basin-hopping has the same aim as SA, and this is exactly where it differs. Where SA accepts or rejects each coordinate $d$ by the Metropolis criterion, basin-hopping accepts or rejects the answer to "which basin's floor is the search on?"
+SA compares arbitrary points at every step, so it keeps taking small steps even near a valley floor. What if the comparison were made between valley floors from the start? Basin-hopping has the same aim as SA, and this is exactly where it differs. Where SA accepts or rejects each coordinate $d$ by the Metropolis criterion, basin-hopping accepts or rejects which basin's floor the search currently sits on.
 
 1. Apply a large random perturbation to the current solution: $$d_0' = d + \mathcal{N}(0,\sigma^2)$$
 2. Run a local optimization from $$d_0'$$ to convergence, finding that basin's floor $$d'$$
 3. Compare the two floors, $J(d)$ against $$J(d')$$, by the Metropolis criterion, and accept or reject
 
-Why this moves so cleanly becomes clear from the landscape basin-hopping effectively sees. Wales and Doye described the method as a transformation of the landscape: each point $d$ is replaced by the value of the floor that local optimization reaches from it. Applied to the landscape of Figure 1, every point between 1391 nm and 1589 nm takes the same value, 0.0024, because LM started anywhere in that range descends to the 1490 nm floor. The left basin becomes 0.867 and the right 1.059. The landscape turns into flat steps, one per basin, and the barriers between them vanish. The Metropolis criterion in basin-hopping therefore sees only the height of the steps (floor differences of 0.19–0.86), not the height of the barriers (about 4.25). It is unmoved by fine ripples in the landscape, such as those the noise creates, and moves far more cleanly in units of whole basins.
+Why this moves in whole basins becomes clear from the landscape basin-hopping effectively sees. Wales and Doye described the method as a transformation of the landscape: each point $d$ is replaced by the value of the floor that local optimization reaches from it. Applied to the landscape of Figure 1, every point between 1391 nm and 1589 nm takes the same value, 0.0024, because LM started anywhere in that range descends to the 1490 nm floor. The left basin becomes 0.867 and the right 1.059. The landscape turns into flat steps, one per basin, and the barriers between them vanish. The Metropolis criterion in basin-hopping therefore sees only the height of the steps (floor differences of 0.19–0.86), not the height of the barriers (about 4.25). On Wales and Doye's reading, the search therefore moves in units of whole basins.
 
 The name basin-hopping was given by Wales and Doye (1997). The method itself is essentially the Monte Carlo-minimization of Li and Scheraga (1987), as Wales and Doye themselves note.
 
@@ -109,7 +109,7 @@ for _ in range(n_hops):
         best_d, best_J = d, J
 ```
 
-The perturbation size (`perturb_sigma`) has to be comparable to the basin spacing (about 200 nm, from Figure 1) for any chance of landing in a different basin. It is set to 150 nm here; since the neighbouring boundary is about 100 nm from the 1293 nm floor, each hop (one perturbation plus one local optimization) then has roughly a 23% chance of landing in the global basin.
+The perturbation size (`perturb_sigma`) has to be comparable to the basin width (about 200 nm, from Figure 1) for any chance of landing in a different basin. It is set to 150 nm here; since the neighbouring boundary is about 100 nm from the 1293 nm floor, each hop (one perturbation plus one local optimization) then has roughly a 23% chance of landing in the global basin.
 
 ### 3.3 Why does a high temperature fail?
 
@@ -118,13 +118,13 @@ Twenty-five hops were attempted from the same $d_0=1300$ nm, at a fixed temperat
 <img src="/assets/img/posts/optimization-global-heuristics/en/fig3-basinhopping-temperature-schedule.png" alt="Basin-hopping trajectories by temperature" width="600">
 _Fig 3. Basin-hopping trajectories at fixed temperatures (d0 = 1300 nm, perturbation standard deviation 150 nm, 25 hops, no cooling). T0 = 0.0005 and 0.05 give the same trajectory and overlap; T0 = 5 is pushed into basins worse than the starting one._
 
-The very low temperature (0.0005) and the moderate one (0.05) give identical trajectories (the blue line is hidden behind the green). Both accept 17 of 25 hops, and both jump from $d=1293$ to $d=1490$ at the fourteenth hop and stay there. Within the 1200–1800 nm search range there are only three basins, widely spaced, so the low-temperature strategy of accepting only improving hops works perfectly well on this problem.
+The very low temperature (0.0005) and the moderate one (0.05) give identical trajectories (the blue line is hidden behind the green). Both accept 17 of 25 hops, and both jump from $d=1293$ to $d=1490$ at the fourteenth hop and stay there. Within the 1200–1800 nm search range there are only three basins, widely spaced, so the low-temperature strategy of accepting only hops with $\Delta J\le0$ (revisits of the same floor included) works well enough on this problem.
 
 At a very high temperature (5.0), 24 of the 25 hops are accepted, effectively all of them. The result is a sequence $d=1293 \to 1022 \to 696 \to 530 \to 441$, thrown into basins all worse than the starting one ($J\approx2$–2.6). It never even passes near the global minimum, so `best_J` remains at the value of the starting basin, 0.867. The acceptance probability shows why. A hop from the 1293 nm floor to the 1022 nm floor has $\Delta J\approx1.10$; at $T=5$ it is accepted with probability 0.80, at $T=0.05$ with $3\times10^{-10}$.
 
-I had expected that too low a temperature would reduce basin-hopping to multi-start. On this problem that was wrong; the lower temperature in fact worked better. The real obstacle was the opposite: at too high a temperature nearly every move into a worse basin is accepted, and the search ends up wandering among basins worse than the one it started in. This run went as far as 441 nm, outside the search range. The acceptance rule may allow such a hop, but physically it is a thickness outside the prior range. Bounding the search to the prior range prevents this kind of escape.
+I had expected that too low a temperature would reduce basin-hopping to multi-start. On this problem that was wrong; the lower temperature in fact worked better. The real obstacle was the opposite: at too high a temperature nearly every move into a worse basin is accepted, and the search ends up wandering among basins worse than the one it started in. This run went as far as 441 nm, outside the search range. The acceptance rule may allow such a hop, but it lies outside the search range fixed in advance. Bounding the search to the prior range prevents this kind of escape.
 
-This difference cannot, however, be put down to the structure of SA versus basin-hopping. The basin-hopping here runs at a fixed temperature (`cooling=1.0`; Wales and Doye's original paper and scipy also keep T fixed), whereas SA cools to below one ten-thousandth of $T_0$ over its 300 steps. With the conditions matched over 200 seeds, holding both at $T=5$ leaves the final position within 5 nm of the global minimum in 1/200 SA runs and 20/200 basin-hopping runs, and cooling basin-hopping by 0.7 per hop raises it to 174/200. What prevents the loss at high temperature is cooling, not the choice of algorithm.
+The better showing of SA at $T_0=5$ (141/200) cannot, however, be put down to the structure of SA versus basin-hopping. The basin-hopping here runs at a fixed temperature (`cooling=1.0`; Wales and Doye's original paper and scipy also keep T fixed), whereas SA cools to below one ten-thousandth of $T_0$ over its 300 steps. With the conditions matched over 200 seeds, holding both at $T=5$ leaves the final position within 5 nm of the global minimum in 1/200 SA runs and 20/200 basin-hopping runs, and cooling basin-hopping by 0.7 per hop raises it to 174/200. What prevents the loss at high temperature is cooling, not the choice of algorithm.
 
 ## 4. Over 50 random starts, how often and in how many steps?
 
@@ -148,7 +148,7 @@ The blue square is the first floor reached by LM from $d_0=1300$ ($d=1293$); the
 
 ## 6. Summary: when is a local method enough?
 
-Everything refined across posts 1 to 3 (gradient descent, Newton, Gauss-Newton, LM) rested on the premise of already being in the right basin. As this post shows, the moment that premise breaks, no amount of careful damping helps a local method: it has no way of seeing another valley in the first place.
+Everything refined across posts 1 to 3 (gradient descent, Newton, Gauss-Newton, LM) rested on the premise of already being in the right basin. As this post shows, the moment that premise breaks, no way of tuning the damping rescues a local method: it has no way of seeing another valley in the first place.
 
 In practice, four questions usually settle which to use.
 
@@ -156,13 +156,13 @@ In practice, four questions usually settle which to use.
 | --- | --- | --- | --- | --- |
 | Prior information on the initial value | A previous measurement, process spec or design value narrows the initial guess to within a basin width | A single LM run | It starts inside the correct basin | Basin width 198 nm; single LM from random starts 36% |
 | Cost of the objective | Milliseconds per evaluation (transfer matrix of a multilayer stack) or seconds (FDTD) | Global search only when needed | Global search makes several to over ten times as many calls | Calls per start: LM 121, SA 301, basin-hopping about 1,790 |
-| Number and spacing of basins | Many, closely spaced basins (especially with several parameters) | Set temperature and perturbation with care; add cooling if needed | The high-temperature failure of wandering among worse basins appears readily | Three basins about 200 nm apart: a low temperature is enough |
+| Number and spacing of basins | Many, closely spaced basins (especially with several parameters) | Set temperature and perturbation with care; add cooling if needed | The high-temperature failure of wandering among worse basins appears readily | Three basins, each about 200 nm wide: a low temperature is enough |
 | Local structure and local optimizer | A smooth landscape and a trustworthy local optimizer (LM) | Basin-hopping | It compares floors and moves basin by basin | Reached in 2.2 hops on average |
-| Local structure and local optimizer | A rough landscape, or no good local optimizer | SA | It needs no local optimization stage and makes fewer calls | 61.8 iterations on average, 301 calls |
+| Local structure and local optimizer | A rough landscape, or no good local optimizer | SA | It needs no local optimization stage and makes fewer calls | 61.8 iterations on average, 301 calls (rough landscapes not tested in this post) |
 
-The first row is the most common answer. The basin width in this example was 198 nm, and having no prior information even at that precision is rarer than one might think. When a global search really is needed and the success rates are equal, SA is the cheaper of the two. Basin-hopping gives a cleaner trajectory and fewer hops but pays for a local optimization at every hop.
+In this example the first row was enough, because the basin width was 198 nm. When a global search really is needed and the success rates are equal, SA is the cheaper of the two. Basin-hopping gives a cleaner trajectory and fewer hops but pays for a local optimization at every hop.
 
-From gradient descent in post 1 to basin-hopping here, this series has worked step by step through a trade-off between two axes: how cleverly local information (gradient, curvature) is used, and how widely global structure is surveyed. Real metrology software commonly uses both: a global search such as a grid search to find the approximate location, and a local method such as LM for the final precision.
+From gradient descent in post 1 to basin-hopping here, this series has worked step by step through a balance between two axes: how cleverly local information (gradient, curvature) is used, and how widely global structure is surveyed. Real metrology software commonly uses both: a global search such as a grid search to find the approximate location, and a local method such as LM for the final precision.
 
 ## References
 
