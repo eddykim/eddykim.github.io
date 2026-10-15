@@ -84,7 +84,7 @@ LABELS = {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT,
         # 그림1
         "fig1": "광원과 검출기를 맞바꾸면 같은 상이 된다",
-        "f1tem": "TEM", "f1stem": "STEM (관례대로 뒤집어 그림)",
+        "f1tem": "TEM", "f1stem": "STEM (TEM과 같은 방향으로 뒤집어 그림)",
         "f1src": "광원", "f1det": "검출기", "f1spec": "시편", "f1lens": "렌즈",
         "f1angles_tem": "위쪽 각 = 조명 각\n아래쪽 각 = 수집 각",
         "f1angles_stem": "위쪽 각 = 수집 각\n아래쪽 각 = 조명 각",
@@ -112,7 +112,7 @@ LABELS = {
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
         "fig1": "Swap source and detector and the image is the same",
-        "f1tem": "TEM", "f1stem": "STEM (drawn inverted, as is conventional)",
+        "f1tem": "TEM", "f1stem": "STEM (drawn inverted to match the TEM layout)",
         "f1src": "Source", "f1det": "Detector", "f1spec": "Specimen", "f1lens": "Lens",
         "f1angles_tem": "Upper angle = illumination\nLower angle = collection",
         "f1angles_stem": "Upper angle = collection\nLower angle = illumination",
@@ -313,11 +313,15 @@ def fig3_4dstem(L):
 
 
 def main():
+    import sys
+    only = set(sys.argv[1:])  # 예: "fig1-reciprocity" 만 다시 그리기
     for lang, L in LABELS.items():
         os.makedirs(L["dir"], exist_ok=True)
         for name, builder in [("fig1-reciprocity", fig1_reciprocity),
                               ("fig2-z-exponent", fig2_z_exponent),
                               ("fig3-4dstem", fig3_4dstem)]:
+            if only and name not in only:
+                continue
             fig = builder(L)
             fig.savefig(os.path.join(L["dir"], name + ".png"), dpi=150,
                         bbox_inches="tight")
