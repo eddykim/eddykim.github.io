@@ -26,7 +26,7 @@ Cohn's 1994 chapter in the edited volume *Microanalysis of Solids* divides micro
 
 Both pay for it. The microspot approach keeps its precision but has to move the sample mechanically from point to point. Cohn's numbers show the difference. A commercial microspot instrument needs **more than 11 hours** to acquire a $100 \times 100$ point image, while a comparatively slow full-field instrument acquires $480 \times 512$ points in **55 seconds**. In exchange, full-field imaging carries a larger uncertainty.
 
-Cohn's table of instruments reported through the 1980s shows something else. An instrument with a $10 \times 30$ μm spot has an uncertainty of $0.1°$ in $\Delta$. A transmission instrument with a 100 μm spot and **eight-zone averaging** reaches $0.005°$. [Post 4](/en/posts/ellipsometer-calibration/) covered four-zone averaging; this instrument went to eight. **Spatial resolution and accuracy trade against each other within a single table.**
+Cohn's table of instruments reported through the 1980s shows something else. An instrument with a $10 \times 30$ μm spot has an uncertainty of $0.1°$ in $\Delta$. A transmission instrument with a 100 μm spot and **eight-zone averaging** reaches $0.005°$. [Post 4](/en/posts/ellipsometer-calibration/) covered four-zone averaging; this instrument went to eight. The instrument types and averaging schemes differ, so this cannot be stated firmly, but **spatial resolution and accuracy appear to trade against each other within a single table.**
 
 Full-field imaging carries one more chronic problem. Cohn puts it this way.
 
@@ -34,7 +34,7 @@ Full-field imaging carries one more chronic problem. Cohn puts it this way.
 
 The sample plane is tilted with respect to the optical axis, so the image plane tilts too and one end falls out of focus. The remedies on offer are wedge prisms for focus correction or scanning stepwise and keeping only the rows with acceptable resolution. Neither is clean.
 
-Normal incidence removes both the defocus and the working-distance constraint. The image plane does not tilt, so there is no defocus. Objective and sample face each other squarely, so **a short working distance no longer risks a collision.** A high-NA objective has a short focal length, and in an oblique arrangement that was exactly the danger.
+Normal incidence removes both the defocus and the working-distance constraint. The image plane does not tilt, so there is no defocus. The objective looks straight down at the sample, so the lens need not be tilted out of the beam path and **a short working distance is no longer a problem.** A high-NA objective has a short focal length, and in an oblique arrangement that was exactly the danger.
 
 ## 2. Where is the back focal plane, and what does it show?
 
@@ -51,7 +51,7 @@ The difficulty is knowing where that plane is. The author's dissertation records
 
 So it is found experimentally. Send a collimated beam into the objective and every ray converges to one small focal spot at the back focal plane, growing by defocus on either side. Mount an imaging system on a micrometer stage, scan along the optical axis, and find where the spot diameter is smallest.
 
-The result explains the layout of these instruments. In the objective the author used, the back focal plane sat **6.1 mm inside the rear face of the objective**, inside the barrel. A camera cannot be placed there, so **a relay lens must image it outside.** That is why instruments built around the back focal plane usually carry one.
+From this result comes the layout of these instruments. In the objective the author used, the back focal plane sat **6.1 mm inside the rear face of the objective**, inside the barrel. A camera cannot be placed there, so **a relay lens must image it outside.** That is why instruments built around the back focal plane usually carry one.
 
 ## 3. Which angle of incidence does each radius in the back focal plane correspond to?
 
@@ -73,7 +73,7 @@ That range matters because of the Brewster angle. As [Ellipsometry Foundations 1
 
 Silicon is not. With an index of 3.875 at 632.8 nm its Brewster angle is $75.53°$, and reaching it takes **NA 0.968**. Dry objectives stop at about 0.95, so this is practically out of reach in air. The most sensitive angle is unavailable on the main substrate of semiconductor metrology, and that is one practical limit of this method.
 
-For strongly absorbing metals the reference is the pseudo-Brewster angle. Ye and colleagues give $67.9°$ for gold ($N = 0.35 - j2.45$). The three common definitions give $65.55°$ (minimum of $\lvert r_p\rvert$), $69.94°$ (minimum of $\lvert r_p/r_s\rvert$) and $70.38°$ ($\Delta = 90°$), and none of them gives $67.9°$.
+For strongly absorbing metals the reference is the pseudo-Brewster angle. Ye and colleagues give $67.9°$ for gold ($N = 0.35 - j2.45$, wavelength 546.1 nm). The three common definitions give $65.55°$ (minimum of $\lvert r_p\rvert$), $69.94°$ (minimum of $\lvert r_p/r_s\rvert$) and $70.38°$ ($\Delta = 90°$), and none of them gives $67.9°$.
 
 ## 4. How does the polarization change as you go around in azimuth?
 
@@ -119,9 +119,9 @@ _Figure 5. A synthesized example of annular acquisition (32.9 nm SiO$$_2$$ on Si
 
 Putting the values in Figure 5(b), $\alpha_2 = -0.705$ and $\alpha_4 = 0.904$, into the inversion gives $\Psi = 34.13°$, the true value. The two coefficients of one ring fix $\Psi$ and $\cos\Delta$.
 
-The four-lobed pattern on the left is the one Ye's paper describes. Dark and bright axes cross. Since polarizer and analyzer are both aligned to $x$, the vertical axis is the brighter one.
+The four-lobed pattern on the left is the one Ye's paper describes. Two bright axes (the vertical one brighter) and the dark diagonals between them cross in a cross shape. Since polarizer and analyzer are both aligned to $x$, the vertical axis is the brighter one.
 
-The right panel shows what the method buys. **A single image yields $\Psi$ and $\Delta$ from $6°$ to $64°$ of incidence at once.** Work that meant swinging a goniometer and measuring again at each angle becomes a matter of reading a different radius.
+The right panel shows what the method buys. Without noise, **a single image yields $\Psi$ and $\Delta$ from $6°$ to $64°$ of incidence at once.** Work that meant swinging a goniometer and measuring again at each angle becomes a matter of reading a different radius.
 
 What is obtained, though, is $\cos\Delta$. **The sign of $\Delta$ is lost here too.** This is the very arrangement that Section 2 of Post 3 said misses the fourth row and column when polarizer and analyzer turn together. With no component to produce circular polarization, it cannot read $S_3$, just as the rotating analyzer of Post 1 could not. In addition, $\cos\Delta$ has zero slope near $0°$ and $180°$, so sensitivity to $\Delta$ drops where $\Delta$ hugs $180°$, as it does at small angles in the right panel of Figure 5.
 
@@ -133,7 +133,7 @@ Three branches have grown from the question of what to read in the back focal pl
 | Annular acquisition | intensity around a ring of fixed radius | Ye 2007 |
 | Interferometry | phase distribution in the pupil | Feke 1998 |
 
-The third has an interesting origin. Feke and colleagues measured the **phase** distribution in the back focal plane with a Michelson-type phase-shifting interferometer and obtained $\Delta$ directly. Their motivation was not thin-film metrology. A precision topography interferometer picks up an error on heterogeneous samples because the phase change on reflection differs between materials. **They wanted to measure that phase change and subtract it.** A topography-interferometer manufacturer among the co-authors is the evidence.
+The third has an interesting origin. Feke and colleagues measured the **phase** distribution in the back focal plane with a Michelson-type phase-shifting interferometer and obtained $\Delta$ directly. Their motivation was not thin-film metrology. A precision topography interferometer picks up an error on heterogeneous samples because the phase change on reflection differs between materials. **They wanted to measure that phase change and subtract it.** The co-authors include a topography-interferometer manufacturer, which supports this reading.
 
 ## 6. If one camera reads the pupil, where does wavelength go?
 
@@ -143,7 +143,7 @@ Reading the back focal plane requires a two-dimensional imaging camera, and **ra
 
 > An ordinary imaging sensor **cannot resolve wavelength directly.**
 
-Three remedies exist and each costs something: a band-pass filter, an RGB camera with a Bayer filter, or several single-wavelength sources switched in turn. The author's dissertation lists three prices as well. The system becomes more complex, it costs more, and **measurement range and speed are constrained.** In a study that photographed the back focal plane through a Bayer filter, the limited spectral resolution left the fitted parameters markedly less distinguishable.
+Three remedies exist and each costs something: a band-pass filter, an RGB camera with a Bayer filter, or several single-wavelength sources switched in turn. The author's dissertation lists three prices as well. The system becomes more complex, it costs more, and **measurement range and speed are constrained.** In the study the author's dissertation cites that photographed the back focal plane through a Bayer filter, the limited spectral resolution left the fitted parameters markedly less distinguishable.
 
 The data volume grows too. Cohn notes that a full-field imaging instrument needs at least three irradiance images to determine $\Psi$ and $\Delta$ completely, which at $480 \times 512$ pixels and 8-bit depth comes to at least 0.74 MByte for the set (about 0.25 MByte per image). Annular acquisition in the back focal plane gets $\Psi$ and $\cos\Delta$ from a single image. Adding wavelengths in sequence, however, multiplies the image count by the number of wavelengths, and the data needed for one point grow quickly.
 
@@ -164,7 +164,7 @@ Normal incidence and a high numerical aperture removed the geometric problems an
 
 Erman and Theeten, as presented in Cohn's chapter, treated this with Fourier optics. Focusing through a finite aperture gives the angle of incidence a spread, and $r_p$ and $r_s$ are **each convolved** over that spread before their ratio sets the detected $\tan\Psi$. Under coherent illumination amplitude functions are convolved; under incoherent illumination irradiance functions are.
 
-Munro and Török treated the same problem in Mueller form in 2008. The two lines of work do not cite each other, but both say that what gets averaged depends on detection, so they read as the same distinction. A focused field is a sum of plane waves, each meeting the sample matrix once, and **what gets averaged depends on how it is detected.** Confocal detection averages the sample's **Jones** matrices; conventional detection averages the **Mueller** matrices.
+Munro and Török treated the same problem in Mueller form in 2008. The two lines of work do not cite each other, but both say that what gets averaged depends on detection, so the author reads them as the same distinction. A focused field is a sum of plane waves, each meeting the sample matrix once, and **what gets averaged depends on how it is detected.** Confocal detection averages the sample's **Jones** matrices; conventional detection averages the **Mueller** matrices.
 
 Why the distinction matters: the average of Jones matrices is still a single Jones matrix, so it produces no depolarization. The average of Mueller matrices does.
 
@@ -224,7 +224,7 @@ This problem is the subject of the author's doctoral work. Several groups have u
 | Line-scan plus polarization filter | ○ | ○ | ✗ | ✗ |
 | Back focal plane with polarization modulation | ✗ | ○ | ✗ | ○ |
 
-Illuminating a shaped ring along the radial direction gives high spatial resolution. It requires measuring at many radii, however, and as the ring narrows the angular resolution improves while the signal weakens. A line-scan spectrograph with a polarization filter achieves single-shot operation and a microspot. It **cannot measure the phase change fully** and stays reflectance-centred, which makes Mueller-matrix analysis difficult.
+Illuminating a ring-shaped structured beam one radius after another gives high spatial resolution. It requires measuring at many radii, however, and as the ring narrows the angular resolution improves while the signal weakens. A line-scan spectrograph with a polarization filter achieves single-shot operation and a microspot. It **cannot measure the phase change fully** and stays reflectance-centred, which makes Mueller-matrix analysis difficult. The channeled-spectroscopy combination achieves single-shot operation and a microspot but needs several measurements to resolve the angle. The Bayer entry in the table follows the table in the author's dissertation.
 
 The author's dissertation sums up the map as follows.
 
@@ -236,9 +236,9 @@ In the back focal plane of an objective with a high numerical aperture, radius b
 
 Three costs follow. Radius and azimuth consume both camera axes, so **there is no axis left for wavelength.** Focusing breaks the plane-wave assumption and, with conventional detection, **produces depolarization in a system that has none**, though pixel-by-pixel reading of the back focal plane keeps it negligible. And the nominal NA cannot be trusted, so **the angle scale itself has to be rebuilt.**
 
-The three ideas that carried this series are all recovered here. A slot that should be empty watches the instrument; a defect in one context becomes the operating principle in another; and what the instrument averaged, the model must average too.
+Two of the ideas that carried this series are used here. A defect in one context becomes the operating principle in another; and what the instrument averaged, the model must average too.
 
-One link remains. Post 5 loaded the polarization onto the wavelength axis so as not to give that axis up; Post 6 used the spatial axes to spread the angles and lost the wavelength axis instead. **What each method gives up and what it keeps fit together.** Provide a separate wavelength axis with a line-scan spectrograph, carry the polarization modulation on that axis through channeled spectroscopy, and spread the angles in the back focal plane, and all four requirements can be met at once. The author's dissertation attempts that combination, and it is why this series placed Posts 5 and 6 side by side.
+One link remains. Post 5 loaded the polarization onto the wavelength axis so as not to give that axis up; Post 6 used the spatial axes to spread the angles and lost the wavelength axis instead. **What each method gives up and what it keeps fit together.** Provide a separate wavelength axis with a line-scan spectrograph, carry the polarization modulation on that axis through channeled spectroscopy, and spread the angles in the back focal plane, and all four requirements (microspot, single-shot, angular resolution and error calibration) can be met at once. The author's dissertation attempts that combination, and it is why this series placed Posts 5 and 6 side by side.
 
 Across six posts the question was a single one. **What cannot be measured, and how do you work with that once you know it?**
 
