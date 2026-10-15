@@ -79,7 +79,7 @@ Finding an edge means finding where brightness changes abruptly, which means dif
 A derivative kernel has $\sum w = 0$, because it must return zero over flat regions. Its $\sum w^2$, however, is not zero, so it erases signal while keeping noise. For the central difference $[-0.5, 0, 0.5]$, $\sqrt{\sum w^2} = 0.707$. It removes only 30% of the noise while eliminating the flat component entirely.
 
 <img src="/assets/img/posts/imgproc-convolution-kernels/en/fig3-derivative-kernels.png" alt="Frequency responses of derivative kernels compared with the ideal derivative" width="700">
-_Fig 3. Frequency responses of the central difference, of a kernel combining [1,2,1] along the same axis (the diagonal section of the Sobel response), and of a σ=2 DoG, compared with the ideal derivative (dotted). All three follow the ideal derivative at low frequencies; the DoG peaks at f=0.15 and pushes everything above it nearly to zero._
+_Fig 3. Frequency responses of the central difference, of a kernel combining [1,2,1] along the same axis (the diagonal section of the Sobel response), and of a σ=2 DoG, compared with the ideal derivative (dotted). The central difference follows the ideal derivative at low frequencies; the DoG peaks at f=0.15 and pushes everything above it nearly to zero._
 
 The ideal derivative responds in direct proportion to frequency. The central difference tracks that line well at low frequencies, sags gradually below it, peaks at $f=0.5$ with a value of $1.0$, and falls to zero at Nyquist. Patterns near Nyquist are therefore invisible to a central difference, which is worth knowing in its own right.
 
@@ -103,7 +103,7 @@ The familiar Sobel kernel has the same structure: a $[-1, 0, 1]$ derivative comp
 
 Everything so far was preparation. Stronger smoothing lowers the noise and stabilizes the edge position, while simultaneously blurring the edge and making its position harder to pin down. Two effects in opposite directions imply an optimum. The following experiment measures where it lies.
 
-A synthetic edge with a known position was generated. The convolution of a step with a Gaussian point spread function (PSF) is an error function, so the edge profile is an erf; the blur width was set to $1.2$ pixels and the true position to $63.37$ pixels. The contrast of 1200 DN and the noise of 17.2 DN are carried over from section 5 of Post 1. For each smoothing width, noise was redrawn 400 times. The position was estimated by fitting a parabola through the three samples around the gradient maximum and taking its vertex.
+A synthetic edge with a known position was generated. The convolution of a step with a Gaussian point spread function (PSF) is an error function, so the edge profile is an erf; the blur width (the standard deviation of the Gaussian PSF) was set to $1.2$ pixels and the true position to $63.37$ pixels. The contrast of 1200 DN and the noise of 17.2 DN are carried over from section 5 of Post 1. For each smoothing width, noise was redrawn 400 times. The position was estimated by fitting a parabola through the three samples around the gradient maximum and taking its vertex.
 
 ```python
 # core of edge_experiment.py
@@ -118,11 +118,11 @@ def estimate_edge(profile, smooth_sigma):
 <img src="/assets/img/posts/imgproc-convolution-kernels/en/fig4-edge-tradeoff.png" alt="Edge position scatter traded against edge width as smoothing increases" width="700">
 _Fig 4. Position scatter (red, left axis) and edge width (blue, right axis) of a synthetic edge with 1.2-pixel blur, from 400 noise draws at each smoothing width σ. The scatter bottoms out at 0.036–0.038 pixels over the shaded range σ=2–4, while the edge width keeps growing from 3.2 to 25.8 pixels._
 
-Without smoothing the position scatter is $0.094$ pixels. It improves 2.6-fold to $0.037$ pixels at $\sigma=2$, stays nearly flat up to $\sigma=4$, then degrades again, reaching $0.051$ pixels at $\sigma=10$. Over the same range the edge width grows monotonically from $3.2$ to $25.8$ pixels.
+Without smoothing the position scatter is $0.094$ pixels. It improves 2.6-fold to $0.037$ pixels at $\sigma=2$, stays nearly flat up to $\sigma=4$, then degrades again, reaching $0.051$ pixels at $\sigma=10$. The edge width is the length of the interval over which brightness rises from 10% to 90%; over the same range it grows monotonically from $3.2$ to $25.8$ pixels.
 
 That the scatter worsens again is the key result. Early on, the gain from noise reduction dominates. Past a certain width the gradient peak becomes too flat for its vertex to be located reliably. A flat peak means the denominator $a-2b+c$ of the parabolic interpolation approaches zero, so small noise is amplified into large position error.
 
-The practical rule is to keep the smoothing width within two to three times the optical PSF width. With a PSF of $1.2$ pixels, the scatter in this experiment bottomed out at $0.036$–$0.038$ pixels for smoothing widths of $2$–$4$ pixels. The floor is flat enough that 400 trials cannot locate a minimum within it, which is why Fig 4 marks it as a band rather than a point. Going far beyond the PSF spends resolution for nothing.
+The practical rule is to keep the smoothing $\sigma$ within two to three times the $\sigma$ of the optical PSF. With a PSF of $1.2$ pixels, the scatter in this experiment bottomed out at $0.036$–$0.038$ pixels for smoothing widths of $2$–$4$ pixels. The floor is flat enough that 400 trials cannot locate a minimum within it, which is why Fig 4 marks it as a band rather than a point. Going far beyond the PSF spends resolution for nothing.
 
 One more thing deserves attention: bias. Averaged over the 400 trials, the bias stayed below $0.02$ pixels throughout. Smoothing with a symmetric kernel widens an edge but does not shift it to one side. Where the small residual bias comes from shows up once the noise is removed. On a noise-free edge the bias is $-0.023$ pixels without smoothing, shrinking to $-0.007$ at $\sigma=2$ and $-0.002$ at $\sigma=4$. The bias therefore comes not from smoothing but from locating the vertex with a three-point parabola, and smoothing actually reduces it. Where subpixel estimation acquires such bias is treated separately in Post 4.
 
@@ -130,9 +130,9 @@ One more thing deserves attention: bias. Averaged over the 400 trials, the bias 
 
 A kernel demands neighbouring values for every output pixel. At the very edge of an image, some of those values lie outside the array. What should fill them?
 
-There is no correct answer. Something must be assumed about the outside, and each mode assumes something different. Zero padding assumes darkness beyond the border; replication assumes the final value persists; reflection assumes the signal folds back symmetrically. Even "reflect" means different things in different libraries. numpy's `reflect` and the OpenCV default do not repeat the edge pixel, whereas scipy.ndimage's `reflect` does. The version used here does not repeat it.
+There is no correct answer. Something must be assumed about the outside, and each mode assumes something different. Zero padding assumes darkness beyond the border; replication assumes the final value persists; reflection assumes the signal folds back symmetrically. Even "reflect" means different things in different libraries. numpy's `reflect` and the OpenCV default do not repeat the edge pixel, whereas scipy.ndimage's `reflect` does. This post uses the variant that does not repeat it.
 
-A signal that genuinely continues past the array was constructed, and the central 96 pixels were taken as the captured image. The ground truth is the full-length signal smoothed in one piece.
+We built a signal that genuinely continues past the array and treated only its central 96 pixels as the captured image. The ground truth is the full-length signal smoothed in one piece.
 
 <img src="/assets/img/posts/imgproc-convolution-kernels/en/fig5-boundary-modes.png" alt="Error comparison of zero, replicate and reflect padding modes" width="750">
 _Fig 5. Error left by three padding modes when a sloped scene, of which only the central 96 pixels were captured, is filtered with a σ=3 Gaussian. Zero padding deviates by up to 493 DN at the border (left); replication and reflection leave about one tenth and one fifth of that in RMS over the outer five pixels (right, rescaled vertical axis)._
