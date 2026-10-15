@@ -14,7 +14,7 @@ description: "Why I am starting a research notebook on optical metrology, and wh
 
 After finishing a long PhD, I looked back and found that everything I had studied, researched, and coded was scattered around in no particular order. Going through it again, my honest reaction was that I had studied less than I thought, and what I did study I never really finished properly. For eight years I built optical metrology instruments — spectroscopic ellipsometry, Mueller matrix polarimetry, AI-assisted metrology, spectroscopic reflectometry — from the hardware through alignment and calibration to the analysis software. Almost all of it ended up locked inside papers, patents, and lab code, or scattered across slide decks and notes.
 
-I have always admired people who keep good technical blogs. Writing well is hard, and explaining something clearly is harder. But the material is there, and with an LLM to help I thought I might be able to turn it into something worth reading. Publishing the process itself, and writing down what I learn along the way — if I keep filling in those gaps, that alone becomes a kind of credibility in this field.
+I have always admired people who keep good technical blogs. Writing well is hard, and explaining something clearly is harder. But the material is there, and with an LLM to help I thought I might be able to turn it into something worth reading. Publishing the process itself, and writing down what I learn along the way — if I keep writing things up, that alone becomes a kind of credibility in this field.
 
 ## Why GitHub Pages
 
