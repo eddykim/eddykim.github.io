@@ -68,7 +68,7 @@ LABELS = {
         "fig3": "후방산란계수는 원자번호를 따라간다",
         "f3x": "원자번호 Z", "f3y": "후방산란계수 η",
         "f3mc": "몬테카를로 ({:.0f} kV, 전자 {:,}개)", "f3reuter": "Reuter 경험식",
-        "f3note": "고Z에서 몬테카를로가 계통적으로 높다.\n통계 요동은 아니며, 단면적 근사의 한계로 보인다",
+        "f3note": "고Z에서 몬테카를로가 계통적으로 높다.\n통계 요동은 아니다. 원인은 미확정(단면적 근사 의심)",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -90,7 +90,7 @@ LABELS = {
         "fig3": "The backscatter coefficient tracks atomic number",
         "f3x": "Atomic number Z", "f3y": "Backscatter coefficient η",
         "f3mc": "Monte Carlo ({:.0f} kV, {:,} electrons)", "f3reuter": "Reuter empirical fit",
-        "f3note": "Monte Carlo runs systematically high at high Z:\nnot statistical noise, probably the cross-section approximation",
+        "f3note": "Monte Carlo runs systematically high at high Z:\nnot statistical noise; cause unresolved (cross section suspected)",
     },
 }
 
