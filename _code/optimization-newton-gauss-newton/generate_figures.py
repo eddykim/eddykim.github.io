@@ -42,15 +42,11 @@ LABELS = {
         "thickness": "두께 d (nm)", "objective": "목적함수 J(d)",
         "actual_J": "실제 J(d)", "quad": "d={:.0f}에서의 2차 근사",
         "current": "현재점 d_k={:.0f}", "after_step": "Newton 스텝 후 d={:.1f}",
-        "fig1": "그림1. 목적함수의 국소 2차 근사와 Newton 스텝",
         "gd": "Gradient Descent (alpha=300)", "newton": "Newton (발산)",
         "gn": "Gauss-Newton", "true_thickness": "실제 두께",
         "thickness_est": "두께 추정값 (nm)",
-        "fig2": "그림2. 두께 추정값 vs iteration (d0=1540nm)",
         "objective_err": "목적함수 J (error)",
-        "fig3": "그림3. 목적함수 J vs iteration (d0=1540nm)",
         "success": "d0={:.0f} (성공)", "failure": "d0={:.0f} (실패, 발산)",
-        "fig4": "그림4. Newton법의 두 얼굴 - 초기값에 따른 성공/실패",
         "p_nt": "[d0={:.0f}] Newton 최종 두께: {:.2f} nm (실패)",
         "p_gn": "[d0={:.0f}] Gauss-Newton 최종 두께: {:.2f} nm",
         "p_gd": "[d0={:.0f}] Gradient Descent 최종 두께: {:.2f} nm",
@@ -61,7 +57,6 @@ LABELS = {
         "p_chaos_row": "  d0={:.12f} -> {:.2f} nm",
         "concave_quad": "d={:.0f}에서의 2차 근사 (위로 볼록)",
         "concave_top": "포물선 꼭대기 = Newton 스텝 후 d={:.1f}",
-        "fig5": "그림5. 곡률이 음수인 지점(d=1540)의 2차 근사",
         "p_concave": "Newton 스텝 @ d0={:.0f}: {:+.2f} nm -> d={:.2f}, 포물선 꼭대기 J={:.2f}",
     },
     "en": {
@@ -70,15 +65,11 @@ LABELS = {
         "thickness": "Thickness d (nm)", "objective": "Objective J(d)",
         "actual_J": "actual J(d)", "quad": "quadratic approximation at d={:.0f}",
         "current": "current point d_k={:.0f}", "after_step": "after Newton step, d={:.1f}",
-        "fig1": "Fig 1. Local quadratic approximation and the Newton step",
         "gd": "Gradient Descent (alpha=300)", "newton": "Newton (diverging)",
         "gn": "Gauss-Newton", "true_thickness": "true thickness",
         "thickness_est": "Estimated thickness (nm)",
-        "fig2": "Fig 2. Thickness estimate vs iteration (d0=1540nm)",
         "objective_err": "Objective J (error)",
-        "fig3": "Fig 3. Objective J vs iteration (d0=1540nm)",
         "success": "d0={:.0f} (converges)", "failure": "d0={:.0f} (fails, diverges)",
-        "fig4": "Fig 4. Two faces of Newton's method - success and failure by initial value",
         "p_nt": "[d0={:.0f}] Newton final thickness: {:.2f} nm (failed)",
         "p_gn": "[d0={:.0f}] Gauss-Newton final thickness: {:.2f} nm",
         "p_gd": "[d0={:.0f}] Gradient Descent final thickness: {:.2f} nm",
@@ -89,7 +80,6 @@ LABELS = {
         "p_chaos_row": "  d0={:.12f} -> {:.2f} nm",
         "concave_quad": "quadratic approximation at d={:.0f} (opens downward)",
         "concave_top": "top of the parabola = after Newton step, d={:.1f}",
-        "fig5": "Fig 5. Quadratic approximation at negative curvature (d=1540)",
         "p_concave": "Newton step @ d0={:.0f}: {:+.2f} nm -> d={:.2f}, top of parabola J={:.2f}",
     },
 }
@@ -170,13 +160,12 @@ def render(L):
     plt.figure(figsize=(6, 4))
     plt.plot(d_local, J_local, "-", color="C0", label=L["actual_J"])
     plt.plot(d_local, J_quad, "--", color="C3", label=L["quad"].format(d_anchor))
-    plt.axvline(d_anchor, color="gray", linestyle=":", label=L["current"].format(d_anchor))
-    plt.axvline(d_next, color="C3", linestyle=":", alpha=0.6, label=L["after_step"].format(d_next))
+    plt.axvline(d_anchor, ymax=0.6, color="gray", linestyle=":", label=L["current"].format(d_anchor))
+    plt.axvline(d_next, ymax=0.6, color="C3", linestyle=":", alpha=0.6, label=L["after_step"].format(d_next))
     plt.xlabel(L["thickness"], **F)
     plt.ylabel(L["objective"], **F)
     plt.ylim(bottom=0)
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig1"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig1-quadratic-approximation.png"), dpi=150)
     plt.close()
@@ -190,7 +179,6 @@ def render(L):
     plt.xlabel("iteration")
     plt.ylabel(L["thickness_est"], **F)
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig2"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig2-thickness-vs-iteration.png"), dpi=150)
     plt.close()
@@ -204,7 +192,6 @@ def render(L):
     plt.ylabel(L["objective_err"], **F)
     plt.yscale("log")
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig3"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig3-objective-vs-iteration.png"), dpi=150)
     plt.close()
@@ -217,7 +204,6 @@ def render(L):
     plt.ylabel(L["objective_err"], **F)
     plt.yscale("log")
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig4"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig4-newton-success-vs-failure.png"), dpi=150)
     plt.close()
@@ -226,14 +212,13 @@ def render(L):
     plt.figure(figsize=(6, 4))
     plt.plot(d_wide, J_wide, "-", color="C0", label=L["actual_J"])
     plt.plot(d_wide, J_quad_c, "--", color="C3", label=L["concave_quad"].format(initial_guess))
-    plt.axvline(initial_guess, color="gray", linestyle=":", label=L["current"].format(initial_guess))
-    plt.axvline(d_top, color="C3", linestyle=":", alpha=0.6, label=L["concave_top"].format(d_top))
+    plt.axvline(initial_guess, ymax=0.62, color="gray", linestyle=":", label=L["current"].format(initial_guess))
+    plt.axvline(d_top, ymax=0.62, color="C3", linestyle=":", alpha=0.6, label=L["concave_top"].format(d_top))
     plt.plot([d_top], [J_top], "o", color="C3", markersize=5)
     plt.xlabel(L["thickness"], **F)
     plt.ylabel(L["objective"], **F)
-    plt.ylim(0, 24)  # 범례가 포물선 꼭대기를 가리지 않도록 위에 여유를 둔다
+    plt.ylim(0, 30)  # 범례가 포물선 꼭대기를 가리지 않도록 위에 여유를 둔다
     plt.legend(prop=LF, fontsize=8, loc="upper left")
-    plt.title(L["fig5"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig5-concave-quadratic-approximation.png"), dpi=150)
     plt.close()
