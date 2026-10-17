@@ -64,10 +64,10 @@ def figure2(L):
         a.annotate("", (A1, y0), (0, y0), arrowprops=dict(arrowstyle="->", color="k", lw=1.6))
         a.annotate("", (tip.real, y0 + tip.imag), (A1, y0), arrowprops=dict(arrowstyle="->", color=col, lw=1.6))
         a.annotate("", (tip.real, y0 + tip.imag), (0, y0), arrowprops=dict(arrowstyle="->", color=col, lw=1.2, ls="--"))
-        a.text(-0.12, y0 + 0.2, lab, color=col, fontsize=10.5, ha="left")
+        a.text(-0.12, y0 - 0.3, lab, color=col, fontsize=10.5, ha="left", va="center")
         a.text(2.75, y0 + 0.25, t(L, f"세기 {abs(tip) ** 2:.2f}", f"intensity {abs(tip) ** 2:.2f}"), color=col, fontsize=9.5,
                ha="right", va="center", **font(L))
-    a.set_xlim(-0.15, 2.8); a.set_ylim(-2.45, 0.95); a.set_aspect("equal")
+    a.set_xlim(-0.15, 2.8); a.set_ylim(-2.85, 0.95); a.set_aspect("equal")
     a.axis("off")
     a.set_title(t(L, "(a) 위상자로 본 두 진폭의 합\n(검정: 진폭 1, 색: 진폭 0.7, 점선: 합)",
                   "(a) Adding two amplitudes as phasors\n(black: amplitude 1, colour: 0.7, dashed: sum)"),
@@ -80,8 +80,8 @@ def figure2(L):
     b.axhline(2.0, color=C_RAY, ls=":", lw=1, label=t(L, "평균 = I₁ + I₂ (같은 세기)", "mean = I₁ + I₂ (equal beams)").replace("I₁ + I₂", r"$I_1 + I_2$"))
     b.set_xlabel(t(L, "위상차 δ (π 단위)", "phase difference δ (units of π)").replace("δ", r"$\delta$").replace("π", r"$\pi$"), **font(L))
     b.set_ylabel(t(L, "세기 (I₁ = 1)", "intensity (I₁ = 1)").replace("I₁", r"$I_1$"), **font(L))
-    legend(b, L, loc="upper right")
-    b.set_ylim(0, 5.3)
+    legend(b, L, loc="upper center", ncol=2, size=8)
+    b.set_ylim(0, 6.2)
     b.set_title(t(L, "(b) 위상차가 정하는 세기", "(b) Intensity set by the phase difference"), fontsize=10.5, **font(L))
     # (c) 가시도
     ratio = np.logspace(-3, 0, 200)
@@ -154,11 +154,11 @@ def figure5(L):
     a.plot(tt * 1000, Rw2 * 100, color=C_KEY, lw=2, label=t(L, "첫 두 반사만", "first two reflections"))
     a.plot(tt * 1000, Rwm * 100, color="k", lw=1, ls="--", label=t(L, "다중반사 모두", "all reflections"))
     a.axvline(lam / (4 * 1.33) * 1000, color=C_GREY, ls=":", lw=1)
-    a.text(lam / (4 * 1.33) * 1000 + 8, 15.5, r"$\lambda/4n$", fontsize=10)
+    a.text(lam / (4 * 1.33) * 1000 + 8, 8.6, r"$\lambda/4n$", fontsize=10)
     a.set_xlabel(t(L, "막 두께 (nm)", "film thickness (nm)"), **font(L))
     a.set_ylabel(t(L, "반사율 (%)", "reflectance (%)"), **font(L))
     legend(a, L, loc="upper right")
-    a.set_ylim(0, 18)
+    a.set_ylim(0, 10)
     a.set_title(t(L, "(a) 공기 중 물막(n = 1.33)의 반사율\n두께 0 에서 어둡다", "(a) Reflectance of a water film (n = 1.33) in air\ndark at zero thickness"),
                 fontsize=10.5, **font(L))
     # (b) 쐐기: 두께가 x 에 비례
@@ -174,11 +174,13 @@ def figure5(L):
                 fontsize=10.5, **font(L))
     # (c) 뉴턴 링: R = 1 m 볼록면 + 평판, 공기층, 유리 n = 1.52
     Rc = 1.0e6
-    s = np.linspace(-3000, 3000, 701)
+    ss = 3                                         # 화면 화소보다 촘촘히 계산해 평균한다 (모아레 방지)
+    s = np.linspace(-3000, 3000, 500 * ss)
     XX, YY = np.meshgrid(s, s)
     gap = newton_gap(np.hypot(XX, YY), Rc)
     # 위 유리 → 공기층 → 아래 유리
     Rn = thin_layer_reflectance(1.52, 1.0, 1.52, gap, lam)
+    Rn = Rn.reshape(500, ss, 500, ss).mean(axis=(1, 3))
     c.imshow(Rn, extent=[-3, 3, -3, 3], cmap="gray", origin="lower")
     for m in [1, 2, 3, 4, 8, 12]:
         rm = np.sqrt(m * lam * Rc) / 1000
