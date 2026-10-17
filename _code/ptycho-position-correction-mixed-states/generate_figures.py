@@ -15,9 +15,9 @@ COL = {None: "#c8553d", "anneal": "#2f6690", "grad": "#6a994e", 0.012: "#2f6690"
 LABELS = {
     "ko": {"dir": BASE, "font": KFONT, "legend": LFONT,
         "truth": "참 시편 (위상)", None: "보정 없음", "anneal": "어닐링", "grad": "기울기",
-        "sig": "위치 오차 (rms, 화소)", "err": "시편 오차", "iters": "반복 횟수", "prms": "남은 위치 오차 (rms, 화소)",
+        "px": "화소", "sig": "위치 오차 (rms, 화소)", "err": "시편 오차", "iters": "반복 횟수", "prms": "남은 위치 오차 (rms, 화소)",
         "before": "명목 위치의 오차", "after": "어닐링 뒤 남은 오차 (같은 축척)",
-        "coh": "결맞은 광원", "src": "광원 폭", "mode": "모드", "K": "모드 수 K", "resid": "데이터 잔차",
+        "coh": "결맞은 광원", "src": "광원 폭", "unit": "사이클/화소", "mode": "모드", "K": "모드 수 K", "resid": "데이터 잔차",
         "rpie": "혼합 상태 rPIE", "ml": "ML 정련", "trunc": "참 상태를 K개로 자름",
         "k1": "모드 하나", "k3": "모드 셋", "true_mode": "참 모드", "rec_mode": "복원한 모드",
         "fig1": "위치를 rms 1.4화소 틀린 채 복원한 위상(같은 데이터). 보정 없이는 무너지고, 위치를 함께 고치면 되살아난다",
@@ -29,9 +29,9 @@ LABELS = {
     },
     "en": {"dir": os.path.join(BASE, "en"), "font": {}, "legend": {},
         "truth": "True specimen (phase)", None: "No correction", "anneal": "Annealing", "grad": "Gradient",
-        "sig": "Position error (rms, px)", "err": "Specimen error", "iters": "Iterations", "prms": "Remaining position error (rms, px)",
+        "px": "px", "sig": "Position error (rms, px)", "err": "Specimen error", "iters": "Iterations", "prms": "Remaining position error (rms, px)",
         "before": "Error of the nominal positions", "after": "Error left after annealing (same scale)",
-        "coh": "Coherent source", "src": "source width", "mode": "mode", "K": "Number of modes K", "resid": "Data residual",
+        "coh": "Coherent source", "src": "source width", "unit": "cycles/px", "mode": "mode", "K": "Number of modes K", "resid": "Data residual",
         "rpie": "Mixed-state rPIE", "ml": "ML refinement", "trunc": "True state truncated to K modes",
         "k1": "One mode", "k3": "Three modes", "true_mode": "True mode", "rec_mode": "Recovered mode",
         "fig1": "Phase reconstructed from the same data with positions wrong by 1.4 px rms. Uncorrected it collapses; correcting the positions recovers it",
@@ -50,9 +50,9 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.07, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
-        fig.tight_layout(rect=rect)
+    def cap(fig, key, rect=None):
+        # 캡션은 본문에 둔다. 이미지에는 넣지 않는다.
+        fig.tight_layout()
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)
@@ -96,7 +96,7 @@ def draw(L):
         d = d - d.mean(0)
         a.quiver(pt[:, 1], -pt[:, 0], 5 * d[:, 1], -5 * d[:, 0], angles="xy", scale_units="xy", scale=1, width=0.004, color="#2f6690")
         a.plot(pt[:, 1], -pt[:, 0], "k.", ms=2)
-        a.set_aspect("equal"); a.set_axis_off(); a.set_title(L[key], fontsize=10, **Fk)
+        a.set_aspect("equal"); a.set_axis_off(); a.set_title(f"{L[key]}: rms {np.sqrt(np.mean(np.sum(d ** 2, 1))):.2f} {L['px']}", fontsize=10, **Fk)
     cap(fig, "fig3", rect=(0, 0.05, 1, 1)); save(fig, "fig3-position-arrows.png")
 
     # 그림4: 결맞음 모드
@@ -108,9 +108,9 @@ def draw(L):
             a = ax[i, k]
             if k < len(info["modes"]):
                 a.imshow(np.abs(info["modes"][k]), cmap="gray")
-                a.set_title(f"{L['mode']} {k + 1}: {info['occ'][k]:.0%}", fontsize=9, **Fk)
+                a.set_title(f"{L['mode']} {k + 1}: {info['occ'][k]:.0%}" if info['occ'][k] >= 0.05 else f"{L['mode']} {k + 1}: {info['occ'][k]:.1%}", fontsize=9, **Fk)
             a.set_axis_off()
-        ax[i, 0].text(-0.15, 0.5, L["coh"] if st == 0 else f"{L['src']} {st}", transform=ax[i, 0].transAxes,
+        ax[i, 0].text(-0.15, 0.5, L["coh"] if st == 0 else f"{L['src']} {st}\n({L['unit']})", transform=ax[i, 0].transAxes,
                       rotation=90, va="center", ha="center", fontsize=9.5, **Fk)
     cap(fig, "fig4", rect=(0.02, 0.04, 1, 1)); save(fig, "fig4-coherent-modes.png", dpi=120)
 
