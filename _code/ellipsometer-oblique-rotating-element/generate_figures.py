@@ -306,13 +306,17 @@ def figure3(L, psi, delta):
         ax.set_ylabel(L["norm_int"], fontsize=10.5, **L["font"])
         ax.set_title(title, fontsize=11.5, **L["font"])
         ax.grid(alpha=0.25)
-        ax.legend(prop=L["legend"], fontsize=9.5, loc="upper right")
+        ax.legend(prop=L["legend"], fontsize=9.5, loc="upper center", ncol=2)
+        ylo, yhi = ax.get_ylim()
+        ticks = [t for t in ax.get_yticks() if ylo - 1e-9 <= t <= yhi]
+        ax.set_ylim(ylo - 0.30 * (yhi - ylo), yhi + 0.22 * (yhi - ylo))
+        ax.set_yticks(ticks)
 
-    ax1.text(0.04, 0.06, L["identical"].format(gap), transform=ax1.transAxes,
+    ax1.text(0.04, 0.03, L["identical"].format(gap), transform=ax1.transAxes,
              fontsize=9, color="#c0392b", va="bottom", **L["font"])
     c_p = normalized_coefficients(intensity_rce(psi, delta, ang[:-1]))[1][1]
     c_m = normalized_coefficients(intensity_rce(psi, -delta, ang[:-1]))[1][1]
-    ax2.text(0.04, 0.06, f"{L['beta2']}\n{c_p:+.3f}  /  {c_m:+.3f}",
+    ax2.text(0.04, 0.03, f"{L['beta2']}\n{c_p:+.3f}  /  {c_m:+.3f}",
              transform=ax2.transAxes, fontsize=9, color="#c0392b", va="bottom", **L["font"])
 
     fig.suptitle(L["fig3"], fontsize=12.5, **L["font"])
@@ -402,11 +406,12 @@ def figure_sensitivity(L):
     best = np.nanmin(np.vstack(curves), axis=0)
     ax2.plot(d, best, color="k", lw=2.6, label=L["envelope"])
     ax2.set_title(L["fig5b"], fontsize=11.5, **L["font"])
-    ax2.legend(prop=L["legend"], fontsize=8.8, loc="upper right", ncol=2)
+    ax2.legend(prop=L["legend"], fontsize=8.5, loc="upper center", ncol=2)
 
     for ax in (ax1, ax2):
         ax.set_xlim(-180, 180)
-        ax.set_ylim(0, clip)
+        ax.set_ylim(0, clip + 5.5)
+        ax.set_yticks(np.arange(0, clip + 1, 2))
         ax.set_xticks(np.arange(-180, 181, 90))
         ax.set_xlabel(L["delta_ax"], fontsize=10.5, **L["font"])
         ax.grid(alpha=0.25)
