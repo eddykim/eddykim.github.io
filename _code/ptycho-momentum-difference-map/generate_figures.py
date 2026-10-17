@@ -31,7 +31,7 @@ LABELS = {
         "rPIE": r"rPIE ($\gamma_{obj}$ = 1)", "rPIE_warm": r"rPIE, $\gamma_{obj}$ = 0.25 for the first 10", "mPIE": "mPIE (Maiden values)",
         "mPIE_ptylab": "mPIE (PtyLab settings)", "DM": "DM",
         "iters": "Iterations", "err": "Specimen error", "resid": "Data residual",
-        "pinhole": "Pinhole probe", "defocus": "Defocused focused probe", "diffuser": "Diffuser probe",
+        "pinhole": "Pinhole probe", "defocus": "Defocused probe", "diffuser": "Diffuser probe",
         "power": "Probe power / target", "nopc": "mPIE, no power control", "pc": "With power control",
         "unlit": "Amplitude of an unilluminated pixel", "d_mPIE": "mPIE (momentum on both)", "d_mom_obj": "Momentum on specimen only",
         "d_mom_prb": "Momentum on probe only", "d_rPIE": "rPIE (no momentum)",
@@ -50,10 +50,10 @@ def traces(case, alg, i):
     return np.array([[r["trace"][k][i] for k in S.CK] for r in rs])
 
 
-def band(ax, case, alg, i, label):
+def band(ax, case, alg, i, label, **kw):
     v = traces(case, alg, i)
     with np.errstate(all="ignore"):
-        ax.loglog(CK, np.median(v, 0), "o-", ms=3.5, color=COL[alg], label=label)
+        ax.loglog(CK, np.median(v, 0), "o-", ms=3.5, color=COL[alg], label=label, **kw)
         if len(v) > 1:
             ax.fill_between(CK, v.min(0), v.max(0), color=COL[alg], alpha=0.18)
 
@@ -106,7 +106,7 @@ def draw(L):
             ax[1].semilogy(r[:, 0], r[:, 6], ls, color=cc, alpha=0.85, lw=1.2, label=L["d_" + alg] if s_ == 0 else None)
     ax[0].set_title(L["nopc"], fontsize=10, **Fk); ax[0].set_ylabel(L["power"], **Fk)
     ax[1].set_title(L["pc"], fontsize=10, **Fk); ax[1].set_ylabel(L["unlit"], **Fk)
-    ax[1].legend(prop=LG, fontsize=8, loc="lower left")
+    ax[1].legend(prop=LG, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=2)
     for a_ in ax:
         a_.set_xlabel(L["iters"], **Fk); a_.grid(alpha=0.3, which="both")
     cap(fig, "fig3"); save(fig, "fig3-drift-divergence.png")
@@ -134,7 +134,8 @@ def draw(L):
     fig, ax = plt.subplots(1, 3, figsize=(13.5, 4.2), sharey=True)
     for a, case in zip(ax, S.PROBES):
         for alg in ("rPIE", "rPIE_warm", "mPIE", "mPIE_ptylab", "DM"):
-            band(a, case, alg, 0, L[alg])
+            # rPIE(빨강)가 mPIE(PtyLab)(주황) 아래에 가려지지 않게 굵고 연하게 먼저 그린다
+            band(a, case, alg, 0, L[alg], **({"lw": 5, "alpha": 0.45, "zorder": 1} if alg == "rPIE" else {}))
         a.set_title(L[case], fontsize=10, **Fk); a.set_xlabel(L["iters"], **Fk); a.grid(alpha=0.3, which="both")
     ax[0].set_ylabel(L["err"], **Fk); ax[0].legend(prop=LG, fontsize=8, loc="lower left")
     cap(fig, "fig5"); save(fig, "fig5-three-probes.png")
@@ -148,6 +149,8 @@ def draw(L):
     fig, ax = plt.subplots(1, 4, figsize=(13, 3.7))
     for a, img, t in ((ax[0], np.abs(P), L["t_p"]), (ax[1], np.abs(p), L["found"])):
         a.imshow(img, cmap="gray")
+        if t == L["t_p"]:
+            a.contour(np.abs(P), levels=[0.5 * np.abs(P).max()], colors="r", linewidths=0.8)
         cy, cx = S.centroid(P)
         a.plot(cx, cy, "r+", ms=10, mew=1.5)
         if t == L["found"]:
@@ -155,9 +158,11 @@ def draw(L):
             a.contour(np.abs(P), levels=[0.5 * np.abs(P).max()], colors="r", linewidths=0.8)
         a.set_title(t, fontsize=9.5, **Fk); a.set_axis_off()
     for a, r, key in ((ax[2], plain, "err_plain"), (ax[3], known, "err_known")):
-        a.imshow(np.where(m, np.abs(r["rec"] - r["obj"]), np.nan)[bb], cmap="magma", vmin=0, vmax=0.1)
+        im = a.imshow(np.where(m, np.abs(r["rec"] - r["obj"]), np.nan)[bb], cmap="magma", vmin=0, vmax=0.1)
         a.set_title(f"{L[key]}: {r['err']:.2g}", fontsize=9.5, **Fk); a.set_axis_off()
-    cap(fig, "fig6", rect=(0, 0, 1, 0.97)); save(fig, "fig6-diffuser-stall.png")
+    cap(fig, "fig6", rect=(0, 0, 0.93, 1))
+    fig.colorbar(im, cax=fig.add_axes([0.94, 0.15, 0.012, 0.7])).set_label(L["err"], **Fk)
+    save(fig, "fig6-diffuser-stall.png")
 
 
 if __name__ == "__main__":
