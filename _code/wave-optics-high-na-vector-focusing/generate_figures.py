@@ -80,7 +80,12 @@ def figure2(L):
     a.text(0.05, -1.55, "z", fontsize=10)
     a.text(1.15, 0.05, "x", fontsize=10)
     a.text(-1.55, -1.75, t(L, "⊙: s 편광 (그림 밖으로)\n↔: p 편광 (그림 평면 안)", "⊙: s polarization (out of page)\n↔: p polarization (in the page)"), fontsize=9, **font(L))
-    a.text(0.25, -0.75, "2θ", fontsize=10)
+    for sgn in (1, -1):                         # 각 빔이 광축(z)과 이루는 각 θ
+        th0, th1 = (270 - 40, 270) if sgn == 1 else (270, 270 + 40)
+        a.add_patch(matplotlib.patches.Arc((0, 0), 0.9, 0.9, theta1=th0, theta2=th1, color="k", lw=0.9))
+        mid = np.radians((th0 + th1) / 2)
+        a.text(0.66 * np.cos(mid) + sgn * 0.02, 0.66 * np.sin(mid), "θ", fontsize=10, ha="center", va="center")
+    a.text(0, -1.08, "2θ", fontsize=10, ha="center", va="center")
     a.set_xlim(-1.7, 1.4)
     a.set_ylim(-1.9, 0.4)
     a.set_aspect("equal")
@@ -97,7 +102,7 @@ def figure2(L):
     for na in (0.3, 0.71, 0.9):
         d = np.degrees(np.arcsin(na))
         b.axvline(d, color=C_GREY, lw=0.6, ls=":")
-        b.text(d + 0.8, 0.5 if na != 0.71 else 0.12, f"NA {na:g}", fontsize=8.5, color=C_GREY)
+        b.text(d + 0.8, {0.3: 0.4, 0.71: 0.62, 0.9: 0.5}[na], f"NA {na:g}", fontsize=8.5, color=C_GREY)
     b.set_xlabel(t(L, "반각 θ (°)", "half-angle θ (°)"), **font(L))
     b.set_ylabel(t(L, "간섭무늬의 가시도", "fringe visibility"), **font(L))
     b.set_ylim(-0.03, 1.12)
