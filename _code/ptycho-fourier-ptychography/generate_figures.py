@@ -61,9 +61,9 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0, 1, 1)):
+    def cap(fig, key, rect=None):
         # 캡션은 본문에 둔다. 이미지에는 넣지 않는다.
-        fig.tight_layout(rect=(0, 0, 1, rect[3]))
+        fig.tight_layout()
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)
@@ -72,11 +72,16 @@ def draw(L):
     St = R["setup"]
     fig, ax = plt.subplots(1, 4, figsize=(14, 3.9))
     ax[0].imshow(np.log10(St["spectrum"] + 1e-6 * St["spectrum"].max()), cmap="magma")
-    for key, (ky, kx) in St["picks"].items():
-        ax[0].add_patch(Circle((NH // 2 + kx, NH // 2 + ky), St["R"], fill=False, ec="w", lw=1.4))
+    PC = {"center": "#4cc9f0", "bright": "#ffd166", "dark": "#ff6b6b"}  # 동공 원과 아래 영상 제목의 색을 맞춘다
+    for n_, (key, (ky, kx)) in enumerate(St["picks"].items(), 1):
+        ax[0].add_patch(Circle((NH // 2 + kx, NH // 2 + ky), St["R"], fill=False, ec=PC[key], lw=1.8))
+        ax[0].text(NH // 2 + kx, NH // 2 + ky - St["R"] - 1.5, str(n_), color=PC[key], ha="center", va="bottom", fontsize=10, weight="bold")
     ax[0].set_title(L["spec"], fontsize=9.5, **Fk); ax[0].set_axis_off()
-    for a, key in zip(ax[1:], ("center", "bright", "dark")):
-        a.imshow(St["images"][key], cmap="gray"); a.set_title(L[key], fontsize=9.5, **Fk); a.set_axis_off()
+    for n_, (a, key) in enumerate(zip(ax[1:], ("center", "bright", "dark")), 1):
+        a.imshow(St["images"][key], cmap="gray"); a.set_title(f"{n_}. {L[key]}", fontsize=9.5, **Fk); a.set_axis_off()
+        for sp in a.spines.values():
+            sp.set_visible(True); sp.set_edgecolor(PC[key]); sp.set_linewidth(3)
+        a.set_axis_on(); a.set_xticks([]); a.set_yticks([])
     cap(fig, "fig1", rect=(0, 0.06, 1, 0.94)); save(fig, "fig1-fp-principle.png")
 
     # 그림2: 합성 개구수
@@ -114,12 +119,18 @@ def draw(L):
     Prel = v["P"] * np.exp(-1j * np.angle(np.mean(v["P"][sup] * np.conj(v["Pt"][sup]))))
     fig, ax = plt.subplots(1, 4, figsize=(14, 3.9))
     for a, P_, t in ((ax[0], v["Pt"], "pt"), (ax[1], Prel, "pr")):
-        a.imshow(np.where(sup, np.angle(P_), np.nan)[20:44, 20:44], cmap="twilight", vmin=-np.pi, vmax=np.pi)
-        a.set_title(L[t], fontsize=9.5, **Fk); a.set_axis_off()
+        im_p = a.imshow(np.where(sup, np.angle(P_), np.nan)[20:44, 20:44], cmap="twilight", vmin=-np.pi, vmax=np.pi)
+        a.set_title(L[t], fontsize=9.5, **Fk); a.set_axis_off(); a.set_facecolor("#d9d9d9"); a.patch.set_visible(True)
     for a, o, t, e in ((ax[2], v["rec_no"], "no_p", v["no_pupil"]), (ax[3], v["rec"], "with_p", v["epry"])):
         a.imshow(crop(np.angle(align(o, R["synth"]["obj"], R["synth"]["mask"])), R["synth"]["mask"]), cmap="gray", vmin=pv[0], vmax=pv[1])
-        a.set_title(f"{L[t]}: {e:.2g}", fontsize=9.5, **Fk); a.set_axis_off()
-    cap(fig, "fig4", rect=(0, 0.06, 1, 0.94)); save(fig, "fig4-pupil-recovery.png")
+        a.set_title(f"{L[t]}: {e:.2g}", fontsize=9.5, **Fk); a.set_xticks([]); a.set_yticks([])
+        for sp in a.spines.values():
+            sp.set_edgecolor("#888888"); sp.set_linewidth(1.0)  # 흰 배경과 섞여 잘려 보이지 않게 테두리를 둔다
+    fig.tight_layout(rect=(0, 0.1, 1, 0.93))
+    p0, p1 = ax[0].get_position(), ax[1].get_position()
+    cb = fig.colorbar(im_p, cax=fig.add_axes([p0.x0, 0.06, p1.x1 - p0.x0, 0.03]), orientation="horizontal", ticks=[-np.pi, 0, np.pi])
+    cb.ax.set_xticklabels(["-π", "0", "π"]); cb.set_label("rad", fontsize=8.5)
+    save(fig, "fig4-pupil-recovery.png")
 
     # 그림5: 겹침에 따른 동공 복원
     fig, ax = plt.subplots(figsize=(8, 4.4))
