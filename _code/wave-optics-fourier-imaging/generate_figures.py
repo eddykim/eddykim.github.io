@@ -87,7 +87,7 @@ def figure2(L):
     for z, txt in [(0.5, "f"), (1.5, "f"), (2.5, "f"), (3.5, "f")]:
         a.annotate("", xy=(z - 0.5, -1.25), xytext=(z + 0.5, -1.25), arrowprops=dict(arrowstyle="<->", lw=0.7))
         a.text(z, -1.22, txt, ha="center", va="bottom", fontsize=9)
-    a.text(2.1, -0.6, t(L, "같은 방향의\n빛은 한 점에", "one direction\n→ one point"), fontsize=8.5, color=C_RED, va="center", **font(L))
+    a.text(2.08, -0.6, t(L, "같은 방향의\n빛은\n한 점에", "one\ndirection\n→ one\npoint"), fontsize=8.5, color=C_RED, va="center", **font(L))
     a.set_xlim(-0.3, 4.4)
     a.set_ylim(-1.9, 1.6)
     a.axis("off")
@@ -113,11 +113,11 @@ def figure2(L):
     c.set_ylim(-1.4, 1.4)
     c.add_patch(mpatches.Circle((0, 0), NA / LAM, fill=False, ec="c", ls="--", lw=1))
     c.set_xlabel(t(L, "공간 주파수 (주기/µm)", "spatial frequency (cycles/µm)"), **font(L))
-    c.set_title(t(L, "(c) 후초점면의 세기 (로그)\n점선: NA 0.5 렌즈가 받는 범위", "(c) Back-focal-plane intensity (log)\ndashes: what an NA 0.5 lens accepts"), fontsize=10, **font(L))
+    c.set_title(t(L, "(c) 후초점면의 세기 (로그)\n점선: NA 0.5 렌즈가 받는 범위", "(c) Back-focal-plane\nintensity (log); dashes:\nwhat an NA 0.5 lens accepts"), fontsize=10, **font(L))
     d = fig.add_subplot(gs[3])
     Ic = np.abs(coherent_image(obj.astype(complex), dx, NA, LAM)) ** 2
     d.imshow(Ic, cmap="gray", extent=ext, origin="lower", vmax=1.2)
-    d.set_title(t(L, "(d) 점선 안만 지난 상 (결맞음)\n가로 줄무늬(주기 0.8 µm)가 사라졌다", "(d) Image from inside the circle (coherent)\nthe 0.8 µm horizontal stripes are gone"), fontsize=10, **font(L))
+    d.set_title(t(L, "(d) 점선 안만 지난 상 (결맞음)\n가로 줄무늬(주기 0.8 µm)가 사라졌다", "(d) Image from inside\nthe circle (coherent):\n0.8 µm stripes are gone"), fontsize=10, **font(L))
     d.set_xlabel("x (µm)")
     save(fig, L, "fig2-lens-fourier-4f.png")
 
@@ -393,6 +393,19 @@ def figure7(L):
             r_hi, r_lo = (36 / (2 * np.pi * neg.min()), 36 / (2 * np.pi * neg.max()))
             for rr in (r_lo, r_hi):
                 ax.add_patch(mpatches.Circle((0, 0), rr, fill=False, ec=C_KEY, ls=":", lw=1.4))
+            # 확대 삽입: 이미 계산한 영상 I 의 오른쪽 위 쪽 일부를 크게 보여 준다 (반전 고리 두 개가 걸리는 창)
+            lim = 8.0                                  # 영상 안쪽(±12.8 µm)에서 첫 고리 둘레를 크게
+            ins = ax.inset_axes([0.56, 0.02, 0.42, 0.42])
+            ins.imshow(I, cmap="gray", origin="lower", extent=[-n * dx / 2, n * dx / 2] * 2)
+            ins.set_xlim(0.0, lim)
+            ins.set_ylim(0.0, lim)
+            for rr in (r_lo, r_hi):
+                ins.add_patch(mpatches.Circle((0, 0), rr, fill=False, ec=C_KEY, ls=":", lw=1.2))
+            ins.set_xticks([]); ins.set_yticks([])
+            for sp in ins.spines.values():
+                sp.set_edgecolor(C_KEY)
+                sp.set_linewidth(1.2)
+            ins.text(0.04, 0.95, t(L, "확대", "zoom"), transform=ins.transAxes, color=C_KEY, fontsize=8, va="top", **font(L))
             print(f"    그림7(c): OTF<0 구간 반지름 {r_lo:.2f}–{r_hi:.2f} µm (주파수 {neg.min()/(2*NA/LAM):.2f}–{neg.max()/(2*NA/LAM):.2f} 차단)")
     fig.tight_layout()
     save(fig, L, "fig7-defocus-mtf-spoke.png", palette=True)
