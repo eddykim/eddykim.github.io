@@ -205,7 +205,7 @@ def draw(L):
     ax2.set_ylabel(L["width_ax"], color="#2b5c9b", **F)
     ax2.tick_params(axis="y", colors="#2b5c9b")
     h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
-    ax.legend(h1 + h2, l1 + l2, prop=LG, fontsize=9, loc="upper right")
+    ax.legend(h1 + h2, l1 + l2, prop=LG, fontsize=9, loc="lower right")
     fig.tight_layout()
     fig.savefig(os.path.join(out, "fig4-edge-tradeoff.png"), dpi=150)
     plt.close(fig)
