@@ -130,7 +130,7 @@ LABELS = {
         "f4gas": "기체 분자 (공기)", "f4e": "200 keV 전자",
         "f4x": "압력 (Pa)", "f4y": "평균자유행로 (m)",
         "f4col": "경통 길이 ~1 m",
-        "f4atm": "대기압", "f4hv": "고진공\n(경통)", "f4uhv": "초고진공\n(전계방출총)",
+        "f4atm": "대기압", "f4hv": "고진공 (경통)\n$10^{-4}$ Pa", "f4uhv": "초고진공\n(전계방출총)",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -161,7 +161,7 @@ LABELS = {
         "f4gas": "Gas molecules (air)", "f4e": "200 keV electrons",
         "f4x": "Pressure (Pa)", "f4y": "Mean free path (m)",
         "f4col": "Column length ~1 m",
-        "f4atm": "Atmosphere", "f4hv": "High vacuum\n(column)",
+        "f4atm": "Atmosphere", "f4hv": "High vacuum (column)\n$10^{-4}$ Pa",
         "f4uhv": "Ultra-high vacuum\n(field-emission gun)",
     },
 }
