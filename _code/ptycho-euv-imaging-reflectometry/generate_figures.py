@@ -4,7 +4,6 @@
 위상은 본문의 규약(시간 인자 exp(+j w t), n = 1 - delta - j beta)에 맞춰 코드 값의 켤레로 그린다.
 """
 import os
-import textwrap
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -87,14 +86,9 @@ def draw(L):
     out = L["dir"]; os.makedirs(out, exist_ok=True)
     Fk, LG = L["font"], L["legend"]
 
-    def cap(fig, key, rect=(0, 0.07, 1, 1)):
-        t = fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
-        fig.canvas.draw()
-        if t.get_window_extent().width > 0.98 * fig.bbox.width:  # 캡션이 폭을 넘으면 줄바꿈
-            text = textwrap.fill(L[key], width=int(len(L[key]) * 0.95 * fig.bbox.width / t.get_window_extent().width))
-            t.set_text(text); t.set_va("bottom"); t.set_y(0.012)
-            rect = (rect[0], rect[1] + 0.03 * text.count("\n"), rect[2], rect[3])
-        fig.tight_layout(rect=rect)
+    def cap(fig, key, rect=None):
+        # 캡션은 본문에 둔다. 이미지에는 넣지 않는다.
+        fig.tight_layout()
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)
@@ -191,17 +185,18 @@ def draw(L):
     P = R["pipeline"]
     fig = plt.figure(figsize=(12.5, 7.6))
     gs = fig.add_gridspec(2, 2, height_ratios=[0.75, 1])
+    rr_ = [next(x for x in P if x["g"] == g_ and x["seed"] == 0) for g_ in (21, 25)]
+    mm = rr_[0]["A"] | rr_[0]["B"] | rr_[0]["Cp"] | rr_[1]["A"] | rr_[1]["B"] | rr_[1]["Cp"]  # 두 영상에 같은 잘라내기를 쓴다
     for j, gg in enumerate((21, 25)):
-        r = next(x for x in P if x["g"] == gg and x["seed"] == 0)
-        mm = r["A"] | r["B"] | r["Cp"]
+        r = rr_[j]
         ys, xs = np.nonzero(mm)
         sl = (slice(ys.min(), ys.max() + 1), slice(xs.min(), xs.max() + 1))
         a = fig.add_subplot(gs[0, j])
         im = a.imshow(np.angle(np.conj(r["img"]))[sl].T, cmap="twilight", vmin=-np.pi, vmax=np.pi,
                       aspect=r["dy"] / r["dx"])
         a.set_title(L["img21" if gg == 21 else "img25"], fontsize=10, **Fk); a.set_xticks([]); a.set_yticks([])
-        if j == 1:
-            plt.colorbar(im, ax=a, fraction=0.04).set_label(L["phase_img"], **Fk)
+        cb = plt.colorbar(im, ax=a, fraction=0.04, ticks=[-np.pi, 0, np.pi]); cb.ax.set_yticklabels(["-π", "0", "π"])
+        cb.set_label(L["phase_img"], **Fk)
     gfine = np.linspace(14, 46, 129)
     ptrue = (S.TRUE["dN"], S.TRUE["dO"], S.TRUE["rho"])
     mod = np.conj(S.model_ratio(ptrue, gfine))

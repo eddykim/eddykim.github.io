@@ -132,7 +132,7 @@ Here $\varphi$ is the phase advance through the film. Both quantities are propor
 To check this by calculation, three material strips were placed side by side, each a wedge whose thickness increases in one direction (30–150 nm for Si$_3$N$_4$ and SiO$_2$, 10–60 nm for Al). The leftmost strip was left empty as vacuum. Noise was added at the same photon scale as in reflection, the probe was recovered too, and the phase and log amplitude of each pixel were plotted. Transmission needs no tilted-plane correction, so the data were measured directly on a uniform grid.
 
 <img src="/assets/img/posts/ptycho-euv-imaging-reflectometry/en/fig7-scattering-quotient.png" alt="Layout of three material wedges and vacuum, and scatter plots of pixel phase against log amplitude for the vacuum-calibrated and the unreferenced reconstruction" width="950">
-_Fig 7. Pixel-wise phase and log amplitude of a 13.5 nm transmission reconstruction. Calibrated to vacuum, each material lies on a line through the origin (centre); without a reference the points scatter (right)_
+_Fig 7. Pixel-wise phase and log amplitude of a 13.5 nm transmission reconstruction. Calibrated to vacuum, each material lies on a line through the origin (centre); without a reference the points scatter (right). The red outline in the left panel bounds the region analysed, where the probe intensity is at least 30 % of its maximum_
 
 In the centre panel, pixels of different thickness line up on one straight line per material. The slope of each line is the scattering quotient, and the dashed lines are the tabulated values. The median pixel ratios are 2.88 for Si$_3$N$_4$, 2.03 for SiO$_2$ and $-0.10$ for Al, in agreement with the tables. The reconstruction error was 0.005.
 
