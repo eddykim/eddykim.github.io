@@ -158,9 +158,9 @@ def figure3(L):
                 # (c) 는 앞뒤 윤곽이 겹치므로, 빈 점을 크게·채운 점을 작게 그리고 화살표로 잇는다
                 ax.annotate("", xy=(c, d * 1e3), xytext=(a, b * 1e3),
                             arrowprops=dict(arrowstyle="->", color=col, lw=1.0,
-                                            shrinkA=6, shrinkB=5, connectionstyle="arc3,rad=-0.25"))
-            ax.plot(a, b * 1e3, "o", color=col, ms=8 if quarter else 5, mfc="white")
-            ax.plot(c, d * 1e3, "o", color=col, ms=4 if quarter else 5)
+                                            shrinkA=9, shrinkB=7, connectionstyle="arc3,rad=-0.25"))
+            ax.plot(a, b * 1e3, "o", color=col, ms=13 if quarter else 5, mfc="white")
+            ax.plot(c, d * 1e3, "o", color=col, ms=3.5 if quarter else 5)
         if quarter:
             ax.text(0.5, 0.92, L["p_c_note"], transform=ax.transAxes, ha="center",
                     fontsize=8.5, **L["font"])
@@ -290,6 +290,7 @@ def figure7(L):
     a1.plot(r, 1 - r / 2, color=C_RAY)
     a1.axhspan(-1, 1, color="#d8eed8", label=L["f6stable"])
     a1.axvline(4, color=C_GREY, ls=":", lw=0.8)
+    a1.text(4.06, 1.08, "d = 4f", color=C_GREY, fontsize=8.5, va="center")
     a1.set_xlabel(L["f6ax"], **L["font"]); a1.set_ylabel(L["f6ay"], **L["font"])
     a1.set_title(L["f6a"], fontsize=10, **L["font"])
     a1.set_ylim(-1.6, 1.2)
@@ -306,7 +307,7 @@ def figure7(L):
     a2.axhline(0, color=C_GREY, lw=0.5)
     a2.set_xlabel(L["f6bx"], **L["font"]); a2.set_ylabel(L["f6by"], **L["font"])
     a2.set_title(L["f6b"], fontsize=10, **L["font"])
-    legend(a2, L, loc="upper left", size=8, ncol=2)
+    legend(a2, L, loc="lower left", size=8, ncol=2)
     fig.tight_layout()
     save(fig, L, "fig7-periodic-guide.png")
 
