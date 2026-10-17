@@ -20,6 +20,7 @@ warnings.filterwarnings("ignore", message=".*encountered in matmul.*")
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
 
 import levenberg_marquardt as lmmod
 import train_data as tdmod
@@ -45,21 +46,16 @@ BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..",
 LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT, "tickfont": "AppleGothic",
-        "f1_title": "그림1. 성공률과 시료당 비용 (무작위 시작 100회)",
-        "f1_methods": ["단일 LM", "Simulated\nAnnealing", "Basin-\nHopping", "회귀망\n→ LM"],
+        "f1_methods": ["단일 LM", "담금질\n기법", "Basin-\nHopping", "회귀망\n→ LM"],
         "f1_y1": "전역 최솟값 도달 성공률 (%)", "f1_y2": "전방모델 호출 / 시료",
-        "f2_title": "그림2. 잔차 재계산이 알려주는 것과 못 알려주는 것",
         "f2_cases": ["정상\n(기준선)", "학습범위 밖\n(2000nm)", "노이즈 5배\n(std=0.02)", "모델 오차\n(n1=1.50)"],
         "f2_y": "기준선 대비 잔차 J 배수 (log)", "f2_dev": "두께 편차",
-        "f3_title": "그림3. 증강이 고치는 오차와 못 고치는 오차",
         "f3_conds": ["정상", "노이즈\n5배", "모델오차\nn1=1.50", "파장축\n+4nm", "광량\nx1.03+0.02"],
         "f3_y": "예측 RMSE (nm)", "f3_no": "증강 없음", "f3_yes": "증강",
         "f3_rich": "학습 두께 8000개", "f3_poor": "학습 두께 250개",
-        "f4_title": "그림4. 모호한 입력에서 회귀망은 조건부 평균으로 간다",
         "f4_x": "참 두께 (nm)", "f4_y": "회귀망 예측 (nm)",
         "f4_ideal": "이상적 (예측 = 참값)", "f4_wide": "450~750nm (프린지 3.9개)",
         "f4_narrow": "595~605nm + 5배 노이즈 (프린지 0.12개)", "f4_center": "학습구간 중심 1500nm",
-        "f5_title": "그림5. 같은 300점, 측정의 종류만 바꿨을 때 (d, n1) 추정값 산포",
         "f5_x": "두께 d 편차 (nm)", "f5_y": "굴절률 n1 편차",
         "f5_a": "수직입사만 450~750nm", "f5_b": "수직입사만 450~1000nm",
         "f5_c": "0°+60° 각 150점", "f5_corr": "상관",
@@ -67,21 +63,16 @@ LABELS = {
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
         "tickfont": None,
-        "f1_title": "Fig 1. Success rate and per-sample cost (100 random starts)",
         "f1_methods": ["single LM", "Simulated\nAnnealing", "Basin-\nHopping", "network\n→ LM"],
         "f1_y1": "Rate of reaching the global minimum (%)", "f1_y2": "Forward-model calls / sample",
-        "f2_title": "Fig 2. What recomputing the residual does and does not reveal",
         "f2_cases": ["normal\n(baseline)", "outside training\n(2000nm)", "5x noise\n(std=0.02)", "model error\n(n1=1.50)"],
         "f2_y": "Residual J relative to baseline (log)", "f2_dev": "thickness error",
-        "f3_title": "Fig 3. Errors augmentation fixes, and errors it does not",
         "f3_conds": ["normal", "5x\nnoise", "model err\nn1=1.50", "wavelength\n+4nm", "photometric\nx1.03+0.02"],
         "f3_y": "Prediction RMSE (nm)", "f3_no": "no augmentation", "f3_yes": "augmented",
         "f3_rich": "8000 training thicknesses", "f3_poor": "250 training thicknesses",
-        "f4_title": "Fig 4. On ambiguous input the network returns the conditional mean",
         "f4_x": "True thickness (nm)", "f4_y": "Network prediction (nm)",
         "f4_ideal": "ideal (prediction = truth)", "f4_wide": "450-750nm (3.9 fringes)",
         "f4_narrow": "595-605nm + 5x noise (0.12 fringes)", "f4_center": "training-range centre 1500nm",
-        "f5_title": "Fig 5. (d, n1) estimate scatter - same 300 points, different kinds of measurement",
         "f5_x": "Thickness error d (nm)", "f5_y": "Refractive index error n1",
         "f5_a": "normal incidence 450-750nm", "f5_b": "normal incidence 450-1000nm",
         "f5_c": "0deg+60deg, 150 points each", "f5_corr": "corr",
@@ -262,7 +253,6 @@ def render(L):
         ax2.annotate(f"{v:.0f}", (i, v), textcoords="offset points",
                      xytext=(0, 9), ha="center", fontsize=9,
                      bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
-    ax1.set_title(L["f1_title"], **L["font"])
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig1-success-vs-cost.png"), dpi=150)
     plt.close()
@@ -282,7 +272,6 @@ def render(L):
                      ha="center", fontsize=9)
         plt.annotate(f"{L['f2_dev']} {d:+.1f} nm", (i, r), textcoords="offset points",
                      xytext=(0, -14), ha="center", fontsize=8, color="#444", **L["font"])
-    plt.title(L["f2_title"], **L["font"])
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig2-residual-alarm.png"), dpi=150)
     plt.close()
@@ -298,9 +287,12 @@ def render(L):
         ax.set_xticklabels(L["f3_conds"], fontsize=8, **tf)
         ax.set_title(sub, fontsize=10, **L["font"])
         ax.set_yscale("log")
+        ax.set_ylim(1.5, 130)
+        ax.yaxis.set_major_locator(FixedLocator([2, 3, 5, 10, 20, 40]))
+        ax.yaxis.set_minor_locator(NullLocator())
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
     axes[0].set_ylabel(L["f3_y"], **L["font"])
-    axes[0].legend(prop=L["legend"], fontsize=9)
-    fig.suptitle(L["f3_title"], **L["font"])
+    axes[0].legend(prop=L["legend"], fontsize=9, loc="upper left", ncol=2)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig3-augmentation-rmse.png"), dpi=150)
     plt.close()
@@ -317,7 +309,6 @@ def render(L):
     plt.ylabel(L["f4_y"], **L["font"])
     plt.xlim(lim); plt.ylim(lim)
     plt.legend(prop=L["legend"], fontsize=8, loc="lower right")
-    plt.title(L["f4_title"], fontsize=10, **L["font"])
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig4-conditional-mean.png"), dpi=150)
     plt.close()
@@ -332,7 +323,6 @@ def render(L):
     plt.xlabel(L["f5_x"], **L["font"])
     plt.ylabel(L["f5_y"], **L["font"])
     plt.legend(prop=L["legend"], fontsize=8)
-    plt.title(L["f5_title"], fontsize=10, **L["font"])
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig5-correlation-ellipse.png"), dpi=150)
     plt.close()
