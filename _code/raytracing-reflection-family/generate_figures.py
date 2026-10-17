@@ -77,6 +77,16 @@ def draw_ray(ax, path, **kwargs):
     ax.plot(p[:, 0], p[:, 1], **kwargs)
 
 
+def mark_incident(ax, ray, hit, color="C3"):
+    """입사 구간의 중간에 진행 방향 화살표를 얹어 입사광과 반사광을 구분한다."""
+    p0 = np.asarray(ray[:2], float)
+    p1 = np.asarray(hit[:2], float)
+    mid = 0.5 * (p0 + p1)
+    d = (p1 - p0) / np.linalg.norm(p1 - p0)
+    ax.annotate("", xy=mid + 6 * d, xytext=mid - 6 * d, zorder=5,
+                arrowprops=dict(arrowstyle="-|>", color=color, linewidth=1.2, mutation_scale=12))
+
+
 # ---------------------------------------------------------------------------
 # 계산 (언어와 무관하게 한 번만 수행한다)
 # ---------------------------------------------------------------------------
@@ -124,12 +134,14 @@ def render(L):
     b = flat_mirror["BOUNDARY"][0]
     ax.plot(b[:, 0], b[:, 1], "k-", linewidth=3)
     draw_ray(ax, np.vstack([flat_ray, flat_out[0]]), color="C3", linewidth=1.2)
+    mark_incident(ax, flat_ray, flat_out[0])
     ax.set_title("FlatMirror", **F)
 
     ax = axes[0, 1]
     b = sph_mirror["BOUNDARY"][0]
     ax.plot(b[:, 0], b[:, 1], "k-", linewidth=3)
     draw_ray(ax, np.vstack([sph_ray, sph_out[0]]), color="C3", linewidth=1.2)
+    mark_incident(ax, sph_ray, sph_out[0])
     ax.set_title("SphericalMirror", **F)
 
     ax = axes[1, 0]
@@ -139,12 +151,14 @@ def render(L):
     draw_ray(ax, np.vstack([bs_ray, bs_t[0]]), color="C0", linewidth=1.2, label=L["transmitted"])
     ax.plot(bs_ray[0], bs_ray[1], "o", color="k", markersize=3)
     ax.legend(prop=LF, fontsize=8, loc="upper left")
+    mark_incident(ax, bs_ray, bs_r[0])
     ax.set_title("BeamSplitter", **F)
 
     ax = axes[1, 1]
     for seg in arb_mirror["BOUNDARY"]:
         ax.plot(seg[:, 0], seg[:, 1], "k-", linewidth=3)
     draw_ray(ax, np.vstack([arb_ray, arb_out[1:]]), color="C3", linewidth=1.2)
+    mark_incident(ax, arb_ray, arb_out[1])
     ax.set_title("ArbitraryMirror", **F)
 
     for ax in axes.flat:
@@ -161,11 +175,11 @@ def render(L):
     # 그림2: 다각형 꼭짓점 법선 -- 점을 재사용한 경우 vs 세 점을 모두 쓴 경우
     print(L["p_vertex"].format(np.round(n_dup, 3), np.round(n_uniq, 3), vertex_ang, refl_ang))
 
-    fig, ax = plt.subplots(figsize=(6, 5))
+    fig, ax = plt.subplots(figsize=(6, 5.8))
     poly = np.array([[vx0, vy0], [vx1, vy1_], [vx2, vy2]])
     ax.plot(poly[:, 0], poly[:, 1], "k-", linewidth=3)
     ax.plot([0, 0], [150, 50], "-", color="0.5", linewidth=1.2)
-    ax.annotate(L["incident"], (5, 120), fontsize=9, **F)
+    ax.annotate(L["incident"], (-6, 120), fontsize=9, ha="right", **F)
     seg_len = 80
     ax.plot([vx1, vx1 + seg_len * v_dup[0]], [vy1_, vy1_ + seg_len * v_dup[1]],
             "-", color="C3", linewidth=1.5, label=L["n_dup"])
@@ -177,7 +191,7 @@ def render(L):
     ax.set_aspect("equal")
     ax.set_xlabel(L["xlabel"], **F)
     ax.set_ylabel(L["ylabel"], **F)
-    ax.legend(prop=LF, fontsize=9, loc="lower right")
+    ax.legend(prop=dict(LF, size=9), loc="upper center", bbox_to_anchor=(0.5, -0.14))
     ax.set_title(L["fig2"].format(refl_ang), **F)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
