@@ -152,8 +152,7 @@ def draw(L):
     Fk, LG = L["font"], L["legend"]
 
     def cap(fig, key, rect=(0, 0.06, 1, 1)):
-        fig.text(0.5, 0.015, L[key], ha="center", fontsize=9, **Fk)
-        fig.tight_layout(rect=rect)
+        fig.tight_layout()   # 그림 번호와 캡션은 본문에 둔다. 이미지 안에는 넣지 않는다.
 
     def save(fig, name, dpi=150):
         fig.savefig(os.path.join(out, name), dpi=dpi); plt.close(fig)
@@ -199,10 +198,11 @@ def draw(L):
     ax[0].legend(prop=LG, fontsize=8, loc="lower center", bbox_to_anchor=(0.5, -0.2), ncol=2, frameon=False)
     sizes = sorted({k[1] for k in OVS}, reverse=True)
     sig = [N * N / s_ ** 2 for s_ in sizes]
-    for kind, it, key, c_, ls, mk, ms in (("real", 600, "real600", C_A, "--", "o", 9), ("real", 3000, "real3000", C_A, "-", "o", 9),
-                                          ("complex", 600, "cplx600", C_B, "--", "s", 5), ("complex", 3000, "cplx3000", C_B, "-", "s", 5)):
-        ax[1].plot(sig, [OVS[(kind, s_, it)] for s_ in sizes], ls, marker=mk, ms=ms, color=c_,
-                   mfc="none" if it == 600 else c_, label=L[key])
+    # 점만 찍는다(점이 네 개뿐이라 선으로 잇지 않는다). 크기를 달리해 겹쳐도 모두 보이게 한다.
+    for kind, it, key, c_, mk, ms in (("real", 600, "real600", C_A, "o", 13), ("real", 3000, "real3000", C_A, "o", 8),
+                                      ("complex", 600, "cplx600", C_B, "s", 9), ("complex", 3000, "cplx3000", C_B, "s", 4.5)):
+        ax[1].plot(sig, [OVS[(kind, s_, it)] for s_ in sizes], linestyle="none", marker=mk, ms=ms, color=c_,
+                   mfc="none" if it == 600 else c_, mew=1.5, label=L[key])
     ax[1].axvline(2, color="#999", ls=":", lw=1); ax[1].set_ylim(-0.5, 8.5)
     ax[1].set_xlabel(L["sig_ax"], **Fk); ax[1].set_ylabel(L["succ"], **Fk)
     ax[1].legend(prop=LG, fontsize=8, loc="lower right"); ax[1].grid(alpha=0.3)
@@ -222,7 +222,6 @@ def draw(L):
     ax.annotate("", (7.9, 1.8), (7.9, 3.1), **kw)
     ax.annotate("", (3.7, 1.15), (6.3, 1.15), **kw); ax.text(5.0, 1.35, L["ifft"], ha="center", fontsize=9, **Fk)
     ax.annotate("", (2.1, 3.1), (2.1, 1.8), **kw)
-    fig.text(0.5, 0.02, L["fig5"], ha="center", fontsize=9, **Fk)
     save(fig, "fig5-er-loop.png")
 
     # 그림6
@@ -249,7 +248,9 @@ def draw(L):
         a.plot(X_CROSS, 0, "*", color="gold", ms=15, mec="k", label=L["sol"])
         a.plot(0.8, 0, "ko", ms=5)
         a.grid(alpha=0.3)
-    ax[0].set_xlim(-2, 8); ax[0].set_ylim(-16, 2.5); ax[0].legend(prop=LG, fontsize=8, loc="lower left")
+    ax[0].set_xlim(-2, 8); ax[0].set_ylim(-16, 2.5)
+    ax[0].legend(prop=LG, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.14), ncol=3, frameon=False)
+    ax[0].annotate(L["start"], (0.8, 0), (-1.7, 1.2), fontsize=9, arrowprops=dict(arrowstyle="->"), **Fk)
     ax[1].set_xlim(-0.5, 5.5); ax[1].set_ylim(-0.5, 1.2)
     ax[1].annotate(L["trap"], TOY["ER"][-1], (1.2, 0.8), color=C_A, fontsize=9,
                    arrowprops=dict(arrowstyle="->", color=C_A), **Fk)
@@ -276,9 +277,14 @@ def draw(L):
             e = np.linalg.norm(a_ * c2 - OBJ_C)
             if best is None or e < best[0]: best = (e, a_ * c2)
         r = crop(best[1], h=30)
-        img(fig.add_subplot(gs[0, j + 1]), np.abs(r), f"{p:.0e} {L['phot']}: {L['amp']}", vmin=0, vmax=1)
-        img(fig.add_subplot(gs[1, j + 1]), np.angle(r) * (np.abs(r) > 0.2), L["phs"], cmap="twilight",
-            vmin=-np.pi, vmax=np.pi)
+        ptxt = f"$10^{{{int(round(np.log10(p)))}}}$ {L['phot']}"
+        a_amp = fig.add_subplot(gs[0, j + 1])
+        img(a_amp, np.abs(r), f"{ptxt}: {L['amp']}", vmin=0, vmax=1)
+        fig.colorbar(a_amp.images[0], ax=a_amp, fraction=0.046, pad=0.02, ticks=[0, 0.5, 1])
+        a_ph = fig.add_subplot(gs[1, j + 1])
+        img(a_ph, np.angle(r) * (np.abs(r) > 0.2), L["phs"], cmap="twilight", vmin=-np.pi, vmax=np.pi)
+        cb = fig.colorbar(a_ph.images[0], ax=a_ph, fraction=0.046, pad=0.02, ticks=[-np.pi, 0, np.pi])
+        cb.ax.set_yticklabels(["$-\\pi$", "0", "$\\pi$"])
     cap(fig, "fig8", rect=(0, 0.06, 1, 1)); save(fig, "fig8-noise.png")
 
 
