@@ -16,6 +16,7 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import MaxNLocator
 
 from gradient_descent import gradient_descent, objective
 from reflectance_model import reflectance
@@ -43,30 +44,22 @@ LABELS = {
         "font": KFONT, "legend": LFONT,
         "measured": "측정치 (합성)", "initial": "초기 모델 (d={:.0f} nm)",
         "wavelength": "파장 (nm)", "reflectance": "반사율",
-        "fig1": "그림1. 모델 초기값 vs 측정치",
         "true_thickness_gm": "실제 두께 (global minimum)",
         "thickness": "두께 d (nm)", "objective": "목적함수 J(d)",
-        "fig2": "그림2. 두께에 따른 목적함수 J(d)",
         "too_large": "alpha=1500 (너무 큼)", "just_right": "alpha=300 (적절함)",
         "true_thickness": "실제 두께", "thickness_est": "두께 추정값 (nm)",
-        "fig3": "그림3. 두께 추정값 vs iteration - step size 비교",
         "objective_err": "목적함수 J (error)",
-        "fig4": "그림4. 목적함수 J vs iteration - step size 비교",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"),
         "font": EFONT, "legend": ELFONT,
         "measured": "Measured (synthetic)", "initial": "Initial model (d={:.0f} nm)",
         "wavelength": "Wavelength (nm)", "reflectance": "Reflectance",
-        "fig1": "Fig 1. Initial model vs measurement",
         "true_thickness_gm": "True thickness (global minimum)",
         "thickness": "Thickness d (nm)", "objective": "Objective J(d)",
-        "fig2": "Fig 2. Objective J(d) versus thickness",
         "too_large": "alpha=1500 (too large)", "just_right": "alpha=300 (appropriate)",
         "true_thickness": "True thickness", "thickness_est": "Estimated thickness (nm)",
-        "fig3": "Fig 3. Thickness estimate vs iteration - step size",
         "objective_err": "Objective J (error)",
-        "fig4": "Fig 4. Objective J vs iteration - step size",
     },
 }
 
@@ -106,8 +99,8 @@ def render(L):
     plt.plot(wavelength_nm, R_initial, "-", color="C0", label=L["initial"].format(initial_guess))
     plt.xlabel(L["wavelength"], **F)
     plt.ylabel(L["reflectance"], **F)
-    plt.legend(prop=LF)
-    plt.title(L["fig1"], **F)
+    plt.ylim(top=0.44)
+    plt.legend(prop=LF, loc="upper center", ncol=2)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig1-model-vs-measurement.png"), dpi=150)
     plt.close()
@@ -118,8 +111,8 @@ def render(L):
     plt.axvline(true_thickness, color="gray", linestyle="--", label=L["true_thickness_gm"])
     plt.xlabel(L["thickness"], **F)
     plt.ylabel(L["objective"], **F)
-    plt.legend(prop=LF)
-    plt.title(L["fig2"], **F)
+    plt.ylim(top=6.4)
+    plt.legend(prop=LF, loc="upper center")
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig2-objective-landscape.png"), dpi=150)
     plt.close()
@@ -131,8 +124,9 @@ def render(L):
     plt.axhline(true_thickness, color="gray", linestyle="--", label=L["true_thickness"])
     plt.xlabel("iteration")
     plt.ylabel(L["thickness_est"], **F)
-    plt.legend(prop=LF)
-    plt.title(L["fig3"], **F)
+    plt.ylim(top=1700)
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
+    plt.legend(prop=LF, loc="upper center", ncol=2)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig3-thickness-vs-iteration.png"), dpi=150)
     plt.close()
@@ -144,8 +138,9 @@ def render(L):
     plt.xlabel("iteration")
     plt.ylabel(L["objective_err"], **F)
     plt.yscale("log")
-    plt.legend(prop=LF)
-    plt.title(L["fig4"], **F)
+    plt.ylim(bottom=1e-4)
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
+    plt.legend(prop=LF, loc="lower center")
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig4-objective-vs-iteration.png"), dpi=150)
     plt.close()
