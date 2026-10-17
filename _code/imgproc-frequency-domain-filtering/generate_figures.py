@@ -36,7 +36,7 @@ LABELS = {
         "filt": "필터 $H$", "psf_cut": "공간 영역 단면", "result": "필터 통과 결과",
         "raw_spec": "창 없이 구한 스펙트럼", "win_spec": "한(Hann) 창을 곱한 뒤",
         "prof_ax": "스펙트럼 세로선 단면 (직류 성분으로 정규화)", "row_ax": "세로 주파수 (빈)",
-        "prof_raw": "창 없음", "prof_win": "한 창",
+        "prof_raw": "창 없음", "prof_win": "한(Hann) 창",
         "wavenumber": r"파수 $\sigma$ (1/$\mu$m)", "intensity": "세기 (임의 단위)",
         "signal": "분광 간섭 신호", "upper": "상부 포락선", "lower": "하부 포락선",
         "eem_bl": "EEM 기저 신호", "true_bl": "참 기저 신호",
@@ -240,7 +240,8 @@ def draw(L):
     ax[2].semilogy(rows, prof_on_win, lw=0.9, color="#2b5c9b", label=L["prof_win"])
     ax[2].set_xlabel(L["row_ax"], **F)
     ax[2].set_title(L["prof_ax"], fontsize=8.5, **F)
-    ax[2].legend(prop=LG, fontsize=8.5); ax[2].grid(alpha=0.3, which="both")
+    ax[2].set_ylim(top=1e2)   # 위쪽 여백에 범례를 둬 DC 봉우리를 가리지 않는다
+    ax[2].legend(prop=LG, fontsize=8.5, loc="upper right"); ax[2].grid(alpha=0.3, which="both")
     caption(fig)
     fig.savefig(os.path.join(out, "fig4-periodic-extension.png"), dpi=150)
     plt.close(fig)
@@ -256,6 +257,7 @@ def draw(L):
     ax[0].plot(maxima[:, 0], maxima[:, 1], "x", ms=4, color="#c0392b")
     ax[0].plot(minima[:, 0], minima[:, 1], "x", ms=4, color="#2b5c9b")
     ax[0].set_xlabel(L["wavenumber"], **F); ax[0].set_ylabel(L["intensity"], **F)
+    ax[0].set_ylim(top=1.6)   # 범례가 들어갈 위쪽 여백
     ax[0].legend(prop=LG, fontsize=8, ncol=2, loc="upper left"); ax[0].grid(alpha=0.3)
     ax[1].plot(sig_x[zmask], sig_y[zmask], "o", ms=3.5, color="#888")
     ax[1].plot(zfit_x, zfit_y, "--", lw=2.0, color="#c0392b", zorder=3)
@@ -282,6 +284,10 @@ def draw(L):
                fontsize=8.5, color="#555", **F)
     ax[1].set_xlabel(L["noise_ax"], **F); ax[1].set_ylabel(L["rms_ax"], **F)
     ax[1].legend(prop=LG, fontsize=9); ax[1].grid(alpha=0.3, which="both")
+    # 로그 눈금에서 10^-2 하나만 읽히지 않도록 1-2-5 눈금에 숫자를 단다.
+    ax[1].set_xticks([0.002, 0.005, 0.01, 0.02, 0.05])
+    ax[1].set_xticklabels(["0.002", "0.005", "0.01", "0.02", "0.05"])
+    ax[1].xaxis.set_minor_formatter(plt.NullFormatter())
     caption(fig)
     fig.savefig(os.path.join(out, "fig6-lpf-vs-eem.png"), dpi=150)
     plt.close(fig)
