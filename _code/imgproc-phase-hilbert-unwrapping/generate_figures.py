@@ -27,7 +27,7 @@ LABELS = {
         "clean": "배경을 빼고 계산한 위상 오차", "perr": "위상 오차 (rad)",
         "noise_ax": "프레임 노이즈", "rms": "위상 오차 RMS (rad)",
         "m_h": "힐베르트 (1장)", "m_f": "푸리에 (1장)", "m_p4": "위상천이 (4장)",
-        "band_ax": "측대역 폭 ($f_0$ 단위)", "e_noise": "노이즈 하 오차 (노이즈 0.05)",
+        "band_ax": "측대역 폭 ($f_0$ 단위)", "e_noise": "노이즈 0.05에서의 오차",
         "e_shape": "노이즈 없음, 형상이 급한 구간의 오차",
         "eps": "천이량 오차 $\\varepsilon$", "s3": "3단계", "s4": "4단계",
         "s5": "5단계 최소자승", "sh": "Hariharan 5단계",
@@ -210,7 +210,8 @@ def draw(L):
     ax[0].plot(X[sl], (A0 - B0)[sl], ":", lw=1.2, color="#c0392b")
     ax[0].axvline(PIX, color="k", lw=0.8, ls="-.", label=L["pixmark"])
     ax[0].set_xlabel(L["pos"], **F); ax[0].set_ylabel(L["inten"], **F)
-    ax[0].legend(prop=LG, fontsize=8); ax[0].grid(alpha=0.3)
+    ax[0].set_ylim(top=1.75)   # 위쪽 여백에 범례를 둬 무늬와 배경선을 가리지 않게 한다
+    ax[0].legend(prop=LG, fontsize=8, ncol=2, loc="upper left"); ax[0].grid(alpha=0.3)
     ax[1].plot(dfine, Ipix, "-", lw=1.5, color="#1e8449", label=L["fitted"])
     ax[1].plot(SH4, Ipix4, "o", ms=7, color="#c0392b", label=L["samples"])
     ax[1].axvline((-PHI[PIX]) % (2 * np.pi), ls=":", lw=1.2, color="k", label=L["phi_here"])
