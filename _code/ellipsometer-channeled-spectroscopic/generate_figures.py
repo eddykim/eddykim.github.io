@@ -288,11 +288,12 @@ def figure5(L):
         ax1.semilogy(HALF, np.maximum(res[d][:, 1], 1e-4), ls, color=c, lw=1.0,
                      alpha=0.55, label=L["f5_del"].format(d))
     ax1.axvline(opd(T_RET) / 2, color="gray", lw=1.0, ls=":")
-    ax1.text(opd(T_RET) / 2, 12, L["f5_halfL"], fontsize=9.0, ha="center",
+    ax1.text(opd(T_RET) / 2, 40, L["f5_halfL"], fontsize=9.0, ha="center",
              color="gray", **L["font"])
     ax1.set_xlabel(L["f5_x"], fontsize=10.5, **L["font"])
     ax1.set_ylabel(L["f5_y"], fontsize=10.5, **L["font"])
     ax1.set_title(L["f5a"], fontsize=11.5, pad=8, **L["font"])
+    ax1.set_ylim(0.02, None)   # 범례가 들어갈 아래쪽 빈 칸을 둔다
     ax1.legend(fontsize=8.2, prop=L["legend"], loc="lower left", ncol=2,
                framealpha=0.92)
     ax1.grid(alpha=0.25, which="both")
@@ -369,7 +370,7 @@ LABELS = {
         "f4_c4": "지연자 4장\n뮬러 16요소",
         "f4_nch": "채널 {}",
         "f4_total": "분광기 전체 {:.0f} 점",
-        "f4_note": "400~1035 nm, 분해능 1.01 nm인 분광기 기준\n(Hagen 2022의 예)",
+        "f4_note": "400~1035 nm, 분해능 1.01 nm인 분광기 기준\n(하겐 2022의 예)",
         # 그림 5
         "fig5": "복조가 남기는 왜곡과 지연량 표류",
         "f5a": "(a) 채널을 좁게 자를수록 커지는 오차",
@@ -420,7 +421,7 @@ LABELS = {
         "f5_psi": "$\\Psi$ — {:.0f} nm film", "f5_del": "$\\Delta$ — {:.0f} nm film",
         "f5_halfL": "$L/2$",
         "f5_drift": "$\\delta\\phi$ = {:.0f}°",
-        "f5_arc": "locus of a 60 nm film; the dot marks the 800 nm end",
+        "f5_arc": "locus of a 60 nm film;\nthe dot marks the 800 nm end",
     },
 }
 
