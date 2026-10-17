@@ -236,7 +236,7 @@ def fig2_envelopes(L):
     kz, ki = first_zero(df_s), information_limit()
     for kv, key, col in [(kz, "f2point", DARK), (ki, "f2info", ORANGE)]:
         # 세로선은 위쪽 주석 아래에서 멈춰 글자를 가로지르지 않게 한다.
-        ax.axvline(kv, ymax=0.84, color=col, ls="-.", lw=1.3)
+        ax.axvline(kv, ymax=0.67, color=col, ls="-.", lw=1.3)
         # sin(chi) 진동 위에 얹히므로 흰 배경을 깔아 읽히게 한다.
         ax.text(kv + 0.12, 0.88, L[key].format(1.0 / kv), fontsize=9, color=col,
                 **L["font"],
@@ -248,10 +248,10 @@ def fig2_envelopes(L):
     ax.axhline(0, color=DARK, lw=0.9)
     ax.set_xlabel(L["f2x"], **L["font"])
     ax.set_ylabel(L["f2y"], **L["font"])
-    ax.set_ylim(-1.05, 1.62)
+    ax.set_ylim(-1.05, 2.3)   # 위쪽 여백에 범례를 두어 sin χ 진동을 가리지 않는다
     ax.set_xlim(0, 12)
     ax.grid(alpha=0.3)
-    ax.legend(prop=L["legend"] or None, loc="lower right", fontsize=8.5)
+    ax.legend(prop=L["legend"] or None, loc="upper right", fontsize=8.5)
     ax.set_title(L["fig2"], fontsize=13, **L["font"])
     fig.tight_layout()
     return fig
