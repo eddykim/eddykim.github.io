@@ -43,7 +43,7 @@ LABELS = {
         "fig5": "그림5. 측정 성분이 노이즈 바닥에 닿는 곳부터 복원한 해가 참 신호에서 떨어져 나간다 (피카르 그림)",
         "small": "작은 $\\lambda$", "bestl": "최적 $\\lambda$", "large": "큰 $\\lambda$",
         "res": "잔차 $\\|Ax - y\\|$", "soln": "해의 크기 $\\|x\\|$",
-        "disc": "불일치 원리", "noiselvl": "노이즈의 크기", "bestpt": "오차 최소", "ff": "필터 인자 $f_i$",
+        "err_r": "상대 오차 (오른쪽 축)", "disc": "불일치 원리", "noiselvl": "노이즈의 크기", "bestpt": "오차 최소", "ff": "필터 인자 $f_i$",
         "recon_t": "$\\lambda$ 에 따른 복원", "lc_t": "잔차가 노이즈만큼 남는 $\\lambda$", "ff_t": "특잇값별로 남기는 비율",
         "fig6": "그림6. 티호노프 정규화는 작은 특잇값 쪽 성분만 눌러 노이즈를 막는다",
         "iters": "반복 횟수", "stop": "여기서 멈추면 최선", "times": "회",
@@ -83,7 +83,7 @@ LABELS = {
         "fig5": "Fig 5. Where the data hit the noise floor, the recovered coefficients depart from the true signal (Picard plot)",
         "small": "Small $\\lambda$", "bestl": "Best $\\lambda$", "large": "Large $\\lambda$",
         "res": "Residual $\\|Ax - y\\|$", "soln": "Solution norm $\\|x\\|$",
-        "disc": "Discrepancy principle", "noiselvl": "Noise level", "bestpt": "Minimum error", "ff": "Filter factor $f_i$",
+        "err_r": "Relative error (right axis)", "disc": "Discrepancy principle", "noiselvl": "Noise level", "bestpt": "Minimum error", "ff": "Filter factor $f_i$",
         "recon_t": "Reconstruction vs $\\lambda$", "lc_t": "$\\lambda$ that leaves a noise-sized residual", "ff_t": "Fraction kept per singular value",
         "fig6": "Fig 6. Tikhonov regularization damps only the small-singular-value components",
         "iters": "Iterations", "stop": "Best place to stop", "times": " it.",
@@ -240,12 +240,12 @@ def draw(L):
     ax.semilogy(f, np.maximum(Hb, 1e-5), color=C_BOX, lw=1.2, label=L["kbox"])
     ax.semilogy(f, Hc, color=C_CODE, lw=1.2, label=L["kcode"])
     zf = np.arange(1, 6) / K
-    ax.plot(zf, np.full_like(zf, 1.3e-5), "v", color=C_BOX, ms=6)
-    ax.text(zf[-1] + 0.012, 1.3e-5, L["zeros"], fontsize=8.5, va="center", color=C_BOX,
+    ax.plot(zf, np.full_like(zf, 4e-6), "v", color=C_BOX, ms=6)
+    ax.text(zf[-1] + 0.012, 4e-6, L["zeros"], fontsize=8.5, va="center", color=C_BOX,
             bbox=dict(fc="white", ec="none", alpha=0.9, pad=1.5), **F)
-    ax.set_ylim(1e-5, 1.5); ax.set_xlim(0, 0.5)
+    ax.set_ylim(2e-6, 1.5); ax.set_xlim(0, 0.5)
     ax.set_xlabel(L["freq"], **F); ax.set_ylabel(L["mag"], **F)
-    ax.legend(prop=LG, fontsize=8.5, loc="lower right"); ax.grid(alpha=0.3, which="both")
+    ax.legend(prop=LG, fontsize=8.5, loc="upper right"); ax.grid(alpha=0.3, which="both")
     cap(fig, "fig3", rect=(0, 0.07, 1, 1)); save(fig, "fig3-transfer-function.png")
 
     # 그림4: 역변환 폭주
@@ -294,11 +294,12 @@ def draw(L):
     ax[1].text(LAMS[1], SIG * np.sqrt(A_BOX.shape[0]) * 1.15, L["noiselvl"], fontsize=8, color=C_TRUE, **F)
     ax[1].axvline(LDISC, color=C_BOX, ls="--", lw=1, label=f"{L['disc']} = {LDISC:.2g}")
     ax2 = ax[1].twinx()
-    ax2.semilogx(LAMS, ERRS, color=C_CODE, lw=1.3)
+    ax2.semilogx(LAMS, ERRS, color=C_CODE, lw=1.3, label=L["err_r"])
     ax2.plot(LBEST, EBEST, "s", mfc="none", color=C_CODE, ms=8)
     ax2.set_ylabel(L["err"], color=C_CODE, **F); ax2.tick_params(axis="y", colors=C_CODE)
     ax[1].set_xlabel("$\\lambda$"); ax[1].set_title(L["lc_t"], fontsize=10, **F)
-    ax[1].legend(prop=LG, fontsize=7.5, loc="center left")
+    h1, l1 = ax[1].get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
+    ax[1].legend(h1 + h2, l1 + l2, prop=LG, fontsize=7, loc="upper center")
     for key, c in (("small", "#bbbbbb"), ("bestl", C_CODE), ("large", C_BOX)):
         lam = {"small": LSMALL, "bestl": LBEST, "large": LLARGE}[key]
         ax[2].semilogx(S, S**2 / (S**2 + lam**2), ".", color=c, ms=3)
