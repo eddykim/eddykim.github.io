@@ -69,16 +69,16 @@ $$ o' = o + \frac{P^*}{\lvert P \rvert_{\max}^2} (\psi' - \psi) $$
 
 첫째로 가중 평균으로 읽을 수 있다. 측정에 맞춘 출사파를 프로브로 나눈 값 $$\psi'/P$$ 가 새 추정이고, 이것과 기존 추정 $o$ 를 섞는 비율이 $w = \lvert P \rvert^2 / \lvert P \rvert_{\max}^2$ 이다. 프로브가 밝은 곳은 새 값을 믿고, 어두운 곳은 기존 값을 지킨다. 둘째로 경사하강으로 읽을 수 있다. 3편에서 본 것처럼 ePIE 한 단계는 위치별 오차의 기울기를 따라 $1/\lvert P \rvert_{\max}^2$ 에 비례하는 걸음을 간다. 이 걸음은 오차 기울기의 립시츠 상수에서 나온 값으로, [1편](/posts/ptycho-computational-imaging-inverse-problem/)의 랜드웨버 반복이 쓰는 걸음과 같은 종류다. 안정하지만 보수적이다. 셋째로 정규화(regularization)한 비용으로 읽을 수 있다. 출사파 오차에 "시편을 많이 바꾸지 말라"는 벌점을 더한 비용을 최소화하면 ePIE 갱신이 나온다. 다만 그 벌점의 세기가 화소마다 다르다. 1편의 티호노프 정규화에서 $\lambda$ 가 위치에 따라 바뀌는 셈이다.
 
-세 관점이 가리키는 문제는 같다. 가중 $w = \lvert P \rvert^2 / \lvert P \rvert_{\max}^2$ 가 너무 빨리 떨어진다. 프로브 밝기(진폭 기준)가 최대의 절반인 곳에서 ePIE는 보정의 25 %만 반영하고, 0.2인 곳에서는 4 %만 반영한다. 프로브의 중심 말고는 거의 고치지 않는 셈이다.
+세 관점이 가리키는 문제는 같다. 가중 $w = \lvert P \rvert^2 / \lvert P \rvert_{\max}^2$ 가 너무 빨리 떨어진다. 프로브 진폭이 최대의 절반인 곳에서 ePIE는 보정의 25 %만 반영하고, 0.2인 곳에서는 4 %만 반영한다. 프로브의 중심 말고는 거의 고치지 않는 셈이다.
 
-<img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/fig3-update-weights.png" alt="프로브 밝기에 따라 ePIE, PIE, rPIE가 시편에 반영하는 비율" width="650">
-_그림3. 가로축은 프로브 밝기, 세로축은 시편에 반영하는 보정 비율이다. ePIE는 밝은 곳 말고는 거의 고치지 않고, rPIE는 α를 줄여 그 곡선을 끌어올린다._
+<img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/fig3-update-weights.png" alt="프로브 진폭에 따라 ePIE, PIE, rPIE가 시편에 반영하는 비율" width="650">
+_그림3. 가로축은 프로브 진폭, 세로축은 시편에 반영하는 보정 비율이다. ePIE는 밝은 곳 말고는 거의 고치지 않고, rPIE는 α를 줄여 그 곡선을 끌어올린다._
 
 그래서 Maiden 등은 분모 하나만 바꾼 rPIE(regularized PIE)를 제안했다.
 
 $$ o' = o + \frac{P^*}{(1 - \alpha)\lvert P \rvert^2 + \alpha \lvert P \rvert_{\max}^2} (\psi' - \psi) $$
 
-여기서 $\alpha$ 는 0과 1 사이의 상수다. $\alpha = 1$ 이면 ePIE와 같다. $\alpha$ 가 0에 가까우면 분모가 $\lvert P \rvert^2$ 이 되어 출사파를 프로브로 그냥 나누는 것이 된다. 그 사이에서는 3편의 PIE처럼 나눗셈에 가까우면서도, 프로브가 0인 곳에서 터지지 않도록 바닥이 $\alpha\lvert P \rvert_{\max}^2$ 로 받쳐져 있다. 그림3처럼 $\alpha = 0.05$ 이면 프로브 밝기(진폭 기준)가 절반인 곳에서도 보정의 87 %를 반영한다. 프로브 갱신은 시편과 프로브의 역할을 바꾼 같은 식이고, Maiden 등은 그쪽은 $\beta = 1$, 곧 ePIE와 같은 형태로 두기를 권했다. 시편은 대개 투과율이 고르게 높아서 프로브 갱신의 가중이 크게 달라지지 않기 때문이다. 이 글도 $\alpha = 0.05$, $\beta = 1$ 을 썼다.
+여기서 $\alpha$ 는 0과 1 사이의 상수다. $\alpha = 1$ 이면 ePIE와 같다. $\alpha$ 가 0에 가까우면 분모가 $\lvert P \rvert^2$ 이 되어 출사파를 프로브로 그냥 나누는 것이 된다. 그 사이에서는 3편의 PIE처럼 나눗셈에 가까우면서도, 프로브가 0인 곳에서 터지지 않도록 바닥이 $\alpha\lvert P \rvert_{\max}^2$ 로 받쳐져 있다. 그림3처럼 $\alpha = 0.05$ 이면 프로브 진폭이 절반인 곳에서도 보정의 87 %를 반영한다. 프로브 갱신은 시편과 프로브의 역할을 바꾼 같은 식이고, Maiden 등은 그쪽은 $\beta = 1$, 곧 ePIE와 같은 형태로 두기를 권했다. 시편은 대개 투과율이 고르게 높아서 프로브 갱신의 가중이 크게 달라지지 않기 때문이다. 이 글도 $\alpha = 0.05$, $\beta = 1$ 을 썼다.
 
 <img src="/assets/img/posts/ptycho-probe-ambiguity-raster-rpie/fig4-convergence.png" alt="핀홀, 초점이 어긋난 집속 프로브, 확산판 프로브에서 ePIE와 rPIE의 수렴" width="900">
 _그림4. 페르마 나선으로 주사한 복원의 상대 오차이며, 선은 패턴 순서 세 가지의 중앙값, 띠는 그 범위다. rPIE는 ePIE보다 열 배 이상 빨리 수렴하고, 확산판 프로브는 둘 다 풀지 못한다._

@@ -20,13 +20,14 @@ LABELS = {
         "o_ph": "시편 위상", "p_amp": "프로브 진폭", "p_ph": "프로브 위상",
         "regular": "규칙 격자", "jitter": "±1화소 흔든 격자", "fermat": "페르마 나선",
         "rec": "복원 진폭", "errmap": "오차 |O - O_true|", "spec": "오차 스펙트럼 (로그)",
-        "pn": "프로브 세기 |P| / |P|max", "w": "시편에 반영하는 비율 w",
+        "pn": "프로브 진폭 |P| / |P|max", "w": "시편에 반영하는 비율 w",
         "l_epie": "ePIE (rPIE $\\alpha = 1$)", "l_pie": "PIE ($\\alpha = 10^{-4}$)",
         "l_r25": "rPIE $\\alpha = 0.25$", "l_r05": "rPIE $\\alpha = 0.05$",
         "iters": "반복 횟수", "err": "상대 오차",
         "pinhole": "핀홀 프로브", "defocus": "초점이 어긋난 집속 프로브", "diffuser": "확산판 프로브",
         "t_p": "참 프로브", "init": "초기 추정 (초점에 맞춤)", "e_found": "ePIE 200회", "r_found": "rPIE 200회",
-        "amp": "진폭", "phase": "위상",
+        "amp": "진폭", "phase": "위상", "sp_ax": "공간주파수 (주기/화소)", "gridf": "격자 주파수 (1/8)",
+        "note5": "각 패널은 64×64 화소 전체. 위상의 흰 영역은 진폭이 최대의 5 % 이하라 생략한 부분",
     },
     "en": {"dir": os.path.join(BASE, "en"), "font": {}, "legend": {},
         "v_true": "Original (O, P)", "v_scale": "Scale exchange (cO, P/c)", "v_ramp": "Phase ramp",
@@ -34,13 +35,14 @@ LABELS = {
         "o_ph": "specimen phase", "p_amp": "probe amplitude", "p_ph": "probe phase",
         "regular": "Regular grid", "jitter": "Grid jittered by ±1 px", "fermat": "Fermat spiral",
         "rec": "Reconstructed amplitude", "errmap": "Error |O - O_true|", "spec": "Error spectrum (log)",
-        "pn": "Probe brightness |P| / |P|max", "w": "Fraction applied to the specimen, w",
+        "pn": "Probe amplitude |P| / |P|max", "w": "Fraction applied to the specimen, w",
         "l_epie": "ePIE (rPIE $\\alpha = 1$)", "l_pie": "PIE ($\\alpha = 10^{-4}$)",
         "l_r25": "rPIE $\\alpha = 0.25$", "l_r05": "rPIE $\\alpha = 0.05$",
         "iters": "Iterations", "err": "Relative error",
-        "pinhole": "Pinhole probe", "defocus": "Defocused focused probe", "diffuser": "Diffuser probe",
+        "pinhole": "Pinhole probe", "defocus": "Defocused probe", "diffuser": "Diffuser probe",
         "t_p": "True probe", "init": "Initial guess (in focus)", "e_found": "ePIE, 200 iterations", "r_found": "rPIE, 200 iterations",
-        "amp": "amplitude", "phase": "phase",
+        "amp": "amplitude", "phase": "phase", "sp_ax": "Spatial frequency (cycles/pixel)", "gridf": "Grid frequency (1/8)",
+        "note5": "Each panel shows the full 64×64 pixels. White areas in the phase row are where the amplitude is below 5 % of its maximum (masked).",
     },
 }
 
@@ -117,6 +119,15 @@ def draw(L):
         spec = np.fft.fftshift(np.abs(np.fft.fft2(r["err_crop"])) ** 2)
         img(ax[i, 3], np.log10(spec + 1e-12 * spec.max()), f"{L['spec']}: {r['grid_frac']:.0%}", cmap="viridis",
             vmin=np.log10(spec.max()) - 6, vmax=np.log10(spec.max()))
+        # 스펙트럼 패널에 축과 격자 주파수(간격 8화소 = 1/8 주기/화소) 표시
+        a3 = ax[i, 3]; a3.set_axis_on(); n_s = spec.shape[0]; c_s = n_s // 2; d_s = n_s / 8.0
+        a3.set_xticks([0, c_s, n_s - 1]); a3.set_xticklabels(["-0.5", "0", "0.5"], fontsize=7)
+        a3.set_yticks([0, c_s, n_s - 1]); a3.set_yticklabels(["-0.5", "0", "0.5"], fontsize=7)
+        a3.plot([c_s + d_s, c_s - d_s, c_s, c_s], [c_s, c_s, c_s + d_s, c_s - d_s], "o", mfc="none", mec="#ff6666",
+                ms=9, mew=1.0, label=L["gridf"])
+        a3.set_xlim(-0.5, n_s - 0.5); a3.set_ylim(n_s - 0.5, -0.5)
+        if i == 2: a3.set_xlabel(L["sp_ax"], fontsize=8, **Fk)
+        if i == 0: a3.legend(prop=LG, fontsize=6.5, loc="lower right")
     cap(fig, "fig2", rect=(0, 0.03, 1, 1)); save(fig, "fig2-raster-grid.png", dpi=120)
 
     # 그림3: 가중 곡선
@@ -153,7 +164,8 @@ def draw(L):
     for j, (pp, key) in enumerate(((Pt, "t_p"), (P0, "init"), (pe, "e_found"), (pr, "r_found"))):
         img(ax[0, j], np.abs(pp), f"{L[key]}: {L['amp']}")
         img(ax[1, j], np.where(msk, np.angle(pp), np.nan), L["phase"], cmap="twilight", vmin=-np.pi, vmax=np.pi)
-    cap(fig, "fig5", rect=(0, 0.05, 1, 1)); fig.subplots_adjust(hspace=0.18); save(fig, "fig5-defocus-probe.png")
+    cap(fig, "fig5", rect=(0, 0.05, 1, 1)); fig.subplots_adjust(hspace=0.18, bottom=0.07)
+    fig.text(0.5, 0.012, L["note5"], ha="center", fontsize=8, **Fk); save(fig, "fig5-defocus-probe.png")
 
 
 if __name__ == "__main__":
