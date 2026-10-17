@@ -279,6 +279,17 @@ rm -rf _site
 `_drafts/`의 글이면 빌드는 생략하고 lint와 pair만 돌린다. 수식을 고쳤으면 `_site/posts/<slug>/`의
 해당 자리가 표로 깨지지 않았는지도 본다.
 
+수식과 조사는 빌드 결과로 한 번 더 확인한다(`_site`를 지우기 전에).
+
+```bash
+python3 $S/mathcheck.py _site                       # 빌드된 HTML의 수식을 MathJax 파서로 검사 (오류·<em> 끼어듦·짝 안 맞는 $)
+python3 $S/mathdiff.py . _site                      # 원문의 $…$가 빌드에 글자 그대로 남았는지 (kramdown이 ' \{ \! \# ^* _를 바꾼다)
+python3 $S/josa_check.py "_posts/*-<slug>.md"       # 그림·표 번호 뒤 조사
+```
+
+`mathcheck.py`는 `$S/mjx`의 node 패키지를 쓴다. 처음 한 번 `cd $S/mjx && npm install --cache ./.npmcache`.
+걸린 인라인 수식은 `$$…$$`로 쓰면 kramdown이 글자 그대로 넘긴다(2026-10-15, 약 500곳을 이렇게 고쳤다).
+
 ## 9단계 — 보고와 커밋 (관문 2)
 
 고친 항목, 바뀐 파일, 검증 결과를 보고한다. 커밋하기 전에 `git status`와 `git diff --stat`을 보여주고

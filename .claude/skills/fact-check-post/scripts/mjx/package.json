@@ -1,0 +1,6 @@
+{
+  "name": "blog-math-check",
+  "private": true,
+  "description": "mathcheck.py가 쓰는 MathJax TeX 파서. 처음 한 번: cd 이 폴더 && npm install --cache ./.npmcache",
+  "dependencies": { "mathjax-full": "3.2.2" }
+}
