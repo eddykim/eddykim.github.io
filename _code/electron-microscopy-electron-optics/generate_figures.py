@@ -334,7 +334,7 @@ def fig3_resolution_vs_cs(L):
     ax.grid(alpha=0.3, which="both")
     ax.legend(prop=L["legend"] or None, loc="lower right")
     ax.text(0.035, 0.93, L["f3slope"], transform=ax.transAxes, fontsize=9,
-            color=GRAY, va="top", **L["font"])
+            color="#34495e", va="top", **L["font"])
     fig.tight_layout()
     return fig
 
