@@ -155,15 +155,15 @@ def figure4(L):
         u = sgn * ep.radius / (ep.z - z_s)
         pts = trace(els, z_s, 0.0, u, z_end=320.0)
         ax.plot(pts[:, 0], pts[:, 1], color=C_RAY, lw=1.2)
-    ax.text(z_s, -14, L["h_obj"], ha="center", **L["font"])
+    ax.text(z_s - 10, 0, L["h_obj"], ha="right", va="center", **L["font"])
     ax.text(-6, -95, L["h_lens"], fontsize=9, ha="right", **L["font"])
     ax.text(85, 100, L["h_hole"], fontsize=9, **L["font"])
     ax.text(ep.z - 5, ep.radius + 8, L["h_img"], ha="right", fontsize=9, color=C_KEY, **L["font"])
-    ax.text(-150, 42, L["h_ang_l"], fontsize=9, color=C_GREY, **L["font"])
+    ax.text(-215, 55, L["h_ang_l"], fontsize=9, color=C_GREY, **L["font"])
     # 입사동 각 라벨은 광선과 겹치지 않도록 아래쪽 원뿔 바깥에 두고 화살표로 가리킨다
-    ax.annotate(L["h_ang_h"], xy=(-110, -ep.radius * 90 / (ep.z - z_s)), xytext=(-150, -48),
+    ax.annotate(L["h_ang_h"], xy=(-110, -ep.radius * 90 / (ep.z - z_s)), xytext=(-215, -66),
                 fontsize=9, color=C_KEY, arrowprops=dict(arrowstyle="-", color=C_KEY, lw=0.6), **L["font"])
-    ax.set_xlim(-220, 430); ax.set_ylim(-125, 135)
+    ax.set_xlim(-310, 430); ax.set_ylim(-125, 135)
     ax.set_xlabel(L["h_x"], **L["font"]); ax.set_ylabel(L["h_y"], **L["font"])
     ax.set_title(L["h_t"], fontsize=10, **L["font"])
     fig.tight_layout()
@@ -202,7 +202,8 @@ def figure5(L):
     ax.annotate(L["r_ep"], xy=(ep.z, -ep.radius + 0.5), xytext=(66, -14), color=C_KEY, fontsize=9,
                 arrowprops=dict(arrowstyle="-", color=C_KEY, lw=0.6), **L["font"])
     ax.plot([xp.z, xp.z], [-xp.radius, xp.radius], color=C_GRN, lw=2.5, alpha=0.8)
-    ax.text(xp.z - 2, xp.radius + 2, L["r_xp"], color=C_GRN, fontsize=9, ha="right", **L["font"])
+    ax.annotate(L["r_xp"], xy=(xp.z, xp.radius), xytext=(-8, 18.5), color=C_GRN, fontsize=9,
+                arrowprops=dict(arrowstyle="-", color=C_GRN, lw=0.6), **L["font"])
     ax.annotate("", xy=(Z_OBJ, Y_OBJ), xytext=(Z_OBJ, 0), arrowprops=dict(arrowstyle="->", lw=1.5))
     ax.text(Z_OBJ, -3, L["r_obj"], ha="center", fontsize=9, **L["font"])
     ax.annotate("", xy=(z_img, chief[-1, 1]), xytext=(z_img, 0), arrowprops=dict(arrowstyle="->", lw=1.5))
