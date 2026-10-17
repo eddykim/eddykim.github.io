@@ -37,43 +37,33 @@ LABELS = {
     "ko": {
         "dir": BASE_DIR, "font": KFONT, "legend": LFONT, "tickfont": "AppleGothic",
         "thickness": "두께 d (nm)", "J_log": "J(d)  (log scale)",
-        "fig1": "그림1. 목적함수 지형 — 세 개의 basin (점선: basin 경계)",
         "sa_low": r"$T_0$ 매우 낮음 (0.0005)", "sa_mid": r"$T_0$ 적당 (0.02)",
         "sa_high": r"$T_0$ 매우 높음 (5.0)",
         "thickness_est": "두께 추정값 (nm)",
-        "fig2": "그림2. SA 온도 스케줄에 따른 탐색 궤적 (d0=1300nm)",
         "bh_low": r"$T_0$ 매우 낮음 (0.0005)", "bh_mid": r"$T_0$ 적당 (0.05)",
         "bh_high": r"$T_0$ 매우 높음 (5.0)",
-        "fig3": "그림3. Basin-Hopping 온도에 따른 궤적 (d0=1300nm, 온도 고정)",
         "bars": ["단일 LM\n(1회 시도)", "Simulated\nAnnealing", "Basin-\nHopping"],
         "success_rate": "전역 최솟값 도달 성공률 (%)",
-        "fig4": "그림4. 무작위 시작 {}회 성공률 비교",
         "start": "시작 바닥 (d0=1300 → LM 수렴)", "last": "마지막 위치",
         "acc": "수락된 시도가 있는 바닥", "rej": "시도가 모두 기각된 바닥",
         "count": "{n}회 시도\n수락 {m}",
         "count1": "{n}회 시도\n수락 {m}",
-        "fig5": "그림5. Basin-Hopping 25 hop의 시도 바닥 (T0=0.05)",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
         "tickfont": None,
         "thickness": "Thickness d (nm)", "J_log": "J(d)  (log scale)",
-        "fig1": "Fig 1. The objective landscape — three basins (dashed: basin boundaries)",
         "sa_low": r"$T_0$ very low (0.0005)", "sa_mid": r"$T_0$ moderate (0.02)",
         "sa_high": r"$T_0$ very high (5.0)",
         "thickness_est": "Estimated thickness (nm)",
-        "fig2": "Fig 2. SA search trajectories by temperature schedule (d0=1300nm)",
         "bh_low": r"$T_0$ very low (0.0005)", "bh_mid": r"$T_0$ moderate (0.05)",
         "bh_high": r"$T_0$ very high (5.0)",
-        "fig3": "Fig 3. Basin-hopping trajectories by temperature (d0=1300nm, fixed temperature)",
         "bars": ["single LM\n(one attempt)", "Simulated\nAnnealing", "Basin-\nHopping"],
         "success_rate": "Rate of reaching the global minimum (%)",
-        "fig4": "Fig 4. Success rate over {} random starts",
         "start": "starting floor (d0=1300, after LM)", "last": "final position",
         "acc": "floor with accepted tries", "rej": "floor with all tries rejected",
         "count": "{n} tries\n{m} accepted",
         "count1": "{n} try\n{m} accepted",
-        "fig5": "Fig 5. Trial floors of 25 basin-hopping hops (T0=0.05)",
     },
 }
 
@@ -192,7 +182,6 @@ def render(L):
     plt.yscale("log")
     plt.xlabel(L["thickness"], **F)
     plt.ylabel(L["J_log"], **F)
-    plt.title(L["fig1"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig1-objective-landscape.png"), dpi=150)
     plt.close()
@@ -205,7 +194,6 @@ def render(L):
     plt.xlabel("iteration")
     plt.ylabel(L["thickness_est"], **F)
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig2"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig2-sa-temperature-schedule.png"), dpi=150)
     plt.close()
@@ -218,7 +206,6 @@ def render(L):
     plt.xlabel("hop")
     plt.ylabel(L["thickness_est"], **F)
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig3"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig3-basinhopping-temperature-schedule.png"), dpi=150)
     plt.close()
@@ -233,7 +220,6 @@ def render(L):
                  ha="center", **F)
     plt.ylim(0, 110)
     plt.ylabel(L["success_rate"], **F)
-    plt.title(L["fig4"].format(N_SEEDS), **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig4-success-rate-comparison.png"), dpi=150)
     plt.close()
@@ -243,10 +229,10 @@ def render(L):
     plt.plot(ds_wide, Js_wide, color="lightgray", linewidth=1.2, zorder=1)
     plt.axvspan(1200, 1800, color="0.95", zorder=0)
     plt.plot(overlay_d[0], overlay_J[0], "s", color="C0", markersize=11, zorder=2, label=L["start"])
-    plt.plot(overlay_d[-1], overlay_J[-1], "*", color="C2", markersize=16, zorder=2, label=L["last"])
+    plt.plot(overlay_d[-1], overlay_J[-1], "*", markerfacecolor="none", markeredgecolor="C2", markeredgewidth=1.6, markersize=18, zorder=2, label=L["last"])
     acc_g = [(g["d"], g["J"]) for g in trial_groups if g["m"] > 0]
     rej_g = [(g["d"], g["J"]) for g in trial_groups if g["m"] == 0]
-    plt.plot(*zip(*acc_g), "o", color="C2", markersize=5, zorder=3, label=L["acc"])
+    plt.plot(*zip(*acc_g), "o", color="C2", markeredgecolor="black", markeredgewidth=0.6, markersize=7, zorder=4, label=L["acc"])
     plt.plot(*zip(*rej_g), "o", markerfacecolor="white", markeredgecolor="C3",
              markersize=7, zorder=3, label=L["rej"])
     plt.annotate("", xy=(overlay_d[-1], overlay_J[-1] * 1.6), xytext=(overlay_d[0] + 15, overlay_J[0]),
@@ -259,7 +245,6 @@ def render(L):
     plt.xlabel(L["thickness"], **F)
     plt.ylabel(L["J_log"], **F)
     plt.legend(prop=LF, fontsize=7, loc="lower left")
-    plt.title(L["fig5"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig5-trajectory-on-landscape.png"), dpi=150)
     plt.close()
