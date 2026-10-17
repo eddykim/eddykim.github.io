@@ -153,8 +153,8 @@ def figure2(L, data):
     ax.set_ylim(0, 1)
     ax.set_xticks([]); ax.set_yticks([])
     ax.set_title(L["f2t"], **L["font"])
-    ax.legend(loc="lower right", prop={"family": L["font"].get("fontfamily", "DejaVu Sans")},
-              framealpha=0.9)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.03), ncol=2,
+              prop={"family": L["font"].get("fontfamily", "DejaVu Sans")}, framealpha=0.9)
     fig.tight_layout()
     save(fig, L, "fig2-wavefronts-rays.png")
 
@@ -178,7 +178,7 @@ def compute_mirage():
 
 def figure3(L, data):
     medium, rays = data
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 4.0),
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 4.6),
                                  gridspec_kw={"width_ratios": [1, 3.2]})
     y = np.linspace(0, 1.6, 400)
     a1.plot(air_temperature(y) - 273.15, y, color=C_WAVE)
@@ -221,7 +221,7 @@ def figure3(L, data):
     a2.set_xlabel(L["f3bx"], **L["font"])
     a2.set_ylabel(L["f3by"], **L["font"])
     a2.set_title(L["f3b"], fontsize=10, **L["font"])
-    a2.legend(loc="lower left", fontsize=8.5,
+    a2.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=3,
               prop={"family": L["font"].get("fontfamily", "DejaVu Sans"), "size": 8.5})
     fig.tight_layout()
     save(fig, L, "fig3-road-mirage-rays.png")
