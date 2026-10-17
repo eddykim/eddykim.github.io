@@ -106,8 +106,9 @@ def figure2(L):
     h1, l1 = b.get_legend_handles_labels()
     h2, l2 = a2.get_legend_handles_labels()
     b.legend(h1 + h2, l1 + l2, loc="upper center", fontsize=8.5, prop=dict(family=plt.rcParams["font.family"], size=8.5))
-    b.set_ylim(-0.5, 6.5)
-    a2.set_ylim(-75, 75)
+    # 두 축의 0을 같은 높이에 맞춘다. 가장자리 광선(ρ=±1)의 112 µm까지 보이게 한다.
+    b.set_ylim(-5.5, 5.5)
+    a2.set_ylim(-125, 125)
     b.set_title(t(L, "(b) f = 100 mm, F/5 평볼록 렌즈의 축상 물점", "(b) On-axis point, f = 100 mm F/5 plano-convex"),
                 fontsize=10.5, **font(L))
     fig.tight_layout()
@@ -648,12 +649,13 @@ def figure13(L):
     for ax, sc in ((a, 1.0), (b, 1e3)):
         for lam, nm, col in [(LINE_F, "F", "#3060ff"), (LINE_D, "d", "#c8a000"), (LINE_C, "C", "#e03030")]:
             ax.axvline(lam * 1e3, color=col, lw=0.9, ls=":")
-            ax.text(lam * 1e3 + 3, 0, nm, color=col, fontsize=10, va="bottom")
+            ax.text(lam * 1e3 + 3, 0.97, nm, color=col, fontsize=10, va="top",
+                    transform=ax.get_xaxis_transform())
         ax.axhline(0, color="k", lw=0.6)
         ax.set_xlabel(t(L, "파장 (nm)", "wavelength (nm)"), **font(L))
     a.set_ylabel(t(L, "d 선(587.6 nm) 초점에서 잰 초점 위치 (mm)", "focus shift from the d-line focus (mm)"), **font(L))
     b.set_ylabel(t(L, "초점 위치 (µm)", "focus shift (µm)"), **font(L))
-    a.legend(fontsize=9, prop=dict(family=plt.rcParams["font.family"], size=9))
+    a.legend(loc="lower right", fontsize=9, prop=dict(family=plt.rcParams["font.family"], size=9))
     a.set_title(t(L, "(a) f = 100 mm 두 렌즈의 색에 따른 초점", "(a) Focus vs color, two f = 100 mm lenses"), fontsize=10.5, **font(L))
     b.set_title(t(L, "(b) 색지움 렌즈만 확대: 남는 2차 스펙트럼", "(b) Achromat only: the secondary spectrum"), fontsize=10.5, **font(L))
     print(f"    그림13: 단렌즈 F−C {back_focus(single, LINE_F) - back_focus(single, LINE_C):.4f} mm, "
