@@ -141,7 +141,8 @@ def render(L_):
         ax.set_ylim(0, 300)                 # 배경을 보이려고 세로축을 자른다
         ax.set_xlabel(L_["be"], fontsize=11, **F)
         ax.set_ylabel(L_["cps"], fontsize=11, **F)
-        ax.legend(prop={**LF, "size": 9}, loc="upper left")
+        ax.legend(prop={**LF, "size": 8.5}, loc="upper right",
+                  bbox_to_anchor=(1.0, 0.92))     # 피크가 없는 오른쪽 위 빈자리
         ax.set_title(L_["fig1"], fontsize=11.5, **F)
         fig.tight_layout()
         fig.savefig(os.path.join(out, "fig1-backgrounds.png"), dpi=150)
