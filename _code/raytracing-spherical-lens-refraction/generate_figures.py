@@ -297,9 +297,16 @@ def render(L):
                  arrowprops=dict(arrowstyle="<->", color="C2"))
     axb.text(vx_ - sag_rim / 2, D / 2 - 30, L["cand_sag_rim"].format(sag_rim),
              ha="center", va="top", fontsize=8, **F)
-    axb.annotate("", xy=(vx_ - sag_demo, Y_DEMO), xytext=(vx_, Y_DEMO),
-                 arrowprops=dict(arrowstyle="<->", color="C3"))
-    axb.text(vx_ - sag_demo - 2, Y_DEMO + 8, L["cand_sag_ray"].format(sag_demo), fontsize=8, color="C3", ha="right", **F)
+    # 5 mm 남짓한 처짐량은 화살표가 마커에 가려지므로, 마커 아래쪽에 막대 표시를 따로
+    # 그리고 지시선으로 라벨을 연결한다.
+    yb = Y_DEMO - 14
+    axb.annotate("", xy=(vx_ - sag_demo, yb), xytext=(vx_, yb),
+                 arrowprops=dict(arrowstyle="-", color="C3", linewidth=1.6, shrinkA=0, shrinkB=0))
+    for xe in (vx_ - sag_demo, vx_):
+        axb.plot([xe, xe], [yb - 5, yb + 5], color="C3", linewidth=1.2)
+    axb.annotate(L["cand_sag_ray"].format(sag_demo), xy=(vx_ - sag_demo / 2, yb),
+                 xytext=(vx_ - sag_demo - 14, yb - 38), fontsize=8, color="C3", ha="right",
+                 arrowprops=dict(arrowstyle="-", color="C3", linewidth=0.8), **F)
     axb.plot(*cand_s, "o", color="C3", markersize=5)
     axb.set_xlim(0, 75)
     axb.set_ylim(0, 270)
