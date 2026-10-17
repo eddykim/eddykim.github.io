@@ -100,7 +100,7 @@ def figure3(L):
     fig = plt.figure(figsize=(13, 7.2))
     gs = fig.add_gridspec(3, 2, width_ratios=[1.55, 1], hspace=0.55)
     # (a) LED: 짧은 무늬 묶음
-    s0, ds = wavelength_band(0.85, 0.05)
+    s0, ds = wavelength_band(1.0, 0.05)
     sig = np.linspace(s0 - 6 * ds, s0 + 6 * ds, 3001)
     S = gaussian_line(sig, s0, ds)
     D = np.linspace(-40, 40, 8001)
@@ -109,7 +109,7 @@ def figure3(L):
     a.plot(D, I, color=C_RED, lw=0.8)
     a.set_xlim(-40, 40)
     a.set_ylabel(t(L, "세기", "intensity"), **font(L))
-    a.set_title(t(L, "(a) LED (850 nm, 반치폭 50 nm): 광로차 ±10 µm 남짓에서만 무늬", "(a) LED (850 nm, 50 nm FWHM): fringes only within about ±10 µm"),
+    a.set_title(t(L, "(a) LED (1 µm, 반치폭 50 nm): 광로차 ±10 µm 남짓에서만 무늬", "(a) LED (1 µm, 50 nm FWHM): fringes only within about ±10 µm"),
                 fontsize=10.5, **font(L))
     a.set_xlabel(t(L, r"광로차 $\Delta$ ($\mu$m)", r"path difference $\Delta$ ($\mu$m)"), **font(L))
     # (b) 나트륨 D 이중선: 맥놀이
@@ -257,8 +257,8 @@ def figure6(L):
         a.plot(x / 1000, I / 2, color=col, lw=1.6, label=t(L, f"광원 각 지름 {lab}", f"source diameter {lab}"))
     a.set_xlabel(t(L, "1 m 뒤 스크린 위 위치 (mm)", "position on a screen 1 m away (mm)"), **font(L))
     a.set_ylabel(t(L, "세기 (평균 = 0.5)", "intensity (mean = 0.5)"), **font(L))
-    legend(a, L, loc="lower right", size=8)
-    a.set_ylim(0, 1.25)
+    legend(a, L, loc="upper center", size=8, ncol=2)
+    a.set_ylim(0, 1.45)
     a.set_title(t(L, "(a) 간격 50 µm 두 구멍, 550 nm: 광원이 클수록 무늬가 흐려진다",
                   "(a) Holes 50 µm apart, 550 nm: larger sources wash out the fringes"), fontsize=10.5, **font(L))
     # (b) 가시도 vs 구멍 간격 (태양)
