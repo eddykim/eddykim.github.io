@@ -47,13 +47,13 @@ LABELS = {
         "font": KFONT, "legend": LFONT,
         "xlabel": "x (mm)", "ylabel": "y (mm)",
         "verbose": {"transmit": "투과", "tir": "전반사(TIR)"},
-        "ann_in": "입사\n(수직, 0°)",
-        "ann_tir": "전반사\n내부입사각 60°",
-        "ann_out": "무굴절 출사\n(내부입사각 0°)",
+        "ann_in": "입사\n(수직, 0$^\\circ$)",
+        "ann_tir": "전반사\n내부입사각 60$^\\circ$",
+        "ann_out": "무굴절 출사\n(내부입사각 0$^\\circ$)",
         "fig1": "수직 입사 광선이 정삼각형 프리즘 안에서 한 번 전반사한다",
         "tir_short": "전반사", "transmit_short": "투과",
-        "sweep_legend": "입사각={:g}°  ({})",
-        "fig2": "입사각이 경계값({:.4f}°)을 넘으면 전반사 대신 투과한다",
+        "sweep_legend": "입사각={:g}$^\\circ$  ({})",
+        "fig2": "입사각이 경계값({:.4f}$^\\circ$)을 넘으면 전반사 대신 투과한다",
         "lens_pass": "투과", "lens_tir": "출사면에서 전반사(반사 뒤 경로까지 추적)",
         "fig3": "평볼록 렌즈(R2=-50mm)의 최외곽 광선은 출사면에서 전반사한다",
         "p_index": "n(N-BK7, {:.0f}nm) = {:.6f}",
@@ -214,9 +214,10 @@ def render(L):
     fig, ax = plt.subplots(figsize=(7, 5))
     draw_prism_outline(ax, prism)
     ax.plot(path0[:, 0], path0[:, 1], "-o", color="C3", linewidth=1.5, markersize=4)
-    ax.annotate(L["ann_in"], (-100, 105), fontsize=9, **F)
-    ax.annotate(L["ann_tir"], (346, 108), fontsize=9, **F)
-    ax.annotate(L["ann_out"], (433, -42), fontsize=9, **F)
+    ax.annotate(L["ann_in"], (-190, 125), fontsize=9, va="bottom", **F)
+    ax.annotate(L["ann_tir"], (330, 125), fontsize=9, va="bottom", **F)
+    ax.annotate(L["ann_out"], xy=(433, -50), xytext=(300, -250), fontsize=9, va="top",
+                arrowprops=dict(arrowstyle="-", color="0.4", linewidth=0.8), **F)
     ax.set_xlim(-200, 600)
     ax.set_ylim(-350, 350)
     ax.set_aspect("equal")
@@ -230,11 +231,11 @@ def render(L):
 
     # fig2(포스트의 그림3): 입사각 훑기 -- 임계각 아래에서는 전반사, 위에서는 투과
     print(L["p_thresh"].format(np.rad2deg(theta_c), theta1_thresh))
-    fig, ax = plt.subplots(figsize=(7, 5))
+    fig, ax = plt.subplots(figsize=(9.2, 5))
     draw_prism_outline(ax, prism)
-    cmap = plt.get_cmap("coolwarm")
+    cmap = plt.get_cmap("viridis")  # 연한 유리색과 구별되도록 어두운 구간만 쓴다
     for i, (ang, p, is_tir) in enumerate(sweep):
-        color = cmap(i / (len(sweep) - 1))
+        color = cmap(0.85 * i / (len(sweep) - 1))
         word = L["tir_short"] if is_tir else L["transmit_short"]
         ax.plot(p[:, 0], p[:, 1], "-", color=color, linewidth=1.3,
                 label=L["sweep_legend"].format(ang, word))
@@ -243,7 +244,7 @@ def render(L):
     ax.set_aspect("equal")
     ax.set_xlabel(L["xlabel"], **F)
     ax.set_ylabel(L["ylabel"], **F)
-    ax.legend(prop=LF, loc="lower right", fontsize=8)
+    ax.legend(prop=dict(LF, size=8), loc="center left", bbox_to_anchor=(1.02, 0.5))
     ax.set_title(L["fig2"].format(theta1_thresh), **F)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
