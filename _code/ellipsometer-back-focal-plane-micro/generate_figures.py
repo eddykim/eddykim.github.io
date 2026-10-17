@@ -64,7 +64,8 @@ def figure1(L):
     ax1.set_title(L["f1a"], fontsize=11.5, pad=8, **L["font"])
     ax1.set_xlim(0, 1)
     ax1.set_ylim(0, 85)
-    ax1.legend(fontsize=8.4, prop=L["legend"], loc="lower right", framealpha=0.92)
+    ax1.legend(prop={**L["legend"], "size": 7.6}, loc="upper left",
+               bbox_to_anchor=(0.01, 0.65), framealpha=0.92)
     ax1.grid(alpha=0.25)
 
     # 후초점면 원판에 등입사각 고리를 그린다
@@ -138,7 +139,9 @@ def figure2(L):
     ax2.set_title(L["f2b"], fontsize=11.5, pad=8, **L["font"])
     ax2.set_xlim(0, 360)
     ax2.set_xticks(range(0, 361, 90))
-    ax2.legend(fontsize=9.0, prop=L["legend"], loc="upper right", framealpha=0.92)
+    ax2.set_ylim(-0.05, 1.30)   # 범례가 들어갈 윗 여백
+    ax2.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    ax2.legend(fontsize=9.0, prop=L["legend"], loc="upper center", ncol=2, framealpha=0.92)
     ax2.grid(alpha=0.25)
     fig.suptitle(L["fig2"], fontsize=13.0, y=0.985, **L["font"])
     fig.tight_layout(rect=(0, 0, 1, 0.94))
@@ -246,20 +249,14 @@ def figure4(L):
     ax1.set_title(L["f4a"], fontsize=11.5, pad=8, **L["font"])
     ax1.legend(fontsize=9.0, prop=L["legend"], loc="lower left", framealpha=0.92)
     ax1.grid(alpha=0.25)
-    ax1.text(0.97, 0.95, L["f4note"], transform=ax1.transAxes, fontsize=9.0,
-             ha="right", va="top", **L["font"],
+    ax1.text(0.05, 0.45, L["f4note"], transform=ax1.transAxes, fontsize=9.0,
+             ha="left", va="top", **L["font"],
              bbox=dict(boxstyle="round,pad=0.3", fc="#fffbe6", ec="#d9c77a", lw=0.8))
 
     ax2.semilogy(HALF, np.maximum(res[:, 2], 1e-6), "-", color=C_M, lw=2.0)
     ax2.set_xlabel(L["f4_x"], fontsize=10.5, **L["font"])
     ax2.set_ylabel(L["f4_y2"], fontsize=10.5, **L["font"])
     ax2.set_title(L["f4b"], fontsize=11.5, pad=8, **L["font"])
-    i = int(np.argmin(np.abs(HALF - 5.0)))
-    ax2.plot([HALF[i]], [res[i, 2]], "o", color=C_M, ms=7)
-    ax2.annotate(L["f4_ann"].format(HALF[i], res[i, 2]),
-                 xy=(HALF[i], res[i, 2]), xytext=(18, -48),
-                 textcoords="offset points", fontsize=9.0, ha="left", **L["font"],
-                 arrowprops=dict(arrowstyle="->", color=C_M, lw=1.0))
     ax2.grid(alpha=0.25, which="both")
     fig.suptitle(L["fig4"], fontsize=13.0, y=0.985, **L["font"])
     fig.tight_layout(rect=(0, 0, 1, 0.94))

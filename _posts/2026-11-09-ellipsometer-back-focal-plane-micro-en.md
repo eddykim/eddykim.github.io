@@ -218,13 +218,13 @@ This problem is the subject of the author's doctoral work. Several groups have u
 
 | | Single-shot | Spectral and angular together | Error calibration | Full $\Psi,\Delta$ |
 | --- | --- | --- | --- | --- |
-| Bayer-filter RGB camera | ✗ | △ | ✗ | ○ |
+| Bayer-filter RGB camera | ○ | △ | ✗ | ○ |
 | Structured-illumination ring | ✗ | △ | ✗ | ✗ |
 | Channeled spectroscopy combined | ○ | ✗ | △ | ○ |
 | Line-scan plus polarization filter | ○ | ○ | ✗ | ✗ |
 | Back focal plane with polarization modulation | ✗ | ○ | ✗ | ○ |
 
-Illuminating a ring-shaped structured beam one radius after another gives high spatial resolution. It requires measuring at many radii, however, and as the ring narrows the angular resolution improves while the signal weakens. A line-scan spectrograph with a polarization filter achieves single-shot operation and a microspot. It **cannot measure the phase change fully** and stays reflectance-centred, which makes Mueller-matrix analysis difficult. The channeled-spectroscopy combination achieves single-shot operation and a microspot but needs several measurements to resolve the angle. The Bayer entry in the table follows the table in the author's dissertation.
+Illuminating a ring-shaped structured beam one radius after another gives high spatial resolution. It requires measuring at many radii, however, and as the ring narrows the angular resolution improves while the signal weakens. A line-scan spectrograph with a polarization filter achieves single-shot operation and a microspot. It **cannot measure the phase change fully** and stays reflectance-centred, which makes Mueller-matrix analysis difficult. The channeled-spectroscopy combination achieves single-shot operation and a microspot but needs several measurements to resolve the angle. A Bayer camera captures three colours in one exposure, so it is single-shot. The dissertation's table marks this cell ✗, but its text says the method achieved single-shot measurement, so the text is followed here. The price is a spectral resolution of only three broad colour bands.
 
 The author's dissertation sums up the map as follows.
 
