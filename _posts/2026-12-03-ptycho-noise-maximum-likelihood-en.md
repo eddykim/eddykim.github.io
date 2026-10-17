@@ -53,7 +53,7 @@ One point deserves attention here. The Fourier projection used since Post 2 repl
 
 ## 3. How Much Does the Cost Function Change the Reconstruction of the Same Data?
 
-Does the theory hold up in calculation? To isolate the effect of noise, the probe was given. The three costs were minimised the same way, by gradient descent: the gradient is divided by the illumination each pixel received, $\sum \lvert P \rvert^2$, to set the direction, and a line search picks a step that actually lowers the cost. rPIE from Post 4 and the difference map (DM) from Post 5 are included alongside.
+Does the theory hold up in calculation? To isolate the effect of noise, the probe was given. The three costs were minimised the same way, by gradient descent: the gradient is divided by the illumination each pixel received, $\sum \lvert P \rvert^2$, to set the direction, and a line search picks a step that actually lowers the cost. Odstrčil et al. replaced the line search with a closed-form least-squares step along each update direction (LSQ-ML). rPIE from Post 4 and the difference map (DM) from Post 5 are included alongside.
 
 <img src="/assets/img/posts/ptycho-noise-maximum-likelihood/en/fig3-error-vs-dose.png" alt="Final error versus dose with the probe known, for rPIE, rPIE with a decaying step, DM, amplitude ML, Poisson ML and intensity least squares" width="750">
 _Fig 3. Final error versus dose with the probe known (300 iterations, median and range of 3 noise draws). Amplitude and Poisson ML are lowest. The dotted line is a $1/\sqrt{N}$ slope reference_
