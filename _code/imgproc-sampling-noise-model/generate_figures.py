@@ -318,7 +318,7 @@ def draw(labels):
     ax.set_xlabel(labels["f_true"], **F)
     ax.set_ylabel(labels["f_apparent"], **F)
     ax.set_ylim(0, 4.1)
-    ax.legend(prop=L, fontsize=9, loc="upper right")
+    ax.legend(prop=L, fontsize=9, loc="center right", bbox_to_anchor=(1.0, 0.38))
     ax.grid(alpha=0.3)
     fig.tight_layout()
     fig.savefig(os.path.join(out, "fig5-frequency-folding.png"), dpi=150)
