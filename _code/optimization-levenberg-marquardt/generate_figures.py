@@ -12,6 +12,7 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import MaxNLocator
 
 from gradient_descent import gradient_descent
 from newton import newton
@@ -42,16 +43,12 @@ LABELS = {
         "mu_large_short": r"$\mu_0$ 크게 ($\tau$=1e6)",
         "true_thickness": "실제 두께", "thickness_est": "두께 추정값 (nm)",
         "xlabel": "반복",
-        "fig1": r"그림1. $\mu_0$ 크기에 따른 LM 수렴 궤적 (d0=1540nm)",
         "damping": r"댐핑 계수 $\mu$",
-        "fig2": r"그림2. 이득비에 따른 $\mu$ 자동 조정",
         "gd": r"경사 하강법 ($\alpha$=300)", "newton": "Newton (발산)",
         "gn": "Gauss-Newton", "lm": r"Levenberg-Marquardt ($\tau$=1e-6)",
-        "fig3": "그림3. 네 방법 비교 (d0=1540nm)",
         "gn_cycle": "Gauss-Newton (세 값 순환)",
         "lm_plain": r"Levenberg-Marquardt ($\tau$=1e-3)",
         "wrong_floor": "이 모델의 국소 최솟값 (1400–1700nm)",
-        "fig4": "그림4. 굴절률을 잘못 가정한 모델에서: GN은 순환, LM은 수렴",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -61,16 +58,12 @@ LABELS = {
         "mu_large_short": r"large $\mu_0$ ($\tau$=1e6)",
         "true_thickness": "true thickness", "thickness_est": "Estimated thickness (nm)",
         "xlabel": "iteration",
-        "fig1": r"Fig 1. LM trajectories by size of $\mu_0$ (d0=1540nm)",
         "damping": r"damping parameter $\mu$",
-        "fig2": r"Fig 2. Adaptation of $\mu$ driven by the gain ratio",
         "gd": "Gradient Descent (alpha=300)", "newton": "Newton (diverging)",
         "gn": "Gauss-Newton", "lm": r"Levenberg-Marquardt ($\tau$=1e-6)",
-        "fig3": "Fig 3. The four methods compared (d0=1540nm)",
         "gn_cycle": "Gauss-Newton (cycles among three values)",
         "lm_plain": r"Levenberg-Marquardt ($\tau$=1e-3)",
         "wrong_floor": "local minimum of this model (1400–1700 nm)",
-        "fig4": "Fig 4. With a wrong refractive index: GN cycles, LM converges",
     },
 }
 
@@ -196,8 +189,9 @@ def render(L):
     plt.axhline(true_thickness, color="gray", linestyle="--", label=L["true_thickness"])
     plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["thickness_est"], **F)
-    plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig1"], **F)
+    plt.ylim(top=1605)
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
+    plt.legend(prop=LF, fontsize=8, loc="upper center")
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig1-mu0-comparison.png"), dpi=150)
     plt.close()
@@ -211,8 +205,8 @@ def render(L):
     plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["damping"], **F)
     plt.yscale("log")
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig2"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig2-mu-adaptation.png"), dpi=150)
     plt.close()
@@ -226,8 +220,8 @@ def render(L):
     plt.axhline(true_thickness, color="gray", linestyle="--", label=L["true_thickness"])
     plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["thickness_est"], **F)
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
     plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig3"], **F)
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig3-four-methods-comparison.png"), dpi=150)
     plt.close()
@@ -239,8 +233,9 @@ def render(L):
     plt.axhline(wrong_floor_d, color="gray", linestyle="--", label=L["wrong_floor"])
     plt.xlabel(L["xlabel"], **F)
     plt.ylabel(L["thickness_est"], **F)
-    plt.legend(prop=LF, fontsize=8)
-    plt.title(L["fig4"], **F)
+    plt.ylim(1390, 1800)
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, steps=[1, 2, 5, 10]))
+    plt.legend(prop=LF, fontsize=8, loc="upper center")
     plt.tight_layout()
     plt.savefig(os.path.join(out, "fig4-gn-failure-lm-rescue.png"), dpi=150)
     plt.close()
