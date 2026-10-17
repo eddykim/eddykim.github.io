@@ -180,7 +180,8 @@ def figure4(L):
     b.set_yticks([])
     b.set_title(t(L, f"(b) 공진기(L = 30 cm, 거울 곡률 60 cm)의 공명선\n세로 모드 간격 {nuF:.0f} MHz, 가로 모드는 {dzeta / np.pi * nuF:.0f} MHz 씩 밀린다",
                   f"(b) Resonances of a cavity (L = 30 cm, mirror radius 60 cm)\nlongitudinal spacing {nuF:.0f} MHz, transverse modes shifted by {dzeta / np.pi * nuF:.0f} MHz"), fontsize=10, **font(L))
-    legend(b, L, loc="upper right", size=8)
+    b.set_ylim(0, 1.7)
+    legend(b, L, loc="upper right", size=8, ncol=2)
     fig.tight_layout()
     save(fig, L, "fig4-gouy-phase.png")
     print(f"    그림4: Δζ/π = {dzeta / np.pi:.4f}, 가로 모드 간격 {dzeta / np.pi * nuF:.1f} MHz")
@@ -326,7 +327,7 @@ def figure7(L):
     n, dx = 256, 0.15
     x, (X, Y) = grid(n, dx)
     fig = plt.figure(figsize=(16, 4.6))
-    gs = fig.add_gridspec(2, 6, width_ratios=[1, 1, 1, 1, 0.45, 2.6], hspace=0.3, wspace=0.12)
+    gs = fig.add_gridspec(2, 6, width_ratios=[1, 1, 1, 1, 0.8, 2.6], hspace=0.3, wspace=0.12)
     modes = [(hermite_gaussian(X, Y, W0, 0, 0), "HG00"), (hermite_gaussian(X, Y, W0, 1, 0), "HG10"),
              (hermite_gaussian(X, Y, W0, 1, 1), "HG11"), (hermite_gaussian(X, Y, W0, 2, 1), "HG21"),
              (laguerre_gaussian(X, Y, W0, 0, 1), "LG$_0^1$"), (laguerre_gaussian(X, Y, W0, 1, 0), "LG$_1^0$"),
@@ -343,6 +344,29 @@ def figure7(L):
             ax.set_title(lab, fontsize=10)
         ax.set_xticks([])
         ax.set_yticks([])
+        if i == 0:
+            first_ax = ax
+        if i == 3:
+            i_ax = ax
+        if U is None:
+            ph_ax = ax
+    # 색 막대: 세기(패널마다 최댓값 = 1로 맞춤)와 위상
+    from matplotlib.cm import ScalarMappable
+    from matplotlib.colors import Normalize
+    for row, (cmap_, lo, hi, lab_k, lab_e) in enumerate([
+            ("inferno", 0, 1, "세기\n(규격화)", "intensity\n(normalised)"),
+            ("twilight", -np.pi, np.pi, "위상 (rad)", "phase (rad)")]):
+        holder = fig.add_subplot(gs[row, 4])
+        holder.axis("off")
+        cax = holder.inset_axes([0.12, 0.1, 0.2, 0.8])
+        cb = fig.colorbar(ScalarMappable(Normalize(lo, hi), cmap=cmap_), cax=cax)
+        if row == 1:
+            cb.set_ticks([-np.pi, 0, np.pi])
+            cb.set_ticklabels([r"$-\pi$", "0", r"$\pi$"])
+        else:
+            cb.set_ticks([0, 1])
+        cb.ax.tick_params(labelsize=8)
+        cax.set_title(t(L, lab_k, lab_e), fontsize=8, **font(L))
     # M²
     b = fig.add_subplot(gs[:, 5])
     n2, dx2 = 512, 0.5
@@ -367,7 +391,8 @@ def figure7(L):
     b.set_ylabel(t(L, "x 방향 2차 모멘트 폭 / W0", "second-moment width in x / W0"), **font(L))
     b.set_title(t(L, "(b) 빔 품질: 폭과 발산이 함께 $\\sqrt{M^2}$ 배\n(원: 파동 전파에서 잰 값)", "(b) Beam quality: width and divergence both × $\\sqrt{M^2}$\n(circles: measured from propagation)"), fontsize=10, **font(L))
     legend(b, L, loc="upper center", size=8.5)
-    fig.text(0.02, 0.97, t(L, "(a) 고차 모드의 세기 (허리에서)", "(a) Intensity of higher-order modes (at the waist)"), fontsize=10.5, va="top", **font(L))
+    pos = first_ax.get_position()
+    fig.text(pos.x0, pos.y1 + 0.085, t(L, "(a) 고차 모드의 세기 (허리에서)", "(a) Intensity of higher-order modes (at the waist)"), fontsize=10.5, va="bottom", **font(L))
     save(fig, L, "fig7-higher-modes-m2.png")
 
 
