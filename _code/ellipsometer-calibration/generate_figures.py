@@ -151,13 +151,11 @@ def figure2(L):
     ax1.axhline(r_min, color=C_ETA, lw=1.2, ls="--")
     ax1.plot([ps_d], [r_min], "*", color=C_FIT, ms=14, zorder=6)
     # 주석은 포물선 안쪽 빈 곳에 두고, 범례는 r_min 선 아래로 내려 겹치지 않게 한다
-    ax1.annotate(L["a_ps"].format(ps_d), xy=(ps_d, r["R"].max() * 0.62),
-                 xytext=(ps_d, r["R"].max() * 0.86), fontsize=9.2,
-                 color=C_PS, ha="center", va="bottom", **L["font"],
-                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9),
-                 arrowprops=dict(arrowstyle="->", color=C_PS, lw=1.0))
+    # 최소점 주석은 파선 오른쪽에 붙여 두어 파선을 가리지 않게 한다
+    ax1.text(ps_d + 0.3, r["R"].max() * 0.80, L["a_ps"].format(ps_d), fontsize=9.2,
+             color=C_PS, ha="left", va="bottom", linespacing=1.3, **L["font"])
     ax1.annotate(L["a_eta"].format(r["eta"]), xy=(ps_d + 1.0, r_min),
-                 xytext=(ps_d + 0.4, r["R"].max() * 0.47),
+                 xytext=(ps_d + 2.6, r["R"].max() * 0.05),
                  fontsize=9.2, color=C_ETA, ha="center", va="bottom", **L["font"],
                  linespacing=1.3,
                  bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9),
@@ -175,6 +173,7 @@ def figure2(L):
     for half, _, err in conv:
         ax2.annotate(f"{err:.0e}".replace("e-0", "e-"), xy=(half, err),
                      xytext=(4, 6), textcoords="offset points", fontsize=8.2)
+    ax2.margins(x=0.10, y=0.15)   # 끝점 라벨이 틀에 닿지 않게 여백을 둔다
     ax2.set_xlabel(L["half_ax"], fontsize=10.5, **L["font"])
     ax2.set_ylabel(L["eta_err_ax"], fontsize=10.5, **L["font"])
     ax2.set_title(L["fig2b"], fontsize=11.5, pad=8, **L["font"])
@@ -303,8 +302,9 @@ def figure4(L):
         ax2.semilogy(DELTA_SWEEP, np.maximum(np.abs(ddel), FLOOR), ls, color=c,
                      lw=1.7, label=L[key + "4"])
     # Ps 는 Delta 에 전혀 번지지 않는다 — cos(Delta) 식에서 편광자 각이 약분된다
-    ax2.text(90, FLOOR * 1.45, L["zero_note"], fontsize=9.0, ha="center",
-             va="bottom", color=C_PS, **L["font"])
+    ax2.text(40, FLOOR * 1.45, L["zero_note"], fontsize=9.0, ha="center",
+             va="bottom", color=C_PS, **L["font"],
+             bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
     ax2.set_ylim(FLOOR * 0.7, None)
     for ax, ylab, title in ((ax1, L["dpsi_ax"], L["fig4a"]),
                             (ax2, L["ddel_ax"], L["fig4b"])):
@@ -427,7 +427,7 @@ LABELS = {
         "res_ax": "잔차 $R = 1 - (\\alpha'^2 + \\beta'^2)$",
         "r_meas": "합성한 측정값",
         "r_fit": "2차 맞춤",
-        "a_ps": "최소점의 위치 → $P_s$ = {:.2f}°",
+        "a_ps": "최소점의 위치\n→ $P_s$ = {:.2f}°",
         "a_eta": "최솟값의 깊이 → $\\eta$ = {:.4f}\n(참값 0.9687)",
         "half_ax": "훑는 범위 (± deg, 오른쪽으로 갈수록 좁다)",
         "eta_err_ax": "$\\eta$ 회수 오차",
@@ -449,7 +449,7 @@ LABELS = {
         "e_as4": "$A_s$ = 0.1° 만 있을 때",
         "e_eta4": "$\\eta$ = 0.999 만 있을 때",
         "fig4note": "$\\eta$ 의 오차는 $\\Delta$ 가 0·180° 로 갈수록\n훨씬 크게 번진다",
-        "zero_note": "$P_s$ 는 $\\Delta$ 에 전혀 번지지 않는다 (정확히 0)",
+        "zero_note": "$P_s$ 는 $\\Delta$ 에 전혀\n번지지 않는다 (정확히 0)",
         # 그림 5
         "fig5": "모형에 없는 효과는 $\\eta$ 로 숨고, MSE 가 그것을 알린다",
         "fig5a": "(a) 넣지 않은 편광 의존 감도가 밀어내는 값",
@@ -489,7 +489,7 @@ LABELS = {
         "res_ax": "residual $R = 1 - (\\alpha'^2 + \\beta'^2)$",
         "r_meas": "synthesized data",
         "r_fit": "quadratic fit",
-        "a_ps": "position of minimum $\\rightarrow$ $P_s$ = {:.2f}°",
+        "a_ps": "position of minimum\n$\\rightarrow$ $P_s$ = {:.2f}°",
         "a_eta": "depth of minimum $\\rightarrow$ $\\eta$ = {:.4f}\n(true 0.9687)",
         "half_ax": "scan range (± deg, narrowing to the right)",
         "eta_err_ax": "error in recovered $\\eta$",
@@ -509,7 +509,7 @@ LABELS = {
         "e_as4": "$A_s$ = 0.1° alone",
         "e_eta4": "$\\eta$ = 0.999 alone",
         "fig4note": "An error in $\\eta$ propagates far more strongly\nas $\\Delta$ approaches 0° or 180°",
-        "zero_note": "$P_s$ does not propagate into $\\Delta$ at all (exactly zero)",
+        "zero_note": "$P_s$ does not propagate into $\\Delta$\nat all (exactly zero)",
         "fig5": "An unmodelled effect hides in $\\eta$, and the MSE reports it",
         "fig5a": "(a) fitted values when the sensitivity is left out",
         "fig5b": "(b) MSE of the same fits",
