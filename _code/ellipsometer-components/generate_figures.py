@@ -103,7 +103,7 @@ LABELS = {
         "nlabel": "$n$ = {:.2f}",
         "target": "22.5° — 네 번 반사하면 $\\lambda/4$",
         "crit": "임계각",
-        "achro": "굴절률이 1.50→1.52로 변해도\n곡선이 거의 겹친다 (무채색)",
+        "achro": "74.7° 부근에서는 굴절률이 1.50→1.52로\n변해도 곡선이 거의 겹친다 (무채색)",
     },
     "en": {
         "dir": os.path.join(BASE_DIR, "en"), "font": EFONT, "legend": ELFONT,
@@ -150,7 +150,7 @@ LABELS = {
         "nlabel": "$n$ = {:.2f}",
         "target": "22.5° — four reflections give $\\lambda/4$",
         "crit": "critical angle",
-        "achro": "the curves nearly coincide as $n$ goes\n1.50 → 1.52 (achromatic)",
+        "achro": "near 74.7° the curves nearly coincide\nas $n$ goes 1.50 → 1.52 (achromatic)",
     },
 }
 
@@ -275,12 +275,12 @@ def figure3(L):
     ax1.annotate(L["stay"], xy=(nm[j], two[j]), xytext=(600, 140), fontsize=9.2,
                  color=C_TWO, ha="left",
                  arrowprops=dict(arrowstyle="->", color=C_TWO, lw=1.3), **L["font"])
-    ax1.set_ylim(0, 380)
+    ax1.set_ylim(0, 480)
     ax1.set_yticks(np.arange(0, 361, 90))
     ax1.set_ylabel(L["ret_deg"], fontsize=10.5, **L["font"])
     ax1.set_title(L["fig3a"], fontsize=11.5, loc="left", **L["font"])
     ax1.plot([], [], color=DANGER, lw=1.1, ls="--", label=L["fatal"])
-    ax1.legend(prop=L["legend"], fontsize=9.0, loc="lower left", framealpha=0.95)
+    ax1.legend(prop=L["legend"], fontsize=9.0, loc="upper right", framealpha=0.95)
     ax1.grid(alpha=0.25)
 
     ax2.plot(nm, axis, color=C_TWO, lw=2.2)
@@ -328,12 +328,12 @@ def figure4(L):
     # 0°·360°(정수 파장)와 180°(반정수 파장)를 지나는 횟수를 따로 센다
     n0 = int(np.sum(np.diff(np.floor(rm / 360.0)) != 0))
     n180 = int(np.sum(np.diff(np.floor((rm - 180.0) / 360.0)) != 0))
-    ax2.text(0.985, 0.94, L["multi_note"].format(n180=n180, n0=n0), transform=ax2.transAxes,
+    ax2.text(0.985, 0.86, L["multi_note"].format(n180=n180, n0=n0), transform=ax2.transAxes,
              ha="right", va="top", fontsize=9.2, color=C_MULTI,
              linespacing=1.45, **L["font"])
     ax2.axvline(550, color="#666", lw=1.0, ls=":")
-    ax2.text(556, 340, L["design"], fontsize=9, color="#666", **L["font"])
-    ax2.set_ylim(-15, 375)
+    ax2.text(556, 380, L["design"], fontsize=9, color="#666", **L["font"])
+    ax2.set_ylim(-15, 405)
     ax2.set_yticks([0, 90, 180, 270, 360])
     ax2.set_xlim(nm[0], nm[-1])
     ax2.set_xlabel(L["wl_nm"], fontsize=10.5, **L["font"])
@@ -373,7 +373,7 @@ def figure5(L):
                             arrowprops=dict(arrowstyle="->", color=DANGER, lw=1.0))
     ax.axhline(22.5, color=DANGER, lw=1.3, ls="--")
     ax.text(46, 24.0, L["target"], ha="left", fontsize=9.2, color=DANGER, **L["font"])
-    ax.text(0.985, 0.66, L["achro"], transform=ax.transAxes, ha="right", va="top",
+    ax.text(0.60, 0.15, L["achro"], transform=ax.transAxes, ha="center", va="top",
             fontsize=9.2, color="#333", linespacing=1.4, **L["font"])
     ax.set_xlim(38, 90)
     ax.set_ylim(0, 50)
