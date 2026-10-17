@@ -138,7 +138,7 @@ def render(L_):
         a1.plot(*zip(start, end), color=col, lw=2.2)
         a1.annotate("", xy=end + 0.6 * u, xytext=end, arrowprops=dict(arrowstyle="-|>", color=col, lw=1.6))
         a1.plot(*start, "o", color=col)
-    a1.text(*(exits["o"] + 0.7 * u + np.array([-0.15, 0.08])), L_["path_o"], color="tab:orange",
+    a1.text(*(exits["o"] + 0.7 * u + np.array([-0.45, 0.14])), L_["path_o"], color="tab:orange",
             fontsize=8.5, ha="right", **F)
     a1.text(*(exits["m"] + 0.7 * u + np.array([0.05, 0.08])), L_["path_m"], color="tab:blue",
             fontsize=8.5, ha="left", **F)
@@ -148,6 +148,12 @@ def render(L_):
     arc = np.linspace(np.pi / 2 - th, np.pi / 2, 20)
     a1.plot(xm + 0.45 * np.cos(arc), 1.0 + 0.45 * np.sin(arc), color="gray", lw=1)
     a1.text(xm + 0.12, 1.55, r"$\theta$", fontsize=11, color="gray")
+    # 산화막 신호도 같은 법선 기준 θ로 나오는 것을 보이도록 법선과 호를 하나 더 그린다.
+    xo = exits["o"][0]
+    a1.plot([xo, xo], [1.0, 1.7], color="gray", lw=0.8, ls=":")
+    arc_o = np.linspace(np.pi / 2 - th, np.pi / 2, 20)
+    a1.plot(xo + 0.4 * np.cos(arc_o), 1.0 + 0.4 * np.sin(arc_o), color="gray", lw=1)
+    a1.text(xo + 0.16, 1.4, r"$\theta$", fontsize=11, color="gray")
     a1.set_xlim(0, 4.3)
     a1.set_ylim(-2.2, 3.0)
     a1.axis("off")
@@ -156,6 +162,10 @@ def render(L_):
         a2.semilogy(d_grid, R0_ang[t], color="black", ls=ls, lw=1.8, label=rf"$\theta$ = {t}°")
     a2.axvline(3 * O.L, color="tab:red", lw=1, ls=":")
     a2.text(3 * O.L - 0.15, 0.12, L_["sub5"], color="tab:red", fontsize=8.5, ha="right", **F)
+    # θ = 60°에서는 같은 5 % 기준이 3λ cos θ = 4.5 nm에서 걸린다.
+    a2.axvline(3 * O.L * np.cos(np.radians(60)), color="tab:red", lw=1, ls=":")
+    a2.text(3 * O.L * np.cos(np.radians(60)) - 0.15, 0.12, "60°: 4.5 nm", color="tab:red",
+            fontsize=8.5, ha="right")
     a2.set_xlim(0, 12)
     a2.set_ylim(0.05, 1e3)
     a2.set_xlabel(L_["d"], fontsize=11, **F)
@@ -233,7 +243,7 @@ def render(L_):
     ax.plot(sd, s_mix, color="tab:blue", lw=1.5, ls="--", label=L_["s_mix"])
     ax.plot(sd, s_obs, color="tab:blue", lw=2, label=L_["s_obs"])
     ax.plot(sd, s_red, color="tab:red", lw=2, label=L_["s_red"])
-    ax.set_xlim(0, 14)
+    ax.set_xlim(0, 10)
     ax.set_ylim(0, 0.8)
     ax.set_xlabel(L_["sd"], fontsize=11, **F)
     ax.set_ylabel(L_["xo"], fontsize=11, **F)
