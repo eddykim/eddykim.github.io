@@ -189,14 +189,16 @@ def draw(L):
                                             label=f"{NM['geometric']} R={gR:.1f}")
     cxt, cyt = circ(CX, CY, R_TRUE); ax[0].plot(cxt, cyt, ":", lw=1.2, color="k",
                                                 label=f"{L['truth']} {R_TRUE:.0f}")
-    ax[0].set_aspect("equal"); ax[0].legend(prop=LG, fontsize=8); ax[0].grid(alpha=0.3)
+    ax[0].set_aspect("equal"); ax[0].grid(alpha=0.3)
+    ax[0].legend(prop=LG, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.06),
+                 ncol=2, frameon=False)  # 원과 점을 가리지 않게 축 밖에 둔다
     ax[1].plot(R_scan, cost_alg, "-", lw=1.7, color=COL["kasa"], label=L["alg"])
     ax[1].plot(R_scan, cost_geo, "-", lw=1.7, color=COL["geometric"], label=L["geo"])
     ax[1].axvline(R_TRUE, ls=":", lw=1.2, color="k")
     ax[1].text(R_TRUE + 0.8, cost_alg.max() * 0.8, L["truth"], fontsize=8.5, **F)
     ax[1].set_xlabel(L["radius"], **F); ax[1].set_ylabel(L["cost"], **F)
     ax[1].set_yscale("log"); ax[1].legend(prop=LG, fontsize=9); ax[1].grid(alpha=0.3)
-    cap(fig)
+    cap(fig, rect=(0, 0.08, 1, 1))
     fig.savefig(os.path.join(out, "fig1-algebraic-vs-geometric.png"), dpi=150)
     plt.close(fig)
 
