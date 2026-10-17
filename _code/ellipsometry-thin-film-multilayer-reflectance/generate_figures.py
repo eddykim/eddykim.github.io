@@ -247,7 +247,7 @@ def render(L):
                                       lw=1.6, mutation_scale=14, zorder=2))
 
 
-    fig2, axes = plt.subplots(1, 3, figsize=(12.6, 5.2))
+    fig2, axes = plt.subplots(1, 3, figsize=(12.6, 4.6))
 
     # (a) 로아드 방법: 아래(기판)에서 위(공기)로 등가계면을 순차 병합
     ax = axes[0]
@@ -264,11 +264,11 @@ def render(L):
     # (b) TMM: D0^-1, Q1, Q2, ..., Dsub 를 한 줄로 곱해나가는 체인
     ax = axes[1]
     chain = [r"$D_0^{-1}$", r"$Q_1$", r"$Q_2$", r"$\cdots$", r"$D_{sub}$"]
-    xs = np.linspace(0.05, 0.75, len(chain))
+    xs = np.linspace(0.03, 0.83, len(chain))
     for x, lab in zip(xs, chain):
-        box(ax, (x, 0.45), 0.16, 0.18, lab, fc="#eaf4ff", fontsize=10.5)
+        box(ax, (x, 0.45), 0.12, 0.18, lab, fc="#eaf4ff", fontsize=10.5)
     for x0, x1 in zip(xs[:-1], xs[1:]):
-        arrow(ax, (x0 + 0.16, 0.54), (x1, 0.54), color="tab:blue")
+        arrow(ax, (x0 + 0.14, 0.54), (x1 - 0.02, 0.54), color="tab:blue")
     ax.text(0.5, 1.16, L["tmm"], ha="center", fontsize=13, weight="bold", **L["font"])
     ax.text(0.5, 0.20, L["tmm_sub"],
             ha="center", fontsize=9, color="#555", **L["font"])
@@ -277,11 +277,11 @@ def render(L):
     ax = axes[2]
     chain = [(r"$I_{01}$", "#ffe0e0"), (r"$L_1$", "#e6ffe6"), (r"$I_{12}$", "#ffe0e0"),
              (r"$L_2$", "#e6ffe6"), (r"$I_{2,sub}$", "#ffe0e0")]
-    xs = np.linspace(0.02, 0.78, len(chain))
+    xs = np.linspace(0.03, 0.83, len(chain))
     for x, (lab, fc) in zip(xs, chain):
-        box(ax, (x, 0.45), 0.18, 0.18, lab, fc=fc, fontsize=10)
+        box(ax, (x, 0.45), 0.12, 0.18, lab, fc=fc, fontsize=9)
     for x0, x1 in zip(xs[:-1], xs[1:]):
-        arrow(ax, (x0 + 0.18, 0.54), (x1, 0.54), color="tab:purple")
+        arrow(ax, (x0 + 0.14, 0.54), (x1 - 0.02, 0.54), color="tab:purple")
     ax.text(0.5, 1.16, L["smm"], ha="center", fontsize=13, weight="bold", **L["font"])
     ax.text(0.5, 0.20, L["smm_sub"],
             ha="center", fontsize=9, color="#555", **L["font"])
@@ -395,6 +395,9 @@ def render(L):
     axes5[1, 1].set_xlabel(L["angle"], fontsize=11, **L["font"])
     axes5[0, 1].set_title(L["panel_b"].format(wl_fixed), fontsize=12, **L["font"])
 
+    # (a)의 Psi 축을 (b)와 같은 눈금 범위(0-40도)로 맞춘다.
+    for ax in (axes5[0, 0], axes5[0, 1]):
+        ax.set_ylim(-2, 40)
     for ax in axes5.ravel():
         ax.grid(alpha=0.3)
     axes5[0, 0].legend(prop=L["legend"], fontsize=9, loc="upper right")
