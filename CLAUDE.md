@@ -5,8 +5,12 @@
 - **새 글 작성** 요청 → `.claude/skills/write-post/SKILL.md`의 워크플로우를 따르세요.
 - **기존 글 교정·영문판 작업** 요청 → `.claude/skills/revise-post/SKILL.md`를 따르세요.
 - **자료 조사·논문/특허 수집** 요청 → `.claude/skills/research-sources/SKILL.md`를 따르세요.
+- **기존 글에 웹 이미지(실물 사진·도판) 보강** 요청 → `.claude/skills/add-web-figures/SKILL.md`를 따르세요.
+  절대 규칙 4의 예외로, 이미지·캡션·그림 번호·연결 문장만 고칩니다.
 - **글의 사실 검증·오류 점검** 요청 → `.claude/skills/fact-check-post/SKILL.md`를 따르세요.
   절대 규칙 4의 예외로, 사용자가 항목별로 승인한 사실 오류와 거기에 딸린 수식·수치·그림만 고칩니다.
+- **발행일**은 `.claude/SCHEDULE.md`가 정합니다. 여러 채팅이 동시에 글을 쓰므로, 작성 중인 글은
+  날짜 없이 `_drafts/`에 두고 완성된 순서대로 그 표의 빈 슬롯을 받습니다.
 
 ## 절대 규칙 (위반 금지)
 
@@ -20,7 +24,9 @@
 ## 디렉토리 구조와 저장 경로
 
 ```
-_posts/                          # 포스트 본문
+_drafts/                         # 작성 중인 글 (날짜 없음)
+  slug.md, slug-en.md
+_posts/                          # 발행일을 받은 포스트 본문 (.claude/SCHEDULE.md)
   YYYY-MM-DD-slug.md
 assets/
   img/posts/<slug>/               # 해당 포스트 전용 이미지·미디어

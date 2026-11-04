@@ -49,3 +49,6 @@ _references/*
 
 # 로컬 미리보기 빌드
 _site_dev
+
+# _code/ 그림 스크립트의 계산 캐시 (다시 만들 수 있다)
+.cache_*.pkl
