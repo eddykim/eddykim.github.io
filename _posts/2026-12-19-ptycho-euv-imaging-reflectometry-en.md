@@ -161,11 +161,13 @@ EUV light is hard to focus with lenses and penetrates only tens of nanometres. T
 
 The absolute magnitude and phase of the recovered reflectance cannot be trusted because of the ambiguities of post 4. Ratios between regions can. A phase step measures height as $4\pi h\sin\theta/\lambda$ and also carries the reflection phase of the layer stack. When thickness and composition are solved together over a narrow range of angles, neither the reflectance ratio nor the phase step separates them alone (nitride thickness bounds of 1.96 nm and 11.6 nm). Together the bound drops to 0.53 nm, because the phase looks in a different direction from the amplitude. A wider range of angles gives 0.28 nm with the amplitude alone. And as the bounds shrink, errors that are not noise, such as interpolation in the correction and a dark reference region, come to decide the result. In transmission, calibrating to vacuum turns the ratio of phase to log amplitude into a material fingerprint independent of thickness.
 
-## Closing the Series
+## Closing Part One
 
 Post 1 started from the inverse problem of undoing a blurred photograph. Post 2 moved to phase retrieval, recovering phase from intensity alone, and post 3 showed the core of ptychography: overlapping, shifted illumination solves the phase problem. Posts 4 and 5 dealt with the ambiguities that appear when the probe is also unknown, and with rPIE, momentum and the difference map. Posts 6 and 7 brought the imperfections of real experiments, photon noise, position errors and partial coherence, into the cost function and the model. Post 8 turned the same mathematics towards illumination angles in Fourier ptychography, and post 9 tied everything together in one framework of automatic differentiation and multislice models.
 
-In this last post the image became a measurement. Looking back, the same questions recurred through all ten posts. What does the measurement contain, and what has it erased? What fills in what was erased? Is the mathematically correct answer the physically correct one? Ptychography is one elaborate answer to these questions: recover the phase from the redundancy of overlap, put the imperfections of the experiment into the model, and read numbers against a reference inside the sample.
+In post 10 the image became a measurement. Looking back, the same questions recurred through all ten posts. What does the measurement contain, and what has it erased? What fills in what was erased? Is the mathematically correct answer the physically correct one? Ptychography is one elaborate answer to these questions: recover the phase from the redundancy of overlap, put the imperfections of the experiment into the model, and read numbers against a reference inside the sample.
+
+That closes Part One. Every calculation in these ten posts used synthetic data generated from a known sample. From post 11 on, the series moves to public experimental data and starts by asking what a reconstruction can be trusted on when there is no ground truth to compare against.
 
 ## References
 
