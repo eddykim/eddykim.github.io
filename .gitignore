@@ -52,3 +52,6 @@ _site_dev
 
 # _code/ 그림 스크립트의 계산 캐시 (다시 만들 수 있다)
 .cache_*.pkl
+
+# Claude Code 세션 기록 사본(hub/tools/claude_sessions.py 가 10분마다 복사한다). 커밋하지 않는다
+.claude/sessions/
